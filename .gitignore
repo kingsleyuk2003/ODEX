@@ -1,6 +1,6 @@
-.idea
+/.idea
 /.local
-.vscode
+/.vscode
 /.git
 /odoo-venv
 /venv
