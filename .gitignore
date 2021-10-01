@@ -3,5 +3,6 @@
 /.vscode
 /.git
 /odoo-venv
+/venv
 *.pyc
 
