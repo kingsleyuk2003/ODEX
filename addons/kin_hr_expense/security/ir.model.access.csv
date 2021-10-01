@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_kin_hr_expense_group,hr.expense.group,model_hr_expense_group,base.group_user,1,1,1,1
+access_emp_expense_group,emp.expense.group,model_emp_expense_group,base.group_user,1,1,1,1

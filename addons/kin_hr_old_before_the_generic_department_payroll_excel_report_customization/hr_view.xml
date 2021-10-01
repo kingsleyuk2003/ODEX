@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.menu" id="hr_attendance.menu_hr_attendance_root">
+		 <field name="groups_id" eval="[(6, 0, [ref('group_show_hr_attendance')])]"/>
+        </record>
+
+        <record id="view_hr_payslip_form_extend" model="ir.ui.view">
+            <field name="name">hr.payslip.form</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form" />
+            <field name="arch" type="xml">
+                <button name="hr_verify_sheet"  position="attributes" >
+                    <attribute name="groups">kin_hr.group_hrpayslip_confirm_button</attribute>
+                </button>
+                <button name="hr_verify_sheet"  position="after" >
+                     <button name="action_email_payslip" type="object" string="Send by Email"  class="oe_highlight" groups="base.group_hr_user"/>
+                </button>
+            </field>
+        </record>
+
+        <record id="view_employee_form_extend" model="ir.ui.view">
+            <field name="name">hr.employee.form.extend</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//page[@groups='base.group_hr_user']/group" position="inside">
+                        <group string="Names and State of Origin" >
+                            <field name="firstname" />
+                            <field name="lastname" />
+                            <field name="middlename" />
+                            <field name="state_id" />
+                        </group>
+                        <group string="Next of Kin Info." >
+                            <field name="next_of_kin" />
+                            <field name="nok_phone" />
+                            <field name="nok_relationship" />
+                        </group>
+                        <group string="Emergency">
+                            <field name="emergency_contact" />
+                            <field name="emergency_contact_phone" />
+                        </group>
+                        <group string="Guarantor Info.">
+                            <field  nolabel="1" name="guarantor_ids" />
+                        </group>
+                </xpath>
+                <xpath expr="//group[@name='active_group']" position="after" >
+                    <group string="Employment Details" >
+                        <field name="employment_date" />
+                        <field name="employment_status" />
+                    </group>
+                     <group string="Qualifications">
+                            <field  nolabel="1" name="qualification_ids" />
+                        </group>
+                </xpath>
+                <field name="address_home_id" position="after" >
+                    <field name="personal_email" />
+                    <field name="personal_mobile" />
+                </field>
+            </field>
+        </record>
+
+
+        <record id="view_nok_relationship_form" model="ir.ui.view" >
+            <field name="name" >nok.relationship.form</field>
+            <field name="model" >nok.relationship</field>
+            <field name="arch" type="xml" >
+                <form string="Next of Kin Relationship" >
+                    <group>
+                        <field name="name" />
+                    </group>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="view_nok_relationship_tree" model="ir.ui.view" >
+            <field name="name" >nok.relationship.tree</field>
+            <field name="model" >nok.relationship</field>
+            <field name="arch" type="xml" >
+                <tree string="Next of Kin Relationship Tree">
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_guarantor_form" model="ir.ui.view" >
+            <field name="name" >guarantor.form</field>
+            <field name="model" >guarantor</field>
+            <field name="arch" type="xml" >
+                <form string="Guarantor" >
+                    <group>
+                        <field name="name" />
+                        <field name="gua_phone" />
+                        <field name="gua_address" />
+                    </group>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="view_guarantor_tree" model="ir.ui.view" >
+            <field name="name" >guarantor.tree</field>
+            <field name="model" >guarantor</field>
+            <field name="arch" type="xml" >
+                <tree string="Guarantor Tree">
+                    <field name="name" />
+                    <field name="gua_phone" />
+                    <field name="gua_address" />
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_qualification_title_form" model="ir.ui.view" >
+            <field name="name" >qualification.title.form</field>
+            <field name="model" >qualification.title</field>
+            <field name="arch" type="xml" >
+                <form string="Qualification Title" >
+                    <group>
+                        <field name="name" />
+                        <field name="description" />
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_qualification_title_tree" model="ir.ui.view" >
+            <field name="name" >qualification.title.tree</field>
+            <field name="model" >qualification.title</field>
+            <field name="arch" type="xml" >
+                <tree string="qualification Title Tree">
+                    <field name="name" />
+                    <field name="description" />
+                </tree>
+            </field>
+        </record>
+
+
+         <record id="view_school_attended_form" model="ir.ui.view" >
+            <field name="name" >school.attended.form</field>
+            <field name="model" >school.attended</field>
+            <field name="arch" type="xml" >
+                <form string="School Attended" >
+                    <group>
+                        <field name="name" />
+                         <field name="school_location" />
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_school_attended_tree" model="ir.ui.view" >
+            <field name="name" >school.attended.tree</field>
+            <field name="model" >school.attended</field>
+            <field name="arch" type="xml" >
+                <tree string="School Attended Tree">
+                    <field name="name" />
+                    <field name="school_location" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_qualification_form" model="ir.ui.view" >
+            <field name="name" >qualification.form</field>
+            <field name="model" >qualification</field>
+            <field name="arch" type="xml" >
+                <form string="Qualification" >
+                    <group>
+                        <field name="qualification_title_id" />
+                        <field name="qualification_year" />
+                         <field name="school_id" />
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_qualification_tree" model="ir.ui.view" >
+            <field name="name" >qualification.tree</field>
+            <field name="model" >qualification</field>
+            <field name="arch" type="xml" >
+                <tree string="Qualification Tree">
+                    <field name="qualification_title_id" />
+                    <field name="qualification_year" />
+                    <field name="school_id" />
+                </tree>
+            </field>
+        </record>
+
+
+        <menuitem id="hr_menus" sequence="100" name="Human Resources"  web_icon="hr,static/description/icon.png" groups="group_show_hr_menu"   />
+         <menuitem id="hr.menu_hr_root" parent="hr_menus" sequence="0"  name="Employees"   />
+        <menuitem id="hr_payroll.menu_hr_payroll_root" parent="hr_menus" sequence="1" name="Payroll"    />
+        <menuitem id="hr_expense.menu_hr_expense_root" parent="hr_menus" sequence="2"  name="Expenses"   />
+        <menuitem id="hr_attendance.timesheet_menu_root" parent="hr_menus" sequence="3" name="Time Sheet"   />
+        <menuitem id="hr_attendance.menu_hr_attendance_root" parent="hr_menus" sequence="4" name="Attendance"     />
+        <menuitem id="hr_holidays.menu_hr_holidays_root" parent="hr_menus" sequence="5" name="Holidays"    />
+
+
+        <!--Hide the Payslip Details Report Menu on the hr payslip-->
+        <record id="hr_payroll.payslip_details_report" model="ir.actions.report.xml" >
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_erp_manager')])]"  />
+        </record>
+
+
+        <!-- Adding Group By the Hr Payslip -->
+        <record id="view_hr_payslip_filter_extend" model="ir.ui.view">
+            <field name="name">hr.payslip.select.extend</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_filter" />
+            <field name="arch" type="xml">
+                    <xpath expr="//group" position="inside">
+                            <filter id="gbpayslip_run_id" string="PaySlip Batch" name="gbpayslip_run_id" context="{'group_by':'payslip_run_id'}" invisible="1" />
+                    </xpath>
+            </field>
+        </record>
+        <record id="hr_payroll.action_view_hr_payslip_form" model="ir.actions.act_window">
+            <field name="context">{'search_default_gbpayslip_run_id': 1}</field>
+        </record>
+
+
+
+        <record id="hr_payslip_run_form_extend" model="ir.ui.view">
+            <field name="inherit_id" ref="hr_payroll.hr_payslip_run_form" />
+            <field name="model">hr.payslip.run</field>
+            <field name="arch" type="xml">
+                     <button name="close_payslip_run" position="attributes">
+                         <attribute name="string" >Compute and Close</attribute>
+                     </button>
+                    <button name="%(hr_payroll.action_hr_payslip_by_employees)d" position="after" >
+                        <button name="action_send_mass_payslip" type="object" string="Send Mass Email Payslip" states="draft" />
+                    </button>
+            </field>
+        </record>
+
+
+
+
+    </data>
+</openerp>

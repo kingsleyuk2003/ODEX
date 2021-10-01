@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+
+        <record id="view_picking_form_skyward_extend" model="ir.ui.view">
+            <field name="name">stock.picking.form.skyward.extend</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="kin_stock.view_picking_form_extend" />
+            <field name="arch" type="xml">
+                <field name="shipment_ref" position="attributes" >
+                    <attribute name="attrs" >{'required': [('state', '=', 'assigned')]}</attribute>
+                </field>
+
+            </field>
+        </record>
+
+        <record id="view_picking_form_skyward_extend1" model="ir.ui.view">
+            <field name="name">stock.picking.form.skyward.extend1</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form" />
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='pack_operation_product_ids']/tree/field[@name='product_qty']"  position="attributes">
+                        <attribute name="widget">integer</attribute>
+                    </xpath>
+
+                    <xpath expr="//field[@name='pack_operation_product_ids']/tree/field[@name='qty_done']"  position="attributes">
+                        <attribute name="widget">integer</attribute>
+                    </xpath>
+
+
+
+                 <field name="product_uom_qty" position="attributes">
+                     <attribute name="widget">integer</attribute>
+                     </field>
+
+
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="view_stock_quant_form_skyward_extend">
+            <field name="name">stock.quant.form.skyward.extend</field>
+            <field name="model">stock.quant</field>
+            <field name="inherit_id" ref="stock.view_stock_quant_form" />
+            <field name="arch" type="xml">
+                <field name="qty" position="attributes" >
+                   <attribute name="widget" >integer</attribute>
+                </field>
+            </field>
+        </record>
+
+         <record model="ir.ui.view" id="view_stock_quant_tree_skyward_extend">
+            <field name="name">stock.quant.tree.skyward.extend</field>
+            <field name="model">stock.quant</field>
+            <field name="inherit_id" ref="stock.view_stock_quant_tree" />
+            <field name="arch" type="xml">
+                 <field name="qty" position="attributes" >
+                   <attribute name="widget" >integer</attribute>
+                </field>
+            </field>
+        </record>
+
+
+        <record id="view_move_tree_skyward_extend" model="ir.ui.view">
+            <field name="name">stock.move.tree.skyward.extend</field>
+            <field name="model">stock.move</field>
+             <field name="inherit_id" ref="stock.view_move_tree" />
+            <field name="arch" type="xml">
+                 <field name="product_uom_qty" position="attributes" >
+                        <attribute name="widget" >integer</attribute>
+                 </field>
+            </field>
+        </record>
+
+
+        <record id="view_move_picking_tree_skyward_extend" model="ir.ui.view">
+            <field name="name">stock.move.tree.skyward.extend</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_picking_tree" />
+            <field name="arch" type="xml">
+                    <field name="product_uom_qty" position="attributes" >
+                        <attribute name="widget" >integer</attribute>
+                 </field>
+            </field>
+        </record>
+
+        <record id="view_move_form_skyward_extend" model="ir.ui.view">
+            <field name="name">stock.move.form.skyward.extend</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_form" />
+            <field name="arch" type="xml">
+                    <field name="product_uom_qty" position="attributes" >
+                        <attribute name="widget" >integer</attribute>
+                 </field>
+            </field>
+        </record>
+
+        <record id="view_move_picking_form_skyward_extend" model="ir.ui.view">
+            <field name="name">stock.move.form.skyward.extend</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_picking_form" />
+            <field name="arch" type="xml">
+                <field name="product_uom_qty" position="attributes" >
+                        <attribute name="widget" >integer</attribute>
+                 </field>
+            </field>
+        </record>
+
+
+        <template id="report_delivery_document_skyward_extend" inherit_id="stock.report_delivery_document" >
+                <xpath expr="//table[@class='table table-condensed mt48']/tbody/tr/td/span[@t-field='move.product_uom_qty']" position="replace" >
+                         <span t-field="move.product_uom_qty" t-field-options='{"widget": "integer" }' />
+                </xpath>
+        </template>
+
+        <template id="report_picking_skyward_extend" inherit_id="stock.report_picking">
+            <xpath expr="//tbody/tr/td/span[@t-field='pack_operation.product_qty']" position="replace" >
+                <span t-field="pack_operation.product_qty" t-field-options='{"widget": "integer" }' />
+            </xpath>
+        </template>
+
+
+
+
+
+    </data>
+</openerp>

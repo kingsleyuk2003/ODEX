@@ -1,0 +1,63 @@
+<openerp>
+    <data>
+		<record id="mail_templ_create_product_email" model="mail.template">
+			<field name="name" >New Product Has been Created</field>
+			<field name="email_from">${ctx.get('system_email')}</field>
+			<field name="reply_to">${ctx.get('product_person_email')}</field>
+			<field name="subject">A New Product (${ctx.get('obj').name}) has been Created in the product category (${ctx.get('obj').categ_id.name}) </field>
+			<field name="email_to">${ctx.get('notify_person_email')}</field>
+			<field name="model_id"   model="ir.model"  search="[('model', '=', 'product.template')]" />
+		    <field name="auto_delete" eval="True"/>
+			<field name="body_html"  >
+				<![CDATA[
+				<p>Dear ${ctx.get('notify_person_name')},</p>
+				<p>A New Product (${ctx.get('obj').name}) has been created by ${ctx.get('product_person_name')}, in the product category (${ctx.get('obj').categ_id.name})</p>
+				<p><a href="${ctx.get('url')}">follow the Link to crosscheck details and also check, if the product was created in the right product category</a></p>
+				<p>Regards and Thanks</p>
+				<p>This is an auto generated message</p>
+				]]>
+			</field>
+		</record>
+
+		<!--<record id="mail_templ_edit_product_email" model="mail.template">-->
+			<!--<field name="name" >Existing Product Has been Edited</field>-->
+			<!--<field name="email_from">${ctx.get('system_email')}</field>-->
+			<!--<field name="reply_to">${ctx.get('product_person_email')}</field>-->
+			<!--<field name="subject">An Existing Product (${object.name}) has been Edited</field>-->
+			<!--<field name="email_to">${ctx.get('notify_person_email')}</field>-->
+			<!--<field name="model_id"   model="ir.model"  search="[('model', '=', 'product.template')]" />-->
+		    <!--<field name="auto_delete" eval="True"/>-->
+			<!--<field name="body_html"  >-->
+				<!--<![CDATA[-->
+				<!--<p>Dear ${ctx.get('notify_person_name')},</p>-->
+				<!--<p>An Existing Product (${object.name}) has been edited by ${ctx.get('product_person_name')}</p>-->
+				<!--<p><a href="${ctx.get('url')}">follow the Link to view the product details</a></p>-->
+				<!--<p>Regards and Thanks</p>-->
+				<!--<p>This is an auto generated message</p>-->
+				<!--]]>-->
+			<!--</field>-->
+		<!--</record>-->
+
+		<record id="mail_templ_delete_product_email" model="mail.template">
+			<field name="name" >Delete Action initiated on Product</field>
+			<field name="email_from">${ctx.get('system_email')}</field>
+			<field name="reply_to">${ctx.get('product_person_email')}</field>
+			<field name="subject">Delete Action initiated on an Existing Product (${object.name})</field>
+			<field name="email_to">${ctx.get('notify_person_email')}</field>
+			<field name="model_id"   model="ir.model"  search="[('model', '=', 'product.template')]" />
+		    <field name="auto_delete" eval="True"/>
+			<field name="body_html"  >
+				<![CDATA[
+				<p>Dear ${ctx.get('notify_person_name')},</p>
+				<p>Delete Action initiated on an existing product (${object.name}) by ${ctx.get('product_person_name')}</p>
+				<p>Regards and Thanks</p>
+				<p>This is an auto generated message</p>
+				]]>
+			</field>
+		</record>
+
+
+
+
+	</data>
+</openerp>

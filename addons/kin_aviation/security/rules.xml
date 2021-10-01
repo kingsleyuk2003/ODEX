@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+
+    <record id="kin_product_received_register_aviation_manager_rule" model="ir.rule">
+        <field name="name">Aviation Station Manager Product Received Register</field>
+        <field ref="model_product_received_register_aviation" name="model_id"/>
+         <field name="domain_force">[('to_stock_location_id.aviation_station_manager_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_aviation_manager'))]"/>
+    </record>
+
+
+
+    <!-- master data rules -->
+      <record id="kin_aviation_station_manager_rule" model="ir.rule">
+        <field name="name">Aviation Station Manager</field>
+        <field ref="model_kin_aviation_station" name="model_id"/>
+         <field name="domain_force">[('aviation_station_manager_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_aviation_manager'))]"/>
+    </record>
+
+
+   <record id="kin_tank_storage_aviation_manager_rule" model="ir.rule">
+        <field name="name">Aviation Station Manager Tank Storage</field>
+        <field ref="model_kin_tank_storage_aviation" name="model_id"/>
+         <field name="domain_force">[('aviation_station_id.aviation_station_manager_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_aviation_manager'))]"/>
+    </record>
+
+       <record id="kin_tank_storage_aviation_officer_rule" model="ir.rule">
+        <field name="name">Aviation Station Officer Tank Storage</field>
+        <field ref="model_kin_tank_storage_aviation" name="model_id"/>
+         <field name="domain_force">[('aviation_station_id.aviation_officer_ids','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_aviation_officer'))]"/>
+    </record>
+
+       <record id="kin_fuel_pump_aviation_manager_rule" model="ir.rule">
+        <field name="name">Aviation Station Manager Fuel Pump</field>
+        <field ref="model_kin_fuel_pump_aviation" name="model_id"/>
+         <field name="domain_force">[('aviation_station_id.aviation_station_manager_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_aviation_manager'))]"/>
+    </record>
+
+       <record id="kin_fuel_pump_aviation_officer_rule" model="ir.rule">
+        <field name="name">Aviation Station Officer Fuel Pump</field>
+        <field ref="model_kin_fuel_pump_aviation" name="model_id"/>
+         <field name="domain_force">[('aviation_station_id.aviation_officer_ids','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_aviation_officer'))]"/>
+    </record>
+
+       <record id="kin_refueller_bowser_manager_rule" model="ir.rule">
+        <field name="name">Aviation Station Manager Refueller</field>
+        <field ref="model_kin_refueller_bowser" name="model_id"/>
+         <field name="domain_force">[('aviation_station_id.aviation_station_manager_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_aviation_manager'))]"/>
+    </record>
+
+       <record id="kin_refueller_bowser_officer_rule" model="ir.rule">
+        <field name="name">Aviation Station Officer Refueller</field>
+        <field ref="model_kin_refueller_bowser" name="model_id"/>
+         <field name="domain_force">[('aviation_station_id.aviation_officer_ids','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_aviation_officer'))]"/>
+    </record>
+
+       <record id="kin_loading_record_manager_rule" model="ir.rule">
+        <field name="name">Aviation Station Manager Loading Record</field>
+        <field ref="model_kin_loading_record" name="model_id"/>
+         <field name="domain_force">[('aviation_station_id.aviation_station_manager_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_aviation_manager'))]"/>
+    </record>
+
+       <record id="kin_loading_record_officer_rule" model="ir.rule">
+        <field name="name">Aviation Station Officer Loading Record</field>
+        <field ref="model_kin_loading_record" name="model_id"/>
+         <field name="domain_force">[('aviation_station_id.aviation_officer_ids','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_aviation_officer'))]"/>
+    </record>
+
+
+    <record id="kin_fuel_delivery_receipt_manager_rule" model="ir.rule">
+        <field name="name">Aviation Station Manager Fuel Delivery Receipt</field>
+        <field ref="model_kin_fuel_delivery_receipt" name="model_id"/>
+         <field name="domain_force">[('aviation_station_id.aviation_station_manager_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_aviation_manager'))]"/>
+    </record>
+
+       <record id="kin_fuel_delivery_receipt_officer_rule" model="ir.rule">
+        <field name="name">Aviation Station Officer Fuel Delivery Receipt</field>
+        <field ref="model_kin_fuel_delivery_receipt" name="model_id"/>
+         <field name="domain_force">[('aviation_station_id.aviation_officer_ids','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_aviation_officer'))]"/>
+    </record>
+
+
+      <record id="kin_aviation_record_manager_rule" model="ir.rule">
+        <field name="name">Aviation Station Manager Aviation Record</field>
+        <field ref="model_kin_aviation_record" name="model_id"/>
+         <field name="domain_force">[('aviation_station_id.aviation_station_manager_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_aviation_manager'))]"/>
+    </record>
+
+       <record id="kin_aviation_record_officer_rule" model="ir.rule">
+        <field name="name">Aviation Station Officer Aviation Record</field>
+        <field ref="model_kin_aviation_record" name="model_id"/>
+         <field name="domain_force">[('aviation_station_id.aviation_officer_ids','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_aviation_officer'))]"/>
+    </record>
+
+</data>
+</openerp>

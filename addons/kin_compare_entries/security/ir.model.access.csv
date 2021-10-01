@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_kin_compare,kin.compare user,model_kin_compare,base.group_user,1,1,1,1
+access_kin_compare_lines_debit,kin.compare.lines.debit user,model_kin_compare_lines_debit,base.group_user,1,1,1,1
+access_kin_compare_lines_credit,kin.compare.lines.credit user,model_kin_compare_lines_credit,base.group_user,1,1,1,1

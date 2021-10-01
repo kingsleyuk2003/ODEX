@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- TAGS FOR MULTI STEP INCOME STATMENT -->
+        <!-- See: http://www.myaccountingcourse.com/financial-statements/multi-step-income-statement -->
+        <!-- http://questionnairetemplated.org/multiple-step-income-statement/multiple-step-income-statement-multi-step-income-statement-cy2re51e-png/ -->
+        <record id="account_tag_sales" model="account.account.tag">
+            <field name="name">Sales for Custom Report</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+         <record id="account_tag_cogs" model="account.account.tag">
+            <field name="name">Cost of Goods Sold for Custom Report</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+
+        <record id="account_tag_selling_expenses" model="account.account.tag">
+            <field name="name">Selling Expenses for Custom Report</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_tag_administrative_expenses" model="account.account.tag">
+            <field name="name">General and Administrative Expenses for Custom Report</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_tag_non_operating_revenue_gains" model="account.account.tag">
+            <field name="name">Other Non-Operating Revenues and Gains for Custom Report</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_tag_non_operating_expenses_losses" model="account.account.tag">
+            <field name="name">Other Non-Operating Expenses and Losses for Custom Report</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_tag_income_tax" model="account.account.tag">
+            <field name="name">Income Tax for Custom Report</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+
+        <!-- TAGS FOR BALANCE SHEET LEDGER ACCOUNTS -->
+         <record id="account_tag_current_assets" model="account.account.tag">
+            <field name="name">Current Assets for Custom Report</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_tag_medium_term_assets" model="account.account.tag">
+            <field name="name">Medium-term Assets for Custom Report</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_tag_long_term_assets" model="account.account.tag">
+            <field name="name">Long-term Assets for Custom Report</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_tag_other_assets" model="account.account.tag">
+            <field name="name">Other Assets for Custom Report</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_tag_current_liabilities" model="account.account.tag">
+            <field name="name">Current Liabilities for Custom Report</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_tag_medium_term_liabilities" model="account.account.tag">
+            <field name="name">Medium-term Liabilities for Custom Report</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_tag_long_term_liabilities" model="account.account.tag">
+            <field name="name">Long-term Liabilities for Custom Report</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_tag_equity" model="account.account.tag">
+            <field name="name">Equity for Custom Report</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+
+    </data>
+</openerp>

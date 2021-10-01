@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="view_company_kin_report_aminata" >
+                    <field name="name">res.company.form.aminata.report</field>
+                    <field name="inherit_id" ref="kin_report.view_company_kin_reportd" />
+                    <field name="model">res.company</field>
+                    <field name="arch" type="xml">
+                         <field name="header_data"  position="after" >
+                              <field name="header_data_aminata_inventory" />
+                         </field>
+
+                    </field>
+        </record>
+
+       <report
+		    id="payroll_excel_report"
+		    model="payroll.report.parser"
+		    string="Aminata Payroll Excel Report"
+		    report_type="xlsx"
+		    name="aminata_modifications.report_payroll_report"
+		    file="aminata_modifications.report_payroll_report"
+		    attachment_use="False"
+        />
+		<record id="payroll_excel_report" model="ir.actions.report.xml" >
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_hr_user')])]"  />
+        </record>
+
+    </data>
+</openerp>

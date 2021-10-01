@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>        
+
+
+        <record forcecreate="True" id="ir_cron_check_leave_allocation_employees" model="ir.cron">
+            <field name="name">Run Check on Leave Allocation for Employees</field>
+            <field eval="True" name="active"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">365</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="True" name="doall"/>
+            <field eval="'hr.holidays'" name="model"/>
+            <field eval="'run_check_leave_allocation_hr_holidays'" name="function"/>
+            <field eval="'()'" name="args"/>
+        </record>
+
+
+        <record forcecreate="True" id="ir_cron_check_leave_check_90_days_maternity_employees" model="ir.cron">
+            <field name="name">Run  Check on Leave for 90 Days for Maternity Employees</field>
+            <field eval="True" name="active"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'hr.holidays'" name="model"/>
+            <field eval="'run_check_leave_allocation_maternity_90days_hr_holidays'" name="function"/>
+            <field eval="'()'" name="args"/>
+        </record>
+
+         <record forcecreate="True" id="run_check_leave_allocation_new_employee_hr_holidays" model="ir.cron">
+            <field name="name">Run  Check on Leave for New Employees</field>
+            <field eval="True" name="active"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'hr.holidays'" name="model"/>
+            <field eval="'run_check_leave_allocation_new_employee_hr_holidays'" name="function"/>
+            <field eval="'()'" name="args"/>
+        </record>
+
+
+        <record forcecreate="True" id="ir_cron_sot_send_mail" model="ir.cron">
+            <field name="name">Run Send Mass Email for Summary of Transactions</field>
+            <field eval="True" name="active"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">months</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'res.partner'" name="model"/>
+            <field eval="'run_sot_send_mass_mail'" name="function"/>
+            <field eval="'()'" name="args"/>
+        </record>
+
+        <record forcecreate="True" id="ir_cron_sos_send_mail" model="ir.cron">
+            <field name="name">Run Send Email for Summary of Sales</field>
+            <field eval="True" name="active"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">months</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'res.company'" name="model"/>
+            <field eval="'run_sos_send_mail'" name="function"/>
+            <field eval="'()'" name="args"/>
+        </record>
+
+    </data>
+</openerp>

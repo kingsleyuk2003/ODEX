@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+	<data>
+
+
+  <record model="ir.sequence" id="seq_pef_id">
+        <field name="name">PEF ID</field>
+        <field name="code">pef_id_code</field>
+        <field name="prefix">PEF</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+
+	</data>
+</openerp>

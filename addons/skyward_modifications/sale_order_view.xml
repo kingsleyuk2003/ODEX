@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <record model="ir.ui.view" id="sale_order_extend">
+        <field name="name">sale.order.skyward.extend</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+             <field name="amount_untaxed" position="after" >
+                 <field name="empties_total" />
+             </field>
+            <xpath expr="//form/group/group/div/field[@name='product_uom_qty']"  position="attributes" >
+                <attribute name="widget" >integer</attribute>
+            </xpath>
+             <xpath expr="//form/group/group/div/field[@name='qty_delivered']"  position="attributes" >
+                <attribute name="widget" >integer</attribute>
+            </xpath>
+             <xpath expr="//form/group/group/div/field[@name='qty_invoiced']"  position="attributes" >
+                <attribute name="widget" >integer</attribute>
+            </xpath>
+
+            <xpath expr="//tree/field[@name='product_uom_qty']"  position="attributes" >
+                <attribute name="widget" >integer</attribute>
+            </xpath>
+             <xpath expr="//tree/field[@name='qty_delivered']"  position="attributes" >
+                <attribute name="widget" >integer</attribute>
+            </xpath>
+             <xpath expr="//tree/field[@name='qty_invoiced']"  position="attributes" >
+                <attribute name="widget" >integer</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <template id="report_saleorder_document_skyward_extend" inherit_id="sale.report_saleorder_document">
+          <xpath expr="//div[@name='total']/div/table/tr[@class='border-black']" position="after">
+             <tr>
+                            <td><strong>Total Value of Empties</strong></td>
+                            <td class="text-right">
+                                 <span t-field="doc.empties_total" t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}'/>
+                            </td>
+                        </tr>
+          </xpath>
+
+        <xpath expr="//tbody/t/tr/td[@class='text-right']/span[@t-field='l.product_uom_qty']"  position="replace">
+            <span t-field="l.product_uom_qty" t-field-options='{"widget": "integer" }' />
+        </xpath>
+
+
+      </template>
+
+</data>
+</openerp>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+	<record id="group_show_product_expiry_fields" model="res.groups">
+			<field name="name">Show Product Expiry Fields on Product Form</field>
+		</record>
+
+		<record id="group_receive_expiry_alert_email" model="res.groups">
+			<field name="name">Receive "Product Expiry Alert Email"  Notification</field>
+		</record>
+
+</data>
+</odoo>

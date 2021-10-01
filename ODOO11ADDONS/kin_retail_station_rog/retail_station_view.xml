@@ -1,0 +1,2242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+ <menuitem name="Retail Station"
+            id="menu_retail_station"
+            groups="account.group_account_invoice,group_retail_attendant,group_retail_manager,group_station_shift_supervisor,group_retail_station_management,group_change_destination"
+            sequence="25" web_icon="kin_retail_station_rog,static/description/icon.png" />
+
+  <menuitem id="menu_retail_station_operation" name="Retail Station Operation" parent="menu_retail_station" sequence="1" groups="account.group_account_invoice,group_retail_manager,group_retail_station_management,group_product_received_register_resolution,group_change_destination" />
+   <menuitem id="menu_product_received_register" name="Product Transfers" parent="menu_retail_station" sequence="1" groups="account.group_account_invoice,group_retail_manager,group_retail_station_management,group_product_received_register_resolution,group_change_destination" />
+   <menuitem id="menu_retail_station_sale_stock" name="Pump Sales and Controls" parent="menu_retail_station" sequence="2" groups="account.group_account_invoice,group_retail_manager,group_station_shift_supervisor,group_retail_station_management" />
+   <!--<menuitem id="menu_retail_bank_lodgment" name="Bank Lodgements" parent="menu_retail_station_operation" sequence="3" groups="group_retail_manager" />-->
+  <menuitem id="menu_retail_station_report" name="Report" parent="menu_retail_station" sequence="4" groups="account.group_account_invoice,group_retail_manager,group_retail_station_management" />
+   <menuitem id="menu_retail_station_configuration" name="Master Data" parent="menu_retail_station" sequence="5" groups="group_retail_manager,group_retail_station_management" />
+<menuitem id="menu_shift_pump_sales_merge" name="Create Day Pump Sales and Controls" parent="menu_retail_station_sale_stock" sequence="2" action="action_retail_sale_merge" groups="group_retail_manager" />
+
+        <record id="view_res_partner_retail_station_extend" model="ir.ui.view">
+            <field name="name" >res.partner.retail.station.extend</field>
+            <field name="model" >res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                 <field name="function" position="before" >
+                     <field name="is_company_station" />
+                     <field name="retail_station_id" attrs="{'required': [('is_company_station', '=', True)]}" />
+                 </field>
+            </field>
+        </record>
+
+        <record id="view_picking_form_retail_station_extend" model="ir.ui.view">
+            <field name="name">stock.picking.form.extend</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form" />
+            <field name="arch" type="xml">
+                 <div  name="button_box" position="inside">
+                     <button type="object"  name="btn_view_prr" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('prr_count', '=', 0)]}" >
+                            <field name="prr_count" widget="statinfo" string="Product Received Register"/>
+                    </button>
+                 </div>
+
+            </field>
+        </record>
+
+        <!-- Product Received Register -->
+        <!--<record id="view_product_received_register_form" model="ir.ui.view" >-->
+            <!--<field name="name" >product.received.register.form</field>-->
+            <!--<field name="model">product.received.register</field>-->
+            <!--<field name="arch" type="xml" >-->
+                <!--<form string="Product Received Register" >-->
+                    <!--<header>-->
+                        <!--<button name="action_transit" class="oe_highlight" states="draft" type="object" string="In Transit"  />-->
+                        <!--<button name="%(action_change_destination)d" type="action"   states="draft,transit" string="Change Destination"  groups="kin_retail_station_rog.group_change_destination"/>-->
+                        <!--<button name="action_confirm" type="object" states="transit" string="Validate and Update Stock" groups="kin_retail_station_rog.group_retail_manager" class="oe_highlight" confirm="You are about to validate that the following product received with the stated quantity. If you have not finished entering the required information, please click 'Cancel' button, otherwise click 'Ok' button" />-->
+                        <!--<button name="action_cancel" states="draft,transit" type="object" string="Cancel" confirm="Are you sure you want to Cancel the document?"/>-->
+                        <!--&lt;!&ndash;<button name="action_cancel_reverse_qty" states="validate,resolved" type="object" string="Cancel" confirm="Are you sure you want to Cancel the document?"/>&ndash;&gt;-->
+                        <!--<button name="action_draft" states="cancel" type="object" string="Reset to Draft"  />-->
+                        <!--<field name="state" widget="statusbar"  />-->
+                    <!--</header>-->
+                    <!--<sheet>-->
+                        <!--<div class="oe_button_box" name="button_box">-->
+                            <!--<button name="action_view_loading_ticket" groups="account.group_account_invoice,stock.group_stock_manager"-->
+                                <!--type="object"-->
+                                <!--class="oe_stat_button"-->
+                                <!--icon="fa-pencil-square-o"-->
+                                <!--attrs="{'invisible': [('lt_count', '=', 0)]}" >-->
+                                <!--<field  name="lt_count" widget="statinfo" string="Loading Ticket"   />-->
+                            <!--</button>-->
+                            <!--<button type="object"  name="btn_view_jnr" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('jnr_count', '=', 0)]}"  groups="account.group_account_invoice" >-->
+                                <!--<field name="jnr_count" widget="statinfo" string="Journal Entries"/>-->
+                            <!--</button>-->
+                            <!--<button type="object"  name="btn_view_stock_move" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('stock_move_count', '=', 0)]}"  groups="stock.group_stock_manager" >-->
+                                <!--<field name="stock_move_count" widget="statinfo" string="Stock Moves"/>-->
+                            <!--</button>-->
+                        <!--</div>-->
+                        <!--<div class="oe_title">-->
+                            <!--<h1>-->
+                                <!--<field name="name" readonly="1" />-->
+                            <!--</h1>-->
+                        <!--</div>-->
+                        <!--<group col="4">-->
+                            <!--<field name="loading_date" readonly="1" />-->
+                            <!--<field name="receiving_date"  />-->
+                            <!--<field name="truck_no"  />-->
+                            <!--<field name="waybill_no"  />-->
+                            <!--<field name="driver_name" attrs="{'readonly': [('state', '!=', 'draft')]}" />-->
+                            <!--<field name="driver_mobile_no" attrs="{'readonly': [('state', '!=', 'draft')]}" />-->
+                            <!--<field name="from_stock_location_id" readonly="1" />-->
+                            <!--<field name="ticket_ref" readonly="1" />-->
+                            <!--<field name="to_stock_location_id"   readonly="1" />-->
+                            <!--<field name="other_ref" attrs="{'readonly': [('state', 'not in', ['draft','transit'])]}"/>-->
+                            <!--<field name="truck_date_in"  attrs="{'readonly': [('state', 'not in', ['draft','transit'])]}" />-->
+                            <!--<field name="truck_date_out"  attrs="{'readonly': [('state', 'not in', ['draft','transit'])]}" />-->
+                            <!--<field name="time_interval" readonly="1" />-->
+                            <!--<field name="product_id" readonly="1" />-->
+                            <!--<field name="product_uom"  readonly="1" />-->
+                            <!--<field name="product_price" />-->
+                            <!--<field name="quantity_loaded" readonly="1" />-->
+                            <!--<field name="qty_received" />-->
+                             <!--<field name="qty_discrepancy" />-->
+                            <!--<field name="amt_discrepancy"   />-->
+                            <!--<field name="retail_station_manager_id" />-->
+                            <!--<field name="user_id" />-->
+                             <!--<field name="retail_manager_comment" attrs="{'readonly': [('state', 'not in', ['draft','transit'])]}" />-->
+                            <!--<field name="resolution_message" readonly="1" />-->
+                            <!--<field name="resolution_notice_date" readonly="1" />-->
+                        <!--</group>-->
+                        <!--<notebook>-->
+                            <!--<page string="Product Received Allocations to Tanks">-->
+                                <!--<field name="prr_line_ids" >-->
+                                    <!--<tree string="PRA" editable="bottom" >-->
+                                        <!--<field name="tank_id" required="1" domain="[('retail_station_id','=',parent.to_stock_location_id)]"  options="{'no_open':True,'no_create':True}"  />-->
+                                        <!--<field name="tank_capacity" readonly="1"  />-->
+                                        <!--<field name="product_id"  readonly="1" />-->
+                                        <!--<field name="product_uom" readonly="1" />-->
+                                        <!--<field name="current_stock_level" readonly="1" />-->
+                                        <!--<field name="available_capacity" />-->
+                                        <!--<field name="product_allocation" required="1" />-->
+                                    <!--</tree>-->
+                                <!--</field>-->
+                            <!--</page>-->
+                            <!--<page string="Other Information">-->
+                                <!--<group col="6">-->
+                                     <!--<field name="qty_discrepancy" />-->
+                                    <!--<field name="qty_discharged" />-->
+                                    <!--<field name="discharged_discrepancy_qty" />-->
+                                     <!--<field name="amt_discrepancy"   />-->
+                                     <!--<field name="amt_discharged" />-->
+                                    <!--<field name="discharged_discrepancy_amt" />-->
+                                <!--</group>-->
+                            <!--</page>-->
+                        <!--</notebook>-->
+                     <!--</sheet>-->
+                    <!--<div class="oe_chatter">-->
+                        <!--<field name="message_follower_ids" widget="mail_followers"/>-->
+                        <!--<field name="message_ids" widget="mail_thread"/>-->
+                    <!--</div>-->
+                <!--</form>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <record id="view_product_received_register_tree" model="ir.ui.view" >
+            <field name="name" >product.received.register.tree</field>
+            <field name="model">product.received.register</field>
+            <field name="arch" type="xml" >
+                <tree string="Product Received Register" decoration-info="state == 'draft' or state == 'transit'" decoration-danger="state=='issue'"  decoration-success="state=='resolved'"  decoration-muted="state=='cancel'" >
+                     <field name="name"  />
+                            <field name="receiving_date"  />
+                            <field name="truck_no"  />
+                    <field name="product_id" />
+                    <field name="quantity_loaded" />
+                            <field name="qty_received" />
+                    <field name="waybill_no"  />
+                    <field name="qty_discrepancy" />
+                    <field name="qty_discharged" />
+                     <field name="driver_name"  />
+                    <field name="driver_mobile_no" />
+                            <field name="from_stock_location_id"   />
+                            <field name="to_stock_location_id"  />
+                            <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_product_received_register_pivot_view">
+            <field name="name">product.received.register.pivot</field>
+            <field name="model">product.received.register</field>
+            <field name="arch" type="xml">
+                <pivot string="Product Received Register Pivot">
+                    <field name="to_stock_location_id" type="col"/>
+                    <field name="truck_date_in" interval="month" type="row" />
+                    <field name="quantity_loaded" type="measure"/>
+                    <field name="qty_received" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_product_received_register_graph_view">
+            <field name="name">product.received.register.graph</field>
+            <field name="model">product.received.register</field>
+            <field name="arch" type="xml">
+                <graph string="Product Received Register Graph" type="bar">
+                   <field name="to_stock_location_id" type="col"/>
+                    <field name="truck_date_in" interval="month" type="row" />
+                    <field name="quantity_loaded" type="measure"/>
+                    <field name="qty_received" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+         <record id="view_product_received_register_filter" model="ir.ui.view">
+            <field name="name">product.received.register.select</field>
+            <field name="model">product.received.register</field>
+            <field name="arch" type="xml">
+                <search string="Product Received Register">
+                    <field name="name" string="ID / Driver Name"  filter_domain="['|',('name','ilike',self),('driver_name','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                         <filter string="Retail Station" domain="[]" context="{'group_by':'to_stock_location_id'}"/>
+                        <filter name="tdi" string="Time In Month" domain="[]" context="{'group_by':'truck_date_in'}"/>
+                        <filter name="tdo" string="Time Out Month" domain="[]" context="{'group_by':'truck_date_out'}"/>
+                        <filter string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                         <filter name="grpstatus" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!--<record id="action_product_received_register_form" model="ir.actions.act_window" >-->
+            <!--<field name="name" >Product Transfers / Product Received</field>-->
+            <!--<field name="type">ir.actions.act_window</field>-->
+            <!--<field name="res_model">product.received.register</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_mode">tree,form,pivot,graph</field>-->
+            <!--<field name="context">{}</field>-->
+             <!--<field name="search_view_id" ref="view_product_received_register_filter"/>-->
+        <!--</record>-->
+
+        <!--<record id="action_product_received_register_view_form" model="ir.actions.act_window.view">-->
+            <!--<field name="sequence">2</field>-->
+            <!--<field name="view_mode">form</field>-->
+             <!--<field name="view_id" ref="view_product_received_register_form" />-->
+            <!--<field name="act_window_id" ref="action_product_received_register_form"/>-->
+        <!--</record>-->
+
+         <!--<record id="action_product_received_register_view_tree" model="ir.actions.act_window.view">-->
+            <!--<field name="sequence">1</field>-->
+            <!--<field name="view_mode">tree</field>-->
+             <!--<field name="view_id" ref="view_product_received_register_tree" />-->
+            <!--<field name="act_window_id" ref="action_product_received_register_form"/>-->
+        <!--</record>-->
+
+        <!--<menuitem id="menu_product_received_register_form" name="Product Received Register from Own Company" parent="menu_product_received_register" sequence="1" action="action_product_received_register_form" groups="kin_retail_station_rog.group_retail_station_management,kin_retail_station_rog.group_retail_manager,kin_retail_station_rog.group_change_destination"  />-->
+
+
+
+<!-- Product Received Register from Other Company -->
+         <record id="view_product_received_register_other_company_form" model="ir.ui.view" >
+            <field name="name" >product.received.register.other.company.form</field>
+            <field name="model">product.received.register</field>
+            <field name="arch" type="xml" >
+                <form string="Product Received Register for Other Company" >
+                    <header>
+                        <button name="action_confirm" type="object" states="draft" string="Validate and Update Stock" groups="kin_retail_station_rog.group_retail_manager"  class="oe_highlight" confirm="You are about to validate that the following product with the stated quantity. If you have not finished entering the required information, please click 'Cancel' button, otherwise click 'Ok' button" />
+                        <button name="action_cancel" states="draft,transit" type="object" string="Cancel" confirm="Are you sure you want to Cancel the document?"/>
+                        <button name="action_cancel_reverse_qty" states="validate,resolved,issue" type="object" string="Cancel and Reverse Stock" confirm="Are you sure you want to Cancel and Reverse Stock Moves for this Record?. Remember to reverse the discrepancy resolution for this record, if any" groups="kin_retail_station_rog.group_cancel_reverse_prr_stock_moves" />
+                        <button name="action_draft" states="cancel" type="object" string="Reset to Draft"  />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,validate"   />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_loading_ticket" groups="account.group_account_invoice,stock.group_stock_manager"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                attrs="{'invisible': [('lt_count', '=', 0)]}" >
+                                <field  name="lt_count" widget="statinfo" string="Loading Ticket" />
+                            </button>
+                            <button type="object"  name="btn_view_jnr" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('jnr_count', '=', 0)]}"  groups="account.group_account_invoice" >
+                                <field name="jnr_count" widget="statinfo" string="Journal Entries"/>
+                            </button>
+                             <button type="object"  name="btn_view_stock_move" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('stock_move_count', '=', 0)]}"  groups="stock.group_stock_manager" >
+                                <field name="stock_move_count" widget="statinfo" string="Stock Moves"/>
+                            </button>
+                        </div>
+
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1" />
+                            </h1>
+                        </div>
+                        <group col="4">
+                            <field name="loading_date"  attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="receiving_date" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="truck_no" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="waybill_no"  attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="driver_name"   attrs="{'readonly': [('state', '!=', 'draft')]}"  />
+                            <field name="driver_mobile_no" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="from_stock_location_id" domain="[('usage','=','internal')]" options="{'no_open':True}"  attrs="{'readonly': [('state', '!=', 'draft')]}"  />
+                             <field name="ticket_ref"  attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="to_stock_location_id"  required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"  options="{'no_open':True,'no_create':True}" />
+                            <field name="other_ref" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="truck_date_in" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="truck_date_out" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="time_interval" readonly="1" />
+                            <field name="product_id"   required="1" domain="[('white_product','in',['pms','ago','kero'])]" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_open':True,'no_create':True}" />
+                            <field name="product_uom" readonly="1" />
+                            <field name="product_price" />
+                            <field name="quantity_loaded"  required="1" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="qty_received"  required="1" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="qty_discrepancy" />
+                            <field name="amt_discrepancy"   />
+                            <field name="retail_station_manager_id" />
+                            <field name="user_id" />
+                            <field name="retail_manager_comment" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                          <field name="resolution_message" readonly="1" />
+                            <field name="resolution_notice_date" readonly="1" />
+                            <field name="create_date" readonly="1" />
+
+                        </group>
+                        <notebook>
+                            <page string="Product Discharged to Tanks">
+                                <field name="prr_line_ids" attrs="{'readonly': [('state', '!=', 'draft')]}" >
+                                    <tree string="PRA" editable="bottom" create="false" delete="false" >
+                                        <field name="is_company_product" invisible="1"/>
+                                        <field name="state" invisible="1"/>
+                                        <field name="tank_id" required="1"  domain="[('retail_station_id','=',parent.to_stock_location_id)]"  options="{'no_open':True,'no_create':True}"  />
+                                        <field name="tank_capacity" readonly="1" />
+                                        <field name="available_capacity" attrs="{'invisible': [('is_company_product', '=', True)]}" />
+                                        <field name="product_id" readonly="1" />
+                                        <field name="product_uom" readonly="1" />
+                                        <field name="current_stock_level" readonly="1" attrs="{'invisible': [('is_company_product', '=', True)]}" />
+                                        <field name="product_allocation" required="1"  />
+                                        <field name="exp_closing_dip" attrs="{'invisible': [('is_company_product', '=', True)]}" />
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_product_received_register_other_form" model="ir.actions.act_window" >
+            <field name="name" >Product Transfers / Product Received Register</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.received.register</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="context">{}</field>
+            <field name="search_view_id" ref="view_product_received_register_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a Product Received Register for Products Received From Other Company
+              </p>
+            </field>
+        </record>
+
+
+        <record id="action_product_received_register_other_company_view_tree" model="ir.actions.act_window.view">
+            <field name="sequence">3</field>
+            <field name="view_mode">tree</field>
+             <field name="view_id" ref="view_product_received_register_tree" />
+            <field name="act_window_id" ref="action_product_received_register_other_form"/>
+        </record>
+
+        <record id="action_product_received_register_other_company_view_form" model="ir.actions.act_window.view">
+            <field name="sequence">4</field>
+            <field name="view_mode">form</field>
+             <field name="view_id" ref="view_product_received_register_other_company_form" />
+            <field name="act_window_id" ref="action_product_received_register_other_form"/>
+        </record>
+
+        <menuitem id="menu_product_received_register_other_company_form" name="Product Received" parent="menu_product_received_register" sequence="2" action="action_product_received_register_other_form" groups="kin_retail_station_rog.group_retail_station_management,kin_retail_station_rog.group_retail_manager,kin_retail_station_rog.group_change_destination" />
+
+
+     <!-- Product Received Register Discrepancies -->
+         <record id="view_product_received_register_discrepancies_form" model="ir.ui.view" >
+            <field name="name" >product.received.register.discrepancies.form</field>
+            <field name="model">product.received.register</field>
+            <field name="arch" type="xml" >
+                <form string="Product Received Register Discrepancies" >
+                     <header>
+                         <button name="%(action_product_received_register_resolution)d" type="action" class="oe_highlight"  states="issue" string="Issue Resolved"  groups="kin_retail_station_rog.group_product_received_register_resolution"/>
+                         <button name="action_create_journal_entry" type="object"  states="issue" string="Create Journal Entry"  groups="account.group_account_invoice" />
+                         <field name="state" widget="statusbar" statusbar_visible="draft,validate"  />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_loading_ticket" groups="account.group_account_invoice,stock.group_stock_manager"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                attrs="{'invisible': [('lt_count', '=', 0)]}" >
+                                <field  name="lt_count" widget="statinfo" string="Loading Ticket" />
+                            </button>
+                            <button type="object"  name="btn_view_jnr" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('jnr_count', '=', 0)]}"  groups="account.group_account_invoice" >
+                                <field name="jnr_count" widget="statinfo" string="Journal Entries"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1" />
+                            </h1>
+                        </div>
+                        <group col="4">
+                            <field name="loading_date" readonly="1" />
+                            <field name="receiving_date"  />
+                            <field name="truck_no"  />
+                            <field name="waybill_no"  />
+                             <field name="driver_name" readonly="1" />
+                            <field name="driver_mobile_no" />
+                            <field name="from_stock_location_id"  readonly="1" />
+                            <field name="ticket_ref" readonly="1" />
+                            <field name="to_stock_location_id" readonly="1"  />
+                             <field name="other_ref" readonly="1" />
+                            <field name="truck_date_in" readonly="1" />
+                            <field name="truck_date_out" readonly="1" />
+                            <field name="time_interval" readonly="1" />
+                            <field name="product_id" readonly="1" />
+                            <field name="product_uom" readonly="1" />
+                            <field name="product_price" />
+                            <field name="quantity_loaded" readonly="1" />
+                            <field name="qty_received" readonly="1" />
+                             <field name="qty_discrepancy" />
+                            <field name="amt_discrepancy"   />
+                            <field name="retail_station_manager_id" />
+                             <field name="user_id" />
+                            <field name="retail_manager_comment" readonly="1" />
+                            <field name="resolution_message" readonly="1" />
+                            <field name="resolution_notice_date" readonly="1" />
+                            <field name="create_date" readonly="1" />
+                        </group>
+                        <notebook>
+                            <page string="Product Discharged to Tanks">
+                                <field name="prr_line_ids" readonly="1" >
+                                    <tree string="PRA" editable="bottom" >
+                                         <field name="tank_id"  />
+                                           <field name="tank_capacity" />
+                                          <field name="available_capacity"  />
+                                          <field name="product_id" />
+                                           <field name="product_uom" />
+                                            <field name="current_stock_level" />
+                                           <field name="product_allocation"  />
+                                        <field name="exp_closing_dip"  />
+                                        <field name="is_company_product" invisible="1"/>
+                                           <field name="state" invisible="1" />
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_product_received_register_discrepancies_form" model="ir.actions.act_window" >
+            <field name="name" >Product Transfers / Product Received (Discrepancies)</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.received.register</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain">[('state','=','issue')]</field>
+        </record>
+
+        <record id="action_product_received_register_discrepancies_view_form" model="ir.actions.act_window.view">
+            <field name="sequence">6</field>
+            <field name="view_mode">form</field>
+             <field name="view_id" ref="view_product_received_register_discrepancies_form" />
+            <field name="act_window_id" ref="action_product_received_register_discrepancies_form"/>
+        </record>
+        <record id="action_product_received_register_discrepancies_view_tree" model="ir.actions.act_window.view">
+            <field name="sequence">5</field>
+            <field name="view_mode">tree</field>
+             <field name="view_id" ref="view_product_received_register_tree" />
+            <field name="act_window_id" ref="action_product_received_register_discrepancies_form"/>
+        </record>
+
+        <menuitem id="menu_product_received_register_discrepancies_form" name="Product Received (Discrepancies)" groups="kin_retail_station_rog.group_retail_station_management,kin_retail_station_rog.group_product_received_register_resolution" parent="menu_product_received_register" sequence="3" action="action_product_received_register_discrepancies_form"/>
+
+
+<!-- Product Received Register Window - Retail Manager -->
+        <!--<record id="action_product_received_register_wip_retail_manager_form" model="ir.actions.act_window" >-->
+            <!--<field name="name" >Product Transfers / Product Received (To-Do)</field>-->
+            <!--<field name="type">ir.actions.act_window</field>-->
+            <!--<field name="res_model">product.received.register</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_mode">tree,form,pivot,graph</field>-->
+            <!--<field name="domain">[('state','in',['draft','transit','cancel'])]</field>-->
+        <!--</record>-->
+
+        <!--<record id="action_product_received_register_wip_retail_manager_view_tree" model="ir.actions.act_window.view">-->
+            <!--<field name="sequence">7</field>-->
+            <!--<field name="view_mode">tree</field>-->
+             <!--<field name="view_id" ref="view_product_received_register_tree" />-->
+            <!--<field name="act_window_id" ref="action_product_received_register_wip_retail_manager_form"/>-->
+        <!--</record>-->
+
+        <!--<record id="action_product_received_register_wip_retail_manager_view_form" model="ir.actions.act_window.view">-->
+            <!--<field name="sequence">8</field>-->
+            <!--<field name="view_mode">form</field>-->
+             <!--<field name="view_id" ref="view_product_received_register_other_company_form" />-->
+            <!--<field name="act_window_id" ref="action_product_received_register_wip_retail_manager_form"/>-->
+        <!--</record>-->
+
+        <!--<menuitem id="menu_product_received_register_wip_retail_manager_form" name="Product Received (To-Do)" groups="kin_retail_station_rog.group_retail_manager" parent="menu_product_received_register" sequence="0" action="action_product_received_register_wip_retail_manager_form"/>-->
+
+
+        <!-- Product Internal Movement -->
+            <record id="view_internal_movement_form" model="ir.ui.view" >
+            <field name="name" >kin.internal.movement.form</field>
+            <field name="model">kin.internal.movement</field>
+            <field name="arch" type="xml" >
+                <form string="Internal Movement" >
+                    <header>
+                        <button name="action_confirm" type="object" states="draft" string="Validate and Update Stock" groups="kin_retail_station_rog.group_internal_movement"  class="oe_highlight" confirm="You are about to validate that the following product with the stated quantity. If you have not finished entering the required information, please click 'Cancel' button, otherwise click 'Ok' button" />
+                        <!--<button name="action_cancel" states="validate" type="object" string="Cancel and Reverse" confirm="Are you sure you want to Cancel the document?" groups="base.group_no_one" />-->
+                        <button name="action_draft" states="cancel" type="object" string="Reset to Draft" groups="kin_retail_station_rog.group_internal_movement"   />
+                        <field name="state" widget="statusbar"  />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                             <button type="object"  name="btn_view_stock_move" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('stock_move_count', '=', 0)]}"  groups="stock.group_stock_manager" >
+                                <field name="stock_move_count" widget="statinfo" string="Stock Moves"/>
+                            </button>
+                        </div>
+
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1" />
+                            </h1>
+                        </div>
+                        <group col="4">
+                            <field name="product_id"   required="1" domain="[('white_product','in',['pms','ago','kero'])]" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_open':True,'no_create':True}" />
+                            <field name="product_uom" readonly="1" />
+                            <field name="date_move" attrs="{'readonly': [('state', '!=', 'draft')]}"  required="1" />
+                            <field name="qty" required="1" />
+                             <field name="from_tank_storage_id" attrs="{'readonly': [('state', '!=', 'draft')]}" required="1"  />
+                            <field name="user_id" attrs="{'readonly': [('state', '!=', 'draft')]}" readonly="1"  />
+                            <field name="to_tank_storage_id" attrs="{'readonly': [('state', '!=', 'draft')]}"  required="1" />
+                            <field name="note" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="create_date" readonly="1" />
+                        </group>
+                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+                <record id="view_kin_internal_movement_tree" model="ir.ui.view" >
+            <field name="name" >kin.internal.movement.tree</field>
+            <field name="model">kin.internal.movement</field>
+            <field name="arch" type="xml" >
+                <tree string="Product Internal Movement" >
+                     <field name="name"  />
+                    <field name="date_move"  />
+                    <field name="product_id"  />
+                    <field name="product_uom"  />
+                    <field name="qty" />
+                    <field name="user_id" />
+                    <field name="from_tank_storage_id" />
+                    <field name="to_tank_storage_id" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+
+
+         <record id="view_kin_internal_movement_filter" model="ir.ui.view">
+            <field name="name">kin.internal.movement.select</field>
+            <field name="model">kin.internal.movement</field>
+            <field name="arch" type="xml">
+                <search string="Product Internal Movement">
+                    <field name="name" string="ID"  filter_domain="['|',('name','ilike',self),('driver_name','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                         <filter name="grpstatus" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_internal_movement_form" model="ir.actions.act_window" >
+            <field name="name" >Product Transfers / Product Internal Transfer</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.internal.movement</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="search_view_id" ref="view_kin_internal_movement_filter"/>
+        </record>
+
+        <menuitem id="menu_stock_internal_movement_form" name="Product Internal Transfer" parent="menu_product_received_register" sequence="4" action="action_internal_movement_form" groups="kin_retail_station_rog.group_internal_movement" />
+
+
+<!-- Account Payment -->
+         <record id="view_account_payment_form_extend" model="ir.ui.view">
+            <field name="name">account.payment.form.extend</field>
+            <field name="model">account.payment</field>
+               <field name="inherit_id" ref="account.view_account_payment_form" />
+            <field name="arch" type="xml">
+                    <field name="communication" position="after" >
+                    <field name="stock_control_id" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                </field>
+                 <div  name="button_box" position="inside">
+                     <button type="object"  name="btn_view_stock_control" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('stock_control_count', '=', 0)]}" >
+                            <field name="stock_control_count" widget="statinfo" string="Stock Control"/>
+                    </button>
+                     <button   name="btn_view_bank_lodgement"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                attrs="{'invisible': [('bank_lodgement_count', '=', 0)]}" >
+                                <field   name="bank_lodgement_count" widget="statinfo" string="Bank Lodgements"/>
+                        </button>
+                 </div>
+            </field>
+         </record>
+
+    <!-- Retail Shift Sales -->
+        <record id="view_retail_sale_form" model="ir.ui.view">
+            <field name="name">retail.sale.form</field>
+            <field name="model">kin.retail.sale</field>
+            <field name="arch" type="xml">
+                <form string="Retail Sales">
+                <header>
+                    <button name="action_confirm" states="draft" type="object" class="oe_highlight"  string="Confirm and Notify Retail Manager" groups="kin_retail_station_rog.group_station_shift_supervisor" confirm="You are about to Confirm this retail sales and send email notification to the responsible persons. If you have not finished entering the required information, please click 'Cancel' button, otherwise click 'Ok' button" />
+                    <button name="action_approve" states="confirm" type="object" class="oe_highlight"  string="Approve and Close Shift"   groups="kin_retail_station_rog.group_retail_manager" />
+                    <button name="%(action_retail_sale_disapproval_reason)d"  states="confirm" type="action"   string="Dis-Approve"  groups="kin_retail_station_rog.group_retail_manager" />
+                    <button name="action_cancel" states="confirm" type="object" string="Cancel"/>
+                     <button name="action_cancel_retail_station_manager" states="approve" type="object" string="Cancel"  groups="kin_retail_station_rog.group_retail_manager" />
+                    <button name="action_draft" states="cancel" type="object" string="Set to Draft" />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,approve"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                            <button type="object"  name="btn_view_stock_control" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('stock_control_count', '=', 0)]}"  groups="account.group_account_invoice,kin_retail_station_rog.group_retail_manager" >
+                                <field name="stock_control_count" widget="statinfo" string="Stock Control"/>
+                            </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="retail_station_id" required="1" domain="[('shift_supervisor_ids', '=', uid)]"  options="{'no_open':True,'no_create':True}"  attrs="{'readonly': [('state', '!=','draft')]}" />
+                            <field name="retail_station_manager_id"  required="1"  readonly="1" />
+                            <field name="total_cash_sales" />
+                            <field name="total_cash_collected"  attrs="{'readonly': [('state', '!=','draft')]}" />
+                            <field name="total_pos_card" attrs="{'readonly': [('state', '!=','draft')]}" />
+                            <field name="total_voucher" attrs="{'readonly': [('state', '!=','draft')]}" />
+                            <field name="other_payment" attrs="{'readonly': [('state', '!=','draft')]}" />
+                            <field name="cash_difference" />
+                        </group>
+                        <group>
+                            <field name="retail_sale_date" attrs="{'readonly': [('state', '!=','draft')]}"  required="1" />
+                             <field name="retail_sale_time_start" t-options="{'format': 'HH:mm'}" attrs="{'readonly': [('state', '!=','draft')]}"  />
+                             <field name="retail_sale_time_end" attrs="{'readonly': [('state', '!=','draft')]}"  />
+                            <field name="time_interval"  />
+                            <field name="shift_supervisor_id" required="1" readonly="1" />
+                            <field name="shift_id" required="1" options="{'no_open':True,'no_create':True}" />
+                            <field name="user_id" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Shift Pump Sales">
+                            <field name="pump_sale_ids"  attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                <tree string="Sales" editable="bottom" create="false" delete="false" >
+                                    <field name="retail_station_id"  invisible="1" />
+                                     <field name="pump_id" readonly="1" required="1" domain="[('retail_station_id','=',parent.retail_station_id)]" options="{'no_open':True,'no_create':True}"  />
+                                    <field name="product_id" readonly="1" />
+                                    <field name="product_uom" readonly="1" />
+                                     <field name="product_price_readonly" readonly="1" />
+                                    <field name="product_price" invisible="1" />
+                                    <field name="meter_start_readonly" readonly="1" />
+                                    <field name="meter_start" invisible="1" />
+                                    <field name="meter_end" required="1" />
+                                    <field name="rtt" />
+                                    <field name="sale_qty"  />
+                                    <field name="price_subtotal" />
+                                </tree>
+                                <form>
+                                    <group col="4">
+                                         <field name="pump_sale_date" readonly="1"  />
+                                         <field name="pump_id" readonly="1" />
+                                        <field name="product_id" readonly="1"  />
+                                        <field name="product_uom" readonly="1"  />
+                                        <field name="product_price" readonly="1"  />
+                                        <field name="meter_start" readonly="1"  />
+                                        <field name="meter_end" readonly="1" />
+                                        <field name="rtt" readonly="1" />
+                                        <field name="sale_qty" readonly="1"  />
+                                        <field name="price_subtotal" readonly="1"  />
+                                        <field name="stock_control_id" readonly="1"  />
+                                        <field name="retail_sale_id" readonly="1"  />
+                                        <field name="retail_station_id" readonly="1"  />
+                                        <field  name="status" readonly="1"  />
+                                        <!--<field name="currency_id" readonly="1" />-->
+                                    </group>
+                                </form>
+
+                            </field>
+                        </page>
+                        <page string="Disapproval Info.">
+                            <group col="4" >
+                                <field name="reason_disapprove" readonly="1" />
+                                <field name="disapprove_id" readonly="1" />
+                                <field name="disapprove_date" readonly="1" />
+                            </group>
+                        </page>
+                    </notebook>
+                    <group col="4"  >
+                          <group string="PMS" class="oe_left" col="2" >
+                                <field name="total_pms_sales_qty"   />
+                               <field name="total_pms_cash_collected"  />
+                        </group>
+                          <group  string="AGO"  class="oe_left" col="2" >
+                                <field name="total_ago_sales_qty"  />
+                              <field name="total_ago_cash_collected"  />
+                        </group>
+                          <group  string="DPK" class="oe_left" col="2" >
+                               <field name="total_kero_sales_qty"   />
+                              <field name="total_kero_cash_collected"    />
+                          </group>
+                    </group>
+
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_kin_retail_sale_tree" model="ir.ui.view" >
+            <field name="name" >kin.retail.sale.tree</field>
+            <field name="model">kin.retail.sale</field>
+            <field name="arch" type="xml" >
+                <tree string="Shift Pump Sales"  decoration-info="state == 'draft' or state == 'confirm'"  decoration-muted="state=='cancel'" >
+                    <field name="name" />
+                    <field name="retail_sale_date"  />
+                    <field name="shift_id" />
+                    <field name="retail_station_id"  />
+                    <field name="retail_station_manager_id" />
+                    <field name="shift_supervisor_id" />
+                    <field name="total_cash_sales" sum="Total" />
+                    <field name="total_cash_collected" sum="Total" />
+                    <field name="total_pos_card" sum="Total" />
+                    <field name="other_payment" sum="Total" />
+                    <field name="cash_difference" sum="Total" />
+                    <field name="state"  />
+                </tree>
+            </field>
+        </record>
+
+         <record model="ir.ui.view" id="view_kin_retail_sale_pivot_view">
+            <field name="name">Retail Sale Pivot</field>
+            <field name="model">kin.retail.sale</field>
+            <field name="arch" type="xml">
+                <pivot string="Retail Sale Pivot">
+                    <field name="retail_station_id" type="row"/>
+                    <field name="total_cash_sales" type="measure" />
+                    <field name="total_cash_collected" type="measure" />
+                     <field name="total_pos_card" type="measure" />
+                     <field name="cash_difference" type="measure" />
+                </pivot>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_kin_retail_sale_graph_view">
+            <field name="name">Retail Sale Graph</field>
+            <field name="model">kin.retail.sale</field>
+            <field name="arch" type="xml">
+                <graph string="Retail Sale Graph" type="bar">
+                    <field name="retail_station_id" type="row"/>
+                    <field name="retail_sale_date" type="col"  />
+                </graph>
+            </field>
+        </record>
+
+        <record id="view_kin_retail_sale_filter" model="ir.ui.view">
+            <field name="name">kin.retail.sale.select</field>
+            <field name="model">kin.retail.sale</field>
+            <field name="arch" type="xml">
+                <search string="Retail Sale Record">
+                    <field name="name" string="ID / Retail Station"  filter_domain="['|',('name','ilike',self),('retail_station_id','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="Shift" string="Shift" domain="[]" context="{'group_by':'shift_id'}"/>
+                        <filter name="grpState" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                        <filter name="grpRS"  string="Retail Station" domain="[]" context="{'group_by':'retail_station_id'}"/>
+                        <filter name="grpdate" string="Date" domain="[]" context="{'group_by':'retail_sale_date'}"/>
+                        <filter string="Retail Station Manager" domain="[]" context="{'group_by':'retail_station_manager_id'}"/>
+
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_kin_retail_sale_form" model="ir.actions.act_window" >
+            <field name="name" >Pump Sales and Controls / Shift Pump Sales</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.retail.sale</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="context">{}</field>
+            <field name="search_view_id" ref="view_kin_retail_sale_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a Shift Pump Sale
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_shift_pump_sales" name="Shift Pump Sales" parent="menu_retail_station_sale_stock" sequence="1" action="action_kin_retail_sale_form" groups="kin_retail_station_rog.group_station_shift_supervisor,kin_retail_station_rog.group_retail_manager,kin_retail_station_rog.group_retail_station_management" />
+
+
+<!-- Shift Pump Sales for Station Supervisors  -->
+        <record id="action_kin_retail_sale_station_supervisor_form" model="ir.actions.act_window" >
+            <field name="name" >Pump Sales and Controls / Shift Pump Sales (To-Do for Station Supervisor)</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.retail.sale</field>
+            <field name="view_type">form</field>
+            <field name="domain">[('state','in',['draft','cancel'])]</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="search_view_id" ref="view_kin_retail_sale_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a Shift Pump Sale
+              </p>
+            </field>
+        </record>
+        <!--<menuitem id="menu_shift_pump_sales_station_supervisor" name="Shift Pump Sales (To-Do for Station Supervisor)" parent="menu_retail_station_sale_stock" sequence="0" action="action_kin_retail_sale_station_supervisor_form" groups="kin_retail_station_rog.group_station_shift_supervisor" />-->
+
+        <!-- Shift Pump Sales for Retail Managers  -->
+        <record id="action_kin_retail_sale_retail_manager_form" model="ir.actions.act_window" >
+            <field name="name" >Pump Sales and Controls / Shift Pump Sales (To-Do for Retail Manager)</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.retail.sale</field>
+            <field name="view_type">form</field>
+            <field name="domain">[('state','in',['confirm','cancel'])]</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="search_view_id" ref="view_kin_retail_sale_filter"/>
+        </record>
+        <!--<menuitem id="menu_shift_pump_sales_retail_manager" name="Shift Pump Sales (To-Do for Retail Manager)" parent="menu_retail_station_sale_stock" sequence="0" action="action_kin_retail_sale_retail_manager_form" groups="kin_retail_station_rog.group_retail_manager" />-->
+
+<!--&lt;!&ndash; Shift Pump Sales for Head Office Managers  &ndash;&gt;-->
+        <!--<record id="action_kin_retail_sale_head_office_form" model="ir.actions.act_window" >-->
+            <!--<field name="name" >Pump Sales and Controls / Shift Pump Sales (To-Do for Head Office Managers)</field>-->
+            <!--<field name="type">ir.actions.act_window</field>-->
+            <!--<field name="res_model">kin.retail.sale</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="domain">[('state','in',['approve','cancel'])]</field>-->
+            <!--<field name="view_mode">tree,form,pivot,graph</field>-->
+            <!--<field name="search_view_id" ref="view_kin_retail_sale_filter"/>-->
+        <!--</record>-->
+        <!--<menuitem id="menu_shift_pump_sales_head_office" name="Shift Pump Sales (To-Do for Head Office Managers)" parent="menu_retail_station_sale_stock" sequence="0" action="action_kin_retail_sale_head_office_form" groups="kin_retail_station_rog.group_retail_station_management" />-->
+
+
+       <!-- Pump Sales and Stock Control and Expenses -->
+         <record id="view_stock_control_form" model="ir.ui.view">
+            <field name="name">stock.control.form</field>
+            <field name="model">kin.stock.control</field>
+            <field name="arch" type="xml">
+                <form string="Pump Sales and Stock">
+                <header>
+                    <button name="action_confirm" states="draft" type="object" class="oe_highlight"  string="Confirm and Notify Management" confirm="You are about to Confirm this stock control and send email notification to the responsible persons. If you have not finished entering the required information, please click 'Cancel' button, otherwise click 'Ok' button" groups="kin_retail_station_rog.group_retail_manager" />
+                    <button name="action_approve" states="confirm" type="object" class="oe_highlight"  string="Approve"  confirm="The accountant will be notified to register payment. Also, Total Stock Gain/Loss Cost will be Posted to the Respective Accounts, if any." groups="kin_retail_station_rog.group_retail_station_management" />
+                    <button name="%(action_stock_control_disapproval_reason)d"  states="confirm" type="action"   string="Dis-Approve"  groups="kin_retail_station_rog.group_retail_station_management" />
+                    <button name="action_register_payment" states="approve,open" type="object" string="Register Payment"  groups="account.group_account_invoice"  />
+                    <button name="action_create_journal_entry" type="object"  states="approve,open" string="Create Journal Entry"  groups="account.group_account_invoice" />
+                    <button name="action_cancel" states="confirm" type="object" string="Cancel"/>
+                    <button name="action_cancel_approver" states="approve,open,done" type="object" string="Cancel and Reverse Stock" groups="kin_retail_station_rog.group_retail_station_management" />
+                    <button name="action_draft" states="cancel" type="object" string="Set to Draft" />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,approve,open,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                            <button  name="btn_view_payment_group"  groups="account.group_account_invoice"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                attrs="{'invisible': [('payment_count', '=', 0)]}" >
+                                <field   name="payment_count" widget="statinfo" string="Payments"/>
+                            </button>
+                            <button type="object"  name="btn_view_jnr" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('jnr_count', '=', 0)]}"  groups="account.group_account_invoice" >
+                                <field name="jnr_count" widget="statinfo" string="Journal Entries"/>
+                            </button>
+                            <button type="object"  name="btn_view_shift_sale" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('shift_sale_count', '=', 0)]}"  groups="account.group_account_invoice,kin_retail_station_rog.group_retail_manager" >
+                                <field name="shift_sale_count" widget="statinfo" string="Shift Sales"/>
+                            </button>
+                        <button type="object"  name="btn_view_stock_move" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('stock_move_count', '=', 0)]}"  groups="stock.group_stock_manager" >
+                                <field name="stock_move_count" widget="statinfo" string="Stock Moves"/>
+                            </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="retail_station_id" required="1"   options="{'no_open':True,'no_create':True}"  readonly="1" />
+                            <field name="retail_station_manager_id"  required="1"  readonly="1" />
+                            <field name="user_id" readonly="1"  />
+                            <field name="cash_in_till"  attrs="{'readonly': [('state', '!=','draft')]}" />
+                        </group>
+                        <group>
+                            <field name="stock_control_date" readonly="1" required="1" />
+                            <!--<field  name="stock_control_shift_ids" widget="many2many_tags"  />-->
+                           <field  name="retail_sale_ids" widget="many2many_tags" readonly="1" />
+                            <field name="bank_journal_ids" invisible="1"/>
+                            <field name="total_cash_sales_shift_sale" readonly="1" />
+                            <field name="total_cash_collected_shift_sale" readonly="1" />
+                            <field name="total_pos_card_shift_sale" readonly="1" />
+                            <field name="total_voucher_shift_sale" readonly="1" />
+                            <field name="other_payment_shift_sale" readonly="1" />
+                            <field name="cash_difference_shift_sale" readonly="1" />
+                            <field name="create_date" readonly="1" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Day Pump Sales">
+                            <field name="pump_sale_ids"   readonly="1">
+                                <tree string="Sales" editable="bottom" create="false" delete="false" >
+                                     <field name="pump_id" required="1" domain="[('retail_station_id','=',parent.retail_station_id)]" options="{'no_open':True,'no_create':True}"  />
+                                    <field name="product_id" readonly="1" />
+                                    <field name="product_uom" readonly="1" />
+                                    <field name="product_price"  readonly="1" />
+                                    <field name="meter_start" readonly="1" />
+                                    <field name="meter_end" required="1" />
+                                    <field name="rtt" />
+                                    <field name="sale_qty"  />
+                                    <field name="price_subtotal" readonly="1"/>
+                                </tree>
+                                <form>
+                                    <group col="4">
+                                         <field name="pump_id" readonly="1"   />
+                                        <field name="product_id" readonly="1" />
+                                        <field name="product_uom" readonly="1" />
+                                        <field name="product_price" readonly="1" />
+                                        <field name="meter_start" readonly="1" />
+                                        <field name="meter_end" readonly="1"  />
+                                        <field name="rtt" readonly="1" />
+                                        <field name="sale_qty"  readonly="1"  />
+                                        <field name="price_subtotal" readonly="1"/>
+                                    </group>
+                                </form>
+                            </field>
+
+                        </page>
+                        <page  string="Tank Dippings" >
+                            <field name="tank_dipping_ids"   attrs="{'readonly': [('state', '!=', 'draft')]}" >
+                                <tree string="Tank Dippings" editable="bottom" create="false" delete="false" >
+                                    <field name="tank_id" readonly="1" domain="[('retail_station_id','=',parent.retail_station_id)]" />
+                                    <field name="product_id" readonly="1"  />
+                                    <field name="product_uom" readonly="1"  />
+                                    <field name="opening_stock" readonly="1" />
+                                    <field name="stock_received" readonly="1" />
+                                    <field name="current_int_transfer_in" readonly="1"  />
+                            <field name="current_int_transfer_out" readonly="1"  />
+                                    <field name="stock_at_hand" />
+                                    <field name="closing_stock" />
+                                    <field name="throughput" />
+                                </tree>
+                                <form>
+                                    <group col="4">
+                                         <field name="tank_id" readonly="1" />
+                                        <field name="product_id" readonly="1"  />
+                                        <field name="product_uom" readonly="1"  />
+                                        <field name="opening_stock" readonly="1" />
+                                        <field name="stock_received" readonly="1" />
+                                        <field name="current_int_transfer_in" readonly="1"  />
+                                        <field name="current_int_transfer_out" readonly="1"   />
+                                        <field name="stock_at_hand" readonly="1"  />
+                                        <field name="closing_stock" readonly="1"  />
+                                        <field name="throughput" readonly="1"  />
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Retail Station Expenses" >
+
+                                <field name="expense_ids" attrs="{'readonly': [('state', '!=', 'draft')]}"   >
+                                    <tree  editable="bottom">
+                                         <field name="exp_date"  required="1" invisible="1" />
+                                        <field name="expense_type" required="1"  />
+                                        <field name="description"   />
+                                        <field name="amount" required="1"  context="{'stock_control_date':parent.stock_control_date}" />
+                                    </tree>
+                                    <form>
+                                        <group col="4" >
+                                            <field name="exp_date"  readonly="1"  />
+                                        <field name="expense_type" readonly="1"   />
+                                        <field name="description" readonly="1"   />
+                                        <field name="amount" readonly="1"  />
+                                        </group>
+                                    </form>
+                                </field>
+
+                        </page>
+                        <page string="Bank / POS / Voucher / Other Lodgements" >
+                            <field name="bank_lodgement_ids" options="{'reload_on_button': true}" attrs="{'readonly': [('state', '!=', 'draft')]}"   >
+                                    <tree editable="bottom">
+                                        <!--<field name="name" />-->
+                                        <field name="lodge_date"  required="1" invisible="1" />
+                                        <field name="amount"  required="1" context="{'stock_control_date':parent.stock_control_date}" />
+                                        <!--<field name="journal_id" domain="[('id','in',parent.retail_station_id.bank_journal_ids and parent.retail_station_id.bank_journal_ids[0][2] or [])]" required="1" options="{'no_open':True,'no_create':True}" />-->
+                                        <field name="journal_id" domain="[('id','in',parent.bank_journal_ids or [])]" required="1" options="{'no_open':True,'no_create':True}" />
+                                        <field name="teller_no" required="1"  />
+                                        <field name="payment_count" invisible="1"/>
+                                        <field name="retail_station_id" invisible="1"  required="1" domain="[('id','=',parent.retail_station_id)]"  options="{'no_open':True,'no_create':True}" />
+                                        <button name="action_validate"   attrs="{'invisible': [('payment_count', '!=', 0)]}"  string="Validate" type="object" icon="gtk-apply" groups="account.group_account_invoice"  />
+                                        <button name="action_cancel"   attrs="{'invisible': [('payment_count', '=', 0)]}"  string="Cancel" type="object" icon="gtk-cancel"  groups="account.group_account_invoice"   />
+                                    </tree>
+                                <form>
+                                    <group col="4" >
+                                          <field name="lodge_date" readonly="1" />
+                                        <field name="amount"  readonly="1" />
+                                        <!--<field name="journal_id" domain="[('id','in',parent.retail_station_id.bank_journal_ids and parent.retail_station_id.bank_journal_ids[0][2] or [])]" required="1" options="{'no_open':True,'no_create':True}" />-->
+                                        <field name="journal_id" readonly="1" />
+                                        <field name="teller_no" readonly="1"  />
+                                        <field name="payment_count" readonly="1" />
+                                        <field name="retail_station_id" readonly="1" />
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Disapproval Info.">
+                            <group col="4" >
+                                <field name="reason_disapprove" readonly="1" />
+                                <field name="disapprove_id" readonly="1" />
+                                <field name="disapprove_date" readonly="1" />
+                            </group>
+                        </page>
+                    </notebook>
+                    <group col="4"  >
+                          <group string="PMS" class="oe_left" col="2" >
+                                <field name="total_pms_sales_qty" string="Total Sales Qty. (ltrs)" readonly="1"   />
+                                <field name="total_pms_throughput" string="Total ThroughPut Qty. (ltrs)" readonly="1" />
+                                    <field name="stock_loss_gain_pms" string="Stock Gain/(-Loss) Qty. (ltrs)" readonly="1" />
+                              <field name="stock_loss_gain_pms_cost" string="Stock Gain/(-Loss) Cost (NGN)" readonly="1" />
+                              <field name="total_pms_cash_collected"  string="Total Cash Sales (NGN)" readonly="1" />
+
+                        </group>
+                          <group  string="AGO"  class="oe_left" col="2" >
+                                <field name="total_ago_sales_qty" string="Total Sales Qty. (ltrs)" readonly="1"  />
+                                <field name="total_ago_throughput" string="Total ThroughPut Qty. (ltrs)'" readonly="1" />
+                                    <field name="stock_loss_gain_ago" string="Stock Gain/(-Loss) Qty. (ltrs)"  readonly="1"/>
+                             <field name="stock_loss_gain_ago_cost"  string="Stock Gain/(-Loss) Cost (NGN)" readonly="1"/>
+                              <field name="total_ago_cash_collected" string="Total Cash Sales (NGN)" readonly="1" />
+                        </group>
+                          <group  string="DPK" class="oe_left" col="2" >
+                               <field name="total_kero_sales_qty" string="Total Sales Qty. (ltrs)" readonly="1"   />
+                                <field name="total_kero_throughput" string="Total ThroughPut Qty. (ltrs)" readonly="1" />
+                                    <field name="stock_loss_gain_kero" string="Stock Gain/(-Loss) Qty. (ltrs)" readonly="1" />
+                              <field name="stock_loss_gain_kero_cost" string="Stock Gain/(-Loss) Cost (NGN)" readonly="1" />
+                              <field name="total_kero_cash_collected" string="Total Cash Sales (NGN)" readonly="1" />
+                          </group>
+                    </group>
+
+                   <group col="4" name="sale_total">
+                        <group col="1" string="Explanation of Variance (Stock and Cash)"  >
+                                <field nolabel="1" name="variance_explanation" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                        </group>
+                       <group string="Cash Control" col="2"  >
+                                    <field name="total_cash_collected" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                     <field name="cash_brought_forward" widget='monetary' options="{'currency_field': 'currency_id'}" />
+                                    <field name="total_cash_to_bank"   widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                    <field name="cash_difference" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+
+                                    <!--<field name="gmd_consumption"  widget='monetary' options="{'currency_field': 'currency_id'}"  />-->
+                                    <!--<field name="ago_for_generator"  widget='monetary' options="{'currency_field': 'currency_id'}"   />-->
+                                    <!--<field name="maintenance_charges"  widget='monetary' options="{'currency_field': 'currency_id'}"   />-->
+                                    <!--<field name="station_car_fueling"  widget='monetary' options="{'currency_field': 'currency_id'}"   />-->
+                                    <!--<field name="other_expenses"  widget='monetary' options="{'currency_field': 'currency_id'}"   />-->
+                                    <field name="total_expenses"  widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                    <field name="net_difference" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+
+                            <button name="button_dummy" states="draft" string="(update fields)" type="object" class="oe_edit_only oe_link"/>
+                       </group>
+                       <group string="Lodgments" col="1" >
+                            <field name="posted_payment" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                           <field name="balance_to_be_posted" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                       </group>
+                    </group>
+
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_kin_stock_control_tree" model="ir.ui.view" >
+            <field name="name" >kin.stock.control.tree</field>
+            <field name="model">kin.stock.control</field>
+            <field name="arch" type="xml" >
+                <tree string="Pump Sales and Stock Control Record" decoration-info="state == 'draft' or state=='confirm'"    decoration-muted="state=='cancel'" >
+                    <field name="name" />
+                    <field name="stock_control_date"  />
+                    <field name="retail_station_id"  />
+                    <field name="retail_station_manager_id" />
+                    <field name="cash_in_till" sum="Total" />
+                    <field name="cash_brought_forward" sum="Total" />
+                                    <field name="total_cash_collected" sum="Total" />
+                                    <field name="total_cash_to_bank" sum="Total" />
+                                    <field name="cash_difference" sum="Total" />
+                     <field name="total_expenses" sum="Total" />
+                    <field name="net_difference" sum="Total" />
+                    <field name="state"   />
+
+
+                </tree>
+            </field>
+        </record>
+
+         <record model="ir.ui.view" id="view_kin_stock_control_pivot_view">
+            <field name="name">Stock Control Pivot</field>
+            <field name="model">kin.stock.control</field>
+            <field name="arch" type="xml">
+                <pivot string="Stock Control Pivot">
+                    <field name="retail_station_id" type="row"/>
+                                    <field name="total_cash_collected" type="measure" />
+                                    <field name="total_cash_to_bank" type="measure" />
+                                    <field name="cash_difference" type="measure" />
+                </pivot>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_kin_stock_control_graph_view">
+            <field name="name">Stock Control Graph</field>
+            <field name="model">kin.stock.control</field>
+            <field name="arch" type="xml">
+                <graph string="Stock Control Graph" type="bar">
+                    <field name="retail_station_id" type="row"/>
+                    <field name="stock_control_date" type="col"  />
+                </graph>
+            </field>
+        </record>
+
+        <record id="view_kin_stock_control_filter" model="ir.ui.view">
+            <field name="name">kin.stock.control.select</field>
+            <field name="model">kin.stock.control</field>
+            <field name="arch" type="xml">
+                <search string="Stock Control Record">
+                    <field name="name" string="ID / Retail Station"  filter_domain="['|',('name','ilike',self),('retail_station_id','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="Shift" string="Shift" domain="[]" context="{'group_by':'shift_id'}"/>
+                        <filter name="grpState" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                         <filter name="grpRS"  string="Retail Station" domain="[]" context="{'group_by':'retail_station_id'}"/>
+                        <filter name="grpdate" string="Date" domain="[]" context="{'group_by':'stock_control_date'}"/>
+                        <filter string="Retail Station Manager" domain="[]" context="{'group_by':'retail_station_manager_id'}"/>
+
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_kin_stock_control_form" model="ir.actions.act_window" >
+            <field name="name" >Pump Sales and Controls / Day Pump Sales and Controls</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.stock.control</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="context">{}</field>
+            <field name="search_view_id" ref="view_kin_stock_control_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a Control Record
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_sales_stock_control" name="Day Pump Sales and Controls" parent="menu_retail_station_sale_stock" sequence="4" action="action_kin_stock_control_form" groups="kin_retail_station_rog.group_retail_manager,kin_retail_station_rog.group_retail_station_management"  />
+
+        <!-- Control Records For Retail Manager  -->
+        <record id="action_kin_stock_control_retail_manager_form" model="ir.actions.act_window" >
+            <field name="name" >Pump Sales and Controls / Day Pump Sales and Controls (To-Do for Retail Manager) </field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.stock.control</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+             <field name="domain">[('state', 'in', ['draft','cancel'])]</field>
+            <field name="search_view_id" ref="view_kin_stock_control_filter"/>
+        </record>
+        <!--<menuitem id="menu_sales_stock_control_retail_manager" name="Day Pump Sales and Controls (To-Do for Retail Manager)" parent="menu_retail_station_sale_stock" sequence="3" action="action_kin_stock_control_retail_manager_form" groups="kin_retail_station_rog.group_retail_manager"  />-->
+
+ <!-- Control Records For HEad Office  -->
+        <record id="action_kin_stock_control_head_office_form" model="ir.actions.act_window" >
+            <field name="name" >Pump Sales and Controls / Day Pump Sales and Controls (To-Do for Head Office Managers) </field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.stock.control</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+             <field name="domain">[('state', 'in', ['confirm','cancel'])]</field>
+            <field name="search_view_id" ref="view_kin_stock_control_filter"/>
+        </record>
+        <!--<menuitem id="menu_sales_stock_control_head_office" name="Day Pump Sales and Controls (To-Do for Head Office Managers)" parent="menu_retail_station_sale_stock" sequence="3" action="action_kin_stock_control_head_office_form" groups="kin_retail_station_rog.group_retail_station_management"  />-->
+
+
+        <!-- Control Records For Accountant  -->
+        <record id="action_kin_stock_control_accountant_form" model="ir.actions.act_window" >
+            <field name="name" >Pump Sales and Controls / Day Pump Sales and Controls (To-Do for Accountant) </field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.stock.control</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+             <field name="domain">[('state', 'in', ['approve','open','cancel'])]</field>
+            <field name="search_view_id" ref="view_kin_stock_control_filter"/>
+        </record>
+        <!--<menuitem id="menu_sales_stock_control_accountant" name="Day Pump Sales and Controls (To-Do for Accountant)" parent="menu_retail_station_sale_stock" sequence="3" action="action_kin_stock_control_accountant_form" groups="account.group_account_invoice"  />-->
+
+
+
+        <!-- Fuel Pump -->
+         <record id="view_kin_fuel_pump_form" model="ir.ui.view" >
+            <field name="name" >kin.fuel.pump.form</field>
+            <field name="model">kin.fuel.pump</field>
+            <field name="arch" type="xml" >
+                <form string="Fuel Pump" >
+                  <header>
+                    <button name="%(action_change_totalizer_pump)d"  string="Change Totalizer Value"   type="action" groups="kin_retail_station_rog.group_change_totalizer_value" />
+                </header>
+                    <sheet>
+                        <group col="4">
+                             <field name="name"  />
+                            <field name="product_id" />
+                            <field name="product_uom" />
+                            <field name="selling_price" readonly="1" />
+                            <field name="tank_ids"  widget="many2many_tags"  required="1" />
+                            <field name="retail_station_id"  readonly="1"  />
+                            <field name="totalizer" required="1" readonly="1"  />
+                            <field name="asset_id" />
+                        </group>
+                        <notebook>
+                         <page string="Pump Price History" >
+                            <field name="pump_price_history_ids"  readonly="1"   >
+                                    <tree>
+                                        <field name="product_id" />
+                                        <field name="uom_id" />
+                                        <field name="new_price" />
+                                        <field name="user_id" />
+                                        <field name="date_change" />
+                                        <field name="previous_price" />
+                                    </tree>
+                            </field>
+                        </page>
+                             <page  string="Pump Meter Totalizer Value History" >
+                             <field name="pump_totalizer_history_ids"  readonly="1"   >
+                                    <tree>
+                                        <field name="product_id" />
+                                        <field name="uom_id" />
+                                        <field name="new_totalizer" />
+                                        <field name="user_id" />
+                                        <field name="date_change" />
+                                        <field name="previous_totalizer" />
+                                    </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+         </record>
+
+        <record id="view_kin_fuel_pump_tree" model="ir.ui.view" >
+            <field name="name" >kin.fuel.pump.tree</field>
+            <field name="model">kin.fuel.pump</field>
+            <field name="arch" type="xml" >
+                <tree string="Fuel Pump Table" >
+                     <field name="name"  />
+                    <field name="product_id" />
+                    <field name="product_uom" />
+                    <field name="selling_price" />
+                     <field name="tank_ids" />
+                    <field name="retail_station_id" />
+                    <field name="totalizer"   />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_kin_fuel_pump_filter" model="ir.ui.view">
+            <field name="name">kin.fuel.pump.select</field>
+            <field name="model">kin.fuel.pump</field>
+            <field name="arch" type="xml">
+                <search string="Fuel Pump Filter">
+                    <field name="name" string="ID / Retail Station"  filter_domain="['|',('name','ilike',self),('retail_station_id','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                        <!--<filter string="Tanks" domain="[]" context="{'group_by':'tank_ids'}"/>-->
+                        <filter name="grpRS" string="Retail Station" domain="[]" context="{'group_by':'retail_station_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_kin_fuel_pump_form" model="ir.actions.act_window" >
+            <field name="name" >Master Data / Fuel Pump</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.fuel.pump</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_grpRS': 1}</field>
+            <field name="search_view_id" ref="view_kin_fuel_pump_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create Fuel Pump
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_kin_fuel_pump" name="Fuel Pump" parent="menu_retail_station_configuration" sequence="5" action="action_kin_fuel_pump_form"/>
+
+
+        <!--  Shift -->
+         <record id="view_kin_shift_form" model="ir.ui.view" >
+            <field name="name" >kin.shift.form</field>
+            <field name="model">kin.shift</field>
+            <field name="arch" type="xml" >
+                <form string="Shift" >
+                    <sheet>
+                        <group col="4">
+                            <field name="name"  required="1" />
+                            <field name="retail_station_ids"  widget="many2many_tags" />
+                        </group>
+                   <notebook>
+                       <page string="Pump Sales and Stock Controls">
+                           <field name="shift_stock_control_ids" readonly="1" />
+                       </page>
+                       <page string="Shift Pump Sales" >
+                           <field name="retail_sale_ids" readonly="1" />
+                       </page>
+                   </notebook>
+                    </sheet>
+                </form>
+            </field>
+         </record>
+
+        <record id="view_kin_shift_tree" model="ir.ui.view" >
+            <field name="name" >kin.shift.tree</field>
+            <field name="model">kin.shift</field>
+            <field name="arch" type="xml" >
+                <tree string="Shift" >
+                     <field name="name" />
+                    <field name="retail_station_ids"   />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_kin_shift_filter" model="ir.ui.view">
+            <field name="name">kin.shift.select</field>
+            <field name="model">kin.shift</field>
+            <field name="arch" type="xml">
+                <search string="Shift Filter">
+                    <field name="name" string="Number / Retail Station"  filter_domain="['|',('name','ilike',self),('retail_station_id','ilike',self)]"/>
+
+                </search>
+            </field>
+        </record>
+
+        <record id="action_kin_shift_form" model="ir.actions.act_window" >
+            <field name="name" >Master Data / Shift</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.shift</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_kin_shift_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create Shift
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_kin_shift_pump" name="Shift" parent="menu_retail_station_configuration" sequence="6" action="action_kin_shift_form"/>
+
+
+        <!-- Tank Storage -->
+         <record id="view_kin_tank_storage_form" model="ir.ui.view" >
+            <field name="name" >kin.tank.storage.form</field>
+            <field name="model">kin.tank.storage</field>
+            <field name="arch" type="xml" >
+                <form string="Tank Storage" >
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object"  name="btn_view_stock_location" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('stock_location_count', '=', 0)]}"  groups="account.group_account_invoice,kin_retail_station_rog.group_retail_manager,stock.group_stock_manager" >
+                                <field name="stock_location_count" widget="statinfo" string="Stock Location(s)"/>
+                            </button>
+                        </div>
+                        <group col="4">
+                             <field name="name" required="1" />
+                            <field name="location_id" />
+                            <field name="usage" required="1" />
+                            <field name="retail_station_id" required="1" />
+                            <field name="product_id" required="1" />
+                            <field name="product_uom" required="1" />
+                            <field name="capacity" required="1" />
+                            <field name="stock_level"  readonly="1" />
+                             <field name="available_space" />
+                            <field name="current_stock_received" readonly="1"  />
+                            <field name="current_int_transfer_in" readonly="1"  />
+                            <field name="current_int_transfer_out" readonly="1"  />
+                            <field name="current_closing_stock" readonly="1"  />
+                             <field name="minimum_stock_level"  />
+                            <field name="remark" />
+                            <field name="asset_id" />
+                        </group>
+                   <notebook>
+                       <page string="Pumps">
+                           <field name="pump_ids" readonly="1" />
+                       </page>
+                       <page>
+                           <field name="prr_line_ids" readonly="1" />
+                       </page>
+                   </notebook>
+                    </sheet>
+                     <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+         </record>
+
+        <record id="view_kin_tank_storage_tree" model="ir.ui.view" >
+            <field name="name" >kin.tank.storage.tree</field>
+            <field name="model">kin.tank.storage</field>
+            <field name="arch" type="xml" >
+                <tree string="Tank Storage" >
+                     <field name="name"  />
+                            <field name="retail_station_id" />
+                            <field name="product_id"  />
+                            <field name="product_uom"  />
+                            <field name="capacity" />
+                    <field name="stock_level"   />
+                     <field name="available_space" />
+                            <field name="remark" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_kin_tank_storage_filter" model="ir.ui.view">
+            <field name="name">kin.tank.storage.select</field>
+            <field name="model">kin.tank.storage</field>
+            <field name="arch" type="xml">
+                <search string="Tank Storage Filter">
+                    <field name="name" string="Number / Retail Station"  filter_domain="['|',('name','ilike',self),('retail_station_id','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="grpRS" string="Retail Station" domain="[]" context="{'group_by':'retail_station_id'}"/>
+                        <filter  string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_kin_tank_storage_form" model="ir.actions.act_window" >
+            <field name="name" >Master Data / Tank Storage</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.tank.storage</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_kin_tank_storage_filter"/>
+            <field name="context">{'search_default_grpRS': 1}</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create Tank Storage
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_kin_tank_storage" name="Tank Storage" parent="menu_retail_station_configuration" sequence="4" action="action_kin_tank_storage_form"/>
+
+
+
+<!-- Retail Stations -->
+         <record id="view_kin_retail_station_rog_form" model="ir.ui.view" >
+            <field name="name" >kin.retail.station.form</field>
+            <field name="model">kin.retail.station</field>
+            <field name="arch" type="xml" >
+                <form string="Retail Station" >
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object"  name="btn_view_stock_location" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('stock_location_count', '=', 0)]}"  groups="account.group_account_invoice,kin_retail_station_rog.group_retail_manager,stock.group_stock_manager" >
+                                <field name="stock_location_count" widget="statinfo" string="Stock Location(s)"/>
+                            </button>
+                        </div>
+                        <group col="4">
+                            <field name="name" required="1" />
+                            <field name="location_id" />
+                            <field name="usage" required="1" />
+                            <field name="address" required="1" />
+                            <field name="country_id" required="1" />
+                            <field name="state_id"  domain="[('country_id','=',country_id)]" required="1" />
+                            <field name="retail_station_manager_id" required="1" />
+                            <field name="retail_station_customer_location_id" domain="[('usage','in', ['customer'])]" required="1"/>
+                            <field name="shift_ids" widget="many2many_tags" />
+                            <field name="shift_supervisor_ids" widget="many2many_tags"  />
+                            <field name="total_stock_level_pms" />
+                            <field name="total_stock_level_ago" />
+                            <field name="total_stock_level_dpk" />
+                             <field name="operational_loss_gain_percentage" />
+                            <field name="latest_cash_in_till" readonly="1" />
+                            <field name="threshold_for_notification" />
+                            <field name="is_net_difference_zero" />
+                            <field name="asset_id" />
+                            <field name="analytical_account_id" />
+                            <field name="bank_journal_ids" widget="many2many_tags" />
+                        </group>
+                   <notebook>
+                       <page string="Branch Companies">
+                           <field name="partner_ids" readonly="1" />
+                       </page>
+                        <page string="Storage Tanks">
+                           <field name="tank_ids" readonly="1" />
+                       </page>
+                        <page string="Pump Sales and Stock Controls">
+                           <field name="stock_control_ids" readonly="1" />
+                       </page>
+                       <page string="Bank Lodgements" >
+                           <field name="bank_lodgement_ids" readonly="1" />
+                       </page>
+                       <page string="Product Re-Order Levels" >
+                           <field name="product_reorder_ids" >
+                                   <tree editable="bottom" >
+                                       <field name="product_id" options="{'no_open':True,'no_create':True}"  />
+                                       <field name="reorder_level" />
+                                   </tree>
+                           </field>
+                       </page>
+                   </notebook>
+                    </sheet>
+                     <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+         </record>
+
+        <record id="view_kin_retail_station_rog_tree" model="ir.ui.view" >
+            <field name="name" >kin.retail.station.tree</field>
+            <field name="model">kin.retail.station</field>
+            <field name="arch" type="xml" >
+                <tree string="Retail Station" >
+                           <field name="name" />
+                            <field name="address" />
+                            <field name="country_id" />
+                            <field name="state_id" />
+                            <field name="retail_station_manager_id" />
+                    <field name="shift_ids"  />
+                    <field name="total_stock_level_pms" />
+                    <field name="total_stock_level_ago" />
+                    <field name="total_stock_level_dpk" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_kin_retail_station_rog_filter" model="ir.ui.view">
+            <field name="name">kin.retail.station.select</field>
+            <field name="model">kin.retail.station</field>
+            <field name="arch" type="xml">
+                <search string="Receiving Depot Filter">
+                    <field name="name" string="Name"  filter_domain="[('name','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter  string="State" domain="[]" context="{'group_by':'state_id'}"/>
+                        <filter  string="Country" domain="[]" context="{'group_by':'country_id'}"/>
+                         <filter  string="Retail Station Manager" domain="[]" context="{'group_by':'retail_station_manager_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_kin_retail_station_rog_form" model="ir.actions.act_window" >
+            <field name="name" >Master Data / Retail Station</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.retail.station</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_kin_retail_station_rog_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create Retail Station
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_kin_retail_station_rog" name="Retail Station" parent="menu_retail_station_configuration" sequence="3" action="action_kin_retail_station_rog_form"/>
+
+
+        <!-- Bank Lodegment -->
+         <record id="view_kin_bank_lodgement_form" model="ir.ui.view" >
+            <field name="name" >kin.bank.lodgement.form</field>
+            <field name="model">kin.bank.lodgement</field>
+            <field name="arch" type="xml" >
+                <form string="Bank Lodgement" >
+                    <header>
+                          <button name="action_validate" class="oe_highlight"  attrs="{'invisible': [('payment_count', '!=', 0)]}"   string="Validate" type="object" icon="gtk-apply" groups="account.group_account_invoice"  />
+                          <button name="action_cancel"  attrs="{'invisible': [('payment_count', '=', 0)]}" string="Cancel" type="object" icon="gtk-cancel" groups="account.group_account_invoice"    />
+                      </header>
+                  <sheet>
+                      <div class="oe_button_box" name="button_box">
+                            <button name="btn_view_stock_control"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                attrs="{'invisible': [('stock_control_count', '=', 0)]}" >
+                                <field  name="stock_control_count" widget="statinfo" string="Stock Controls"/>
+                            </button>
+                          <button name="btn_view_payment_group"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                attrs="{'invisible': [('payment_count', '=', 0)]}" >
+                                <field  name="payment_count" widget="statinfo" string="Payments"/>
+                            </button>
+                    </div>
+                      <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                        <group col="4">
+                            <field name="lodge_date" required="1" />
+                            <field name="amount" required="1" />
+                            <field name="journal_id" required="1"  options="{'no_open':True,'no_create':True}"  />
+                            <field name="teller_no" required="1" />
+                            <field name="retail_station_id" required="1" options="{'no_open':True,'no_create':True}" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+         </record>
+
+        <record id="view_kin_bank_lodgement_tree" model="ir.ui.view" >
+            <field name="name" >kin.bank.lodgement.tree</field>
+            <field name="model">kin.bank.lodgement</field>
+            <field name="arch" type="xml" >
+                <tree string="Bank Lodgement" >
+                            <field name="name" />
+                            <field name="lodge_date"  />
+                            <field name="amount"  />
+                            <field name="journal_id"  />
+                            <field name="teller_no" />
+                            <field name="retail_station_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_kin_bank_lodgement_filter" model="ir.ui.view">
+            <field name="name">kin.bank.lodgement.select</field>
+            <field name="model">kin.bank.lodgement</field>
+            <field name="arch" type="xml">
+                <search string="Bank Lodegment Filter">
+                    <field name="name" string="ID / Teller No."  filter_domain="['|',('name','ilike',self),('teller_no','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter  name="grpRST" string="Retail Station" domain="[]" context="{'group_by':'retail_station_id'}"/>
+                        <filter  name="grpPM" string="Payment Method" domain="[]" context="{'group_by':'journal_id'}"/>
+                        <filter name="grpDate"  string="Date" domain="[]" context="{'group_by':'lodge_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_kin_bank_lodgement_form" model="ir.actions.act_window" >
+            <field name="name" >Report / Bank Lodgement</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.bank.lodgement</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,pivot</field>
+            <field name="search_view_id" ref="view_kin_bank_lodgement_filter"/>
+            <field name="context">{'search_default_grpRST': 1,'search_default_grpPM': 1,'search_default_grpDate':1}</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create Bank Lodgement
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_kin_bank_lodgement" name="Bank Lodgements" parent="menu_retail_station_report" sequence="1" action="action_kin_bank_lodgement_form"/>
+
+        <!-- Retail Station Expenses -->
+       <record id="view_kin_retail_station_rog_expense_form" model="ir.ui.view">
+            <field name="name">kin.retail.station.expense.form</field>
+            <field name="model">kin.retail.station.expense</field>
+            <field name="arch" type="xml">
+                <form string="Retail Station Expenses">
+                <header>
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                            <button name="btn_view_stock_control"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                attrs="{'invisible': [('stock_control_count', '=', 0)]}" >
+                                <field  name="stock_control_count" widget="statinfo" string="Stock Controls"/>
+                            </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="retail_station_id" required="1"   options="{'no_open':True,'no_create':True}"  attrs="{'readonly': [('state', '!=','draft')]}" />
+                            <field name="retail_station_manager_id"  required="1"  readonly="1" />
+                        </group>
+                        <group>
+                            <field name="exp_date" attrs="{'readonly': [('state', '!=','draft')]}"  required="1" />
+
+                        </group>
+                    </group>
+                    <group col="4">
+                        <field name="expense_type" attrs="{'readonly': [('state', '!=','draft')]}"  required="1"  />
+                         <field name="description" attrs="{'readonly': [('state', '!=','draft')]}" required="1"   />
+                         <field name="amount" attrs="{'readonly': [('state', '!=','draft')]}"  required="1"  />
+                         <field name="stock_control_id" readonly="1" />
+                    </group>
+
+
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_kin_retail_station_rog_expense_tree" model="ir.ui.view" >
+            <field name="name" >kin.retail.station.expense.tree</field>
+            <field name="model">kin.retail.station.expense</field>
+            <field name="arch" type="xml" >
+                <tree string="Retail Station Expense" >
+                    <field name="name" />
+                    <field name="exp_date"  />
+                    <field name="expense_type" />
+                    <field name="description" />
+                    <field name="amount"  />
+                    <field name="retail_station_id"  />
+                    <field name="retail_station_manager_id" />
+                    <field name="stock_control_id" />
+                    <field name="state"  />
+                </tree>
+            </field>
+        </record>
+
+         <record model="ir.ui.view" id="view_kin_retail_station_rog_expense_pivot_view">
+            <field name="name">Retail Station Expense Pivot</field>
+            <field name="model">kin.retail.station.expense</field>
+            <field name="arch" type="xml">
+                <pivot string="Stock Control Pivot">
+                    <field name="retail_station_id" type="row"/>
+                    <field name="amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_kin_retail_station_rog_expense_graph_view">
+            <field name="name">Retail Station Expense Graph</field>
+            <field name="model">kin.retail.station.expense</field>
+            <field name="arch" type="xml">
+                <graph string="Stock Control Graph" type="bar">
+                    <field name="retail_station_id" type="row"/>
+                    <field name="amount" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="view_kin_retail_station_rog_expense_filter" model="ir.ui.view">
+            <field name="name">kin.retail.station.expense.select</field>
+            <field name="model">kin.retail.station.expense</field>
+            <field name="arch" type="xml">
+                <search string="Retail Station Expense">
+                    <field name="name" string="ID / Retail Station"  filter_domain="['|',('name','ilike',self),('retail_station_id','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                       <filter name="grpRS"  string="Retail Station" domain="[]" context="{'group_by':'retail_station_id'}"/>
+                        <filter name="grpExpDate" string="Date" domain="[]" context="{'group_by':'exp_date'}"/>
+                        <filter name="grpState" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                        <filter string="Retail Station Manager" domain="[]" context="{'group_by':'retail_station_manager_id'}"/>
+
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_kin_retail_station_rog_expense_form" model="ir.actions.act_window" >
+            <field name="name" >Report / Retail Station Expense</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.retail.station.expense</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,pivot,graph</field>
+            <field name="context">{'search_default_grpExpDate': 1,'search_default_grpRS':1,'search_default_grpState':1}</field>
+            <field name="search_view_id" ref="view_kin_stock_control_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a Retail Station Expense
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_kin_retail_station_rog_expense" name="Retail Station Expense" parent="menu_retail_station_report" sequence="5" action="action_kin_retail_station_rog_expense_form"/>
+
+ <!-- Pump Sales -->
+         <record model="ir.ui.view"  id="pump_sale_tree_view" >
+            <field name="name" >kin.pump.sale</field>
+            <field name="model" >kin.pump.sale</field>
+            <field name="arch" type="xml">
+                <tree string="Pump Meter Sale Report" create="0" delete="0" >
+                    <field name="pump_sale_date" />
+                     <field name="pump_id" />
+                    <field name="product_id" />
+                    <field name="product_uom" />
+                    <field name="product_price" />
+                    <field name="meter_start" />
+                    <field name="meter_end" />
+                    <field name="rtt" sum="Total"/>
+                    <field name="sale_qty" sum="Total" />
+                    <field name="price_subtotal" sum="Total" />
+                    <field name="stock_control_id" />
+                    <field name="retail_sale_id" />
+                    <field name="retail_station_id" />
+                    <field  name="status" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_pump_sale_filter" model="ir.ui.view">
+            <field name="name">Pump Meter Sale Report</field>
+           <field name="model" >kin.pump.sale</field>
+            <field name="arch" type="xml">
+                <search string="Pump Meter Sale Search">
+                    <field name="product_id" />
+                     <field name="pump_id" />
+                    <!--<field name="retail_sale_id" />-->
+                    <field name="retail_station_id" />
+                    <field name="stock_control_id" />
+                     <separator/>
+                    <group expand="0" string="Group By">
+                         <filter name="groupby_psd" string="Date" domain="[]" context="{'group_by':'pump_sale_date'}"/>
+                        <filter name="groupby_rst" string="Retail Station" domain="[]" context="{'group_by':'retail_station_id'}"/>
+                        <filter name="groupby_product" string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter name="groupby_pump" string="Pump Meter" domain="[]" context="{'group_by':'pump_id'}"/>
+                         <filter name="groupby_stock_control" string="Stock Control" domain="[]" context="{'group_by':'stock_control_id'}"/>
+                         <filter name="groupby_status" string="Status" domain="[]" context="{'group_by':'status'}"/>
+                        <!--<filter name="groupby_retail_sale" string="Retail Sale" domain="[]" context="{'group_by':'retail_sale_id'}"/>-->
+
+                    </group>
+                </search>
+            </field>
+        </record>
+
+          <record id="action_pump_sale" model="ir.actions.act_window">
+            <field name="name">Report / Pump Meter Sale Report</field>
+            <field name="res_model" >kin.pump.sale</field>
+              <field name="domain">[('retail_sale_id', '=', False)]</field>
+            <field name="context">{'search_default_groupby_status': 1}</field>
+            <field name="view_type" >form</field>
+            <field name="view_mode">tree,pivot</field>
+            <field name="view_id" ref="pump_sale_tree_view"/>
+             <field name="search_view_id" ref="view_pump_sale_filter"/>
+        </record>
+
+     <menuitem id="menu_pump_sale_report" name="Pump Meter Sale Report"  action="action_pump_sale" parent="menu_retail_station_report"    sequence="31"/>
+
+
+        <!-- Tank Dipping Report -->
+         <record model="ir.ui.view"  id="tank_dipping_tree_view" >
+            <field name="name" >kin.tank.dipping</field>
+            <field name="model" >kin.tank.dipping</field>
+            <field name="arch" type="xml">
+                <tree string="Tank Dipping Report" create="0" delete="0" >
+                    <field name="tank_dip_date" />
+                     <field name="tank_id" />
+                    <field name="product_id" />
+                    <field name="opening_stock" />
+                    <field name="stock_received" sum="Total" />
+                    <field name="current_int_transfer_in" sum="Total" />
+                    <field name="current_int_transfer_out" sum="Total" />
+                    <field name="stock_at_hand" sum="Total" />
+                    <field name="closing_stock" sum="Total"  />
+                    <field name="throughput" sum="Total" />
+                    <field name="stock_control_id" />
+                    <field name="retail_sale_id" />
+                    <field name="retail_station_id" />
+                    <field  name="status" />
+                </tree>
+            </field>
+        </record>
+
+         <record id="view_tank_dipping_filter" model="ir.ui.view">
+            <field name="name">Tank Dipping Report</field>
+           <field name="model" >kin.tank.dipping</field>
+            <field name="arch" type="xml">
+                <search string="Tank Dipping Search">
+                     <field name="tank_id" />
+                    <field name="product_id" />
+                     <field name="stock_control_id" />
+                    <!--<field name="retail_sale_id" />-->
+                     <separator/>
+                    <group expand="0" string="Group By">
+                         <filter name="groupby_tdd" string="Date" domain="[]" context="{'group_by':'tank_dip_date'}"/>
+                        <filter name="groupby_tank" string="Tank" domain="[]" context="{'group_by':'tank_id'}"/>
+                        <filter name="groupby_product" string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                         <filter name="groupby_status" string="Status" domain="[]" context="{'group_by':'status'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+          <record id="action_tank_dipping" model="ir.actions.act_window">
+            <field name="name">Report / Tank Dipping Report</field>
+            <field name="res_model" >kin.tank.dipping</field>
+            <field name="view_type" >form</field>
+            <field name="view_mode">tree,pivot</field>
+                 <field name="domain">[('retail_sale_id', '=', False)]</field>
+            <field name="context">{'search_default_groupby_status': 1}</field>
+            <field name="view_id" ref="tank_dipping_tree_view"/>
+             <field name="search_view_id" ref="view_tank_dipping_filter"/>
+        </record>
+
+     <menuitem id="menu_tank_dipping_report" name="Tank Dipping Report"  action="action_tank_dipping" parent="menu_retail_station_report"    sequence="31"/>
+
+
+
+        <!-- Extend Product -->
+         <record id="product_template_retail_station_form_extend" model="ir.ui.view">
+            <field name="name">product.template.retail.station.form.extend</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <field name="categ_id" position="after" >
+                    <field name="white_product" />
+                </field>
+                <field name="taxes_id" position="after" >
+                    <field name="discrepancy_account" />
+                    <field name="discharged_discrepancy_account" />
+                </field>
+            </field>
+        </record>
+
+
+        <!-- Extend Account Move -->
+        <record id="view_move_line_form_retail_station_extend" model="ir.ui.view">
+            <field name="name">account.move.line.form.retail.station.extend</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_move_line_form"/>
+            <field name="arch" type="xml">
+                <field name="move_id" position="before">
+                    <field name="prr_id"   />
+                    <field name="stock_control_id"   />
+                </field>
+            </field>
+        </record>
+
+
+        <record id="view_move_form_retail_station_extend" model="ir.ui.view" >
+            <field name="name" >account.move.form.retail.station.extend</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form" />
+            <field name="arch" type="xml">
+                <field name="ref" position="after" >
+                    <field name="prr_id" />
+                    <field name="stock_control_id"   />
+                </field>
+            </field>
+        </record>
+
+        <record id="view_account_move_filter_retail_station_extend" model="ir.ui.view">
+            <field name="name">account.move.select.retail.station.extend</field>
+            <field name="model">account.move</field>
+             <field name="inherit_id" ref="account.view_account_move_filter" />
+            <field name="arch" type="xml">
+                <field name="name" position="after" >
+                    <field name="prr_id"/>
+                    <field name="stock_control_id"   />
+                </field>
+            </field>
+        </record>
+
+
+ <!--Company -->
+         <record model="ir.ui.view" id="view_company_kin_retail_station_rog">
+                    <field name="name">res.company.form.kin.retail.station</field>
+                    <field name="inherit_id" ref="base.view_company_form"/>
+                    <field name="model">res.company</field>
+                    <field name="arch" type="xml">
+                        <notebook position="inside">
+                            <page string="Retail Station">
+                                <group>
+                                    <field name="inventory_change"  />
+                                    <field name="gain_account"  />
+                                    <field name="loss_account"  />
+                                </group>
+                            </page>
+                        </notebook>
+                    </field>
+                </record>
+
+        <!-- Stock Move -->
+        <record id="view_move_form_retail_station_extend" model="ir.ui.view">
+            <field name="name">stock.move.form.retail.station.extend</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_form" />
+            <field name="arch" type="xml">
+                    <group name="origin_grp" position="after" >
+                        <group string="Other Links" colspan="4">
+                            <field name="prr_id" />
+                            <field name="stock_control_id" />
+                            <field name="internal_movement_id" />
+                        </group>
+                    </group>
+            </field>
+        </record>
+
+        <!-- Stock Location -->
+        <record id="view_location_form_retail_station_extend" model="ir.ui.view">
+            <field name="name">stock.location.retail.station.form</field>
+            <field name="model">stock.location</field>
+            <field name="inherit_id" ref="stock.view_location_form" />
+            <field name="arch" type="xml">
+                <div class="oe_button_box" position="inside" name="button_box">
+                        <button type="object"  name="btn_view_prr" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('prr_count', '=', 0)]}"  >
+                                <field name="prr_count" widget="statinfo" string="Product Received Registers"/>
+                            </button>
+                    <button type="object"  name="btn_view_retail_stations" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('retail_station_count', '=', 0)]}"  >
+                                <field name="retail_station_count" widget="statinfo" string="Retail Stations"/>
+                            </button>
+                    <button type="object"  name="btn_view_tank_storages" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('tank_storage_count', '=', 0)]}"  >
+                                <field name="tank_storage_count" widget="statinfo" string="Tank Storage(s)"/>
+                            </button>
+                </div>
+            </field>
+        </record>
+
+
+        <!-- Fuel Pump Price History -->
+        <record model="ir.ui.view"  id="pump_price_history_tree_view" >
+            <field name="name" >kin.fuel.pump.history</field>
+            <field name="model" >kin.fuel.pump.history</field>
+            <field name="arch" type="xml">
+                <tree string="Pump Price History" create="0" delete="0" >
+                    <field name="product_id" />
+                    <field name="uom_id" />
+                    <field name="new_price" />
+                    <field name="user_id" />
+                    <field name="date_change" />
+                    <field name="previous_price" />
+                    <field name="fuel_pump_id" />
+                    <field name="retail_station_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_pump_sale_price_filter" model="ir.ui.view">
+            <field name="name">Pump Sale Price History Search</field>
+            <field name="model">kin.fuel.pump.history</field>
+            <field name="arch" type="xml">
+                <search string="Pump Sale Price History Search">
+                    <field name="product_id" />
+                    <field name="retail_station_id" />
+                    <field name="new_price" />
+                    <field name="date_change" />
+                     <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="groupby_rst" string="Retail Station" domain="[]" context="{'group_by':'retail_station_id'}"/>
+                        <filter name="groupby_product" string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter name="groupby_user" string="User" domain="[]" context="{'group_by':'user_id'}"/>
+                         <filter name="groupby_fuelpump" string="Fuel Pump" domain="[]" context="{'group_by':'fuel_pump_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+          <record id="action_pump_price_history" model="ir.actions.act_window">
+            <field name="name">Pump Sale Price History</field>
+            <field name="res_model">kin.fuel.pump.history</field>
+            <field name="context">{'search_default_groupby_product': 1,'search_default_groupby_rst': 1}</field>
+            <field name="view_type" >form</field>
+            <field name="view_mode">tree,pivot</field>
+            <field name="view_id" ref="pump_price_history_tree_view"/>
+             <field name="search_view_id" ref="view_pump_sale_price_filter"/>
+        </record>
+
+     <menuitem id="menu_pump_price_history" name="Pump Price History"  action="action_pump_price_history" parent="menu_retail_station_report" groups="kin_retail_station_rog.group_change_price"    sequence="31"/>
+
+
+                 <!-- Fuel Pump Meter Totalizer History -->
+        <record model="ir.ui.view" id="pump_totalizer_history_tree_view"  >
+            <field name="name" >kin.fuel.totalizer.history</field>
+            <field name="model" >kin.fuel.totalizer.history</field>
+            <field name="arch" type="xml">
+                <tree string="Pump Meter Totalizer History" create="0" delete="0" >
+                    <field name="product_id" />
+                    <field name="uom_id" />
+                    <field name="new_totalizer" />
+                    <field name="user_id" />
+                    <field name="date_change" />
+                    <field name="previous_totalizer" />
+                    <field name="fuel_pump_id" />
+                    <field name="retail_station_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_pump_totalizer_filter" model="ir.ui.view">
+            <field name="name">Pump Meter Sale Totalizer Value History Search</field>
+            <field name="model">kin.fuel.totalizer.history</field>
+            <field name="arch" type="xml">
+                <search string="Pump Meter Totalizer Value History Search">
+                    <field name="product_id" />
+                    <field name="retail_station_id" />
+                    <field name="new_totalizer" />
+                    <field name="date_change" />
+                     <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="groupby_rst" string="Retail Station" domain="[]" context="{'group_by':'retail_station_id'}"/>
+                        <filter name="groupby_product" string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter name="groupby_user" string="User" domain="[]" context="{'group_by':'user_id'}"/>
+                         <filter name="groupby_fuelpump" string="Fuel Pump Meter" domain="[]" context="{'group_by':'fuel_pump_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+          <record id="action_pump_totalizer_history" model="ir.actions.act_window">
+            <field name="name">Pump Meter Sale Totalizer Value History</field>
+            <field name="res_model">kin.fuel.totalizer.history</field>
+            <field name="context">{'search_default_groupby_product': 1,'search_default_groupby_rst': 1}</field>
+            <field name="view_type" >form</field>
+            <field name="view_mode">tree,pivot</field>
+            <field name="view_id" ref="pump_totalizer_history_tree_view"/>
+             <field name="search_view_id" ref="view_pump_totalizer_filter"/>
+        </record>
+
+     <menuitem id="menu_pump_totalizer_history" name="Pump Meter Totalizer Value History"  action="action_pump_totalizer_history" parent="menu_retail_station_report" groups="kin_retail_station_rog.group_change_totalizer_value"    sequence="32"/>
+
+
+   <!-- Tank Storage Report -->
+        <record id="view_kin_tank_storage_tree_report" model="ir.ui.view" >
+            <field name="name" >kin.tank.storage.tree.report</field>
+            <field name="model">kin.tank.storage</field>
+            <field name="arch" type="xml" >
+                <tree string="Stock Level Report" create="false" delete="false" edit="false" >
+                     <field name="name"  />
+                            <field name="retail_station_id" />
+                            <field name="product_id"  />
+                            <field name="product_uom"  />
+                            <field name="capacity" sum="Total"  />
+                    <field name="stock_level"  sum="Total"  />
+                     <field name="available_space" sum="Total"  />
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="action_kin_tank_storage_stock_level" model="ir.actions.act_window" >
+            <field name="name" >Product Transfers / Stock Level Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.tank.storage</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,pivot</field>
+        </record>
+
+         <record id="action_kin_tank_storage_stock_level_tree" model="ir.actions.act_window.view">
+            <field name="sequence">1</field>
+            <field name="view_mode">tree</field>
+             <field name="view_id" ref="view_kin_tank_storage_tree_report" />
+            <field name="act_window_id" ref="action_kin_tank_storage_stock_level"/>
+        </record>
+
+        <menuitem id="menu_kin_tank_storage_stock_level_report" name="Stock Level Report" parent="menu_product_received_register" sequence="4" action="action_kin_tank_storage_stock_level"/>
+
+
+        <!-- Meter Pump report -->
+           <record id="view_kin_fuel_pump_tree_report" model="ir.ui.view" >
+            <field name="name" >kin.fuel.pump.tree.report</field>
+            <field name="model">kin.fuel.pump</field>
+            <field name="arch" type="xml" >
+                <tree string="Fuel Pump Meter Table" >
+                     <field name="name"  />
+                    <field name="product_id" />
+                    <field name="product_uom" />
+                    <field name="selling_price" />
+                     <field name="tank_ids" />
+                    <field name="retail_station_id" />
+                    <field name="totalizer"   />
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_kin_fuel_pump_form_report" model="ir.actions.act_window" >
+            <field name="name" >Report / Fuel Pump Meter Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.fuel.pump</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,pivot</field>
+        </record>
+
+         <record id="action_kin_fuel_pump_form_report_tree" model="ir.actions.act_window.view">
+            <field name="sequence">1</field>
+            <field name="view_mode">tree</field>
+             <field name="view_id" ref="view_kin_fuel_pump_tree_report" />
+            <field name="act_window_id" ref="action_kin_fuel_pump_form_report"/>
+        </record>
+
+        <menuitem id="menu_kin_fuel_pump_report" name="Fuel Pump Meter Report" parent="menu_retail_station_report" sequence="7" action="action_kin_fuel_pump_form_report"/>
+
+<!-- Product Discharged Lines -->
+               <record id="view_product_received_register_lines_tree_report" model="ir.ui.view" >
+            <field name="name" >product.received.register.lines.report</field>
+            <field name="model">product.received.register.lines</field>
+            <field name="arch" type="xml" >
+                <tree string="Product Discharged" >
+                       <field name="tank_id"  />
+                       <field name="tank_capacity" />
+                      <field name="available_capacity"  />
+                      <field name="product_id" />
+                       <field name="product_uom" />
+                        <field name="current_stock_level" />
+                       <field name="product_allocation"  />
+                    <field name="exp_closing_dip"  />
+                    <field name="is_company_product" invisible="1"/>
+                       <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_product_received_register_lines_report" model="ir.actions.act_window" >
+            <field name="name" >Report / Product Discharged Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.received.register.lines</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,pivot</field>
+        </record>
+
+         <record id="action_product_received_register_lines_report_tree" model="ir.actions.act_window.view">
+            <field name="sequence">1</field>
+            <field name="view_mode">tree</field>
+             <field name="view_id" ref="view_product_received_register_lines_tree_report" />
+            <field name="act_window_id" ref="action_product_received_register_lines_report"/>
+        </record>
+
+        <menuitem id="menu_product_received_register_lines_report" name="Product Discharged Report" parent="menu_retail_station_report" sequence="8" action="action_product_received_register_lines_report"/>
+
+
+                 <menuitem name="Day Control Excel Report" id="menu_stock_control_report" action="action_stock_control_report_wizard"
+          parent="menu_retail_station_report" sequence="5"  icon="STOCK_PRINT" />
+
+    </data>
+</odoo>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record  id="view_ml_report_wizard" model="ir.ui.view" >
+                <field name="name">Move Line Report Wizard</field>
+                <field name="model">ml.report.wizard</field>
+                <field name="arch" type="xml" >
+                <form string="Ml Report Wizard" >
+                  <label string="This wizard will help you generate a Account Move Line Grouped by Journal Entry in .xlsx file" />
+                     <group col="4" colspan="4" >
+                         <field name="start_date" required="1" />
+                         <field name="end_date" required="1" />
+                         <field name="account_id" required="1" options="{'no_open':True,'no_create':True}" />
+                    </group>
+
+                        <footer>
+                            <button default_focus="1" icon="gtk-execute" name="ml_excel_report" string="Export as Excel" type="object"  colspan="2" class="oe_highlight" />
+                            or <button special="cancel" class="oe_link"  string="Cancel"  />
+                        </footer>
+                </form>
+             </field>
+        </record>
+
+		<record id="action_ml_report_wizard" model="ir.actions.act_window">
+            <field name="name">Generate Move Line Report</field>
+            <field name="res_model">ml.report.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_ml_report_wizard"/>
+            <field name="context">{}</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="target">new</field>
+        </record>
+
+         <menuitem name="Account Move Line grouped by Journal Entries" id="menu_ml_report" action="action_ml_report_wizard"
+          parent="account_financial_report_qweb.menu_oca_reports" sequence="22"  icon="STOCK_PRINT" />
+
+
+   </data>
+</openerp>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+
+    <record id="group_show_allocation_request_menu" model="res.groups">
+        <field name="name">Show "Allocation Request" Menu </field>
+    </record>
+
+    <record id="group_leave_allocation_menu" model="res.groups">
+        <field name="name">Show "Leave Allocation" Menu </field>
+    </record>
+
+     <record id="group_show_general_leave_dashboard_menu" model="res.groups">
+        <field name="name">Show Dashboard for all Leaves Menu </field>
+    </record>
+
+
+</data>
+</odoo>

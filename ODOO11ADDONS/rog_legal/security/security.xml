@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+		<record model="ir.module.category" id="module_category_rog_modification_legal">
+            <field name="name">ROG Modifications - Legal</field>
+     </record>
+
+
+		<!-- Legal-->
+	<record id="group_legal" model="res.groups">
+			<field name="name">Show Legal Application</field>
+			<field name="category_id" ref="module_category_rog_modification_legal"/>
+	</record>
+
+	<record id="group_receive_legal_advice_email_notification" model="res.groups">
+		<field name="name">Receive Legal Advice Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_legal"/>
+	</record>
+
+		<record id="group_receive_legal_adviser" model="res.groups">
+		<field name="name">Legal Adviser</field>
+		<field name="category_id" ref="module_category_rog_modification_legal"/>
+	</record>
+
+	<record id="group_receive_legal_case_email_notification" model="res.groups">
+		<field name="name">Receive Legal Case Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_legal"/>
+	</record>
+
+
+
+
+</data>
+</odoo>

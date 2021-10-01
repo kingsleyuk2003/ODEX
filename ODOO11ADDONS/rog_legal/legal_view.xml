@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+ <menuitem name="Legal"
+            id="menu_legal_app"
+            groups="group_legal"
+            sequence="25" web_icon="rog_legal,static/description/icon_legal.png" />
+  <menuitem id="menu_legal_menu" name="Legal" parent="menu_legal_app" sequence="4" groups="group_legal" />
+<menuitem id="menu_legal_report" name="Reporting" parent="menu_legal_app" sequence="5" groups="group_legal" />
+
+
+
+<!-- Legal and Advice -->
+         <record id="view_legal_advice_form" model="ir.ui.view">
+            <field name="name">legal.advice.form</field>
+            <field name="model">legal.advice</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                         <button name="%(action_legal_advice)d" type="action"  states="draft" string="Submit Request to Legal Adviser"  class="oe_highlight"   />
+                        <button name="%(action_legal_response)d"  states="request" type="action"   string="Respond to Legal Request" class="oe_highlight"  groups="rog_legal.group_receive_legal_adviser" />
+                         <button name="button_done" type="object"  states="response" string="Done" class="oe_highlight"   />
+                        <button name="button_cancel" type="object"  states="request,response,done" string="Cancel"   />
+                        <button name="button_draft" type="object"  states="cancel" string="Reset"   />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,request,response,done"/>
+                    </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                        <group col="4" >
+                            <field name="date"  required="1"  attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="user_id" readonly="1"  />
+                             <field name="requester_id" attrs="{'readonly': [('state', '=','done')]}" options="{'no_open':True,'no_create':True}"  />
+
+                        </group>
+                    <group col="2" colspan="4">
+                        <field name="request_opinion"   attrs="{'readonly': [('state', '=','done')]}" />
+                    </group>
+                    <group col="2" colspan="4">
+                        <field name="answer"   attrs="{'readonly': [('state', '=','done')]}" />
+                    </group>
+
+                    <notebook>
+                        <page string="Process Stages">
+                            <p>1.) Draft</p>
+                            <p>2.) Request for Advise</p>
+                            <p>3.) Respond to Requester</p>
+                            <p>5.) Done</p>
+                        </page>
+
+
+                    </notebook>
+                </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_legal_advice_tree" model="ir.ui.view" >
+            <field name="name" >legal.advice.tree</field>
+            <field name="model">legal.advice</field>
+            <field name="arch" type="xml" >
+                <tree>
+
+                    <field name="date" />
+                     <field name="user_id"  />
+                    <field name="requester_id" />
+                    <field name="state"  />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_legal_advice_filter" model="ir.ui.view">
+            <field name="name">legal.advice.select</field>
+            <field name="model">legal.advice</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" string="ID"  filter_domain="['|',('name','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="grpRDate" string="Date" domain="[]" context="{'group_by':'date'}"/>
+                        <filter name="grpState" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                         <filter string="Requester" domain="[]" context="{'group_by':'requester_id'}"/>
+                        <filter string="User" domain="[]" context="{'group_by':'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_legal_advice_form" model="ir.actions.act_window" >
+            <field name="name" >Legal Advice / Opinion</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">legal.advice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_grpState':1}</field>
+            <field name="search_view_id" ref="view_legal_advice_filter"/>
+        </record>
+        <menuitem id="menu_legal_advice" name="Legal Advise / Opinion" parent="menu_legal_menu" sequence="1" action="action_legal_advice_form"/>
+
+
+<!-- Case Management -->
+         <record id="view_legal_case_form" model="ir.ui.view">
+            <field name="name">legal.case.form</field>
+            <field name="model">legal.case</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                          <button name="button_open_dispute" type="object"  states="draft" string="Open Dispute" class="oe_highlight"   />
+                         <button name="button_close_dispute" type="object"  states="open_dispute" string="Close Dispute" class="oe_highlight"   />
+                        <button name="button_done" type="object"  states="close_dispute" string="Done" class="oe_highlight"   />
+                        <button name="button_cancel" type="object"  states="open_dispute,close_dispute,done" string="Cancel"   />
+                        <button name="button_draft" type="object"  states="cancel" string="Reset"   />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,open_dispute,close_dispute,done"/>
+                    </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                        <group col="4" >
+                            <field name="open_dispute_date"  required="1"  attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="close_dispute_date"   attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="case_file_no" />
+                            <field name="plantiff" />
+                            <field name="defendant" />
+                            <field name="suit_number" />
+                            <field name="court_name" />
+                            <field name="judge_magistrate_name" />
+                            <field name="location" />
+                            <field name="user_id" readonly="1"  />
+                        </group>
+                    <group col="2" colspan="4">
+                        <field name="description"   attrs="{'readonly': [('state', '=','done')]}" />
+                    </group>
+
+
+                    <notebook>
+                        <page string="Process Stages">
+                            <p>1.) Draft</p>
+                            <p>2.) Open Dispute</p>
+                            <p>3.) Close Dispute</p>
+                            <p>5.) Done</p>
+                        </page>
+                     <page  string="Reminders" >
+                        <group>
+                            <field name="reminder_ids" nolabel="1"  >
+                                <tree  editable="bottom"  decoration-success="days_remaining &gt;= expiry_day_interval"    decoration-danger="days_remaining &lt; expiry_day_interval and days_remaining &gt;= 0" >
+                                    <field name="name" />
+                                    <field name="reference_no" />
+                                    <field name="issue_date" />
+                                    <field name="expiry_date" />
+                                    <field name="days_remaining" />
+                                    <field name="expiry_day_interval" />
+                                    <field name="state" />
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+
+
+                    </notebook>
+                </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_legal_case_tree" model="ir.ui.view" >
+            <field name="name" >legal.case.tree</field>
+            <field name="model">legal.case</field>
+            <field name="arch" type="xml" >
+                <tree>
+                    <field name="case_file_no" />
+                    <field name="open_dispute_date" />
+                    <field name="close_dispute_date" />
+                    <field name="plantiff" />
+                    <field name="defendant" />
+                     <field name="user_id"  />
+                    <field name="state"  />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_legal_case_filter" model="ir.ui.view">
+            <field name="name">legal.case.select</field>
+            <field name="model">legal.case</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" string="ID"  filter_domain="['|',('name','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="grpODRDate" string="Date" domain="[]" context="{'group_by':'open_dispute_date'}"/>
+                         <filter name="grpCDRDate" string="Date" domain="[]" context="{'group_by':'close_dispute_date'}"/>
+                        <filter name="grpState" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                        <filter string="User" domain="[]" context="{'group_by':'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_legal_case_form" model="ir.actions.act_window" >
+            <field name="name" >Case Register</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">legal.case</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_grpState':1}</field>
+            <field name="search_view_id" ref="view_legal_case_filter"/>
+        </record>
+        <menuitem id="menu_legal_case" name="Case Register" parent="menu_legal_menu" sequence="2" action="action_legal_case_form"/>
+
+
+
+
+
+
+
+
+
+
+        <!-- Reminders -->
+
+        <record id="reminder_form_view_legal" model="ir.ui.view">
+            <field name="name">kin.reminder.form</field>
+            <field name="model">kin.reminder</field>
+             <field name="inherit_id" ref="kin_reminder.reminder_form_view" />
+            <field name="arch" type="xml">
+                <field name="user_id" position="after" >
+                    <field name="legal_case_id" readonly="1" groups="rog_legal.group_legal"  />
+
+                </field>
+            </field>
+         </record>
+
+                 <menuitem name="Case File Excel Report" id="menu_case_file_report" action="action_case_file_report_wizard"
+          parent="menu_legal_report" sequence="5"  icon="STOCK_PRINT" />
+
+    </data>
+</odoo>
+
+

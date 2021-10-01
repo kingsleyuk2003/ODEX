@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
+		<!-- Or by referencing the parent report id e.g. kin_report.receipt_custom -->
+		<!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
+		<report
+		    id="kin_report.receipt_custom"
+		    model="account.payment.group"
+		    string="Agary Payment Receipt"
+		    report_type="qweb-pdf"
+		    name="agary_modifications.custom_receipt_agary"
+		    file="agary_modifications.custom_receipt_agary"
+		    attachment_use="False"
+		    		/>
+
+
+<template id="custom_receipt_agary">
+	    <t t-call="report.html_container"> 	    	
+	        <t t-foreach="docs" t-as="o">
+	            <t t-call="kin_report.custom_layout"  >
+					<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+	                <div class="page" >
+						<style type="text/css">
+							<t t-call="kin_report.style"/>
+						</style>
+						<div t-raw="o.company_id.html_after_header" />
+
+						<div class="row">
+							<div class="col-xs-12 text-center" >
+								<h3><b>
+									<span t-if="o.state == 'posted'">PAYMENT RECEIPT</span>
+									<span t-if="o.state == 'draft'">DRAFT RECEIPT</span>
+									<span t-if="o.state == 'posted'" t-field="o.name" /></b></h3>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<p>Date: <b><span t-field="o.payment_date" /></b></p>
+								<p>Received from  <b><span t-field="o.partner_id.name" /></b></p>
+								<p>the sum of  <b><span  t-esc="o.amount_to_text(o.payments_amount, o.currency_id)"/></b></p>
+								<p>payment in respect of  <b><span t-field="o.communication" /></b></p>
+								<p>Reference No: <b><span t-esc="o.get_references()" /></b></p>
+								<p>Amount: <b><span t-field="o.payments_amount" /></b> </p>
+								<br />
+								<br />
+								<br />
+								<p>FOR: <b><span t-field="o.company_id.name" /></b> ................................ </p>
+								<br />
+								<br />
+								<p><b>NOTE:</b></p>
+								<p>This receipt must be stamped and signed for validity. </p>
+							</div>
+						</div>
+
+
+
+	                </div>
+	            </t>
+	        </t>
+    	</t>
+</template>
+	</data>
+</openerp>

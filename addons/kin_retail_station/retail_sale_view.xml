@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequences for retail.sale.order -->
+        <record id="seq_retail_sale_order" model="ir.sequence">
+            <field name="name">Retail Sale Order</field>
+            <field name="code">retail.sale.order</field>
+            <field name="prefix">RSO</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+
+    <data>
+
+         <menuitem name="Other Sales"
+            id="menu_retail_station_sales_marketing" parent="menu_retail_station" groups="group_retail_attendant,group_retail_manager,group_station_shift_supervisor,group_retail_station_management"  sequence="3"  />
+
+
+        <record id="view_retail_station_order_calendar" model="ir.ui.view">
+            <field name="name">retail.sale.order.calendar</field>
+            <field name="model">retail.sale.order</field>
+            <field name="arch" type="xml">
+                <calendar string="Retail Station Sales Orders" color="state" date_start="date_order">
+                    <field name="partner_id"/>
+                    <field name="amount_total" widget="monetary"/>
+                </calendar>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_retail_station_order_graph">
+            <field name="name">retail.sale.order.graph</field>
+            <field name="model">retail.sale.order</field>
+            <field name="arch" type="xml">
+                <graph string="Retail Station Orders">
+                    <field name="partner_id"/>
+                    <field name="amount_total" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_retail_station_order_pivot">
+            <field name="name">retail.sale.order.pivot</field>
+            <field name="model">retail.sale.order</field>
+            <field name="arch" type="xml">
+                <pivot string="Retail Station Orders">
+                    <field name="date_order" type="row"/>
+                    <field name="amount_total" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- Sales Orders Kanban View  -->
+        <record model="ir.ui.view" id="view_retail_station_order_kanban">
+            <field name="name">retail.sale.order.kanban</field>
+            <field name="model">retail.sale.order</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="amount_total"/>
+                    <field name="date_order"/>
+                    <field name="state"/>
+                    <field name="currency_id"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <strong><span><t t-esc="record.partner_id.value"/></span></strong>
+                                    </div>
+                                    <div class="col-xs-6 pull-right text-right">
+                                        <strong><field name="amount_total" widget="monetary"/></strong>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6 text-muted">
+                                        <span><t t-esc="record.name.value"/> <t t-esc="record.date_order.value"/></span>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <span t-attf-class="pull-right text-right label #{['draft', 'cancel'].indexOf(record.state.raw_value) > -1 ? 'label-default' : ['done'].indexOf(record.state.raw_value) > -1 ? 'label-success' : 'label-primary'}"><t t-esc="record.state.value"/></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="view_retail_station_order_tree" model="ir.ui.view">
+            <field name="name">retail.sale.order.tree</field>
+            <field name="model">retail.sale.order</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <tree string="Retail Station Orders" decoration-bf="message_needaction==True" decoration-muted="state=='cancel'">
+                    <field name="message_needaction" invisible="1"/>
+                    <field name="name" string="Order Number"/>
+                    <field name="date_order"/>
+                    <field name="partner_id"/>
+                    <field name="user_id"/>
+                    <field name="amount_total" sum="Total Tax Included" widget="monetary"/>
+                    <field name="state" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_retail_station_order_form" model="ir.ui.view">
+            <field name="name">retail.sale.order.form</field>
+            <field name="model">retail.sale.order</field>
+            <field name="arch" type="xml">
+                <form string="Retail Station Sales Order">
+                <header>
+                    <button name="action_confirm" states="draft" type="object" string="Confirm and Notify Manager" />
+                   <button name="action_cancel" states="sale" type="object" string="Cancel"/>
+                    <button name="action_draft" states="cancel" type="object" string="Set to Draft"  />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,sale"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1" attrs="{'readonly': [('state', 'in', ('cancel','sale'))]}"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id"  options='{"always_reload": True}' attrs="{'readonly': [('state', 'in', ('cancel','sale'))]}"/>
+                        </group>
+                        <group>
+                            <field name="date_order" attrs="{'readonly': [('state', 'in', ('cancel','sale'))]}" />
+                            <field name="currency_id" attrs="{'readonly': [('state', 'in', ('cancel','sale'))]}" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Retail Station Order Lines">
+                            <field name="order_line" mode="tree,kanban"  attrs="{'readonly': [('state', 'in', ('cancel','sale'))]}">
+                                <form string="Retail Station Order Lines">
+                                    <group>
+                                        <group>
+                                            <field name="product_id"   />
+                                            <field name="price_subtotal" />
+                                            <label for="product_uom_qty" string="Ordered Quantity"/>
+                                            <div>
+                                                <field name="product_uom_qty" class="oe_inline"/>
+                                                <field name="product_uom" groups="product.group_uom" class="oe_inline oe_no_button"
+                                                    attrs="{'readonly': [('state', 'in', ('sale', 'cancel'))]}"/>
+                                            </div>
+                                            <field name="price_unit"/>
+                                            <label for="discount" groups="sale.group_discount_per_so_line"/>
+                                            <div name="discount" groups="sale.group_discount_per_so_line">
+                                                <field name="discount" class="oe_inline"/> %%
+                                            </div>
+                                        </group>
+                                        <group>
+                                            <field name="tax_id" widget="many2many_tags" domain="[('type_tax_use','=','sale')]" />
+
+                                        </group>
+                                    </group>
+                                    <label for="name"/>
+                                    <field name="name"/>
+                                    <field name="state" invisible="1"/>
+                                </form>
+                                <tree string="Retail Station Order Lines" editable="bottom" >
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id" />
+                                    <field name="name"/>
+                                    <field name="product_uom_qty"
+                                        string="Ordered Qty"
+                                    />
+                                    <field name="product_uom"
+                                        attrs="{'readonly': [('state', 'in', ('sale', 'cancel'))]}"
+                                        groups="product.group_uom" options='{"no_open": True}'/>
+                                    <field name="price_unit" />
+                                    <field name="tax_id" widget="many2many_tags" domain="[('type_tax_use','=','sale')]"/>
+                                    <field name="discount" groups="sale.group_discount_per_so_line"/>
+                                    <field name="price_subtotal" widget="monetary"/>
+                                    <field name="state" invisible="1"/>
+                                </tree>
+                                <kanban class="o_kanban_mobile">
+                                    <field name="product_id"/>
+                                    <field name="product_uom_qty"/>
+                                    <field name="product_uom" groups="product.group_uom"/>
+                                    <field name="price_subtotal"/>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <strong><span><t t-esc="record.product_id.value"/></span></strong>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-8 text-muted">
+                                                        <span><t t-esc="record.product_uom_qty.value"/> <t t-esc="record.product_uom.value"/></span>
+                                                    </div>
+                                                    <div class="col-xs-4 text-muted">
+                                                        <span class="pull-right text-right"><t t-esc="record.price_subtotal.value"/></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                <field name="amount_untaxed" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <field name="amount_tax" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                    <label for="amount_total" />
+                                    <button name="button_dummy"
+                                        states="draft" string="(update order)" type="object" class="oe_edit_only oe_link"/>
+                                </div>
+                                <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                            </group>
+
+                            <div class="oe_clear"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+        </record>
+
+
+         <record id="view_retail_station_order_filter" model="ir.ui.view">
+            <field name="name">retail.sale.order.list.select</field>
+            <field name="model">retail.sale.order</field>
+            <field name="arch" type="xml">
+                <search string="Search Retail Station  Order">
+                    <field name="name" string="Retail Station Order" filter_domain="['|',('name','ilike',self),('client_order_ref','ilike',self)]"/>
+                    <field name="partner_id" operator="child_of"/>
+                    <field name="user_id"/>
+                    <field name="team_id" string="Sales Team"/>
+                    <filter string="My Retail Station Sales Orders" domain="[('user_id','=',uid)]" name="my_retail_station_orders_filter"/>
+                    <separator/>
+                    <filter string="Draft Orders" name="draft" domain="[('state','=','draft')]" help="Sales Order that haven't yet been confirmed"/>
+                    <filter string="Saved Sales Orders" name="sales" domain="[('state','=','sale')]"/>
+                    <separator/>
+                    <filter string="Unread Messages" name="message_needaction" domain="[('message_needaction','=',True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Salesperson" domain="[]" context="{'group_by':'user_id'}"/>
+                        <filter name="customer" string="Customer" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="Order Month" domain="[]" context="{'group_by':'date_order'}"/>
+                    </group>
+               </search>
+            </field>
+        </record>
+
+        <record id="action_retail_station_orders" model="ir.actions.act_window">
+            <field name="name">Other Sales / Retail Station Sales Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">retail.sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
+            <field name="search_view_id" ref="view_retail_station_order_filter"/>
+            <field name="context">{'default_show_sale': True}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create your Retail Station Sales Orders.
+                </p>
+            </field>
+        </record>
+
+
+        <record id="view_retail_station_customer_tree" model="ir.ui.view">
+            <field name="name">retail.station.customer.tree</field>
+            <field name="model">retail.station.customer</field>
+            <field name="arch" type="xml">
+                <tree string="Retail Station Customers">
+                    <field name="name"/>
+                     <field name="contact_person"/>
+                     <field name="address"/>
+                     <field name="mobile"/>
+                     <field name="email"/>
+                     <field name="function"/>
+                     <field name="user_id"/>
+                     <field name="credit" />
+                    <field name="credit_limit" />
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_retail_station_customer_form" model="ir.ui.view">
+            <field name="name">retail.station.customer.form</field>
+            <field name="model">retail.station.customer</field>
+            <field name="arch" type="xml">
+                <form string="Retail Station Customers">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                        <button name="action_view_order"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-pencil-square-o"
+                            attrs="{'invisible': [('order_count', '=', 0)]}">
+                            <field name="order_count" widget="statinfo" string="Retail Sale Orders"/>
+                        </button>
+
+                    </div>
+                        <!--<div class="oe_title">-->
+                            <!--<h1>-->
+                                <!--<field name="name" default_focus="1" placeholder="Name" />-->
+
+                            <!--</h1>-->
+                        <!--</div>-->
+                        <group col="4">
+                               <field name="name"/>
+                     <field name="contact_person"/>
+                     <field name="address"/>
+                     <field name="mobile"/>
+                     <field name="email"/>
+                     <field name="function"/>
+                     <field name="user_id"/>
+                            <field name="active"/>
+
+                        </group>
+                        <notebook>
+                                <page string="Accounting" >
+                                    <group col="4" >
+                                        <field name="credit" />
+                                        <field name="credit_limit" />
+                                        <field name="is_enforce_credit_limit_so" />
+                                        <field name="currency_id" />
+                                    </group>
+                                </page>
+                            </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_retail_station_customer_filter" model="ir.ui.view">
+            <field name="name">retail.station.customer.select</field>
+            <field name="model">retail.station.customer</field>
+            <field name="arch" type="xml">
+                <search string="Retail Station Customer">
+                   <field name="name"
+                       filter_domain="['|','|',('name','ilike',self),('ref','=',self),('email','ilike',self)]"/>
+                   <filter help="My Retail Station Customers" domain="[('user_id','=',uid)]"/>
+                   <separator/>
+                   <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                   <separator/>
+                   <!--<field name="category_ids" string="Tag" filter_domain="[('category_ids','ilike', self)]"/>-->
+
+                   <group expand="0" name="group_by" string="Group By">
+                       <filter name="salesperson" string="Salesperson" domain="[]" context="{'group_by' : 'user_id'}" />
+                   </group>
+               </search>
+            </field>
+        </record>
+
+         <record id="action_retail_station_customer_form" model="ir.actions.act_window">
+            <field name="name">Other Sales / Retail Station Customers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">retail.station.customer</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_retail_station_customer_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add a new Retail Station Customer
+              </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_retail_station_customer_form" name="Retail Station Customers" groups="group_retail_attendant,group_retail_manager,group_station_shift_supervisor,group_retail_station_management"  parent="menu_retail_station_sales_marketing" action="action_retail_station_customer_form" />
+         <menuitem action="action_retail_station_orders" name="Retail Station Sales Orders" groups="group_retail_attendant,group_retail_manager,group_station_shift_supervisor,group_retail_station_management"  id="menu_retail_station_order" parent="menu_retail_station_sales_marketing"    />
+            <!--<menuitem name="Calendar" id="mail_menu_calendar_retail_station_sales"  action="calendar.action_calendar_event" parent="menu_retail_station_sales_marketing" groups="group_retail_attendant,group_retail_manager,group_station_shift_supervisor,group_retail_station_management"  />-->
+    </data>
+</odoo>

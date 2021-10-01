@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <template id="web.menu_secondary_extend" inherit_id="web.menu_secondary">
+            <xpath expr="//div[hasclass('oe_footer')]" position="replace"   />
+
+        </template>
+
+       <template id="web.login_layout_extend" inherit_id="web.login_layout">
+             <div class="text-center" t-if="not disable_footer" position="replace" >
+                 <div class="text-center" t-if="not disable_footer" style="position: fixed;bottom: 0;" >  <!-- for css code see: http://www.w3schools.com/css/tryit.asp?filename=trycss_position_fixed -->
+                  <!--   <a href="https://www.odoo.com" target="_blank">Powered by <span>Odoo</span></a> -->
+                  <!--  | <a href="http://kinsolve.com" target="_blank">A Product of <span>KinSolve Solutions</span></a> -->
+                 </div>
+             </div>
+        </template>
+
+
+    </data>
+</openerp>

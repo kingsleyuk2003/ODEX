@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+        <record id="view_res_partner_rog_extend" model="ir.ui.view">
+            <field name="name" >res.partner.rog.extend</field>
+            <field name="model" >res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                 <field name="website" position="after" >
+                     <field name="rc_number" />
+                     <field name="tin_number" />
+                     <field name="product_service_type" />
+                     <field name="contracted" />
+                     <field name="registration_status" />
+                     <field name="evaluation_status" />
+                     <field name="control" />
+                     <field name="others" />
+                 </field>
+            </field>
+        </record>
+
+        </data>
+</openerp>

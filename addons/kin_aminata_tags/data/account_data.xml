@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+
+        <record id="account_aminata_cash_at_bank" model="account.account.tag">
+            <field name="name">Aminata Cash at Bank</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_cash_in_hand" model="account.account.tag">
+            <field name="name">Aminata Cash in Hand</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+
+        <record id="account_aminata_current_assets" model="account.account.tag">
+            <field name="name">Aminata Current Assets</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_loan_advances" model="account.account.tag">
+            <field name="name">Aminata Loan and Advances</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_loan_receivable_shorterm" model="account.account.tag">
+            <field name="name">Aminata Loan Receivable Short-term</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+         <record id="account_aminata_misc_loan_receivable_longterm" model="account.account.tag">
+            <field name="name">Aminata Loan receivable longterm</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_prepaid_expenses" model="account.account.tag">
+            <field name="name">Aminata Prepaid Expenses</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_prepaid_rent" model="account.account.tag">
+            <field name="name">Aminata Prepaid Rent</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_stock_in_hand" model="account.account.tag">
+            <field name="name">Aminata Stock in Hand</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_private_sale" model="account.account.tag">
+            <field name="name">Aminata Private Sale</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_coupon_fraud" model="account.account.tag">
+            <field name="name">Aminata Coupon Fraud</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+         <record id="account_aminata_employee_receivable" model="account.account.tag">
+            <field name="name">Aminata Employee Receivable</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+         <record id="account_aminata_gas_station" model="account.account.tag">
+            <field name="name">Aminata Gas Station Receivable</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+         <record id="account_aminata_gol_sales" model="account.account.tag">
+            <field name="name">Aminata GOL Sales Receivable</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+         <record id="account_aminata_multinational" model="account.account.tag">
+            <field name="name">Aminata Multinational Sale</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_moh" model="account.account.tag">
+            <field name="name">Aminata MOH Sales Receivable</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_personal_loan" model="account.account.tag">
+            <field name="name">Aminata Personal Loan</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <!-- Delete from the database -->
+        <!--<record id="account_aminata_intercompany_balances" model="account.account.tag">-->
+            <!--<field name="name">Aminata Intercompany Balances</field>-->
+            <!--<field name="applicability">accounts</field>-->
+        <!--</record>-->
+
+        <record id="account_aminata_intercompany_receivables" model="account.account.tag">
+            <field name="name">Aminata Related Parties' Receivables</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_intercompany_payables" model="account.account.tag">
+            <field name="name">Aminata Related Parties' Payables</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_rental_income" model="account.account.tag">
+            <field name="name">Aminata Rental Income Receivables</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_public_sale" model="account.account.tag">
+            <field name="name">Aminata Public Receivables</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+
+        <record id="account_aminata_bad_debt_customers" model="account.account.tag">
+            <field name="name">Aminata Provision for Bad Debt Customers</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+
+        <record id="account_aminata_wip" model="account.account.tag">
+            <field name="name">Aminata Work In Progress</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_leased_properties" model="account.account.tag">
+            <field name="name">Aminata Leased Properties</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_other_fixed_assets" model="account.account.tag">
+            <field name="name">Aminata Fixed Assets</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_owned_properties" model="account.account.tag">
+            <field name="name">Aminata Owned Properties</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_arkoil_mgt_master" model="account.account.tag">
+            <field name="name">Aminata Arkoil Management (Master)</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+
+         <record id="account_aminata_arkoil" model="account.account.tag">
+            <field name="name">Aminata Arkoil</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+         <record id="account_aminata_gas_station_overages" model="account.account.tag">
+            <field name="name">Aminata Arkoil Gas Station Overages</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_security_deposits" model="account.account.tag">
+            <field name="name">Aminata Security Deposits</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_non_cash_expenses" model="account.account.tag">
+            <field name="name">Aminata Non-cash Expenses</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+         <record id="account_aminata_arkoil_security_deposits" model="account.account.tag">
+            <field name="name">Aminata Arkoil Security Deposits</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+         <record id="account_aminata_truckers_payable" model="account.account.tag">
+            <field name="name">Aminata Truckers Payable</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+         <record id="account_aminata_sundry_creditors" model="account.account.tag">
+            <field name="name">Aminata Sundry Creditors</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+         <record id="account_aminata_accrued_liabilities" model="account.account.tag">
+            <field name="name">Aminata Accrued Liabilities</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+         <record id="account_aminata_accrued_misc_liabilities" model="account.account.tag">
+            <field name="name">Aminata Misc. Accrued Liabilities</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+         <record id="account_aminata_tax_liabilities" model="account.account.tag">
+            <field name="name">Aminata Tax Liabilities</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_misc_liabilities" model="account.account.tag">
+            <field name="name">Aminata Miscelleneous Liabilities</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_trade_payables" model="account.account.tag">
+            <field name="name">Aminata Trade Payables</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_other_payables" model="account.account.tag">
+            <field name="name">Aminata Other Payables</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_letter_credit_guarantees" model="account.account.tag">
+            <field name="name">Aminata Bank Letter of Credit and Guarantees</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_bank_overdraft" model="account.account.tag">
+            <field name="name">Aminata Bank Overdraft</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+         <record id="account_aminata_unsecured_loan" model="account.account.tag">
+            <field name="name">Aminata Unsecured Loan</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_shorterm_loan" model="account.account.tag">
+            <field name="name">Aminata Short-term Loans</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_mediumloan" model="account.account.tag">
+            <field name="name">Aminata Medium-term Loans</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_shareholder_loan" model="account.account.tag">
+            <field name="name">Aminata Shareholder Loans</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+         <record id="account_aminata_interest_payable" model="account.account.tag">
+            <field name="name">Aminata Interest Payable</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+
+        <record id="account_aminata_misc_loan" model="account.account.tag">
+            <field name="name">Aminata Misc. Loan</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_reserves_surplus" model="account.account.tag">
+            <field name="name">Aminata Reserves and Surplus</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_sales_account" model="account.account.tag">
+            <field name="name">Aminata Sales Account</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_indirect_incomes" model="account.account.tag">
+            <field name="name">Aminata Indirect Incomes</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+
+        <record id="account_aminata_purchase_accounts" model="account.account.tag">
+            <field name="name">Aminata Purchase (COGS) Accounts </field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_direct_expenses" model="account.account.tag">
+            <field name="name">Aminata Direct Expenses</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_bank_charges" model="account.account.tag">
+            <field name="name">Aminata Bank Charges</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_finance_cost" model="account.account.tag">
+            <field name="name">Aminata Finance Cost</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_selling_distribution" model="account.account.tag">
+            <field name="name">Aminata Selling and Distribution</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_fuel_expenses" model="account.account.tag">
+            <field name="name">Aminata Fuel Expenses</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_licenses_and_registration" model="account.account.tag">
+            <field name="name">Aminata Licenses and Registration</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_other_admin_expenses" model="account.account.tag">
+            <field name="name">Aminata Other Administrative Expenses</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_payroll_expenses" model="account.account.tag">
+            <field name="name">Aminata Personnel Expenses</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_professional_fees" model="account.account.tag">
+            <field name="name">Aminata Professional Fees</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_repairs_maintenance" model="account.account.tag">
+            <field name="name">Aminata Repairs and Maintenance</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+         <record id="account_aminata_taxes" model="account.account.tag">
+            <field name="name">Aminata Taxes</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+        <record id="account_aminata_utilities" model="account.account.tag">
+            <field name="name">Aminata Utilities</field>
+            <field name="applicability">accounts</field>
+        </record>
+
+
+
+
+    </data>
+</openerp>

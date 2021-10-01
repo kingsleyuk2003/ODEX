@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_kin_product_regulation_user,kin.product.regulation ticket user,model_product_regulation,group_product_regulation_user,1,1,1,1
+access_kin_product_regulation_manager,kin.product.regulation ticket manager,model_product_regulation,group_product_regulation_manager,1,1,1,1
+access_kin_product_category_user,kin.product.category user,model_kin_product_category,group_product_regulation_user,1,1,0,0
+access_kin_product_category_manager,kin.product.category  manager,model_kin_product_category,group_product_regulation_manager,1,1,1,1

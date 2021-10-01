@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+<template id="custom_header_agary" inherit_id= "kin_report.custom_header" >
+    <xpath expr="//div[@class='header']"  position="replace">
+        <div class="header text-center" >
+                <div class="row"  >
+                    <div class="row" >
+                        <div class="col-xs-12 " style="font-weight:bold"  >
+                            <img t-if="company.header_logo" t-att-src="'data:image/png;base64,%s' % company.header_logo" style="max-height: 50px;"/>
+                            <span t-field="company.header_data" />
+                        </div>
+                    </div>
+                </div>
+        </div>
+     </xpath>
+</template>
+
+  <template id="custom_header_agary_hr" inherit_id= "kin_hr.custom_header" >
+    <xpath expr="//div[@class='header']"  position="replace">
+        <div class="header text-center" >
+                <div class="row"  >
+                    <div class="row" >
+                        <div class="col-xs-12 " style="font-weight:bold"  >
+                            <img t-if="company.header_logo" t-att-src="'data:image/png;base64,%s' % company.header_logo" style="max-height: 50px;"/>
+                            <span t-field="company.header_data" />
+                        </div>
+                    </div>
+                </div>
+        </div>
+     </xpath>
+</template>
+
+
+	</data>
+</openerp>

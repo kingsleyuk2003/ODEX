@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+    <record id="mrp_bom_form_view_extend" model="ir.ui.view">
+            <field name="name">mrp.bom.form.extend</field>
+            <field name="model">mrp.bom</field>
+            <field name="inherit_id" ref="mrp.mrp_bom_form_view" />
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='bom_line_ids']//field[@name='product_uom']" position="after">
+                         <field name="product_cost"/>
+                </xpath>
+
+            </field>
+    </record>
+
+
+        <record id="mrp_production_form_view_extend" model="ir.ui.view">
+            <field name="name">mrp.production.form.extend</field>
+            <field name="model">mrp.production</field>
+             <field name="inherit_id" ref="mrp.mrp_production_form_view" />
+            <field name="arch" type="xml">
+                 <field name="date_planned" position="after" >
+                     <field name="batch_id" groups="base.group_no_one" />
+                 </field>
+                <field name="location_src_id" position="attributes" >
+                    <attribute name="domain" ></attribute>
+                </field>
+                <field name="location_dest_id" position="attributes" >
+                    <attribute name="domain" ></attribute>
+                </field>
+
+                <xpath expr="//div[@class='oe_title']" position="before" >
+                    <div  name="button_box" class="oe_button_box"  >
+                         <button type="object"  name="btn_view_moves" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('move_count', '=', 0)]}" groups="account.group_account_manager"  >
+                                <field name="move_count" widget="statinfo" string="Journal Entries" />
+                        </button>
+                    </div>
+                </xpath>
+
+
+            </field>
+         </record>
+
+
+        <record id="mrp_production_batch_form_view" model="ir.ui.view" >
+            <field name="name" >mrp.production.batch.form</field>
+            <field name="model" >mrp.production.batch</field>
+            <field name="arch" type="xml" >
+                <form string="Batch" >
+                    <header>
+                        <!--<button name="button_start" states="draft" string="Start Batch Production" class="oe_highlight"/>-->
+                         <!--<button name="button_done" states="progress" string="End Batch Production" class="oe_highlight"/>-->
+                        <field name="state" widget="statusbar" statusbar_visible="draft,progress,done" statusbar_colors='{"done":"blue"}'/>
+                     </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="Batch Reference"/></h1>
+                        </div>
+                        <group>
+                             <group>
+                                <field name="product_id"  context='{"default_type": "product"}'/>
+                                <label for="product_qty"/>
+                                <div class="o_row">
+                                    <field name="product_qty" />
+                                    <field name="product_uom" options="{'no_open':True,'no_create':True}" groups="product.group_uom"/>
+                                </div>
+                                <field name="date_planned"/>
+                            </group>
+                            <group>
+                                <field name="origin"/>
+                                <field name="is_template" groups="base.group_no_one" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Manufacturing Orders">
+                                <field name="manufacturing_ids" nolabel="1"  >
+                                    <tree string="Manufacturing Orders Lists" edit="false"  editable="top" create="false" delete="false"  >
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name" />
+                                        <field name="product_id" options="{'no_open':True,'no_create':True}"  />
+                                        <field name="product_uom" options="{'no_open':True,'no_create':True}"  />
+                                        <field name="location_src_id" options="{'no_open':True,'no_create':True}"  />
+                                        <field name="location_dest_id" options="{'no_open':True,'no_create':True}"  />
+                                        <!--<field name="date_start" />-->
+                                        <!--<field name="date_finished" />-->
+                                        <field name="date_planned" />
+                                        <field name="state" />
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                 </form>
+            </field>
+        </record>
+
+
+        <record id="mrp_production_batch_tree_view" model="ir.ui.view">
+            <field name="name">mrp.production.batch.tree</field>
+            <field name="model">mrp.production.batch</field>
+            <field name="arch" type="xml">
+                <tree decoration-bf="message_needaction==True" decoration-info="state in ('draft','done')" decoration-danger="date_planned&lt;current_date and state not in ('done','cancel')" decoration-muted="state in ('done','cancel')" string="Manufacturing Batches">
+                    <field name="message_needaction" invisible="1"/>
+                    <field name="name"/>
+                    <field name="date_planned"/>
+                    <field name="product_id"/>
+                    <field name="product_qty" sum="Total Qty"/>
+                    <field name="product_uom" options="{'no_open':True,'no_create':True}" groups="product.group_uom"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="mrp_production_batch_kanban_view" model="ir.ui.view">
+            <field name="name">mrp.production.batch.kanban</field>
+            <field name="model">mrp.production.batch</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile">
+                    <field name="name"/>
+                    <field name="product_id"/>
+                    <field name="product_qty"/>
+                     <field name="product_uom" options="{'no_open':True,'no_create':True}"/>
+                    <field name="date_planned"/>
+                    <field name="state"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <strong><span><t t-esc="record.product_id.value"/></span></strong>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <strong><span class="pull-right text-right"><t t-esc="record.product_qty.value"/> <t t-esc="record.product_uom.value"/></span></strong>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6 text-muted">
+                                        <span><t t-esc="record.name.value"/> <t t-esc="record.date_planned.value and record.date_planned.value.split(' ')[0] or False"/></span>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <span t-attf-class="pull-right text-right label #{['draft', 'cancel'].indexOf(record.state.raw_value) > -1 ? 'label-default' : ['none'].indexOf(record.state.raw_value) > -1 ? 'label-danger' : ['confirmed'].indexOf(record.state.raw_value) > -1 ? 'label-warning' : ['done'].indexOf(record.state.raw_value) > -1 ? 'label-success' : 'label-primary'}"><t t-esc="record.state.value"/></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <record id="view_production_batch_calendar" model="ir.ui.view">
+            <field name="name">mrp.production.batch.calendar</field>
+            <field name="model">mrp.production.batch</field>
+            <field eval="2" name="priority"/>
+            <field name="arch" type="xml">
+                <calendar date_start="date_planned" string="Manufacturing Orders">
+                    <field name="name"/>
+                    <field name="product_id"/>
+                    <field name="product_qty"/>
+                </calendar>
+            </field>
+        </record>
+        <!--<record id="view_production_batch_gantt" model="ir.ui.view">-->
+            <!--<field name="name">mrp.production.batch.gantt</field>-->
+            <!--<field name="model">mrp.production.batch</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<gantt date_stop="date_finished" date_start="date_start" progress="progress" string="Productions" default_group_by="routing_id">-->
+                <!--</gantt>-->
+            <!--</field>-->
+        <!--</record>-->
+        <record id="view_production_batch_pivot" model="ir.ui.view">
+            <field name="name">mrp.production.batch.pivot</field>
+            <field name="model">mrp.production.batch</field>
+            <field name="arch" type="xml">
+                <pivot string="Manufacturing Production Batch">
+                     <field name="product_qty" type="measure"/>
+                    <field name="product_id" type="row"/>
+                </pivot>
+            </field>
+        </record>
+        <record id="view_production_batch_graph" model="ir.ui.view">
+            <field name="name">mrp.production.batch.graph</field>
+            <field name="model">mrp.production.batch</field>
+            <field name="arch" type="xml">
+                <graph string="Manufacturing Production Batch">
+                    <field name="date_planned"/>
+                    <field name="product_qty" type="measure"/>
+                    <field name="product_id" type="row"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="view_mrp_production_batch_filter" model="ir.ui.view">
+            <field name="name">mrp.production.batch.select</field>
+            <field name="model">mrp.production.batch</field>
+            <field name="arch" type="xml">
+                <search string="Search Production Batch">
+                    <field name="name" string="Production Batch" filter_domain="['|',('name','ilike',self),('origin','ilike',self)]"/>
+                     <filter string="New" name="new_state" domain="[('state','=','draft')]"
+                        help="Manufacturing Batch that are Newly Created"/>
+                    <filter string="In Progress" name="in_progress_state" domain="[('state','=','progress')]"
+                        help="Manufacturing Batch that are in Progress"/>
+                    <filter string="Completed" name="done_state" domain="[('state','=','done')]"
+                        help="Manufacturing Batch that are Done"/>
+                    <filter string="Cancelled" name="cancel_state" domain="[('state','=','cancel')]"
+                        help="Manufacturing Batch that are Cancelled"/>
+                    <separator/>
+                    <filter string="Late" domain="['&amp;', ('date_planned','&lt;', current_date), ('state', 'in', ('draft', 'progress'))]"
+                        help="Production Batch started late"/>
+                    <field name="product_id"/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter string="Status" domain="[]" context="{'group_by':'state'}"/>
+                        <filter string="Scheduled Month" domain="[]" context="{'group_by':'date_planned'}" help="Scheduled Date by Month"/>
+                    </group>
+               </search>
+            </field>
+        </record>
+
+        <record id="mrp_production_batch_action" model="ir.actions.act_window">
+            <field name="name">Manufacturing Batch</field>
+            <field name="res_model">mrp.production.batch</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="view_mrp_production_batch_filter"/>
+            <field name="context">{}</field>
+            <field name="domain">[('is_template', '=', False)]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a manufacturing batch.
+              </p><p>
+                A manufacturing batch consist of manufacturing orders.
+              </p><p>
+                Manufacturing orders are usually proposed automatically based
+                on customer requirements or automated rules like the minimum
+                stock rule.
+              </p>
+            </field>
+        </record>
+
+
+
+
+         <record id="mrp_production_batch_template_action" model="ir.actions.act_window">
+            <field name="name">Manufacturing Batch Templates</field>
+            <field name="res_model">mrp.production.batch</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="view_mrp_production_batch_filter"/>
+            <field name="context">{}</field>
+            <field name="domain">[('is_template', '=', True)]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a manufacturing batch Template
+              </p><p>
+                A manufacturing batch consist of manufacturing orders.
+              </p><p>
+                Manufacturing orders are usually proposed automatically based
+                on customer requirements or automated rules like the minimum
+                stock rule.
+              </p>
+            </field>
+        </record>
+
+
+
+        <menuitem action="mrp_production_batch_action"
+            id="menu_mrp_production_batch_action"
+            parent="mrp.menu_mrp_manufacturing"
+            sequence="0"/>
+
+
+<menuitem action="mrp_production_batch_template_action"
+            id="menu_mrp_production_batch_template_action"
+            parent="mrp.menu_mrp_manufacturing"
+            sequence="-1"/>
+
+
+
+        <!--  Accounting view -->
+        <record id="view_move_line_tree_production_extend" model="ir.ui.view">
+            <field name="name">account.move.line.tree.production.extend</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_move_line_tree"/>
+            <field name="arch" type="xml">
+                <field name="balance" position="after" >
+                     <field name="manu_id" />
+                </field>
+            </field>
+        </record>
+
+        <record id="view_move_line_form_production_extend" model="ir.ui.view">
+            <field name="name">account.move.line.form.production.extend</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_move_line_form"/>
+            <field name="arch" type="xml">
+                <field name="move_id" position="before">
+                    <field name="manu_id"   />
+                </field>
+            </field>
+        </record>
+
+
+
+        <record id="view_move_form_production_extend" model="ir.ui.view" >
+            <field name="name" >account.move.form.production.extend</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form" />
+            <field name="arch" type="xml">
+                <field name="ref" position="after" >
+                    <field name="manu_id" />
+                </field>
+            </field>
+        </record>
+
+        <record id="view_account_move_filter_production_extend" model="ir.ui.view">
+            <field name="name">account.move.select.production.extend</field>
+            <field name="model">account.move</field>
+             <field name="inherit_id" ref="account.view_account_move_filter" />
+            <field name="arch" type="xml">
+                <field name="name" position="after" >
+                    <field name="manu_id"/>
+                </field>
+            </field>
+        </record>
+
+
+         <record id="view_mrp_production_filter_extend" model="ir.ui.view">
+            <field name="name">mrp.production.select.extend</field>
+            <field name="model">mrp.production</field>
+             <field name="inherit_id" ref="mrp.view_mrp_production_filter" />
+            <field name="arch" type="xml">
+                <field name="name" position="after" >
+                    <field name="batch_id" />
+                </field>
+            </field>
+         </record>
+
+
+
+        <!-- Edit Product Menu -->
+         <record id="product_product_action_product_mrp_extend" model="ir.actions.act_window">
+            <field name="name">Products</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.product</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="view_type">form</field>
+             <field name="domain">[('type', 'not in', ['service'])]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to define a new product.
+                </p>
+            </field>
+        </record>
+
+         <menuitem id="mrp.menu_mrp_product_form"
+            name="Products"
+            action="product_product_action_product_mrp_extend"
+            parent="mrp.menu_mrp_bom"/>
+
+
+
+    </data>
+</openerp>

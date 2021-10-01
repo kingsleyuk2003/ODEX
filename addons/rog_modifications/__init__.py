@@ -1,0 +1,13 @@
+import purchase
+import shipping
+import account
+import hr
+import stock
+import res_partner
+import sale
+import rog_report
+import product
+import inventory
+import wizard
+import report
+import procurement

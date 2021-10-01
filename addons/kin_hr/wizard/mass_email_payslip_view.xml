@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+
+        <record id="mass_email_payslip_wizard_view" model="ir.ui.view">
+            <field name="name">Mass Email Payslip Wizard</field>
+            <field name="model">mass.email.payslip.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Mass Email Confirmation">
+                    <p>You are about the Mass email the selected payslips to the respective employees </p>
+                    <p>Ensure you have checked them before emailing the slips</p>
+                    <footer>
+                        <button name="mass_email_payslip" string="Send Email Payslips" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_mass_email_payslips" model="ir.actions.act_window">
+            <field name="name">Mass Email Payslips</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mass.email.payslip.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <!--<field name="groups_id" eval="[(4,ref('base.group_hr_user'))]"/>           -->
+        </record>
+
+
+        <record model="ir.values" id="mass_email_payslip_multi">
+            <field name="model_id" ref="hr_payroll.model_hr_payslip" />
+            <field name="name">Mass Email Payslip</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('action_mass_email_payslips'))" />
+            <field name="key">action</field>
+            <field name="model">hr.payslip</field>
+            <field name="groups_id" eval="[(4,ref('base.group_hr_user'))]"/>
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+
+	<record model="ir.module.category" id="module_category_rog_modification_sale">
+            <field name="name">ROG Modifications - Sales</field>
+     </record>
+
+
+	<record model="ir.module.category" id="module_category_rog_modification_purchase">
+            <field name="name">ROG Modifications - C and I Purchase</field>
+     </record>
+
+		<record model="ir.module.category" id="module_category_rog_modification_inventory">
+            <field name="name">ROG Modifications - Inventory</field>
+     </record>
+
+	<record model="ir.module.category" id="module_category_rog_modification_shipping">
+            <field name="name">ROG Modifications - Shipping</field>
+     </record>
+
+	<record model="ir.module.category" id="module_category_rog_modification_accounting">
+            <field name="name">ROG Modifications - Accounting</field>
+     </record>
+
+	<record model="ir.module.category" id="module_category_rog_modification_hr">
+            <field name="name">ROG Modifications - HR</field>
+     </record>
+
+	<record id="group_receive_hr_leave_allocation_email_notification" model="res.groups">
+		<field name="name">Receive Leave Allocation Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_hr"/>
+	</record>
+
+		<record id="group_show_confirm_rog_rule_adjustment" model="res.groups">
+			<field name="name">Show "Confirm" button on HR Rule Adjustment</field>
+			<field name="category_id" ref="module_category_rog_modification_hr"/>
+	</record>
+
+	<record id="group_show_approve_rog_rule_adjustment" model="res.groups">
+			<field name="name">Show "Approve" button on HR Rule Adjustment</field>
+			<field name="category_id" ref="module_category_rog_modification_hr"/>
+	</record>
+
+	<record id="group_show_refund_rog_rule_adjustment" model="res.groups">
+			<field name="name">Show "Refund" button on HR Rule Adjustment</field>
+			<field name="category_id" ref="module_category_rog_modification_hr"/>
+	</record>
+
+
+
+	<record id="group_receive_email_confirm_rog_rule_adjustment" model="res.groups">
+			<field name="name">Receive Notification for Rule Adjustment Confirmation</field>
+			<field name="category_id" ref="module_category_rog_modification_hr"/>
+	</record>
+
+	<record id="group_receive_email_approve_rog_rule_adjustment" model="res.groups">
+			<field name="name">Receive Email Notification for Rule Adjustment Approval</field>
+			<field name="category_id" ref="module_category_rog_modification_hr"/>
+	</record>
+
+	<record id="group_receive_email_refund_rog_rule_adjustment" model="res.groups">
+			<field name="name">Receive Email Notification for Rule Adjustment Refund</field>
+			<field name="category_id" ref="module_category_rog_modification_hr"/>
+	</record>
+
+	<record id="group_show_submit_btn_hr_expense" model="res.groups">
+			<field name="name">Show Submit to Manager Button for HR expense</field>
+			<field name="category_id" ref="module_category_rog_modification_hr"/>
+	</record>
+
+	<record id="group_show_approve_btn_hr_expense" model="res.groups">
+			<field name="name">Show Approve Button for HR expense</field>
+			<field name="category_id" ref="module_category_rog_modification_hr"/>
+	</record>
+
+	<record id="group_show_post_entry_btn_hr_expense" model="res.groups">
+			<field name="name">Show Post Journal Entries Button for HR expense</field>
+			<field name="category_id" ref="module_category_rog_modification_hr"/>
+	</record>
+
+
+	<record id="group_receive_local_purchase_email_notification" model="res.groups">
+		<field name="name">Receive Local Purchase Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_purchase"/>
+	</record>
+
+	<record id="group_receive_foreign_purchase_email_notification" model="res.groups">
+		<field name="name">Receive Foreign Purchase Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_purchase"/>
+	</record>
+
+	<record id="group_receive_form_m_forwarded_scanning_agent_email_notification" model="res.groups">
+		<field name="name">Receive Form M Forwarded to Scanning Agent Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_purchase"/>
+	</record>
+
+	<record id="group_receive_form_m_forwarded_to_cbn_email_notification" model="res.groups">
+		<field name="name">Receive Form M Forwarded to CBN by Bank Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_purchase"/>
+	</record>
+
+	<record id="group_receive_letter_of_credit_established_email_notification" model="res.groups">
+		<field name="name">Receive letter of Credit Established Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_purchase"/>
+	</record>
+
+	<record id="group_receive_confirm_order_email_notification" model="res.groups">
+		<field name="name">Receive Confirm Order Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_purchase"/>
+	</record>
+
+	<record id="group_receive_cancel_order_email_notification" model="res.groups">
+		<field name="name">Receive Cancel Order Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_purchase"/>
+	</record>
+
+	<record id="group_show_form_m_application_menu" model="res.groups">
+		<field name="name">Show Form M Application Menu</field>
+		<field name="category_id" ref="module_category_rog_modification_purchase"/>
+	</record>
+
+	<record id="group_show_confirm_order_btn" model="res.groups">
+		<field name="name">Show Confirm Order btn</field>
+		<field name="category_id" ref="module_category_rog_modification_purchase"/>
+	</record>
+
+	<record id="group_show_approve_order_btn" model="res.groups">
+		<field name="name">Show Approve Order btn</field>
+		<field name="category_id" ref="module_category_rog_modification_purchase"/>
+	</record>
+
+
+
+
+<record id="group_receive_purchase_email_notification" model="res.groups">
+		<field name="name">Receive Procurement Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_purchase"/>
+	</record>
+
+		<record id="group_show_conversion_rate_field" model="res.groups">
+			<field name="name">Show Conv. Rate field on Purchase Order Line</field>
+			<field name="category_id" ref="module_category_rog_modification_purchase"/>
+	</record>
+
+
+
+
+<!-- Inventory -->
+	<record id="group_receive_bank_inspection_on_discharged_product_email_notification" model="res.groups">
+		<field name="name">Receive Bank Inspection on Discharged Product Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_inventory"/>
+	</record>
+
+	<record id="group_receive_bank_monitoring_stock_email_notification" model="res.groups">
+		<field name="name">Receive Bank Monitoring of Stock Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_inventory"/>
+	</record>
+
+
+
+	<!-- Shipping -->
+	<record id="group_ci_purchase" model="res.groups">
+			<field name="name">Show C and I Purchase</field>
+			<field name="category_id" ref="module_category_rog_modification_purchase"/>
+	</record>
+
+
+	<!-- Shipping -->
+	<record id="group_shipping" model="res.groups">
+			<field name="name">Show Shipping Application</field>
+			<field name="category_id" ref="module_category_rog_modification_shipping"/>
+	</record>
+
+	<record id="group_receive_ship_to_ship_email_notification" model="res.groups">
+			<field name="name">Receive Ship to Ship Email Notification</field>
+			<field name="category_id" ref="module_category_rog_modification_shipping"/>
+	</record>
+
+
+
+	<!-- Accounting -->
+
+	<record id="group_ssa_split_rog" model="res.groups">
+			<field name="name">Show "Allow SSA Split" Field on the Journal Entry</field>
+			<field name="category_id" ref="module_category_rog_modification_accounting"/>
+	</record>
+
+	<record id="group_date_rog" model="res.groups">
+			<field name="name">Approve Back/Forward Dating</field>
+	</record>
+
+	<!-- Sales -->
+	<record id="group_discount_approve_rog" model="res.groups">
+			<field name="name">Approve Discount Changes on Sales Order</field>
+			<field name="category_id" ref="module_category_rog_modification_sale"/>
+	</record>
+
+	<record id="group_product_sales_price_approve_rog" model="res.groups">
+			<field name="name">Approve Product Sales Price on Product Page</field>
+			<field name="category_id" ref="module_category_rog_modification_sale"/>
+	</record>
+
+
+
+
+<!--	<record id="group_show_hr_rog_contract" model="res.groups">-->
+<!--			<field name="name">Show Contract Tab for ROG on Employees Form</field>-->
+<!--        <field name="category_id" ref="kin_hr.module_category_hr"/>-->
+<!--		</record>-->
+
+
+	<!-- General -->
+	<record id="group_ssa_rog" model="res.groups">
+			<field name="name">Show "SSA" Fields </field>
+	</record>
+
+	<record id="group_management_report_rog" model="res.groups">
+			<field name="name">ROG Management Report</field>
+	</record>
+
+	<record id="group_email_report_sos_rog" model="res.groups">
+			<field name="name">Receive Summary of Sales Scheduled Email Report</field>
+	</record>
+
+
+
+<!-- QHSSE Safety -->
+
+
+	<!-- Procurement / LC -->
+		<record id="group_procurement" model="res.groups">
+			<field name="name">Show Procurement / LC Menu</field>
+			<field name="category_id" ref="module_category_rog_modification_purchase"/>
+	</record>
+
+	<record id="group_show_create_lc_bc_bill" model="res.groups">
+			<field name="name">Show "Create LC/BC Bill" Button</field>
+			<field name="category_id" ref="module_category_rog_modification_purchase"/>
+	</record>
+
+	<record id="group_show_create_pef_bill" model="res.groups">
+			<field name="name">Show "Create PEF Bill" Button</field>
+			<field name="category_id" ref="module_category_rog_modification_purchase"/>
+	</record>
+
+	<record id="group_show_create_pppra_bill" model="res.groups">
+			<field name="name">Show "Create PPPRA Bill" Button</field>
+			<field name="category_id" ref="module_category_rog_modification_purchase"/>
+	</record>
+
+	<!-- Accounting -->
+
+	<record id="group_receive_rog_lc_bc_email_notification" model="res.groups">
+		<field name="name">Receive LC/BC Bill Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_accounting"/>
+	</record>
+
+	<record id="group_receive_rog_pef_email_notification" model="res.groups">
+		<field name="name">Receive PEF Bill Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_accounting"/>
+	</record>
+
+	<record id="group_receive_rog_pppra_email_notification" model="res.groups">
+		<field name="name">Receive PPPRA Bill Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_accounting"/>
+	</record>
+
+
+
+
+
+
+
+</data>
+</odoo>

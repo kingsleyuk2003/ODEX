@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+	<data>
+
+
+
+
+    <record model="ir.sequence" id="seq_legal_advice_id">
+        <field name="name">Legal Advice</field>
+        <field name="code">la_code</field>
+        <field name="prefix">LA</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+     <record model="ir.sequence" id="seq_legal_case_id">
+        <field name="name">Legal Case</field>
+        <field name="code">lc_code</field>
+        <field name="prefix">LC</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+
+
+
+	</data>
+</odoo>

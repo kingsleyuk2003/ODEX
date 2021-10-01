@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+   <record id="view_order_form_double_extend" model="ir.ui.view">
+            <field name="name">sale.order.form.double.extend</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="arch" type="xml">
+
+                 <button name="action_cancel"  position="before" >
+                        <button name="action_send_to_manager" states="draft"  string="Send to Manager" class="btn-primary" type="object" groups="kin_sales_double_validation.group_show_send_to_manager"  />
+                     <button name="action_send_for_confirm"  string="Send Accepted Quote for Conversion to Sales Order" class="btn-primary" type="object" attrs="{'invisible':[('state', '!=', 'to_accept')]}" context="{'show_sale': True}" groups="kin_sales_double_validation.group_show_send_for_validation_btn"/>
+
+                    <button  name="action_approve" string="Approve Sale Order" class="btn-primary" type="object"  attrs="{'invisible':[('state', '!=', 'so_to_approve')]}" context="{'show_sale': True}" groups="kin_sales_double_validation.group_show_approve_btn"/>
+                     <button name="%(action_disapprove_sale_orders)d"   string="Disapprove Sale Order" class="btn-primary" type="action"  attrs="{'invisible':[('state', '!=', 'so_to_approve')]}" context="{'show_sale': True}" groups="kin_sales_double_validation.group_show_disapprove_btn"/>
+                 </button>
+
+                 <button name="action_cancel" states="draft,sent,sale" type="object"  position="attributes">
+                     <attribute name="states">draft,waiting,to_accept,so_to_approve,sale,no_sale</attribute>
+                 </button>
+                <field name="state" widget="statusbar" statusbar_visible="draft,sent,sale,done" position="attributes">
+                    <attribute name="statusbar_visible" >draft,waiting,to_accept,so_to_approve,sale,done</attribute>
+                </field>
+
+                <field name="user_id" position="after" >
+                    <field name="confirmed_by_user_id" />
+                    <field name="approved_by_user_id" />
+                    <field name="disapproved_by_user_id" />
+                </field>
+            </field>
+        </record>
+
+        <record id="view_order_form_double1_extend" model="ir.ui.view">
+            <field name="name">sale.order.form.double1.extend</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="kin_sales.view_order_form_extend" />
+            <field name="arch" type="xml">
+                 <xpath expr="//button[@name='action_confirm'][@states='sent']" position="attributes" >
+                    <attribute name="states"> </attribute>
+                    <attribute name="attrs">{'invisible':[('state', '!=', 'waiting')]}</attribute>
+                    <attribute name="groups">kin_sales_double_validation.group_show_confirm_btn</attribute>
+                </xpath>
+                <button name="action_confirm" states="draft" type="object" context="{'show_sale': True}" position="attributes" >
+                     <attribute name="states"> </attribute>
+                </button>
+            </field>
+        </record>
+
+        <record id="view_users_form_extend_validation" model="ir.ui.view">
+            <field name="name">res.users.extend.validation</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Sales Preference">
+                        <group>
+                            <field name="sale_confirm_limit"/>
+                            <field name="is_use_sale_confirm_limit" />
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+       </record>
+
+        <record id="sale.action_quotations" model="ir.actions.act_window">
+            <field name="name">Quotations</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="sale.view_quotation_tree"/>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
+            <field name="context">{}</field>
+            <field name="domain">[('state','in',('draft','sent','cancel','to_accept'))]</field>
+            <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Create a Quotation, the first step of a new sale.
+              </p><p>
+                Your next actions should flow efficiently: confirm the Quotation
+                to a Sale Order, then create the Invoice and collect the Payment.
+              </p><p>
+                Note that once a Quotation becomes a Sale Order, it will be moved
+                from the Quotations list to the Sales Order list.
+              </p>
+            </field>
+        </record>
+
+        <record id="action_orders_sale_double_validation_confirm" model="ir.actions.act_window">
+            <field name="name">Quotations Accepted by Customers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
+            <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+            <field name="context">{'show_sale': True}</field>
+            <field name="domain">[('state', '=', 'waiting')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a Quotation, the first step of a new sale.
+                </p><p>
+                    Your next actions should flow efficiently: confirm the Quotation to a Sale Order, then create the Invoice and collect the Payment.
+                </p><p>
+                    Note that once a Quotation becomes a Sale Order, it will be moved from the Quotations list to the Sales Order list.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_orders_sale_double_validation_approve" model="ir.actions.act_window">
+            <field name="name">Sales Orders to Approve</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
+            <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+            <field name="context">{'show_sale': True}</field>
+            <field name="domain">[('state', '=', 'so_to_approve')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a Quotation, the first step of a new sale.
+                </p><p>
+                    Your next actions should flow efficiently: confirm the Quotation to a Sale Order, then create the Invoice and collect the Payment.
+                </p><p>
+                    Note that once a Quotation becomes a Sale Order, it will be moved from the Quotations list to the Sales Order list.
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem action="action_orders_sale_double_validation_confirm"
+            id="menu_sale_order_confirm" parent="base.menu_sales"
+            sequence="11" groups="kin_sales_double_validation.group_show_sales_order_to_confirm_menu"/>
+
+        <menuitem action="action_orders_sale_double_validation_approve"
+            id="menu_sale_order_approve" parent="base.menu_sales"
+            sequence="12" groups="kin_sales_double_validation.group_show_sales_order_to_approve_menu"/>
+
+    </data>
+</openerp>

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_legal_case user,legal.case user,model_legal_case,group_legal,1,1,1,1
+access_legal_advice user,legal.advice user,model_legal_advice,group_legal,1,1,1,1
+access_kin_reminder legal user,kin.reminder legal user ,model_kin_reminder,group_legal,1,1,1,1

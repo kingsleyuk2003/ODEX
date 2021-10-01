@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
+		<!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
+		<report
+		    id="retail_sales_order_custom"
+		    model="retail.sale.order"
+		    string="Retail Sales Order / Delivery Note"
+		    report_type="qweb-pdf"
+		    name="kin_retail_station_general.report_retail_sale_order"
+		    file="kin_retail_station_general.report_retail_sale_order"
+		    attachment_use="False"
+		    		/>
+
+
+<template id="report_retail_sale_order">
+	    <t t-call="report.html_container"> 	    	
+	        <t t-foreach="docs" t-as="o">
+	            <t t-call="kin_retail_station_general.custom_layout"  >
+	                <div class="page" >
+						<style type="text/css">
+							<t t-call="kin_retail_station_general.style"/>
+						</style>
+						<!--<div t-raw="o.company_id.html_after_header" />-->
+						<div class="row" >
+							<div class="col-xs-5">
+								<div><span style="font-weight:bold">Order Date:  </span> <span t-field="o.date_order" /></div>
+
+							</div>
+							<div class="col-xs-7">
+								<div class="row">
+									<div class="col-xs-6 col-xs-offset-6" style="font-weight:bold">
+										<span>TO:</span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6 col-xs-offset-6">
+										<div t-field="o.partner_id" />
+									</div>
+						    	</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 text-center" >
+								<h3><b>RETAIL SALES ORDER <span t-field="o.name" /></b></h3>
+							</div>
+						</div>
+						<table  style="width: 100%;" class="table-bordered-black"  >
+									<thead>
+										<tr>
+											<th><span>Sales Contact</span></th>
+											<th><span>Retail Station</span></th>
+											<th><span>Job Role</span></th>
+											<th><span>Email</span></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><span t-field="o.user_id.name" />
+											</td><td><span t-field="o.retail_station_id.name" /></td>
+											<td><span t-field="o.user_id.function" /></td>
+											<td><span t-field="o.user_id.email" /></td>
+										</tr>
+									</tbody>
+						</table>
+						<p />
+
+						<div class="row mt16">
+							<div class="col-xs-12 text-center" >
+								<span style="font-weight:bold" >.................................... Product / Services Information ....................................</span>
+							</div>
+						</div>
+						<p />
+						<div class="row mt8">
+							<div class="col-xs-12" >
+								<table  style="width: 100%;" class="table-bordered-black" cellpadding="3" cellspacing="0" >
+
+										<thead style="display: table-row-group " >
+												<tr>
+													<td width="40%" ><span><b>Description</b></span></td>
+													<td class="text-right" ><span><b>Qty.</b></span></td>
+													<td class="text-right" ><span><b>Unit Price(<span t-field="o.currency_id.symbol" />)</b></span></td>
+													<td class="text-right" ><span><b>Price(<span t-field="o.currency_id.symbol" />)</b></span></td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr  t-foreach="o.order_line" t-as="line" >
+													<td style="padding-left: 2px" ><span t-field="line.name" /></td>
+													<td class="text-right">
+														<span t-field="line.product_uom_qty"/>
+													</td>
+													<td class="text-right">
+														<span t-esc="'{:,.2f}'.format(line.price_unit)" />
+													</td>
+													<td class="text-right">
+														<span t-esc="'{:,.2f}'.format(line.price_subtotal)" />
+													</td>
+												</tr>
+											</tbody>
+											<tr>
+												<td  colspan="2"  style="border-bottom:solid white;border-left: solid white" />
+												<td ><b>Total <span t-field="o.currency_id.name" /></b></td>
+												<td class="text-right">
+													<span t-esc="'{:,.2f}'.format(o.amount_total)"	 />
+												</td>
+											</tr>
+								</table>
+							</div>
+							<br />
+							<br />
+						<div class="col-xs-12" name="div_so_bottom"  >
+							<div  class="row mt32"  >
+								<div class="col-xs-6" >
+									<span>Approved by ....................................</span>
+								</div>
+								<div class="col-xs-6" >
+									<span>Operations ......................................</span>
+								</div>
+							</div>
+						 	<br />
+						 	<div  class="row" >
+								<div class="col-xs-6" >
+									<span>Sales Manager: ................................</span>
+								</div>
+								 <div class="col-xs-6" >
+									<span>Received by: ...................................</span>
+								</div>
+							</div>
+						</div>
+
+
+						</div>
+
+	                </div>
+	            </t>
+	        </t>
+    	</t>
+</template>
+	</data>
+</openerp>

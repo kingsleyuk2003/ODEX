@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+        <record id="view_ticket_recovered" model="ir.ui.view">
+            <field name="name">Ticket Recovered</field>
+            <field name="model">ticket.recovered.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Ticket Recovered">
+                        <h3>Has the Ticket been Recovered or Was it a Mistake by the Dispatch Officer?</h3>
+                    <footer>
+                        <button name="action_ticket_recovered_wizard" string="Yes, already recovered " type="object" context="{'is_ticket_recovered':True}" />
+                        or
+                         <button name="action_ticket_recovered_wizard" string="No, it is lost" type="object"   context="{'is_ticket_recovered':False}"  class="oe_highlight" />
+                        or
+                         <button name="action_ticket_recovered_wizard" string="Is a Mistake" type="object"   context="{'is_ticket_mistake':True}"  />
+                        or
+                        <button special="cancel" class="oe_link"  string="Close"  />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_ticket_recovered" model="ir.actions.act_window">
+            <field name="name">Ticket Recovered</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ticket.recovered.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_ticket_recovered" />
+            <field name="target">new</field>
+            <!--<field name="groups_id" eval="[(4,ref('base.group_sale_salesman'))]"/>-->
+        </record>
+
+
+
+
+
+    </data>
+</openerp>

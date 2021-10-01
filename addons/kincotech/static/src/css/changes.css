@@ -1,0 +1,72 @@
+
+
+
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.navbar-inverse {
+   background-color: #3f51b5;
+  /** background-color: #30A1FD;**/
+   border-color: #3f51b5;
+  /** border-color: #30A1FD; **/
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #FCFCFC;
+}
+
+.navbar-default {
+    background-color: #3f51b5;
+
+}
+
+/**a.oe_menu_toggler {
+    background-color: transparent !important; }
+
+**/
+.openerp .oe_background_grey {
+    background: #fcfcfc !important;
+}
+
+
+.navbar-default .navbar-nav > li > a {
+    color: #fcfcfc;
+}
+
+.o_kanban_view {
+    background-color: #fcfcfc;
+}
+
+
+
+
+.openerp .nav-pills > li.active > a, .openerp a.list-group-item.active > a {
+    background-color: #3f51b5;
+    color: white;
+    border-radius: 0;
+}
+
+
+.app-name > .oe_menu_text {
+color: #fcfcfc;
+font-weight: bold;
+}
+
+.app-drawer-icon-open{
+color: #fcfcfc;
+}
+
+
+.openerp .oe_list_content > tfoot {
+    border-bottom: 14px solid #f0eeee;
+}
+
+
+/** reference: ../website/static/src/less/web.assets_backend/import_bootstrap.less.css **/
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: #e7e7e7;
+    }
+
+

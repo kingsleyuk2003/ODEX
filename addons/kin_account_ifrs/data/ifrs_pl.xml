@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+        <record id="ifrs_pl" model="mis.report" >
+            <field name="name">Statement of Profit or Loss and Statement of Comprehensive Income</field>
+        </record>
+
+        <record id="ifrs_pl_continuing_operations" model="mis.report.kpi" >
+            <field name="sequence" >1</field>
+            <field name="description" >Continuing operations</field>
+            <field name="name">continuing_operations</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="style_id" ref="mis_report_style_indent_0_bold" />
+            <field name="expression" >AccountingNone</field>
+             <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+       <record id="ifrs_pl_revenue" model="mis.report.kpi" >
+            <field name="sequence" >2</field>
+            <field name="description" >Revenue</field>
+            <field name="name">revenue</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >-balp[('report_head_id.name', '=', 'Revenue')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_cost_of_sales_of_goods" model="mis.report.kpi" >
+            <field name="sequence" >3</field>
+            <field name="description" >Cost of sales of goods</field>
+            <field name="name">cost_of_sales_of_goods</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >-balp[('report_head_id.name', '=', 'Cost of sales of goods')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_gross_profit" model="mis.report.kpi" >
+            <field name="sequence" >4</field>
+            <field name="description" >Gross profit</field>
+            <field name="name">gross_profit</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_1_bold" />
+            <field name="expression" >revenue + cost_of_sales_of_goods</field>
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_space_1" model="mis.report.kpi" >
+            <field name="sequence" >5</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_distribution_costs" model="mis.report.kpi" >
+            <field name="sequence" >6</field>
+            <field name="description" >Distribution costs</field>
+            <field name="name">distribution_costs</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >-balp[('report_head_id.name', '=', 'Distribution costs')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_administrative_expenses" model="mis.report.kpi" >
+            <field name="sequence" >7</field>
+            <field name="description" >Administrative expenses</field>
+            <field name="name">administrative_expenses</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >-balp[('report_head_id.name', '=', 'Administrative expenses')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_other_income" model="mis.report.kpi" >
+            <field name="sequence" >8</field>
+            <field name="description" >Other income</field>
+            <field name="name">other_income</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >-balp[('report_head_id.name', '=', 'Other income')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_space_2" model="mis.report.kpi" >
+            <field name="sequence" >9</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_operating_profit" model="mis.report.kpi" >
+            <field name="sequence" >10</field>
+            <field name="description" >Operating profit</field>
+            <field name="name">operating_profit</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_1_bold" />
+            <field name="expression" >gross_profit + distribution_costs + administrative_expenses  + other_income</field>
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_space_3" model="mis.report.kpi" >
+            <field name="sequence" >11</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_finance_income" model="mis.report.kpi" >
+            <field name="sequence" >12</field>
+            <field name="description" >Finance income</field>
+            <field name="name">finance_income</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >-balp[('report_head_id.name', '=', 'Finance income')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_finance_costs" model="mis.report.kpi" >
+            <field name="sequence" >13</field>
+            <field name="description" >Finance costs</field>
+            <field name="name">finance_costs</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >-balp[('report_head_id.name', '=', 'Finance costs')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_finance_costs_net" model="mis.report.kpi" >
+            <field name="sequence" >14</field>
+            <field name="description" >Finance costs – net</field>
+            <field name="name">finance_costs_net</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_1_bold" />
+            <field name="expression" >finance_income + finance_costs</field>
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+
+        <record id="ifrs_pl_space_4" model="mis.report.kpi" >
+            <field name="sequence" >15</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_profit_before_income_tax" model="mis.report.kpi" >
+            <field name="sequence" >16</field>
+            <field name="description" >Profit before income tax</field>
+            <field name="name">profit_before_income_tax</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_1_bold" />
+            <field name="expression" >operating_profit + finance_costs_net</field>
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_space_5" model="mis.report.kpi" >
+            <field name="sequence" >17</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_income_tax_expense" model="mis.report.kpi" >
+            <field name="sequence" >18</field>
+            <field name="description" >Income tax expense</field>
+            <field name="name">income_tax_expense</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_1" />
+            <field name="expression" >-balp[('report_head_id.name', '=', 'Income tax expense')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_2" />
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_space_6" model="mis.report.kpi" >
+            <field name="sequence" >19</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_profit_from_continuing_operation" model="mis.report.kpi" >
+            <field name="sequence" >20</field>
+            <field name="description" >Profit from continuing operations</field>
+            <field name="name">profit_from_continuing_operation</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_0_bold" />
+            <field name="expression" >profit_before_income_tax + income_tax_expense</field>
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_space_7" model="mis.report.kpi" >
+            <field name="sequence" >21</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_profit_for_the_period" model="mis.report.kpi" >
+            <field name="sequence" >22</field>
+            <field name="description" >Profit for the period</field>
+            <field name="name">profit_for_the_period</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_0_bold" />
+            <field name="expression" >profit_from_continuing_operation</field>
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_space_8" model="mis.report.kpi" >
+            <field name="sequence" >23</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_other_comprehensive_income" model="mis.report.kpi" >
+            <field name="sequence" >24</field>
+            <field name="description" >Other comprehensive income</field>
+            <field name="name">other_comprehensive_income</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="style_id" ref="mis_report_style_indent_0_bold" />
+            <field name="expression" >AccountingNone</field>
+             <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_revaluation_surplus_deficit" model="mis.report.kpi" >
+            <field name="sequence" >25</field>
+            <field name="description" >Revaluation Surplus/Deficit</field>
+            <field name="name">revaluation_surplus_deficit</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_1" />
+            <field name="expression" >-balp[('report_head_id.name', '=', 'Revaluation Surplus/Deficit')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_2" />
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_remeasurement_gain_or_loss" model="mis.report.kpi" >
+            <field name="sequence" >26</field>
+            <field name="description" >Remeasurement gain or loss</field>
+            <field name="name">remeasurement_gain_or_loss</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_1" />
+            <field name="expression" >-balp[('report_head_id.name', '=', 'Remeasurement gain or loss')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_2" />
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_changes_in_fv_of_financial_asset" model="mis.report.kpi" >
+            <field name="sequence" >27</field>
+            <field name="description" >Changes in FV of financial assets</field>
+            <field name="name">changes_in_fv_of_financial_asset</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_1" />
+            <field name="expression" >-balp[('report_head_id.name', '=', 'Changes in FV of financial assets')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_2" />
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_changes_in_fv_of_cashflow_hedgin" model="mis.report.kpi" >
+            <field name="sequence" >28</field>
+            <field name="description" >Changes in FV of Cashflow hedging instrument</field>
+            <field name="name">changes_in_fv_of_cashflow_hedgin</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_1" />
+            <field name="expression" >-balp[('report_head_id.name', '=', 'Changes in FV of Cashflow hedging instrument')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_2" />
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_other_comprehensive_income_for_t" model="mis.report.kpi" >
+            <field name="sequence" >29</field>
+            <field name="description" >Other comprehensive income for the period, net of tax</field>
+            <field name="name">other_comprehensive_income_for_t</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_0_bold" />
+            <field name="expression" >revaluation_surplus_deficit + remeasurement_gain_or_loss + changes_in_fv_of_financial_asset + changes_in_fv_of_cashflow_hedgin</field>
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_space_9" model="mis.report.kpi" >
+            <field name="sequence" >30</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_total_comprehensive_income_for_t" model="mis.report.kpi" >
+            <field name="sequence" >31</field>
+            <field name="description" >Total comprehensive income for the period</field>
+            <field name="name">total_comprehensive_income_for_t</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_0_bold" />
+            <field name="expression" >profit_for_the_period + other_comprehensive_income_for_t</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_1" />
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+        <record id="ifrs_pl_space_10" model="mis.report.kpi" >
+            <field name="sequence" >32</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_pl" />
+        </record>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </data>
+</openerp>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+
+		<record model="ir.module.category" id="module_category_delivery_grid">
+            <field name="name">Delivery Grid</field>
+            <field name="description">Delivery Grid</field>
+            <!--<field name="sequence">7</field>-->
+        </record>
+
+
+		<record id="group_receive_delivery_register_notification" model="res.groups">
+			<field name="name">Receive Delivery Email Notification</field>
+			<field name="category_id" ref="module_category_delivery_grid"/>
+		</record>
+
+	<record id="group_receive_delivery_register_shortage_notification" model="res.groups">
+			<field name="name">Receive Delivery Shortage Notification</field>
+			<field name="category_id" ref="module_category_delivery_grid"/>
+		</record>
+
+	<record id="group_receive_delivery_register_trucker_bill_notification" model="res.groups">
+			<field name="name">Receive Delivery Trucker Bill Notification</field>
+			<field name="category_id" ref="module_category_delivery_grid"/>
+		</record>
+
+	<record id="group_show_clear_create_trucker_invoice_delivery" model="res.groups">
+			<field name="name">Show "Clear and Create Trucker Invoice" button</field>
+			<field name="category_id" ref="module_category_delivery_grid"/>
+		</record>
+
+	<record id="group_show_cancel_delivery" model="res.groups">
+			<field name="name">Show "Cancel" button</field>
+			<field name="category_id" ref="module_category_delivery_grid"/>
+		</record>
+
+		<record id="group_show_delivery_operation" model="res.groups">
+			<field name="name">Show "Delivery Operations" Menu</field>
+			<field name="category_id" ref="module_category_delivery_grid"/>
+		</record>
+
+	<record id="group_delivery_rate_officer" model="res.groups">
+			<field name="name">Delivery Rate Officer</field>
+			<field name="category_id" ref="module_category_delivery_grid"/>
+		</record>
+
+
+
+
+</data>
+</openerp>

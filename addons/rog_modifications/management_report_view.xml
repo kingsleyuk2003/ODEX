@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+            <menuitem name="Management Reports"
+            id="menu_management_report_app"
+            groups="group_management_report_rog"
+            sequence="25" web_icon="rog_modifications,static/description/mgt_report.png" />
+
+        <menuitem id="menu_mgt_report_menu" name="Management Reports" parent="menu_management_report_app"  />
+
+         <menuitem name="My Dashboard" id="menu_my_dashboard_report" action="board.open_board_my_dash_action"
+          parent="menu_mgt_report_menu" sequence="1"  icon="STOCK_PRINT" />
+
+          <menuitem name="Consolidated Report" id="menu_consolidated_report" action="action_consolidated_report_wizard"
+          parent="menu_mgt_report_menu" sequence="2"  icon="STOCK_PRINT" />
+
+        <menuitem name="Consolidated Finance Report" id="menu_consolidated_finance_report" action="action_consolidated_finance_report_wizard"
+          parent="menu_mgt_report_menu" sequence="3"  icon="STOCK_PRINT" />
+
+        <menuitem name="Depot Operations Summary Report" id="menu_depot_report" action="action_depot_report_wizard"
+          parent="menu_mgt_report_menu" sequence="4"  icon="STOCK_PRINT" />
+
+        <menuitem name="Bank / Cash Report" id="menu_bank_report" action="action_bank_report_wizard"
+          parent="menu_mgt_report_menu" sequence="5"  icon="STOCK_PRINT" />
+
+        <menuitem name="Aged Balance Report" id="menu_aged_balance_report" action="account_financial_report_qweb.action_aged_partner_balance_wizard"
+          parent="menu_mgt_report_menu" sequence="6"  icon="STOCK_PRINT" />
+
+		 <menuitem name="MANAGEMENT REPORT-SUMMARY OF OPERATIONS" id="menu_consol_report" action="action_consol_report_wizard"
+          parent="menu_mgt_report_menu" sequence="7"  icon="STOCK_PRINT" />
+
+		<menuitem name="MANAGEMENT REPORT-SUMMARY OF SALES BY PRODUCTS" id="menu_sales_summary_report" action="action_sales_summary_report_wizard"
+          parent="menu_mgt_report_menu" sequence="8"  icon="STOCK_PRINT" />
+
+		<menuitem name="MANAGEMENT REPORT-SUMMARY OF SALES" id="menu_sos_sales_summary_report" action="action_sos_report_wizard"
+          parent="menu_mgt_report_menu" sequence="9"  icon="STOCK_PRINT" />
+
+		 <report
+		    id="sos_report_rog"
+            model="sos.report.wizard"
+		    string="Summary of Sales"
+		    report_type="xlsx"
+		    name="rog_modifications.sos_excel_report_rog"
+		    attachment_use="False"
+        />
+
+		<report
+		    id="sales_summary_consolidated_report_rog"
+            model="sales.summary.consol.report.wizard"
+		    string="Sales Summary Consolidated"
+		    report_type="xlsx"
+		    name="rog_modifications.sales_summary_consol_excel_report_rog"
+		    attachment_use="False"
+        />
+
+		<report
+		    id="sales_summary_report_rog"
+            model="sales.summary.report.wizard"
+		    string="Sales Summary"
+		    report_type="xlsx"
+		    name="rog_modifications.sales_summary_excel_report_rog"
+		    attachment_use="False"
+        />
+
+           <report
+		    id="consolidated_report_rog"
+            model="consolidated.report.wizard"
+		    string="Consolidated Report"
+		    report_type="xlsx"
+		    name="rog_modifications.consolidated_excel_report_rog"
+		    attachment_use="False"
+        />
+
+		<report
+		    id="consol_report_rog"
+            model="consol.report.wizard"
+		    string="Consolidated Report I"
+		    report_type="xlsx"
+		    name="rog_modifications.consol_excel_report_rog"
+		    attachment_use="False"
+        />
+
+        <report
+		    id="consolidated_finance_report_rog"
+            model="consolidated.finance.report.wizard"
+		    string="Consolidated Finance Report"
+		    report_type="xlsx"
+		    name="rog_modifications.consolidated_finance_excel_report_rog"
+		    attachment_use="False"
+        />
+
+         <report
+		    id="depot_report_rog"
+            model="depot.report.wizard"
+		    string="Depot Report"
+		    report_type="xlsx"
+		    name="rog_modifications.depot_excel_report_rog"
+		    attachment_use="False"
+        />
+
+         <report
+		    id="bank_report_rog"
+            model="bank.report.wizard"
+		    string="Bank Report"
+		    report_type="xlsx"
+		    name="rog_modifications.bank_excel_report_rog"
+		    attachment_use="False"
+        />
+
+
+    </data>
+</odoo>
+
+

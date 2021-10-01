@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+
+    <record id="kin_pef_register_pef_officer_rule" model="ir.rule">
+        <field name="name">PEF Officer PEF Register</field>
+        <field ref="model_kin_pef_register" name="model_id"/>
+        <field name="domain_force">['|',('user_id','=',user.id),('user_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('group_pef_officer'))]"/>
+    </record>
+
+
+
+</data>
+</openerp>

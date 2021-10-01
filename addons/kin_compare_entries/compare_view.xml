@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+ <menuitem name="Compare Entries"
+            id="menu_compare_entries_app"
+            sequence="25" web_icon="kin_pef,static/description/icon.png" />
+
+
+   <menuitem id="menu_compare" name="Compare and Remove" parent="menu_compare_entries_app" sequence="1" />
+
+
+         <!-- Compare -->
+        <record id="view_kin_compare_form" model="ir.ui.view" >
+            <field name="name" >kin.compare.form</field>
+            <field name="model">kin.compare</field>
+            <field name="arch" type="xml" >
+                <form string="Compare" >
+                    <header>
+                         <button name="btn_compare" type="object" string="Compare" />
+                    </header>
+                    <sheet>
+                        <group col="4">
+                            <field name="name" />
+                        </group>
+                   <notebook>
+                       <page string="Debit Entry Lines">
+                           <field name="compare_lines_debit_ids"  >
+                               <tree editable="bottom" >
+                                   <field name="date" />
+                                   <field name="name" />
+                                   <field name="journal" />
+                                   <field name="partner" />
+                                   <field name="ref" />
+                                   <field name="debit" />
+                               </tree>
+
+                           </field>
+                       </page>
+                       <page string="Credit Entry Lines" >
+                            <field name="compare_lines_credit_ids"  >
+                           <tree editable="bottom" >
+                                   <field name="date" />
+                                   <field name="name" />
+                                <field name="journal" />
+                                   <field name="partner" />
+                                   <field name="ref" />
+                                   <field name="credit" />
+                               </tree>
+                            </field>
+                       </page>
+                   </notebook>
+                    </sheet>
+                </form>
+            </field>
+         </record>
+
+        <record id="view_kin_compare_tree" model="ir.ui.view" >
+            <field name="name" >kin.compare.tree</field>
+            <field name="model">kin.compare</field>
+            <field name="arch" type="xml" >
+                <tree string="Compare" >
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+
+
+
+        <record id="action_kin_compare_form" model="ir.actions.act_window" >
+            <field name="name" >Compare</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.compare</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="menu_kin_compare" name="Compare" parent="menu_compare" sequence="2" action="action_kin_compare_form"/>
+
+
+
+        <!-- Compare lines Debit -->
+         <record id="view_kin_compare_lines_debit_form" model="ir.ui.view" >
+            <field name="name" >kin.compare.lines.debit.form</field>
+            <field name="model">kin.compare.lines.debit</field>
+            <field name="arch" type="xml" >
+                <form string="Compare Lines Debit" >
+                    <sheet>
+                        <group col="4">
+                            <field name="date" />
+                                   <field name="name" />
+                                   <field name="journal" />
+                                   <field name="partner" />
+                                   <field name="ref" />
+                                   <field name="debit" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+         </record>
+
+        <record id="view_kin_compare_lines_debit_tree" model="ir.ui.view" >
+            <field name="name" >kin.compare.lines.debit.tree</field>
+            <field name="model">kin.compare.lines.debit</field>
+            <field name="arch" type="xml" >
+                <tree string="Compare" >
+                    <field name="name" />
+                           <field name="journal" />
+                                   <field name="partner" />
+                                   <field name="ref" />
+                                   <field name="debit" />
+                </tree>
+            </field>
+        </record>
+
+
+
+        <record id="action_kin_compare_lines_debit_form" model="ir.actions.act_window" >
+            <field name="name" >Compare Lines Debit</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.compare.lines.debit</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="menu_kin_compare_lines_debit" name="Compare Lines Debit" parent="menu_compare" sequence="3" action="action_kin_compare_lines_debit_form"/>
+
+
+
+        <!-- Compare lines Credit -->
+         <record id="view_kin_compare_lines_credit_form" model="ir.ui.view" >
+            <field name="name" >kin.compare.lines.credit.form</field>
+            <field name="model">kin.compare.lines.credit</field>
+            <field name="arch" type="xml" >
+                <form string="Compare Lines Credit" >
+                    <sheet>
+                        <group col="4">
+                            <field name="date" />
+                                   <field name="name" />
+                                   <field name="journal" />
+                                   <field name="partner" />
+                                   <field name="ref" />
+                                   <field name="credit" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+         </record>
+
+        <record id="view_kin_compare_lines_credit_tree" model="ir.ui.view" >
+            <field name="name" >kin.compare.lines.credit.tree</field>
+            <field name="model">kin.compare.lines.credit</field>
+            <field name="arch" type="xml" >
+                <tree string="Compare" >
+                    <field name="name" />
+                           <field name="journal" />
+                                   <field name="partner" />
+                                   <field name="ref" />
+                                   <field name="credit" />
+                </tree>
+            </field>
+        </record>
+
+
+
+        <record id="action_kin_compare_lines_credit_form" model="ir.actions.act_window" >
+            <field name="name" >Compare Lines Credit</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.compare.lines.credit</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="menu_kin_compare_lines_credit" name="Compare Lines Credit" parent="menu_compare" sequence="4" action="action_kin_compare_lines_credit_form"/>
+
+
+
+    </data>
+</openerp>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+		<record model="ir.module.category" id="module_category_sales_double_validation">
+            <field name="name">Sales Double Validation</field>
+            <field name="description">Sales Double Validation</field>
+            <!--<field name="sequence">7</field>-->
+        </record>
+
+
+		<record id="group_show_sales_order_to_confirm_menu" model="res.groups">
+			<field name="name">Show "Quotations Accepted by Customers" Menu</field>
+			<field name="category_id" ref="module_category_sales_double_validation"/>
+		</record>
+
+		<record id="group_show_sales_order_to_approve_menu" model="res.groups">
+			<field name="name">Show "Sale Orders to Approve" Menu</field>
+			<field name="category_id" ref="module_category_sales_double_validation"/>
+		</record>
+
+	<record id="group_show_send_to_manager" model="res.groups">
+			<field name="name">Show "Send to Manager" Button on Sales Order</field>
+			<field name="category_id" ref="module_category_sales_double_validation"/>
+		</record>
+
+	<record id="group_show_receive_send_to_manager" model="res.groups">
+			<field name="name">Receive "Send to Manager" SO Email on Sales Order</field>
+			<field name="category_id" ref="module_category_sales_double_validation"/>
+		</record>
+
+		<record id="group_show_send_for_validation_btn" model="res.groups">
+			<field name="name">Show "Send Accepted Quote for Conversion to Sales Order" Button on Sales Order</field>
+			<field name="category_id" ref="module_category_sales_double_validation"/>
+        	<field name="implied_ids" eval="[(4, ref('group_show_sales_order_to_confirm_menu'))]"/>
+		</record>
+
+
+
+
+		<record id="group_show_confirm_btn" model="res.groups">
+			<field name="name">Show "Convert Quote to Sale Order" button on Sales Order</field>
+			<field name="category_id" ref="module_category_sales_double_validation"/>
+		</record>
+
+		<record id="group_receive_send_for_confirm_email" model="res.groups">
+			<field name="name">Receive "Send Accepted Quote for Conversion to Sales Order" Email Notification</field>
+			<field name="comment" >The Sales Order Approver should get an email notification whenever a sales order is submitted</field>
+			<field name="category_id" ref="module_category_sales_double_validation"/>
+		</record>
+
+	    <record id="group_show_approve_btn" model="res.groups">
+			<field name="name">Show "Approve Sale Order" button on Sales Order</field>
+			<field name="category_id" ref="module_category_sales_double_validation"/>
+        	<field name="implied_ids" eval="[(4, ref('group_show_sales_order_to_confirm_menu'))]"/>
+		</record>
+
+		<record id="group_show_disapprove_btn" model="res.groups">
+			<field name="name">Show "Disapprove Sale Order" button on Sales Order</field>
+			<field name="category_id" ref="module_category_sales_double_validation"/>
+        	<field name="implied_ids" eval="[(4, ref('group_show_sales_order_to_confirm_menu'))]"/>
+		</record>
+
+		<record id="group_receive_quotation_confirmed_email" model="res.groups">
+			<field name="name">Receive "Confirmed Quotation to Sale Order" Email Notification</field>
+			<field name="comment" >The people that should be notified will get an email when a quotation is confirmed/converted to sale order</field>
+			<field name="category_id" ref="module_category_sales_double_validation"/>
+		</record>
+
+		<record id="group_receive_quotation_confirmed_email_to_approve" model="res.groups">
+			<field name="name">Receive "Sale Order Requires Approval or Disapproval" Email Notification</field>
+			<field name="comment" >The people that should be notified will get an email when a quotation is confirmed/converted to sale order and it requires approval and disapproval</field>
+			<field name="category_id" ref="module_category_sales_double_validation"/>
+		</record>
+
+		<record id="group_receive_approve_sale_order_email" model="res.groups">
+			<field name="name">Receive "Approved Sale Order" Email Notification</field>
+			<field name="comment" >The people that should be notified will get an email when a sale order is approved before stock is committed</field>
+			<field name="category_id" ref="module_category_sales_double_validation"/>
+		</record>
+
+		<record id="group_receive_disapprove_sale_order_email" model="res.groups">
+			<field name="name">Receive "Disapproved Sale Order" Email Notification</field>
+			<field name="comment" >The people that should be notified will get an email when a sale order is disapproved</field>
+			<field name="category_id" ref="module_category_sales_double_validation"/>
+		</record>
+
+
+
+
+
+
+
+</data>
+</openerp>

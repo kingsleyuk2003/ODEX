@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record  id="view_payroll_report_wizard" model="ir.ui.view" >
+                <field name="name">Payroll Report Wizard</field>
+                <field name="model">payroll.report.wizard</field>
+                <field name="arch" type="xml" >
+                <form string="Payroll Report Wizard" >
+                  <label string="This wizard will help  generate the .xls payroll report" />
+                     <group col="4" colspan="4" >
+                         <field name="start_date" required="1" />
+                         <field name="end_date" required="1" />
+                    </group>
+                    <notebook colspan="4">
+                        <page string="Departments">
+                            <field name="department_ids" nolabel="1"  >
+                                        <field name="name" />
+                                </field>
+                        </page>
+                    </notebook>
+                        <footer>
+                            <button default_focus="1" icon="gtk-execute" name="payroll_report" string="Export as Excel" type="object"  colspan="2" class="oe_highlight" />
+                            or <button special="cancel" class="oe_link"  string="Cancel"  />
+                        </footer>
+                </form>
+             </field>
+        </record>
+
+		<record id="action_payroll_report_wizard" model="ir.actions.act_window">
+            <field name="name">Generate Payroll Report</field>
+            <field name="res_model">payroll.report.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_payroll_report_wizard"/>
+            <field name="context">{}</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="target">new</field>
+        </record>
+
+                  <menuitem id="menu_payroll_report_excel" name="Department Payroll Excel Report" parent="hr_payroll_kin_report" sequence="20" action="kin_hr.action_payroll_report_wizard" icon="STOCK_PRINT"  groups="base.group_hr_user" />
+
+
+   </data>
+</openerp>

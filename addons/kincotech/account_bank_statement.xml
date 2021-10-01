@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    	<record id="view_bank_statement_form_extend" model="ir.ui.view">
+            <field name="name">account.bank.statement.form.extend</field>
+            <field name="model">account.bank.statement</field>
+            <field name="inherit_id" ref="account.view_bank_statement_form" />
+            <field name="arch" type="xml">   
+                <field name="balance_end_real" position="after" >
+                	<field name="input_file" readonly="1" />
+                </field>
+            	<button  class="oe_inline oe_stat_button" name="button_journal_entries" position="after" >
+                   	 <button class="oe_stat_button"   name="%(bank_statement_import_action)d" string="Import Bank Stmt."   icon="fa-bars"  type="action"  />
+                </button>
+			</field>
+		</record>	
+ </data>
+</openerp>
+         

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+
+        <report
+		    id="stock_control_report"
+            model="kin.stock.control.wizard"
+		    string="Day Stock Control Report"
+		    report_type="xlsx"
+		    name="kin_retail_station_rog.stock_control_report"
+		    attachment_use="False"
+        />
+
+
+    </data>
+</odoo>
+

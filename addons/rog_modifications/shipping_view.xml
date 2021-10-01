@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+ <menuitem name="Shipping"
+            id="menu_shipping_app"
+            groups="group_shipping"
+            sequence="25" web_icon="rog_modifications,static/description/icon_ship.png" />
+  <menuitem id="menu_shipping_menu" name="Shipping" parent="menu_shipping_app" sequence="4" groups="group_shipping" />
+<menuitem id="menu_shipping_report_menu" name="Report" parent="menu_shipping_app" sequence="5" groups="group_shipping" />
+
+          <menuitem name="Shipping Report" id="menu_shipping_report" action="action_shipping_report_wizard"
+          parent="menu_shipping_report_menu" sequence="5"  icon="STOCK_PRINT" />
+
+        <!-- Chartering of Vessels -->
+       <record id="view_vessel_charter_contract_form" model="ir.ui.view">
+            <field name="name">vessel.charter.contract.form</field>
+            <field name="model">vessel.charter.contract</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                         <button name="button_new_contract" type="object"  states="draft" string="New Contract"  class="oe_highlight"   />
+                        <button name="button_source_vessel" type="object"  states="new_contract" string="Agent Sourcing Vessel"  class="oe_highlight"   />
+                        <button name="button_engage_fendering_company" type="object"  states="source_vessel" string="Engage Fendering Company" class="oe_highlight"   />
+                        <button name="button_done" type="object"  states="engage_fendering_company" string="Done" class="oe_highlight"   />
+                        <button name="button_cancel" type="object"  states="new_contract,source_vessel,engage_fendering_company,done" string="Cancel"   />
+                        <button name="button_draft" type="object"  states="cancel" string="Reset"   />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,new_contract,source_vessel,engage_fendering_company,done"/>
+                    </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                        <group col="4" >
+                            <field name="document_no"   attrs="{'readonly': [('state', '=','done')]}" />
+                            <field name="vehicle_contract_date"  required="1"  attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="vessel_owner_id"   options="{'no_open':True,'no_create':True}" attrs="{'readonly': [('state', '=','done')]}" />
+                            <field name="agent_id"  options="{'no_open':True,'no_create':True}" attrs="{'readonly': [('state', '=','done')]}" />
+                            <field name="fendering_company_id"  options="{'no_open':True,'no_create':True}"  attrs="{'readonly': [('state', '=','done')]}" />
+                           <field name="user_id" readonly="1"  />
+                            <field name="description"   attrs="{'readonly': [('state', '=','done')]}" />
+                        </group>
+                    <notebook>
+                        <page string="Process Stages">
+                            <p>1.) Draft</p>
+                            <p>2.) New Contract</p>
+                            <p>3.) Agent Sourcing Vessel</p>
+                            <p>4.) Engage Fendering Company</p>
+                            <p>5.) Done</p>
+                        </page>
+                        <page  string="Reminders" >
+                        <group>
+                            <field name="reminder_ids" nolabel="1"  >
+                                <tree  editable="bottom"  decoration-success="days_remaining &gt;= expiry_day_interval"    decoration-danger="days_remaining &lt; expiry_day_interval and days_remaining &gt;= 0" >
+                                    <field name="name" />
+                                    <field name="reference_no" />
+                                    <field name="issue_date" />
+                                    <field name="expiry_date" />
+                                    <field name="days_remaining" />
+                                    <field name="expiry_day_interval" />
+                                    <field name="state" />
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+
+                    </notebook>
+
+                </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_vessel_charter_contract_tree" model="ir.ui.view" >
+            <field name="name" >vessel.charter.contract.tree</field>
+            <field name="model">vessel.charter.contract</field>
+            <field name="arch" type="xml" >
+                <tree>
+                    <field name="name" />
+                    <field name="document_no"  />
+                    <field name="vehicle_contract_date" />
+                    <field name="vessel_owner_id" />
+                    <field name="agent_id"  />
+                    <field name="fendering_company_id"  />
+                     <field name="user_id"  />
+                    <field name="state"  />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_vessel_charter_contract_filter" model="ir.ui.view">
+            <field name="name">vessel.charter.contract.select</field>
+            <field name="model">vessel.charter.contract</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" string="ID / Doc. No"  filter_domain="['|',('name','ilike',self),('document_no','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                       <filter name="grpRS"  string="Vessel Owner" domain="[]" context="{'group_by':'vessel_owner_id'}"/>
+                        <filter name="grpVDate" string="Date" domain="[]" context="{'group_by':'vehicle_contract_date'}"/>
+                        <filter name="grpState" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                        <filter string="Agent" domain="[]" context="{'group_by':'agent_id'}"/>
+                         <filter string="Fendering Company" domain="[]" context="{'group_by':'fendering_company_id'}"/>
+                         <filter string="Responsible Person" domain="[]" context="{'group_by':'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_vessel_charter_contract_form" model="ir.actions.act_window" >
+            <field name="name" >Chartering of Vessels</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vessel.charter.contract</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_grpState':1}</field>
+            <field name="search_view_id" ref="view_vessel_charter_contract_filter"/>
+        </record>
+        <menuitem id="menu_vessel_charter_contract" name="Chartering of Vessels" parent="menu_shipping_menu" sequence="5" action="action_vessel_charter_contract_form"/>
+
+
+        <!-- Ship To Ship Transfer -->
+        <record id="view_ship_to_ship_form" model="ir.ui.view">
+            <field name="name">ship.to.ship.form</field>
+            <field name="model">ship.to.ship</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                         <button name="btn_inspect_product_mv" type="object"  states="draft" string="Inspection of Product on Mother Vessel"  class="oe_highlight"   />
+                        <button name="btn_confirm_integrity_dv" type="object"  states="inspect_product_mv" string="Confirm Integrity of Daughter Vessel"  class="oe_highlight"   />
+                        <button name="btn_engage_independent_inspection" type="object"  states="confirm_integrity_dv" string="Engage Independent Inspector Company to Inspect Product on Mother Vessel"  class="oe_highlight"   />
+                        <button name="btn_operation_guideline_sent" type="object"  states="engage_independent_inspection" string="Operation Guideline Details Sent to Vessel Owner"  class="oe_highlight"   />
+                        <button name="btn_terms_of_engagement_reviewed" type="object"  states="operation_guideline_sent" string="Terms of Engagement is Being Reviewed"  class="oe_highlight"   />
+                        <button name="btn_vessel_cleared" type="object"  states="terms_of_engagement_reviewed" string="Vessels are Cleared"  class="oe_highlight"   />
+                        <button name="btn_nominate_loading_vendors" type="object"  states="vessel_cleared" string="Nominate Loading Vendors"  class="oe_highlight"   />
+                        <button name="btn_loading_instruction_sent_daughter_vessel_company" type="object"  states="nominate_loading_vendors" string="Loading Instruction Sent to Daughter Vessel Company"  class="oe_highlight"   />
+                        <button name="btn_npa_clearance" type="object"  states="loading_instruction_sent_daughter_vessel_company" string="NPA Clearance for Arrival Purposes"  class="oe_highlight"   />
+                        <button name="btn_nor_received" type="object"  states="npa_clearance" string="Notice of Readiness is Received from Master Vessel on Arrival"  class="oe_highlight"   />
+                        <button name="btn_sts_monitoring" type="object"  states="nor_received" string="Ship To Ship Transfer Monitoring Commences"  class="oe_highlight"   />
+                        <button name="btn_documentary_instructions_sent_mv" type="object"  states="sts_monitoring" string="Documentary Instructions Sent to the Master Vessel"  class="oe_highlight"   />
+                        <button name="btn_post_cargo_formalities" type="object"  states="documentary_instructions_sent_mv" string="Post Cargo Formalities Commences"  class="oe_highlight"   />
+                        <button name="btn_transship_document_forwarded" type="object"  states="post_cargo_formalities" string="Transship Documents are Forwarded to the Charterers"  class="oe_highlight"   />
+                        <button name="btn_discharge_order_for_daughter_vessel" type="object"  states="transship_document_forwarded" string="Daughter Vessel Discharge Order Forwarded for Disport Operation"  class="oe_highlight"   />
+                        <button name="btn_naval_clearance_application" type="object"  states="discharge_order_for_daughter_vessel" string="Port Agent Process Transship and Port Call Documents for Nimasa Dues"  class="oe_highlight"   />
+                        <button name="btn_transship_document_nimasa_dues" type="object"  states="naval_clearance_application" string="Vendor Bill Received and Sent to Finance Department for Payment Processing"  class="oe_highlight"   />
+                        <button name="btn_processes_monitoring" type="object"  states="transship_document_nimasa_dues" string="Done"  class="oe_highlight"   />
+                        <button name="btn_vendor_bill_received" type="object"  states="processes_monitoring" string="Cancel"  class="oe_highlight"   />
+                        <button name="btn_event_summary_mgt" type="object"  states="vendor_bill_received" string="reee"  class="oe_highlight"   />
+                        <button name="btn_done" type="object"  states="event_summary_mgt" string="Done"  class="oe_highlight"   />
+                        <button name="button_cancel" type="object"  states="inspect_product_mv,confirm_integrity_dv,engage_independent_inspection,operation_guideline_sent,terms_of_engagement_reviewed,vessel_cleared,nominate_loading_vendors,loading_instruction_sent_daughter_vessel_company,npa_clearance,nor_received,sts_monitoring,documentary_instructions_sent_mv,post_cargo_formalities,transship_document_forwarded,discharge_order_for_daughter_vessel,naval_clearance_application,transship_document_nimasa_dues,processes_monitoring,vendor_bill_received,event_summary_mgt,done" string="Cancel"   />
+                        <button name="button_draft" type="object"  states="cancel" string="Reset"   />
+                        <field name="state" widget="statusbar" statusbar_visible=" " />
+                    </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                        <group col="4" >
+                            <field name="document_no"  attrs="{'readonly': [('state', '=','done')]}" />
+                            <field name="date"  required="1" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="product_vendor_id" readonly="1"   options="{'no_open':True,'no_create':True}" attrs="{'readonly': [('state', '=','done')]}" />
+                            <field name="inspector_id"  options="{'no_open':True,'no_create':True}" attrs="{'readonly': [('state', '=','done')]}" />
+                            <field name="mother_vessel_location"    attrs="{'readonly': [('state', '=','done')]}" />
+                            <field name="expected_inspection_date"  required="1"  attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="user_id" readonly="1"  />
+                            <field name="description"   attrs="{'readonly': [('state', '=','done')]}" />
+                            <field name="purchase_id" readonly="1" />
+                        </group>
+                    <notebook>
+                         <page string="Details">
+                            <group col="4" >
+                                <field name="mf" readonly="True" />
+                                <field name="bank_qty" />
+                                <field name="supplier_id" readonly="1" options="{'no_open':True,'no_create':True}"  />
+                                <field name="mv_vessel" />
+                                <field name="dv_vessel" />
+                                <field name="dv_bl_qty" />
+                                <field name="product_id" readonly="1" options="{'no_open':True,'no_create':True}"  />
+                                <field name="tank_farm" />
+                                <field name="discharge_date" required="1" />
+                                <field name="shore_receipt" readonly="1" />
+                                <field name="shore_tank" readonly="1" />
+                                <field name="ullage_bdischarge_mt" readonly="1" />
+                                <field name="ullage_bdischarge_ltrs" readonly="1" />
+                                <field name="ullage_report_ltrs" readonly="1" />
+                            </group>
+                        </page>
+                        <page string="Process Stages">
+                             <p>1.) Draft</p>
+                             <p>2.) Inspection of Product on Mother Vessel</p>
+                             <p>3.) Confirm Integrity of Daughter Vessel</p>
+                             <p>4.) Engage Independent Inspector Company to Inspect Product on Mother Vessel</p>
+                             <p>5.) Operation Guideline Details Sent to Vessel Owner</p>
+                             <p>6.) Terms of Engagement is Being Reviewed</p>
+                             <p>7.) Vessels are Cleared</p>
+                             <p>8.) Nominate Loading Vendors</p>
+                             <p>9.) Loading Instruction Sent to Daughter Vessel Company</p>
+                             <p>10.) NPA Clearance for Arrival Purposes</p>
+                             <p>11.) Notice of Readiness is Received from Master Vessel on Arrival</p>
+                             <p>12.) Ship To Ship Transfer Monitoring Commences</p>
+                             <p>13.) Documentary Instructions Sent to the Master Vessel</p>
+                             <p>14.) Post Cargo Formalities Commences</p>
+                             <p>15.) Transship Documents are Forwarded to the Charterers</p>
+                             <p>16.) Daughter Vessel Discharge Order Forwarded for Disport Operation</p>
+                             <p>17.) Naval Clearance Application Initiated</p>
+                             <p>18.) Port Agent Process Transship and Port Call Documents for Nimasa Dues</p>
+                             <p>19.) Processes Monitored</p>
+                             <p>20.) Vendor Bill Received and Sent to Finance Department for Payment Processing</p>
+                             <p>21.) Event Summary Sent to Management after Documents Filing</p>
+                             <p>22.) Done</p>
+                        </page>
+                        <page  string="Reminders" >
+                        <group>
+                            <field name="reminder_ids" nolabel="1"  >
+                                <tree  editable="bottom"  decoration-success="days_remaining &gt;= expiry_day_interval"    decoration-danger="days_remaining &lt; expiry_day_interval and days_remaining &gt;= 0" >
+                                  <field name="name" />
+                                    <field name="reference_no" />
+                                    <field name="issue_date" />
+                                    <field name="expiry_date" />
+                                    <field name="days_remaining" />
+                                    <field name="expiry_day_interval" />
+                                    <field name="state" />
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+
+                    </notebook>
+                </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_ship_to_ship_tree" model="ir.ui.view" >
+            <field name="name" >ship.to.ship.tree</field>
+            <field name="model">ship.to.ship</field>
+            <field name="arch" type="xml" >
+                <tree>
+                    <field name="document_no" />
+                    <field name="product_vendor_id" />
+                    <field name="inspector_id" />
+                    <field name="mother_vessel_location" />
+                    <field name="expected_inspection_date" />
+                    <field name="user_id" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_ship_to_ship_filter" model="ir.ui.view">
+            <field name="name">ship.to.ship.select</field>
+            <field name="model">ship.to.ship</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" string="ID / document_no"  filter_domain="['|',('name','ilike',self),('document_no','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                       <filter name="grpPV"  string="Product Vendor" domain="[]" context="{'group_by':'product_vendor_id'}"/>
+                        <filter name="grpInsp"  string="Inspector" domain="[]" context="{'group_by':'inspector_id'}"/>
+                        <filter name="grpVDate" string="Date" domain="[]" context="{'group_by':'date'}"/>
+                        <filter name="grpState" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                       <filter string="Responsible Person" domain="[]" context="{'group_by':'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_ship_to_ship_form" model="ir.actions.act_window" >
+            <field name="name" >Ship To Ship Transfer</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ship.to.ship</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <!--<field name="context">{'search_default_grpState':1}</field>-->
+            <field name="search_view_id" ref="view_ship_to_ship_filter"/>
+        </record>
+        <menuitem id="menu_ship_to_ship" name="Ship To Ship Transfer" parent="menu_shipping_menu" sequence="6" action="action_ship_to_ship_form"/>
+
+
+<!-- Import Permit and DPR License -->
+         <record id="view_import_permit_form" model="ir.ui.view">
+            <field name="name">import.permit.form</field>
+            <field name="model">import.permit</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                         <button name="button_app_form" type="object"  states="draft" string="Obtain Application Form"  class="oe_highlight"   />
+                        <button name="button_payment_remita" type="object"  states="app_form" string="Payment Made on Remita Portal"  class="oe_highlight"   />
+                        <button name="button_app_form_submitted" type="object"  states="payment_remita" string="Application Form Filled and Submitted" class="oe_highlight"   />
+                        <button name="button_awaiting_issuance_license" type="object"  states="app_form_submitted" string="Awaiting Issuance of License" class="oe_highlight"   />
+                        <button name="button_done" type="object"  states="awaiting_issuance_license" string="Done" class="oe_highlight"   />
+                        <button name="button_cancel" type="object"  states="app_form,payment_remita,app_form_submitted,awaiting_issuance_license,done" string="Cancel"   />
+                        <button name="button_draft" type="object"  states="cancel" string="Reset"   />
+                        <field name="state" widget="statusbar" statusbar_visible=" "/>
+                    </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                        <group col="4" >
+                            <field name="document_no"  attrs="{'readonly': [('state', '=','done')]}" />
+                            <field name="date"  required="1"  attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="expiry_date"  required="1"  attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="company_name" required="1"  attrs="{'readonly': [('state', '=','done')]}"  />
+                             <field name="user_id" readonly="1"  />
+                            <field name="description"   attrs="{'readonly': [('state', '=','done')]}" />
+                        </group>
+                    <notebook>
+                        <page string="Import Permit Lines">
+                            <group>
+                                <field name="import_permit_line_ids" nolabel="1"  attrs="{'readonly': [('state', '=','done')]}" >
+                                    <tree editable="bottom">
+                                          <field name="product_id"  domain="[('white_product','in',['pms','ago','kero'])]" options="{'no_open':True,'no_create':True}" />
+                                        <field name="country_origin" />
+                                        <field name="qty_approved" />
+                                        <field name="estimated_value" />
+                                        <field name="inclusion" />
+                                        <field name="quantity_used" />
+                                        <field name="bank" />
+                                        <field name="balance" />
+                                    </tree>
+                                </field>
+                            </group>
+
+                        </page>
+                        <page string="Process Stages">
+                            <p>1.) Draft</p>
+                            <p>2.) Obtain Application Form</p>
+                            <p>3.) Payment Made on Remita Portal</p>
+                            <p>4.) Application Form Filled and Submitted</p>
+                            <p>5.) Awaiting Issuance of License</p>
+                            <p>5.) Done</p>
+                        </page>
+                        <page  string="Reminders" >
+                        <group>
+                            <field name="reminder_ids" nolabel="1"  >
+                                <tree  editable="bottom"  decoration-success="days_remaining &gt;= expiry_day_interval"    decoration-danger="days_remaining &lt; expiry_day_interval and days_remaining &gt;= 0" >
+                                    <field name="name" />
+                                    <field name="reference_no" />
+                                    <field name="issue_date" />
+                                    <field name="expiry_date" />
+                                    <field name="days_remaining" />
+                                    <field name="expiry_day_interval" />
+                                    <field name="state" />
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+
+                    </notebook>
+                </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_import_permit_tree" model="ir.ui.view" >
+            <field name="name" >import.permit.tree</field>
+            <field name="model">import.permit</field>
+            <field name="arch" type="xml" >
+                <tree>
+                    <field name="name" />
+                    <field name="document_no"  />
+                    <field name="date" />
+                     <field name="user_id"  />
+                    <field name="state"  />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_import_permit_filter" model="ir.ui.view">
+            <field name="name">import.permit.select</field>
+            <field name="model">import.permit</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" string="ID / Doc. No"  filter_domain="['|',('name','ilike',self),('document_no','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="grpVDate" string="Date" domain="[]" context="{'group_by':'date'}"/>
+                        <filter name="grpState" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                         <filter string="Responsible Person" domain="[]" context="{'group_by':'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_import_permit_form" model="ir.actions.act_window" >
+            <field name="name" >Import Permits and DPR License</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">import.permit</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <!--<field name="context">{'search_default_grpState':1}</field>-->
+            <field name="search_view_id" ref="view_import_permit_filter"/>
+        </record>
+        <menuitem id="menu_import_permit" name="Import Permits and DPR License" parent="menu_shipping_menu" sequence="7" action="action_import_permit_form"/>
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- Reminders -->
+
+        <record id="reminder_form_view_shipping" model="ir.ui.view">
+            <field name="name">kin.reminder.form</field>
+            <field name="model">kin.reminder</field>
+             <field name="inherit_id" ref="kin_reminder.reminder_form_view" />
+            <field name="arch" type="xml">
+                <field name="user_id" position="after" >
+                    <field name="charter_id" readonly="1" groups="rog_modifications.group_shipping"  />
+                    <field name="shiptoship_id" readonly="1" groups="rog_modifications.group_shipping"  />
+                    <field name="import_permit_id" readonly="1" groups="rog_modifications.group_shipping" />
+                </field>
+            </field>
+         </record>
+
+    </data>
+</odoo>
+
+

@@ -1,0 +1,72 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_loading_programme_safety_officer,loading.programme safety officer,model_loading_programme,group_safety_officer,1,1,1,0
+access_loading_programme_safety_manager,loading.programme safety manager,model_loading_programme,group_safety_manager,1,1,1,1
+access_loading_programme_depot_officer,loading.programme depot officer,model_loading_programme,group_depot_officer,1,1,1,0
+access_loading_programme_depot_manager,loading.programme depot manager,model_loading_programme,group_depot_manager,1,1,1,1
+access_loading_programme_dpr_officer,loading.programme drp officer,model_loading_programme,group_dpr_officer,1,1,1,0
+access_loading_programme_dpr_manager,loading.programme dpr manager,model_loading_programme,group_dpr_manager,1,1,1,1
+access_loading_programme_loader_officer,loading.programme loader officer,model_loading_programme,group_loader_officer,1,1,1,0
+access_loading_programme_loader_manager,loading.programme loader manager,model_loading_programme,group_loader_manager,1,1,1,1
+access_loading_programme_dispatch_officer,loading.programme dispatch officer,model_loading_programme,group_dispatch_officer,1,1,1,0
+access_loading_programme_dispatch_manager,loading.programme dispatch manager,model_loading_programme,group_dispatch_manager,1,1,1,1
+access_loading_programme_operation_manager,loading.programme operation manager,model_loading_programme,group_operation_manager,1,1,1,1
+access_loading_programme_ica_officer,loading.programme ica officer,model_loading_programme,group_ica_officer,1,1,1,0
+access_loading_programme_ica_manager,loading.programme ica manager,model_loading_programme,group_ica_manager,1,1,1,1
+access_loading_programme_lines_safety_officer,loading.programme.lines safety officer,model_loading_programme_lines,group_safety_officer,1,1,1,0
+access_loading_programme_lines_safety_manager,loading.programme.lines safety manager,model_loading_programme_lines,group_safety_manager,1,1,1,1
+access_loading_programme_lines_depot_officer,loading.programme.lines depot officer,model_loading_programme_lines,group_depot_officer,1,1,1,0
+access_loading_programme_lines_depot_manager,loading.programme.lines depot manager,model_loading_programme_lines,group_depot_manager,1,1,1,1
+access_loading_programme_lines_dpr_officer,loading.programme.lines drp officer,model_loading_programme_lines,group_dpr_officer,1,1,1,0
+access_loading_programme_lines_dpr_manager,loading.programme.lines dpr manager,model_loading_programme_lines,group_dpr_manager,1,1,1,1
+access_loading_programme_lines_loader_officer,loading.programme.lines loader officer,model_loading_programme_lines,group_loader_officer,1,1,1,0
+access_loading_programme_lines_loader_manager,loading.programme.lines loader manager,model_loading_programme_lines,group_loader_manager,1,1,1,1
+access_loading_programme_lines_dispatch_officer,loading.programme.lines dispatch officer,model_loading_programme_lines,group_dispatch_officer,1,1,1,1
+access_loading_programme_lines_dispatch_manager,loading.programme.lines dispatch manager,model_loading_programme_lines,group_dispatch_manager,1,1,1,1
+access_loading_programme_lines_operation_manager,loading.programme.lines operation manager,model_loading_programme_lines,group_operation_manager,1,1,1,1
+access_loading_programme_lines_ica_officer,loading.programme.lines ica officer,model_loading_programme_lines,group_ica_officer,1,1,1,0
+access_loading_programme_lines_ica_manager,loading.programme.lines ica manager,model_loading_programme_lines,group_ica_manager,1,1,1,1
+access_truck_checklist_dispatch_officer,truck.check.list dispatch officer,model_truck_check_list,group_dispatch_officer,1,1,1,0
+access_truck_checklist_dpr_officer,truck.check.list dpr officer,model_truck_check_list,group_dpr_officer,1,1,0,0
+access_truck_checklist_safety_officer,truck.check.list safety officer,model_truck_check_list,group_safety_officer,1,1,1,0
+access_truck_checklist_safety_manager,truck.check.list safety manager,model_truck_check_list,group_safety_manager,1,1,1,1
+access_truck_checklist_depot_officer,truck.check.list depot officer,model_truck_check_list,group_depot_officer,1,1,1,0
+access_truck_checklist_depot_manager,truck.check.list depot manager,model_truck_check_list,group_depot_manager,1,1,1,1
+access_truck_park_ticket_security_officer,truck.park.ticket security officer,model_truck_park_ticket,group_security_officer,1,0,0,0
+access_truck_park_ticket_safety_officer,truck.park.ticket safety officer,model_truck_park_ticket,group_safety_officer,1,0,0,0
+access_truck_park_ticket_officer,truck.park.ticket truck park officer,model_truck_park_ticket,group_truck_park_officer,1,1,1,0
+access_truck_park_ticket_manager,truck.park.ticket  truck park manager,model_truck_park_ticket,group_truck_park_manager,1,1,1,1
+access_truck_park_ticket_account_user,truck.park.ticket account user,model_truck_park_ticket,account.group_account_user,1,0,0,0
+access_truck_park_ticket_stock_picking,truck.park.ticket stock picking,stock.model_stock_picking,group_truck_park_officer,1,1,0,0
+access_truck_park_ticket_account_journal,truck.park.ticket account journal,account.model_account_journal,group_truck_park_officer,1,0,0,0
+access_truck_park_ticket_account_invoice,truck.park.ticket account invoice,account.model_account_invoice,group_truck_park_officer,1,1,1,1
+access_truck_park_ticket_account_invoice_tax,truck.park.ticket account invoice tax,account.model_account_invoice_tax,group_truck_park_officer,1,0,0,0
+access_truck_park_ticket_account_analytic_default,truck.park.ticket account analytic default,account_analytic_default.model_account_analytic_default,group_truck_park_officer,1,0,0,0
+access_truck_park_ticket_account_invoice_line,truck.park.ticket account invoice line,account.model_account_invoice_line,group_truck_park_officer,1,1,1,0
+access_in_gate_record_security_officer,in.gate.record security officer,model_in_gate_record,group_security_officer,1,1,1,1
+access_in_gate_record_security_manager,in.gate.record security manager,model_in_gate_record,group_security_manager,1,1,1,1
+access_tarmac_truck_checklist_dpr_officer,tarmac.truck.checklist dpr officer,model_tarmac_truck_checklist,group_dpr_officer,1,1,0,0
+access_tarmac_truck_checklist_dispatch_officer,tarmac.truck.checklist dispatch officer,model_tarmac_truck_checklist,group_dispatch_officer,1,1,0,0
+access_tarmac_truck_checklist_security_officer,tarmac.truck.checklist security officer,model_tarmac_truck_checklist,group_security_officer,1,1,0,0
+access_tarmac_truck_checklist_safety_officer,tarmac.truck.checklist safety officer,model_tarmac_truck_checklist,group_safety_officer,1,1,1,1
+access_tarmac_truck_checklist_safety_manager,tarmac.truck.checklist safety manager,model_tarmac_truck_checklist,group_safety_manager,1,1,1,1
+access_tarmac_truck_checklist_depot_officer,tarmac.truck.checklist depot officer,model_tarmac_truck_checklist,group_depot_officer,1,1,1,0
+access_tarmac_truck_checklist_depot_manager,tarmac.truck.checklistdepot manager,model_tarmac_truck_checklist,group_depot_manager,1,1,1,1
+access_empty_truck_exit_safety_officer,empty.truck.exit safety officer,model_empty_truck_exit,group_safety_officer,1,1,1,1
+access_empty_truck_exit_safety_manager,empty.truck.exit safety manager,model_empty_truck_exit,group_safety_manager,1,1,1,1
+access_empty_truck_exit ica officer,empty.truck.exit ica officer,model_empty_truck_exit,group_ica_officer,1,1,1,0
+access_empty_truck_exit ica manager,empty.truck.exit ica manager,model_empty_truck_exit,group_ica_manager,1,1,1,1
+access_empty_truck_exit_dispatch_officer,empty.truck.exit dispatch officer,model_empty_truck_exit,group_dispatch_officer,1,1,1,0
+access_empty_truck_exit_dispatch_manager,empty.truck.exit dispatch manager,model_empty_truck_exit,group_dispatch_manager,1,1,1,1
+access_empty_truck_exit_operation_manager,empty.truck.exit operation manager,model_empty_truck_exit,group_operation_manager,1,1,1,1
+access_empty_truck_exit_security_officer,empty.truck.exit security officer,model_empty_truck_exit,group_security_officer,1,1,1,0
+access_empty_truck_exit_security_manager,empty.truck.exit security manager,model_empty_truck_exit,group_security_manager,1,1,1,1
+access_exit_gate_record_security_officer,exit.gate.record security officer,model_exit_gate_record,group_security_officer,1,1,1,1
+access_exit_gate_record_security_manager,exit.gate.record security manager,model_exit_gate_record,group_security_manager,1,1,1,1
+access_loading_meter_officer,loading.meter officer,model_loading_meter,group_loader_officer,1,0,0,0
+access_loading_meter_manager,loading.meter manager,model_loading_meter,group_loader_manager,1,1,1,1
+access_tarmac_loading_record security_officer,tarmac.loading.record security officer,model_tarmac_loading_record,group_security_officer,1,1,1,1
+access_tarmac_loading_record security_manager,tarmac.loading.record security manager,model_tarmac_loading_record,group_security_manager,1,1,1,1
+access_tarmac_loading_record safety_officer,tarmac.loading.record safety officer,model_tarmac_loading_record,group_safety_officer,1,1,1,1
+access_kin_throughput_receipt_user,kin.throughput.receipt user,model_kin_throughput_receipt,group_throughput_receipt,1,1,1,1
+access_kin_internal_use_user,kin.internal.use user,model_kin_internal_use,group_internal_use,1,1,1,1
+access_dpr_info_user,dpr.info user,model_dpr_info,base.group_user,1,1,1,1

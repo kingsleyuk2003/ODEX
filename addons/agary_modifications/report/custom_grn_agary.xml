@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
+		<!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
+		<report
+		    id="stock.action_report_delivery"
+		    model="stock.picking"
+		    string="Good Received Note"
+		    report_type="qweb-pdf"
+		    name="agary_modifications.report_grn_agary"
+		    file="agary_modifications.report_grn_agary"
+		    attachment_use="False"
+		/>
+
+<template id="report_grn_agary">
+	    <t t-call="report.html_container"> 	    	
+	        <t t-foreach="docs" t-as="o">
+	            <t t-call="kin_report.custom_layout"  >
+	                <div class="page" >
+						<style type="text/css">
+							<t t-call="kin_report.style"/>
+						</style>
+						<div t-raw="o.company_id.html_after_header" />
+
+						<div class="row" >
+							<div class="col-xs-7" >
+								<b>Supplier's Name:</b> <span t-field="o.partner_id" />
+							</div>
+							<div class="col-xs-5" >
+								<b>Date:</b> <span t-field="o.date_grn" /><!-- <b> &#160;&#160; GRN No:</b>  <span t-field="o.grn_no" />-->
+						   </div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 text-center" >
+								<h3><b>GOODS RECEIVED NOTE <span t-field="o.name" /></b></h3>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-12" >
+								<table  style="width: 100%" class="table-bordered-black" cellpadding="3" cellspacing="0" >
+									<thead>
+										<tr>
+											<th><span>Order No. / Way Bill No:</span></th>
+											<th><span>Invoice No:</span></th>
+											<th><span>P.O No:</span></th>
+											<th><span>Name of Agent:</span></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><span t-field="o.order_no_waybill" /></td>
+											<td><span t-field="o.invoice_no" /></td>
+											<td><span t-field="o.origin" /></td>
+											<td><span t-field="o.agent_id.name" /></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<p />
+						<div class="row">
+							<div class="col-xs-12 " >
+								<table  style="width: 100%" class="table-bordered-black" cellpadding="3" cellspacing="0" >
+									<thead>
+										<tr>
+											<th><span>Name of Driver:</span></th>
+											<th><span>Tel/Mobile No:</span></th>
+											<th><span>Container No:</span></th>
+											<th><span>Vehicle No:</span></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><span t-field="o.driver_id.name" /></td>
+											<td><span t-field="o.tel_mobile" /></td>
+											<td><span t-field="o.container_no" /></td>
+											<td><span t-field="o.vehicle_no" /></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<br />
+						<div class="row">
+							<div class="col-xs-12" >
+								<table  style="width: 100%" class="table-bordered-black" cellpadding="3" cellspacing="0" >
+ 										<t t-set="has_serial_number" t-value="o.pack_operation_ids.filtered('pack_lot_ids')" groups="stock.group_production_lot"/>
+										<thead style="display: table-row-group " >
+											<tr>
+												<td width="50%" ><span><b>Description</b></span></td>
+												<td class="text-right" ><span><b>Qty. Ordered</b></span></td>
+												<td class="text-right" ><span><b>Qty. Received</b></span></td>
+											</tr>
+										</thead>
+										<tbody>
+
+											<tr  t-foreach="o.pack_operation_ids" t-as="pack_operation" >
+												<td style="padding-left: 2px" >
+													<span t-field="pack_operation.name"/>
+													<t t-if="not pack_operation.product_id and pack_operation.package_id">
+														<span  t-field="pack_operation.package_id"/>
+													</t>
+													<p name="p_serial" >
+														<div t-if="has_serial_number"><strong>Batch(es):</strong></div>
+														<t t-foreach="pack_operation.pack_lot_ids" t-as="packlot" >
+															<span t-field="packlot.lot_id" />(<span t-field="packlot.qty"/>),
+															<t t-if="not packlot.lot_id">
+																<span t-field="packlot.lot_name"/>(<span t-field="packlot.qty"/>),
+															</t>
+														</t>
+													</p>
+												</td>
+												<td class="text-right">
+													<span t-field="pack_operation.product_qty"/>
+													<span t-field="pack_operation.product_uom_id"/>
+												</td>
+												<td class="text-right">
+													<span t-field="pack_operation.qty_done"/>
+													<span t-field="pack_operation.product_uom_id"/>
+												</td>
+											</tr>
+										</tbody>
+								</table>
+							</div>
+						</div>
+						<br />
+						<div  class="row" >
+								<div class="col-xs-12" >
+									<p t-field="o.note"/>
+								</div>
+							</div>
+
+						<br />
+						<br />
+
+							<div  class="row" name="div_sign_picking" >
+								<div class="col-xs-6" >
+									<p><span>Received by: ................................................. </span></p>
+									<p><span>Director: ........................................................</span></p>
+								</div>
+								<div class="col-xs-6" >
+									<p><span>Signature / Date: ............................................</span></p>
+									<p><span>Signature / Date: ............................................</span></p>
+								</div>
+							</div>
+							<p><u><b>_______________________________________________________________________________________</b></u></p>
+						 	<p><b>Checks:</b></p>
+							<div  class="row" >
+								<div class="col-xs-12" >
+									<p><span>Security Dept. Rep: ........................................... Signature: .............................. Date: ............................. </span></p>
+									<p><span>Operations Manager: ......................................... Signature: .............................. Date: ............................. </span></p>
+									<p><span>Account Rep: ..................................................... Signature: .............................. Date: ............................. </span></p>
+								</div>
+							</div>
+
+						</div>
+
+
+	            </t>
+	        </t>
+    	</t>
+</template>
+	</data>
+</openerp>

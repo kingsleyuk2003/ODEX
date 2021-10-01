@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <template id="report_purchaseorder_document_extend" inherit_id="purchase.report_purchaseorder_document">
+
+        <xpath expr="//div[@class='row']/div[@class='col-xs-6']"  position="attributes">
+             <attribute  name="class"  >col-xs-8</attribute>
+     </xpath>
+        <xpath expr="//div[@class='row']/div[@class='col-xs-5 col-xs-offset-1']"  position="attributes">
+             <attribute  name="class"  >col-xs-3 col-xs-offset-1</attribute>
+     </xpath>
+
+        <xpath expr="//p[@t-field='o.notes']"  position="after">
+                <div  class="row mt32 mb32" name="div_sign" >
+                    <div class="col-xs-6" >
+                        <span>Authorized by ......................................................</span>
+                    </div>
+                     <div class="col-xs-6" >
+                        <span>Signature/Date ................................................</span>
+                    </div>
+                </div>
+
+            </xpath>
+        </template>
+
+</data>
+</openerp>

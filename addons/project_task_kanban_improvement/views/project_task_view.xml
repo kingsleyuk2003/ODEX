@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="assets_backend" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/project_task_kanban_improvement/static/css/project_task.css" type="text/css" />
+            </xpath>
+        </template>
+
+        <record id="task_kanban_inherited" model="ir.ui.view">
+            <field name="name">project.task.kanban.inherited</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field invisible="1" name="customer_image"/>
+                </xpath>
+
+                <xpath expr="//div[@class='text-muted']" position="inside">
+                    <img t-if="record.customer_image.raw_value" class="partner_task_image nib pull-right" t-attf-src="data:image/png;base64,#{record.customer_image.raw_value}" />
+                </xpath>
+
+                <xpath expr="//field[@name='name']" position="after">
+                    <div class="display_time nib">
+                        <span title="Planned hours"><field name="planned_hours"/></span>
+                        <span title="Remaining Hours"><field name="remaining_hours"/></span>
+                        <span title="Time Spent"><t t-esc="record.planned_hours.value - record.remaining_hours.value"/></span>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

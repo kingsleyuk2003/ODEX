@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+	<data>
+
+
+    <record model="ir.sequence" id="seq_product_received_register_id">
+        <field name="name">PRR ID AV</field>
+        <field name="code">prr_code_av</field>
+        <field name="prefix">PRRAV</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+    <record model="ir.sequence" id="seq_sales_stock_control_id">
+        <field name="name">SSC ID AV</field>
+        <field name="code">ssc_code_av</field>
+        <field name="prefix">SSCAV</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+    <record model="ir.sequence" id="seq_retail_sale_id">
+        <field name="name">RS ID AV</field>
+        <field name="code">rs_code_av</field>
+        <field name="prefix">RSAV</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+    <record model="ir.sequence" id="seq_kin_bank_lodgement_id">
+        <field name="name">BL ID AV</field>
+        <field name="code">bl_code_av</field>
+        <field name="prefix">BLAV</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+    <record model="ir.sequence" id="seq_kin_aviation_expense_id">
+        <field name="name">REX ID AV</field>
+        <field name="code">rex_code_av</field>
+        <field name="prefix">REXAV</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+<record model="ir.sequence" id="seq_aviation_record_id">
+        <field name="name">AV REC</field>
+        <field name="code">av_rec_code</field>
+        <field name="prefix">AVR</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+   <record model="ir.sequence" id="seq_kin_internal_movement_aviation_id">
+        <field name="name">INT MOVE AV ID</field>
+        <field name="code">int_move_av_code</field>
+        <field name="prefix">INTMAV</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+          <record model="ir.sequence" id="seq_kin_bowser_movement_aviation_id">
+        <field name="name">BOWSER MOVE AV ID</field>
+        <field name="code">bow_move_av_code</field>
+        <field name="prefix">TBOW</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+ <record model="ir.sequence" id="seq_kin_bowser_movement_tank_aviation_id">
+        <field name="name">BOWSER MOVE TANK AV ID</field>
+        <field name="code">bow_move_avt_code</field>
+        <field name="prefix">BOWT</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+         <record model="ir.sequence" id="seq_kin_bowser_movement_bowser_aviation_id">
+        <field name="name">BOWSER MOVE BOWSER AV ID</field>
+        <field name="code">bow_move_avb_code</field>
+        <field name="prefix">BOWB</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+
+    <record model="ir.sequence" id="seq_loading_rec_aviation_id">
+        <field name="name">LR ID AV</field>
+        <field name="code">lr_code_av</field>
+        <field name="prefix">LRAV</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+     <record model="ir.sequence" id="seq_delivery_receipt_aviation_id">
+        <field name="name">DR ID AV</field>
+        <field name="code">dr_code_av</field>
+        <field name="prefix">DRAV</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+	</data>
+</openerp>

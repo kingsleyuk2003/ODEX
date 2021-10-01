@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+
+        <!-- Retail Sale Merge -->
+        <record id="view_retail_sale_merge" model="ir.ui.view">
+            <field name="name">Retail Sales Merge</field>
+            <field name="model">retail.sale.merge.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Merge Retail Sales">
+                     <p>Merge All Shifts within for the selected date </p>
+                    <group  col="4" >
+                        <field name="date"/>
+                        <field  name="retail_station_id" domain="[('retail_station_manager_id', '=', uid)]" options="{'no_open':True,'no_create':True}"  />
+                        <field name="sale_shift_ids" widget="many2many_tags" readonly="1"   />
+                    </group>
+                    <footer>
+                        <button name="action_merge" string="Merge Shifts" type="object" context="{'is_merge': True}"  groups="kin_retail_station_rog.group_retail_manager"  class="oe_highlight"/>
+                        or
+                        <button string="Close" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_retail_sale_merge" model="ir.actions.act_window">
+            <field name="name">Retail Sales Merge</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">retail.sale.merge.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_retail_sale_merge" />
+            <field name="target">new</field>
+            <!--<field name="groups_id" eval="[(4,ref('base.group_sale_salesman'))]"/>-->
+        </record>
+
+
+
+    </data>
+</odoo>

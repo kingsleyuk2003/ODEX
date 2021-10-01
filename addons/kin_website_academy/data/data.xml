@@ -1,0 +1,14 @@
+<openerp>
+    <data>
+        <record id="t_1" model="academy.teachers" >
+            <field name="name">Kingsley</field>
+            <field name="biography" >This is just a small profile page for the Kingsley Teacher</field>
+        </record>
+        <record id="t_2" model="academy.teachers" >
+            <field name="name">Chidozie</field>
+        </record>
+        <record id="t_3" model="academy.teachers" >
+            <field name="name">Okonkwo</field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,4 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_leave_request_first_approval","hr.holidays","hr_holidays.model_hr_holidays","ng_hr_holidays.group_leave_first_approval",1,1,1,1
+
+"access_leave_request_second_approval","hr.holidays","hr_holidays.model_hr_holidays","ng_hr_holidays.group_leave_second_approval",1,1,1,1

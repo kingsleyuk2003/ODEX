@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        
+         <record id="OTHER_ROG" model="hr.salary.rule.category">
+            <field name="name">ROG Other</field>
+            <field name="code">OTHERROG</field>
+        </record>
+
+        <record id="hr_rule_rog_absentism" model="hr.salary.rule">
+            <field name="name">Absentism</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">absent</field>
+            <field name="category_id" ref="rog_modifications.OTHER_ROG"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.get_rog_calculation('absent',payslip.date_from,payslip.date_to)</field>
+        </record>
+
+         <record id="hr_rule_rog_lieo" model="hr.salary.rule">
+            <field name="name">Late In / Early Out</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">lieo</field>
+            <field name="category_id" ref="rog_modifications.OTHER_ROG"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.get_rog_calculation('lieo',payslip.date_from,payslip.date_to)</field>
+        </record>
+
+         <record id="hr_rule_rog_lwp" model="hr.salary.rule">
+            <field name="name">Leave Without Pay</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">lwp</field>
+            <field name="category_id" ref="rog_modifications.OTHER_ROG"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.get_rog_calculation('lwp',payslip.date_from,payslip.date_to)</field>
+        </record>
+
+         <record id="hr_rule_rog_absentism_refund" model="hr.salary.rule">
+            <field name="name">Absentism Refund</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">absent_refund</field>
+            <field name="category_id" ref="rog_modifications.OTHER_ROG"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.get_rog_calculation('absent_refund',payslip.date_from,payslip.date_to)</field>
+        </record>
+
+         <record id="hr_rule_rog_lwpr_refund" model="hr.salary.rule">
+            <field name="name">Leave Without Pay Refund</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">lwpr_refund</field>
+            <field name="category_id" ref="rog_modifications.OTHER_ROG"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.get_rog_calculation('lwpr_refund',payslip.date_from,payslip.date_to)</field>
+        </record>
+
+         <record id="hr_rule_rog_lieor" model="hr.salary.rule">
+            <field name="name">Late In / Early Out Refund</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">lieo_refund</field>
+            <field name="category_id" ref="rog_modifications.OTHER_ROG"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.get_rog_calculation('lieo_refund',payslip.date_from,payslip.date_to)</field>
+        </record>
+
+         <record id="hr_rule_rog_other_refund" model="hr.salary.rule">
+            <field name="name">Other Refund</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">other_refund</field>
+            <field name="category_id" ref="rog_modifications.OTHER_ROG"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.get_rog_calculation('other_refund',payslip.date_from,payslip.date_to)</field>
+        </record>
+
+         <record id="hr_rule_rog_reward" model="hr.salary.rule">
+            <field name="name">Reward</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">reward</field>
+            <field name="category_id" ref="rog_modifications.OTHER_ROG"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = payslip.get_rog_calculation('reward',payslip.date_from,payslip.date_to)</field>
+        </record>
+
+    </data>
+</openerp>

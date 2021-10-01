@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_cost_price_history,cost.prices.history cost,product.model_product_price_history,group_see_product_cost_history,1,1,1,1
+access_product_sale_price_history,sale.prices.history sales,model_product_sale_price_history,group_see_product_cost_history,1,1,1,1

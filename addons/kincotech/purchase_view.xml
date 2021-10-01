@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+   <!-- <delete model="ir.ui.menu" id="purchase.menu_purchase_rfq"/> -->
+    <menuitem name="Draft PO's / Quotations" action="purchase.purchase_rfq" id="purchase.menu_purchase_rfq"
+            parent="purchase.menu_procurement_management"
+            sequence="0"/>
+
+
+     <record id="view_invoice_supplier_purchase_form_extend" model="ir.ui.view">
+        <field name="name">account.invoice.supplier.purchase.extend</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="purchase.view_invoice_supplier_purchase_form"/>
+        <field name="arch" type="xml">
+            <field name="purchase_id" position="replace" />
+
+            <field name="partner_id" position="before" >
+                 <field name="purchase_id" attrs="{'invisible': [('state', '&lt;&gt;', 'draft')]}" class="oe_edit_only"/>
+            </field>
+
+        </field>
+    </record>
+
+    </data>
+</openerp>

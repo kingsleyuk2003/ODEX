@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+	<data>
+
+
+
+   <record model="ir.sequence" id="seq_purchase_contract_id">
+        <field name="name">PUR CONTR ID</field>
+        <field name="code">pcontract_code</field>
+        <field name="prefix">PCT</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+    <record model="ir.sequence" id="seq_station_distr_id">
+        <field name="name">Station Distribution ID</field>
+        <field name="code">station_distr_code</field>
+        <field name="prefix">RDO/%(range_year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+    <record model="ir.sequence" id="seq_station_prod_distr_id">
+        <field name="name">Station Product Distribution ID</field>
+        <field name="code">station_prod_distr_code</field>
+        <field name="prefix">RIDO/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+    <record model="ir.sequence" id="seq_int_stock_move_id">
+        <field name="name">INT STOCK MOVE ID</field>
+        <field name="code">int_stock_move_code</field>
+        <field name="prefix">RSTS/%(range_year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+    <record model="ir.sequence" id="seq_station_sales_id">
+        <field name="name">Station Sales ID</field>
+        <field name="code">station_sales_code</field>
+        <field name="prefix">RINV/%(range_year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+    <record model="ir.sequence" id="seq_station_lifting_order_id">
+        <field name="name">Station Lifting Order ID</field>
+        <field name="code">station_lifting_order_code</field>
+        <field name="prefix">RLO/%(range_year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+
+	</data>
+</openerp>

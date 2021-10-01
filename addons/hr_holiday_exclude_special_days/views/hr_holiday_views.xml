@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record id="edit_holiday_new" model="ir.ui.view">
+            <field name="name">Leave Request inherited</field>
+            <field name="model">hr.holidays</field>
+            <field name="inherit_id" ref="hr_holidays.edit_holiday_new"/>
+            <field name="arch" type="xml">
+                <!-- Remove Odoo's XML onchange and replace it with modified @api.onchange in python -->
+                <xpath expr="//sheet/group/group/div/div/field[@name='date_from']" position="attributes">
+                    <attribute name="on_change">1</attribute>
+                </xpath>
+                <xpath expr="//sheet/group/group/div/div/field[@name='date_to']" position="attributes">
+                    <attribute name="on_change">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='employee_id']" position="attributes">
+                    <attribute name="on_change">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="edit_holiday_status_form_inherit" model="ir.ui.view">
+            <field name="name">hr.holidays.status.form</field>
+            <field name="model">hr.holidays.status</field>
+            <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='limit']" position="after">
+                    <field name="is_public_holiday" help="Use this leave type for Public Holidays"/>
+                </xpath>
+            </field>
+        </record>
+
+        <menuitem id="hr_holidays.menu_hr_holidays_configuration" name="Configuration" parent="hr_holidays.menu_hr_holidays_root"
+                  sequence="100" groups="base.group_configuration,base.group_hr_manager"/>
+
+        <menuitem id="menu_hr_holidays_leave_types" name="Leave Types" parent="hr_holidays.menu_hr_holidays_configuration"
+                  sequence="1" groups="base.group_configuration,base.group_hr_manager" action="hr_holidays.open_view_holiday_status"/>
+    </data>
+</openerp>

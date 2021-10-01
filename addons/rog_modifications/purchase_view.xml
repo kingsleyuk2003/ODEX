@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+ <menuitem name="C and I Purchase"
+            id="menu_ci_purchase_app"
+            groups="group_ci_purchase"
+            sequence="25" web_icon="rog_modifications,static/description/purchase_ci.png" />
+  <menuitem id="menu_purchase_ci_menu" name="C and I Purchase" parent="menu_ci_purchase_app" sequence="4" groups="group_ci_purchase" />
+<menuitem id="menu_ci_purchase_report_menu" name="Report" parent="menu_ci_purchase_app" sequence="5" groups="group_ci_purchase" />
+
+        <menuitem name="Form M Excel Report" id="menu_form_m_report" action="action_form_m_report_wizard"
+          parent="menu_ci_purchase_report_menu" sequence="5"  icon="STOCK_PRINT" />
+
+         <menuitem name="LC BC Excel Report" id="menu_lc_bc_report" action="action_lc_bc_report_wizard"
+          parent="menu_ci_purchase_report_menu" sequence="6"  icon="STOCK_PRINT" />
+
+        <menuitem name="PEF PPPRA Excel Report" id="menu_pef_pppra_report" action="action_pef_pppra_report_wizard"
+          parent="menu_ci_purchase_report_menu" sequence="7"  icon="STOCK_PRINT" />
+
+    <record id="form_m_rog_form" model="ir.ui.view">
+            <field name="name">form.m.rog</field>
+            <field name="model">form.m</field>
+            <field name="arch" type="xml">
+                <form string="Form M">
+                 <header>
+                        <button name="button_form_m_forwarded_scanning_agent" type="object" states="draft" class="oe_highlight" string="Form M Forwarded to Scanning Agent" />
+                        <button name="button_form_m_forwarded_to_cbn" type="object" states="form_m_forwarded_scanning_agent" class="oe_highlight" string="Form M Forwarded to CBN by Bank" />
+                        <button name="action_create_po" type="object" states="form_m_forwarded_to_cbn" string="Create LC or BC Form" confirm="You are about to apply for a LC or BC. Click 'ok' to continue or 'cancel' to discard the operation"   class="oe_highlight"  />
+                        <button name="button_draft" states="cancel"  string="Set to Draft" type="object" />
+                        <button name="button_cancel" states="draft,form_m_forwarded_scanning_agent,form_m_forwarded_to_cbn" string="Cancel" type="object" confirm="Are you sure you want to Cancel the document?"  />
+                        <field name="state" widget="statusbar"  />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                             <button type="object"  name="btn_view_purchase_order" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('purchase_order_count', '=', 0)]}"   >
+                                <field name="purchase_order_count" widget="statinfo" string="PO for LC BC"/>
+                            </button>
+                        </div>
+                        <group col="4" >
+                             <field name="dpr_import_licence_ref_no" />
+                            <field name="soncap_ref_no" />
+                            <field name="establishment_date" />
+                            <field name="bank" />
+                            <field name="name" />
+                            <field name="cb_ba_no" />
+                            <field name="product_id"    options="{'no_open':True,'no_create':True}" />
+                            <field name="form_m_qty"   />
+                            <field name="conv_rate" invisible="1"  />
+                            <field name="form_m_qty_ltr" invisible="1"  />
+                            <field name="unit_price_product"  />
+                            <field name="form_m_value"  />
+                            <field name="trx_type" />
+                            <field name="supplier_id"  />
+                            <field name="insurance_company_id" />
+                            <field name="insurance_amt" />
+                            <field name="form_m_expiry" />
+                        </group>
+                        <notebook>
+                            <page  string="LC BC PO" >
+                                <field name="purchase_order_ids" />
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+    </record>
+
+         <record id="view_form_m_rog_tree" model="ir.ui.view" >
+            <field name="name" >form.m.tree</field>
+            <field name="model">form.m</field>
+            <field name="arch" type="xml" >
+                <tree string="Form M" >
+                    <field name="dpr_import_licence_ref_no" />
+                            <field name="soncap_ref_no" />
+                            <field name="establishment_date" />
+                            <field name="bank" />
+                            <field name="name" />
+                            <field name="cb_ba_no" />
+                            <field name="product_id"    />
+                            <field name="form_m_qty"   />
+                            <field name="unit_price_product"  />
+                            <field name="form_m_value"  />
+                            <field name="trx_type" />
+                            <field name="supplier_id"  />
+                            <field name="insurance_company_id" />
+                            <field name="insurance_amt" />
+                            <field name="form_m_expiry" />
+
+                </tree>
+            </field>
+        </record>
+
+         <record id="view_form_m_rog_filter" model="ir.ui.view">
+            <field name="name">form.m.select</field>
+            <field name="model">form.m</field>
+            <field name="arch" type="xml">
+                <search string="Form M">
+                    <field name="name" string="Form M No."  />
+                    <group expand="0" string="Group By">
+                        <filter string="Supplier" domain="[]" context="{'group_by':'supplier_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_form_m_form" model="ir.actions.act_window" >
+            <field name="name" >Form M</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">form.m</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <!--<field name="context">{'search_default_grpstatus': 1}</field>-->
+            <field name="search_view_id" ref="view_form_m_rog_filter"/>
+        </record>
+
+        <menuitem id="menu_form_m" name="Form M Application" parent="menu_purchase_ci_menu" sequence="1" action="action_form_m_form" groups="group_show_form_m_application_menu"   />
+
+
+
+
+
+     <record id="purchase_order_rog_form" model="ir.ui.view">
+            <field name="name">purchase.order.form.rog</field>
+            <field name="model">purchase.order</field>
+            <field name="arch" type="xml">
+                <form string="Procurement Order">
+                <header>
+                    <!--<button name="action_rfq_send" states="draft" string="Send RFQ by Email" type="object" context="{'send_rfq':True}" class="oe_highlight"/>-->
+                    <!--<button name="action_rfq_send" states="sent" string="Re-Send RFQ by Email" type="object" context="{'send_rfq':True}"/>-->
+                    <!--<button name="print_quotation" string="Print RFQ" type="object" states="draft" class="oe_highlight" groups="base.group_user"/>-->
+                    <!--<button name="print_quotation" string="Print RFQ" type="object" states="sent" groups="base.group_user"/>-->
+                      <button name="button_local_purchase" type="object" states="draft,sent" string="Local Purchase" class="oe_highlight" />
+                     <button name="button_foreign_purchase" type="object" states="draft,sent" string="Foreign Purchase" class="oe_highlight" />
+
+                    <button name="button_letter_of_credit_established" type="object" states="foreign_purchase,form_m_forwarded_to_cbn" class="oe_highlight" string="Letter of Credit Established" />
+                    <button name="button_confirm" type="object" states="local_purchase,letter_of_credit_established" string="Confirm Order" id="draft_confirm" class="oe_highlight" groups="rog_modifications.group_show_confirm_order_btn"  />
+                    <!--<button name="button_confirm" type="object" states="sent" string="Confirm Order" class="oe_highlight" id="bid_confirm"/>-->
+                    <button name="button_approve_order" type="object" states='to approve' string="Approve Order" class="oe_highlight" groups="rog_modifications.group_show_approve_order_btn" />
+                    <button name="button_create_lc_bc_bill" type="object" string="Create LC/BC Bill"  states="purchase" groups="rog_modifications.group_show_create_lc_bc_bill" class="oe_highlight" confirm="Please ensure the Final Invoice Value has been filled, and you are ready to create a bill" />
+                    <button name="button_create_pef_bill" type="object" string="Create PEF Bill" states="purchase" groups="rog_modifications.group_show_create_pef_bill" class="oe_highlight" confirm="Please ensure the PEF Payment Value has been populated, and you are ready to create a bill"  />
+                    <button name="button_create_pppra_bill" type="object" string="Create PPPRA Bill" states="purchase" groups="rog_modifications.group_show_create_pppra_bill" class="oe_highlight" confirm="Please ensure the PPPRA Payment Value has been populated, and you are ready to create a bill" />
+                    <!--<button name="action_rfq_send" states="purchase" string="Send PO by Email" type="object" context="{'send_rfq':False}"/>-->
+                    <!--<button name="action_view_picking" string="Receive Products" class="oe_highlight" type="object" attrs="{'invisible': ['|', '|' , ('is_shipped', '=', True), ('state','not in', ('purchase','done')), ('picking_count', '=', 0)]}"/>-->
+
+                    <button name="button_done" type="object" string="Lock" states="purchase"/>
+                    <button name="button_unlock" type="object" string="Unlock" states="done" groups="purchase.group_purchase_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible=" " readonly="1"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object"
+                            name="action_view_picking"
+                            class="oe_stat_button"
+                            icon="fa-truck" attrs="{'invisible':[('state', 'in', ('draft','sent','to approve')),('picking_ids','=',[])]}">
+                            <field name="picking_count" widget="statinfo" string="Shipment" help="Incoming Shipments"/>
+                            <field name="picking_ids" invisible="1"/>
+                        </button>
+                        <button type="object"  name="action_view_invoice"
+                            class="oe_stat_button"
+                            icon="fa-pencil-square-o" attrs="{'invisible':[('state', 'in', ('draft','sent','to approve')),('invoice_ids','=',[])]}">
+                            <field name="invoice_count" widget="statinfo" string="Vendor Bills"/>
+                            <field name='invoice_ids' invisible="1"/>
+                        </button> 
+                    </div>
+                    <div class="oe_title">
+                        <label string="Request for Quotation" attrs="{'invisible': [('state','not in',('draft','sent','bid'))]}"/>
+                        <label string="Purchase Order" attrs="{'invisible': [('state','in',('draft','sent','bid'))]}"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <!--<field name="is_lc_purchase" />-->
+                            <field name="partner_id" context="{'search_default_supplier':1, 'default_supplier':1, 'default_customer':0}" domain="[('supplier','=',True)]"/>
+                            <field name="partner_ref"/>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                            <!--<field name="is_shipped" invisible="1"/>-->
+                            <field name="form_id" readonly="1" />
+                             <field name="ship_to_ship_id"  readonly="1"/>
+                            <field name="lc_bc_invoice" readonly="1" />
+                            <field name="pef_invoice" readonly="1" />
+                            <field name="pppra_invoice" readonly="1" />
+                        </group>
+                        <group>
+                            <field name="date_order"/>
+                            <field name="origin" attrs="{'invisible': [('origin','=',False)]}"/>
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Products">
+                            <field name="order_line" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}">
+                                 <tree string="Purchase Order Lines" editable="bottom">
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="state" invisible="1"/>
+                                    <!--<field name="sequence" widget="handle"/>-->
+                                    <field name="product_id" attrs="{'readonly': [('state', 'in', ('purchase', 'to approve','done', 'cancel'))]}" context="{'partner_id':parent.partner_id, 'quantity':product_qty,'uom':product_uom, 'company_id': parent.company_id}" force_save="1"/>
+                                    <field name="name"/>
+                                    <!--<field name="move_dest_ids" invisible="1"/>-->
+                                    <field name="date_planned"/>
+                                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                                    <field name="account_analytic_id" context="{'default_partner_id':parent.partner_id}" groups="purchase.group_analytic_accounting"/>
+                                    <!--<field name="analytic_tag_ids" groups="purchase.group_analytic_accounting" widget="many2many_tags" options="{'color_field': 'color'}"/>-->
+                                    <field name="product_qty"/>
+                                    <field name="qty_received" invisible="not context.get('show_purchase', True)"/>
+                                    <field name="qty_invoiced" invisible="not context.get('show_purchase', True)"/>
+                                    <field name="product_uom" groups="product.group_uom" attrs="{'readonly': [('state', 'in', ('purchase', 'done', 'cancel'))]}" force_save="1"/>
+                                     <field name="conv_rate" groups="rog_modifications.group_show_conversion_rate_field" />
+                                     <field name="price_unit"/>
+                                    <field name="taxes_id" widget="many2many_tags" domain="[('type_tax_use','=','purchase')]" context="{'default_type_tax_use': 'purchase'}" options="{'no_create': True}"/>
+                                    <field name="price_subtotal" widget="monetary"/>
+                                </tree>
+                                <form string="Purchase Order Line">
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="product_id"
+                                                       context="{'partner_id': parent.partner_id}"/>
+                                                <label for="product_qty"/>
+                                                <div>
+                                                    <field name="product_qty" class="oe_inline"/>
+                                                    <span class="oe_inline">&#160;</span>
+                                                    <field name="product_uom" groups="product.group_uom" class="oe_inline"/>
+                                                </div>
+                                                <field name="price_unit"/>
+                                            </group>
+                                            <group>
+                                                <field name="taxes_id" widget="many2many_tags" domain="[('type_tax_use', '=', 'purchase')]" options="{'no_create': True}"/>
+                                                <field name="date_planned" widget="date"/>
+                                                <field name="account_analytic_id" colspan="2" groups="purchase.group_analytic_accounting"/>
+                                                <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                                            </group>
+                                        </group>
+                                        <notebook>
+                                        <page string="Notes">
+                                            <field name="name"/>
+                                        </page>
+                                        <page string="Invoices and Incoming Shipments">
+                                            <field name="invoice_lines"/>
+                                            <field name="move_ids"/>
+                                        </page>
+
+                                        </notebook>
+                                    </sheet>
+                                </form>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="amount_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <div class="oe_subtotal_footer_separator oe_inline">
+                                    <label for="amount_total"/>
+                                </div>
+                                <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                            <field name="notes" class="oe_inline" placeholder="Define your terms and conditions ..."/>
+                            <div class="oe_clear"/>
+                        </page>
+<!--                        <page string="Deliveries &amp; Invoices">-->
+<!--                            <group>-->
+<!--                                <group>-->
+<!--                                    <label for="date_planned"/>-->
+<!--                                    <div>-->
+<!--                                        <field name="date_planned" required="1" attrs="{'readonly': [('state', 'not in', ('draft', 'sent'))]}"/>-->
+<!--                                        <button name="action_set_date_planned" type="object"-->
+<!--                                            states="draft,sent"-->
+<!--                                            string="Set date to all order lines"-->
+<!--                                            help="This changes the scheduled date of all order lines to the given date"-->
+<!--                                            class="fa fa-calendar o_icon_button oe_edit_only"/>-->
+<!--                                    </div>-->
+<!--                                    <field name="picking_type_id" domain="[('code','=','incoming')]" options="{'no_create': True}" groups="stock.group_stock_multi_locations"/>-->
+<!--                                    <field name="dest_address_id" groups="stock.group_stock_multi_locations" attrs="{'invisible': [('default_location_dest_id_usage', '!=', 'customer')], 'required': [('default_location_dest_id_usage', '=', 'customer')]}"/>-->
+<!--                                    <field name="default_location_dest_id_usage" invisible="1"/>-->
+<!--                                    <field name="incoterm_id"/>-->
+<!--                                </group>-->
+<!--                                <group>-->
+<!--                                    <field name="invoice_status"/>-->
+<!--                                    <field name="payment_term_id" options="{'no_open': True, 'no_create': True}" attrs="{'readonly': ['|', ('invoice_status','=', 'invoiced'), ('state', '=', 'done')]}"/>-->
+<!--                                    <field name="fiscal_position_id" options="{'no_create': True}" attrs="{'readonly': ['|', ('invoice_status','=', 'invoiced'), ('state', '=', 'done')]}"/>-->
+<!--                                    <field name="date_approve" groups="base.group_no_one"/>-->
+<!--                                </group>-->
+<!--                            </group>-->
+<!--                        </page>-->
+
+                    <page string="Form M Details" >
+                        <group col="4">
+                            <field name="dpr_import_licence_ref_no" />
+                            <field name="soncap_ref_no" />
+                            <field name="establishment_date" />
+                            <field name="bank" />
+                            <field name="form_m_no" />
+                            <field name="cb_ba_no" />
+                            <field name="product_id"    options="{'no_open':True,'no_create':True}" />
+                            <field name="form_m_qty"   />
+                            <field name="conv_rate" invisible="1"  />
+                            <field name="form_m_qty_ltr" invisible="1"  />
+                            <field name="unit_price_product"  />
+                            <field name="form_m_value"  />
+                            <field name="trx_type" />
+                            <field name="supplier_id"  />
+                            <field name="insurance_company_id" />
+                            <field name="insurance_amt" />
+                            <field name="form_m_expiry" />
+                        </group>
+                    </page>
+                    <page string="LC and BC Details">
+                        <group col="4">
+                            <field name="in_house_no" />
+                            <field name="dpr_import_ref_no" readonly="1" />
+                            <field name="pppra_alloc_qty" />
+                            <field name="lc_bc_establishment_date" />
+                            <field name="form_m_no1" readonly="1" />
+                            <field name="lc_bc_no" />
+                            <field name="bank1" readonly="1" />
+                            <field name="supplier_id1" readonly="1" />
+                            <field name="product_type_id" readonly="1"  options="{'no_open':True,'no_create':True}" />
+                            <field name="form_m_qty1" readonly="1" />
+                            <field name="form_m_value1" readonly="1" />
+                            <field name="trx_type1" readonly="1" />
+                            <field name="mother_vessel_name" readonly="1" />
+                            <field name="daughter_vessel_name" readonly="1" />
+                            <field name="bl_qty" readonly="1" />
+                            <field name="shore_tank_qty" readonly="1" />
+                            <field name="final_invoice_value" />
+                            <field name="difference_value" />
+                            <field name="foreign_exchange_bid" invisible="1" />
+                            <field name="exchange_rate" />
+                            <field name="naira_value" />
+                            <field name="sgd_qty" />
+                            <field name="sgd_submission_date" />
+                            <field name="dpr_product_cert_qty" />
+                            <field name="dpr_submission_date" />
+                            <field name="dpr_date_interval" />
+                            <field name="due_date_dpr_submission" readonly="1" />
+                            <field name="is_shipping_documents" />
+                            <field name="pef_amount" />
+                            <field name="is_pef_payment_status" />
+                            <field name="sdn_value" />
+                            <field name="batch" />
+                            <field name="status" />
+                            <field name="date_paid" />
+                            <field name="receiving_bank" />
+                            <field name="is_shipping_documents" />
+                        </group>
+                    </page>
+                    <page string="PEF and PPPRA Details" >
+                        <group col="4">
+                            <field name="lc_bc_pfi"  />
+                            <field name="in_house_no_pef_pppra" readonly="1" />
+                            <field name="issue_date_paid" />
+                            <field name="name_of_vessel" readonly="1" />
+                            <field name="product_id2" readonly="1"  options="{'no_open':True,'no_create':True}" />
+                            <field name="volume" readonly="1" />
+                            <field name="rate_pef" />
+                            <field name="pef_payment" />
+                            <field name="status_payment_pef"  />
+                            <field name="rate_pppra" readonly="1" />
+                            <field name="admin_charge" readonly="1" />
+                            <field name="status_payment_pppra" />
+
+                        </group>
+                    </page>
+                           <page string="Process Stages">
+                        <separator string="Foreign Purchase" />
+                        <p>1.) Form M Forwarded to Scanning Agent</p>
+                        <p>2.) Form M Forwarded to CBN by Bank</p>
+                        <p>3.) letter of Credit Established</p>
+                        <separator string="On Product Receipt" />
+                        <p>1.) Bank Inspection on Discharged Product</p>
+                        <p>2.) Bank Monitoring of Stock</p>
+                    </page>
+                    <page  string="Reminders" >
+                        <group>
+                            <field name="reminder_ids" nolabel="1"  >
+                                <tree  editable="bottom"  decoration-success="days_remaining &gt;= expiry_day_interval"    decoration-danger="days_remaining &lt; expiry_day_interval and days_remaining &gt;= 0" >
+                                    <field name="name" />
+                                    <field name="reference_no" />
+                                    <field name="issue_date" />
+                                    <field name="expiry_date" />
+                                    <field name="days_remaining" />
+                                    <field name="expiry_day_interval" />
+                                    <field name="state" />
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_purchase_order_rog" model="ir.actions.act_window">
+            <field name="name">LC or BC Orders</field>
+            <field name="type">ir.actions.act_window</field>
+             <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,pivot,graph,calendar</field>
+            <field name="context">{'default_is_lc_purchase': True}</field>
+            <field name="res_model">purchase.order</field>
+            <field name="domain">[('is_lc_purchase','=',True)]</field>
+        </record>
+
+          <record id="action_purchase_order_rog_tree" model="ir.actions.act_window.view">
+            <field name="sequence">1</field>
+            <field name="view_mode">tree</field>
+             <field name="view_id" ref="purchase.purchase_order_tree" />
+            <field name="act_window_id" ref="action_purchase_order_rog"/>
+        </record>
+
+         <record id="action_purchase_order_rog_form" model="ir.actions.act_window.view">
+            <field name="sequence">2</field>
+            <field name="view_mode">form</field>
+             <field name="view_id" ref="purchase_order_rog_form" />
+            <field name="act_window_id" ref="action_purchase_order_rog"/>
+        </record>
+
+
+        <menuitem action="action_purchase_order_rog" id="menu_purchase_rfq_rog"
+            parent="menu_purchase_ci_menu" name="LC or BC" groups="group_procurement"
+            sequence="10"/>
+        
+
+         <record id="reminder_form_view_rog_purchase" model="ir.ui.view">
+            <field name="name">kin.reminder.form</field>
+            <field name="model">kin.reminder</field>
+             <field name="inherit_id" ref="kin_reminder.reminder_form_view" />
+            <field name="arch" type="xml">
+                <field name="user_id" position="after" >
+                    <field name="purchase_id" readonly="1" />
+                </field>
+            </field>
+         </record>
+
+
+         <record id="product_template_purchase_lc_form_extend" model="ir.ui.view">
+            <field name="name">product.template.purchase.lc.form.extend</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <field name="categ_id" position="after" >
+                    <field name="rate_pef" />
+                    <field name="rate_pppra" />
+                       <field name="pef_org" />
+                       <field name="pppra_org" />
+                    <field name="pef_account" />
+                    <field name="pppra_account" />
+                </field>
+            </field>
+        </record>
+
+
+        <record id="invoice_form_lc_extend" model="ir.ui.view">
+            <field name="name">account.invoice.lc.extend</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form" />
+            <field name="arch" type="xml">
+                   <field name="move_id" position="before" >
+                       <field name="lc_bc_po" />
+                       <field name="pef_po" />
+                       <field name="pppra_po" />
+                   </field>
+            </field>
+        </record>
+
+
+
+
+
+
+
+
+
+
+    </data>
+</odoo>
+
+

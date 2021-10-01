@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+
+        <record id="confirm_multiple_sale_orders_view" model="ir.ui.view">
+            <field name="name">Sales Orders Confirmation</field>
+            <field name="model">sale.order.confirmation.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Sales Orders Confirmation">
+                    <p>You are about the confirm the selected sales order(s). </p>
+                    <p>Ensure you have checked them and validated the entries before confirmation</p>
+
+                    <footer>
+                        <button name="confirm_sales_orders" string="Confirm Sales Order(s)" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!--<record id="action_confirm_multiple_sale_orders" model="ir.actions.act_window">-->
+            <!--<field name="name">Confirm Sale Orders</field>-->
+            <!--<field name="type">ir.actions.act_window</field>-->
+            <!--<field name="res_model">sale.order.confirmation.wizard</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_mode">form</field>-->
+            <!--<field name="target">new</field>-->
+            <!--&lt;!&ndash;<field name="groups_id" eval="[(4,ref('base.group_sale_salesman'))]"/>&ndash;&gt;-->
+        <!--</record>-->
+
+
+        <!--<record model="ir.values" id="sale_order_multiple_confirm">-->
+            <!--<field name="model_id" ref="sale.model_sale_order" />-->
+            <!--<field name="name">Convert Quotes to Sale Orders</field>-->
+            <!--<field name="key2">client_action_multi</field>-->
+            <!--<field name="value" eval="'ir.actions.act_window,' + str(ref('action_confirm_multiple_sale_orders'))" />-->
+            <!--<field name="key">action</field>-->
+            <!--<field name="model">sale.order</field>-->
+             <!--<field name="groups_id" eval="[(4,ref('kin_sales_double_validation.group_show_confirm_btn'))]"/>-->
+        <!--</record>-->
+
+    </data>
+</openerp>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <record id="recept_email_template" model="mail.template">
+          <field name="name">Reception Mails</field>
+          <field name="email_from">${object.company_id and object.company_id.email or ''}</field>
+          <!--<field name="email_from">${object.create_uid and object.create_uid.email or ''}</field>-->
+          <field name="subject">Notice of Confirmation to ${object.name}</field>
+          <field name="email_to">${object.guest_email|safe}</field>
+          <!--<field name="email_to">${object.guest_email|safe}</field>-->
+          <!--<field name="lang">${object.lang}</field>-->
+          <field name="model_id" ref="receptions_main.model_recept_main"/>
+          <!--<field name="model_id" ref="model_reception_mod"/>-->
+          <field name="auto_delete" eval="True"/>
+	  <field name="body_html">
+            <![CDATA[
+	      <p>Dear ${(object.name)},<br/><br/>
+	      Your appointment to Visit ${object.emp_visit.name} is ${object.state_stu}<br/></p>
+              Regards,<br/>
+              ${(object.company_id.name)}
+	    ]]>
+	  </field>
+       </record>
+
+    </data>
+</openerp>

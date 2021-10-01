@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequences for private.order -->
+        <record id="seq_private_order" model="ir.sequence">
+            <field name="name">Private Order</field>
+            <field name="code">private.order</field>
+            <field name="prefix">PRIVO</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+
+
+
+
+    <data>
+
+         <menuitem name="Private Marketing/Sales"
+            id="menu_private_sales_marketing"
+            groups="group_show_private_order,group_show_private_order_manager"
+            sequence="25" web_icon="gamification,static/description/icon.png" />
+
+
+        <record id="view_private_order_calendar" model="ir.ui.view">
+            <field name="name">private.order.calendar</field>
+            <field name="model">private.order</field>
+            <field name="arch" type="xml">
+                <calendar string="Private Orders" color="state" date_start="date_order">
+                    <field name="partner_id"/>
+                    <field name="amount_total" widget="monetary"/>
+                </calendar>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_private_order_graph">
+            <field name="name">private.order.graph</field>
+            <field name="model">private.order</field>
+            <field name="arch" type="xml">
+                <graph string="Private Orders">
+                    <field name="partner_id"/>
+                    <field name="amount_total" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_private_order_pivot">
+            <field name="name">private.order.pivot</field>
+            <field name="model">private.order</field>
+            <field name="arch" type="xml">
+                <pivot string="Private Orders">
+                    <field name="date_order" type="row"/>
+                    <field name="amount_total" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- Sales Orders Kanban View  -->
+        <record model="ir.ui.view" id="view_private_order_kanban">
+            <field name="name">private.order.kanban</field>
+            <field name="model">private.order</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="amount_total"/>
+                    <field name="date_order"/>
+                    <field name="state"/>
+                    <field name="currency_id"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <strong><span><t t-esc="record.partner_id.value"/></span></strong>
+                                    </div>
+                                    <div class="col-xs-6 pull-right text-right">
+                                        <strong><field name="amount_total" widget="monetary"/></strong>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6 text-muted">
+                                        <span><t t-esc="record.name.value"/> <t t-esc="record.date_order.value"/></span>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <span t-attf-class="pull-right text-right label #{['draft', 'cancel'].indexOf(record.state.raw_value) > -1 ? 'label-default' : ['done'].indexOf(record.state.raw_value) > -1 ? 'label-success' : 'label-primary'}"><t t-esc="record.state.value"/></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="view_private_order_tree" model="ir.ui.view">
+            <field name="name">private.order.tree</field>
+            <field name="model">private.order</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <tree string="Private Orders" decoration-bf="message_needaction==True" decoration-muted="state=='cancel'">
+                    <field name="message_needaction" invisible="1"/>
+                    <field name="name" string="Order Number"/>
+                    <field name="date_order"/>
+                    <field name="partner_id"/>
+                    <field name="user_id"/>
+                    <field name="amount_total" sum="Total Tax Included" widget="monetary"/>
+                    <field name="state" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_private_order_form" model="ir.ui.view">
+            <field name="name">private.order.form</field>
+            <field name="model">private.order</field>
+            <field name="arch" type="xml">
+                <form string="Private Sales Order">
+                <header>
+                    <button name="action_confirm" states="draft" type="object" string="Confirm and Notify Manager" />
+                   <button name="action_cancel" states="sale" type="object" string="Cancel"/>
+                    <button name="action_draft" states="cancel" type="object" string="Set to Draft" groups="kin_private_order_crm.group_show_private_order_manager" />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,sale"/>
+                </header>
+                <sheet>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1" attrs="{'readonly': [('state', 'in', ('cancel','sale'))]}"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id"  options='{"always_reload": True}' attrs="{'readonly': [('state', 'in', ('cancel','sale'))]}"/>
+                        </group>
+                        <group>
+                            <field name="date_order" attrs="{'readonly': [('state', 'in', ('cancel','sale'))]}" />
+                            <field name="currency_id" attrs="{'readonly': [('state', 'in', ('cancel','sale'))]}" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Private Order Lines">
+                            <field name="order_line" mode="tree,kanban"  attrs="{'readonly': [('state', 'in', ('cancel','sale'))]}">
+                                <form string="Private Order Lines">
+                                    <group>
+                                        <group>
+                                            <field name="product_id"   />
+                                            <field name="price_subtotal" />
+                                            <label for="product_uom_qty" string="Ordered Quantity"/>
+                                            <div>
+                                                <field name="product_uom_qty" class="oe_inline"/>
+                                                <field name="product_uom" groups="product.group_uom" class="oe_inline oe_no_button"
+                                                    attrs="{'readonly': [('state', 'in', ('sale', 'cancel'))]}"/>
+                                            </div>
+                                            <field name="price_unit"/>
+                                            <label for="discount" groups="sale.group_discount_per_so_line"/>
+                                            <div name="discount" groups="sale.group_discount_per_so_line">
+                                                <field name="discount" class="oe_inline"/> %%
+                                            </div>
+                                        </group>
+                                        <group>
+                                            <field name="tax_id" widget="many2many_tags" domain="[('type_tax_use','=','sale')]" />
+
+                                        </group>
+                                    </group>
+                                    <label for="name"/>
+                                    <field name="name"/>
+                                    <field name="state" invisible="1"/>
+                                </form>
+                                <tree string="Private Order Lines" editable="bottom" >
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id" />
+                                    <field name="name"/>
+                                    <field name="product_uom_qty"
+                                        string="Ordered Qty"
+                                    />
+                                    <field name="product_uom"
+                                        attrs="{'readonly': [('state', 'in', ('sale', 'cancel'))]}"
+                                        groups="product.group_uom" options='{"no_open": True}'/>
+                                    <field name="price_unit" />
+                                    <field name="tax_id" widget="many2many_tags" domain="[('type_tax_use','=','sale')]"/>
+                                    <field name="discount" groups="sale.group_discount_per_so_line"/>
+                                    <field name="price_subtotal" widget="monetary"/>
+                                    <field name="state" invisible="1"/>
+                                </tree>
+                                <kanban class="o_kanban_mobile">
+                                    <field name="product_id"/>
+                                    <field name="product_uom_qty"/>
+                                    <field name="product_uom" groups="product.group_uom"/>
+                                    <field name="price_subtotal"/>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <strong><span><t t-esc="record.product_id.value"/></span></strong>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-8 text-muted">
+                                                        <span><t t-esc="record.product_uom_qty.value"/> <t t-esc="record.product_uom.value"/></span>
+                                                    </div>
+                                                    <div class="col-xs-4 text-muted">
+                                                        <span class="pull-right text-right"><t t-esc="record.price_subtotal.value"/></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                <field name="amount_untaxed" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <field name="amount_tax" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                    <label for="amount_total" />
+                                    <button name="button_dummy"
+                                        states="draft" string="(update order)" type="object" class="oe_edit_only oe_link"/>
+                                </div>
+                                <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                            </group>
+
+                            <div class="oe_clear"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+        </record>
+
+
+         <record id="view_private_order_filter" model="ir.ui.view">
+            <field name="name">private.order.list.select</field>
+            <field name="model">private.order</field>
+            <field name="arch" type="xml">
+                <search string="Search Private Order">
+                    <field name="name" string="Private Order" filter_domain="['|',('name','ilike',self),('client_order_ref','ilike',self)]"/>
+                    <field name="partner_id" operator="child_of"/>
+                    <field name="user_id"/>
+                    <field name="team_id" string="Sales Team"/>
+                    <filter string="My Private Orders" domain="[('user_id','=',uid)]" name="my_private_orders_filter"/>
+                    <separator/>
+                    <filter string="Draft Orders" name="draft" domain="[('state','=','draft')]" help="Sales Order that haven't yet been confirmed"/>
+                    <filter string="Saved Sales Orders" name="sales" domain="[('state','=','sale')]"/>
+                    <separator/>
+                    <filter string="Unread Messages" name="message_needaction" domain="[('message_needaction','=',True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Salesperson" domain="[]" context="{'group_by':'user_id'}"/>
+                        <filter name="customer" string="Customer" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="Order Month" domain="[]" context="{'group_by':'date_order'}"/>
+                    </group>
+               </search>
+            </field>
+        </record>
+
+        <record id="action_private_orders" model="ir.actions.act_window">
+            <field name="name">Private Sales Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">private.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
+            <field name="search_view_id" ref="view_private_order_filter"/>
+            <field name="context">{'default_show_sale': True}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create your Private Sales Orders.
+                </p>
+            </field>
+        </record>
+
+
+        <record id="view_private_customer_tree" model="ir.ui.view">
+            <field name="name">private.customer.tree</field>
+            <field name="model">private.customer</field>
+            <field name="arch" type="xml">
+                <tree string="Private Customers">
+                    <field name="name"/>
+                    <field name="address" />
+                    <field name="function" placeholder="e.g. Sales Director"/>
+                    <field name="contact_person" />
+                    <field name="mobile" />
+                    <field name="email" />
+                    <field name="commence_date" />
+                    <field name="business_mode" />
+                    <field name="payment_mode" />
+                    <field name="payment_duration" />
+                    <field name="payment_schedule" />
+                    <field name="customer_type" />
+                    <field name="potential" />
+                    <!--<field name="category_ids" widget="many2many_tags" placeholder="Categories..."/>-->
+
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_private_customer_form" model="ir.ui.view">
+            <field name="name">private.customer.form</field>
+            <field name="model">private.customer</field>
+            <field name="arch" type="xml">
+                <form string="Private Customers">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                        <button name="action_view_order"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-pencil-square-o"
+                            attrs="{'invisible': [('order_count', '=', 0)]}">
+                            <field name="order_count" widget="statinfo" string="Private Orders"/>
+                        </button>
+
+                    </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" default_focus="1" placeholder="Name" />
+
+                            </h1>
+                        </div>
+                        <group col="4">
+                                 <field name="address" />
+                                <field name="function" placeholder="e.g. Sales Director"/>
+                                 <field name="contact_person" />
+                                 <field name="mobile" />
+                                 <field name="email" />
+                                 <field name="commence_date" />
+                                 <field name="business_mode" />
+                                 <field name="payment_mode" />
+                                 <field name="payment_duration" />
+                                 <field name="payment_schedule" />
+                                <field name="customer_type"  widget="many2many_tags" />
+                                <field name="potential" />
+                                <field name="user_id" />
+                                <!--<field name="category_ids" widget="many2many_tags" placeholder="Categories..."/>-->
+                                <field name="active"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_private_customer_filter" model="ir.ui.view">
+            <field name="name">private.customer.select</field>
+            <field name="model">private.customer</field>
+            <field name="arch" type="xml">
+                <search string="Private Customer">
+                   <field name="name"
+                       filter_domain="['|','|',('name','ilike',self),('ref','=',self),('email','ilike',self)]"/>
+                   <filter help="My Private Customers" domain="[('user_id','=',uid)]"/>
+                   <separator/>
+                   <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                   <separator/>
+                   <!--<field name="category_ids" string="Tag" filter_domain="[('category_ids','ilike', self)]"/>-->
+
+                   <group expand="0" name="group_by" string="Group By">
+                       <filter name="salesperson" string="Salesperson" domain="[]" context="{'group_by' : 'user_id'}" />
+                   </group>
+               </search>
+            </field>
+        </record>
+
+         <record id="action_private_customer_form" model="ir.actions.act_window">
+            <field name="name">Private Customers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">private.customer</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_private_customer_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add a new Private Customer
+              </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_private_customer_form" parent="menu_private_sales_marketing" action="action_private_customer_form" />
+         <menuitem action="action_private_orders"  id="menu_private_order" parent="menu_private_sales_marketing"    />
+
+
+
+
+
+        <!--- Marketing Reports -->
+
+         <record model="ir.ui.view" id="marketing_activity_pivot_view">
+            <field name="name">Marketing Activity Pivot</field>
+            <field name="model">marketing.activity</field>
+            <field name="arch" type="xml">
+                <pivot string="Marketing Activity">
+                    <field name="user_id" type="row"/>
+                    <field name="date" type="col"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="marketing_activity_graph_view">
+            <field name="name">Marketing Activity Graph</field>
+            <field name="model">marketing.activity</field>
+            <field name="arch" type="xml">
+                <graph string="Marketing Activity" type="bar">
+                    <field name="user_id" type="row"/>
+                    <field name="date" interval="month" type="col"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="view_marketing_activity_tree" model="ir.ui.view">
+            <field name="name">marketing.activity.tree</field>
+            <field name="model">marketing.activity</field>
+            <field name="arch" type="xml">
+                <tree string="Private Marketing Activities">
+                    <field name="date" />
+                    <field name="name"/>
+                    <field name="mobile" />
+                    <field name="territory_id" />
+                    <field name="speciality_id" />
+                    <field name="product_id" />
+                    <field name="outcome_id" />
+                    <field name="appointment_id" />
+                    <field name="next_app_date" />
+                    <field name="activity_type_id" />
+                    <field name="user_id" />
+                    <field name="state" />
+                     <field name="description" />
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_marketing_activity_form" model="ir.ui.view">
+            <field name="name">marketing.activity.form</field>
+            <field name="model">marketing.activity</field>
+            <field name="arch" type="xml">
+                <form string="Marketing Activities">
+                    <header>
+                    <button name="action_confirm" states="draft" type="object" string="Confirm" confirm="Confirmed Activities cannot be edited or deleted. only Managers are allowed to do so. Are you sure you want to confirm it? " />
+                   <button name="action_cancel" states="done" type="object" string="Cancel"  />
+                    <button name="action_draft" states="cancel" type="object" string="Set to Draft" groups="kin_private_order_crm.group_show_private_order_manager" />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                </header>
+                    <sheet>
+                        <group col="4">
+                                <field name="name" required="1" attrs="{'readonly': [('state', 'in', ('cancel','done'))]}"/>
+                                <field name="date" required="1" attrs="{'readonly': [('state', 'in', ('cancel','done'))]}" />
+                                <field name="mobile" attrs="{'readonly': [('state', 'in', ('cancel','done'))]}" />
+                                <field name="territory_id" attrs="{'readonly': [('state', 'in', ('cancel','done'))]}" />
+                                <field name="speciality_id" attrs="{'readonly': [('state', 'in', ('cancel','done'))]}"/>
+                                <field name="product_id" attrs="{'readonly': [('state', 'in', ('cancel','done'))]}" />
+                                <field name="outcome_id" attrs="{'readonly': [('state', 'in', ('cancel','done'))]}"/>
+                                <field name="appointment_id" attrs="{'readonly': [('state', 'in', ('cancel','done'))]}"/>
+                                <field name="next_app_date" attrs="{'readonly': [('state', 'in', ('cancel','done'))]}"/>
+                                <field name="user_id"  required="1"  attrs="{'readonly': [('state', 'in', ('cancel','done'))]}"/>
+                                <field name="activity_type_id"    attrs="{'readonly': [('state', 'in', ('cancel','done'))]}"/>
+                            <field name="description"   attrs="{'readonly': [('state', 'in', ('cancel','done'))]}"/>
+                        </group>
+                    </sheet>
+                     <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" />
+                    <field name="message_ids" widget="mail_thread" />
+                </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_marketing_activity_filter" model="ir.ui.view">
+            <field name="name">marketing.activity.select</field>
+            <field name="model">marketing.activity</field>
+            <field name="arch" type="xml">
+                <search string="Marketing Activities">
+                   <field name="name"
+                       filter_domain="['|','|',('name','ilike',self),('ref','=',self),('email','ilike',self)]"/>
+                   <filter help="My Marketing Activities" domain="[('user_id','=',uid)]"/>
+                    <filter  string="Draft" domain="[('state','=','draft')]" />
+                    <filter string="Confirmed" domain="[('state','=','done')]" />
+                   <separator/>
+                   <group expand="0" name="group_by" string="Group By">
+                       <filter name="salesperson" string="Salesperson" domain="[]" context="{'group_by' : 'user_id'}" />
+                        <filter name="territory_id" string="Address/Institution" domain="[]" context="{'group_by' : 'territory_id'}" />
+                       <filter name="speciality_id" string="Speciality" domain="[]" context="{'group_by' : 'speciality_id'}" />
+                       <filter name="product_id" string="Product Detailed" domain="[]" context="{'group_by' : 'product_id'}" />
+                       <filter name="outcome_id" string="Outcome" domain="[]" context="{'group_by' : 'outcome_id'}" />
+                       <filter name="appointment_id" string="Next Appointment" domain="[]" context="{'group_by' : 'appointment_id'}" />
+                       <filter name="date" string="Date" domain="[]" context="{'group_by' : 'date:day'}" />
+                       <filter name="next_app_date" string="Next Appointment Date" domain="[]" context="{'group_by' : 'next_app_date:week'}" />
+                       <filter name="activity_type_id" string="Activity Type" domain="[]" context="{'group_by' : 'activity_type_id'}" />
+                       <filter name="state" string="Status" domain="[]" context="{'group_by' : 'state'}" />
+                   </group>
+               </search>
+            </field>
+        </record>
+
+         <record id="action_marketing_activity_form" model="ir.actions.act_window">
+            <field name="name">Marketing Activities</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">marketing.activity</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="search_view_id" ref="view_marketing_activity_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add a new Marketing Activity
+              </p>
+            </field>
+        </record>
+
+         <record id="action_customer_type" model="ir.actions.act_window">
+            <field name="name">Customer Type</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">customer.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create Customer Type
+                </p>
+            </field>
+        </record>
+
+        <record id="action_marketing_territory" model="ir.actions.act_window">
+            <field name="name">Marketing Territory</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">marketing.territory</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create Marketing Teritory
+                </p>
+            </field>
+        </record>
+
+         <record id="action_marketing_speciality" model="ir.actions.act_window">
+            <field name="name">Marketing Speciality</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">marketing.speciality</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create Marketing Speciality
+                </p>
+            </field>
+        </record>
+
+        <record id="action_marketing_product" model="ir.actions.act_window">
+            <field name="name">Marketing Product</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">marketing.product</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create Marketing Product
+                </p>
+            </field>
+        </record>
+
+        <record id="action_marketing_outcome" model="ir.actions.act_window">
+            <field name="name">Marketing Outcome</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">marketing.outcome</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create Marketing Outcome
+                </p>
+            </field>
+        </record>
+
+        <record id="action_marketing_appointment" model="ir.actions.act_window">
+            <field name="name">Marketing Appointment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">marketing.appointment</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create Marketing Appointment
+                </p>
+            </field>
+        </record>
+
+        <record id="action_activity_type" model="ir.actions.act_window">
+            <field name="name">Activity Type</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">activity.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create Activity Type
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Configuration"   id="menu_marketing_config" parent="menu_private_sales_marketing"  groups="group_show_private_order_manager"  sequence="100"  />
+        <menuitem action="action_customer_type" id="menu_customer_type_config" parent="menu_marketing_config" />
+        <menuitem action="action_marketing_territory" id="menu_marketing_territory_config" parent="menu_marketing_config" />
+        <menuitem action="action_marketing_speciality" id="menu_marketing_speciality_config" parent="menu_marketing_config" />
+        <menuitem action="action_marketing_product" id="menu_marketing_product_config" parent="menu_marketing_config" />
+        <menuitem action="action_marketing_outcome" id="menu_marketing_outcome_config" parent="menu_marketing_config" />
+        <menuitem action="action_marketing_appointment" id="menu_marketing_appointment_config" parent="menu_marketing_config" />
+        <menuitem action="action_activity_type" id="menu_marketing_activity_type_config" parent="menu_marketing_config" />
+
+
+
+         <menuitem action="action_marketing_activity_form"  id="menu_private_marketing_activity" parent="menu_private_sales_marketing" />
+        <menuitem name="Calendar" id="mail_menu_calendar_marketing"  action="calendar.action_calendar_event" parent="menu_private_sales_marketing" />
+    </data>
+</odoo>

@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- SBU -->
+        <record id="view_sbu_form" model="ir.ui.view">
+            <field name="name">sbu.form</field>
+            <field name="model">sbu</field>
+            <field name="arch" type="xml">
+                <form string="SBU">
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="sbu_analytic_account_id" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+         </record>
+
+         <record id="view_sbu_tree" model="ir.ui.view" >
+            <field name="name" >sbu.tree</field>
+            <field name="model">sbu</field>
+            <field name="arch" type="xml" >
+                <tree string="SBU"  >
+                    <field name="name" />
+                    <field name="sbu_analytic_account_id" />
+                </tree>
+            </field>
+         </record>
+
+         <record id="view_sbu_filter" model="ir.ui.view">
+            <field name="name">sbu.tree</field>
+            <field name="model">sbu</field>
+            <field name="arch" type="xml">
+                <search string="SBU Filter">
+                      <field name="name" string="Name/Analytic Acct."  filter_domain="['|',('name','ilike',self),('sbu_analytic_account_id','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                       <filter  string="Analytic Account" domain="[]" context="{'group_by':'sbu_analytic_account_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_sbu" model="ir.actions.act_window">
+            <field name="name">SBU</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sbu</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_sbu_filter"/>
+        </record>
+
+        <menuitem id="account_sbu_menu"    action="action_sbu"    sequence="33"    parent="account.account_account_menu"/>
+
+
+
+        <!-- Shared Service Allocation Table -->
+          <record id="view_shared_service_allocation_tree" model="ir.ui.view" >
+            <field name="name" >shared.service.allocation.tree</field>
+            <field name="model">shared.service.allocation</field>
+            <field name="arch" type="xml" >
+                <tree string="Shared Service Allocation" editable="bottom" >
+                            <field name="hr_department_id" />
+                            <field name="sbu_id"  />
+                            <field name="percentage_allocation"  />
+                </tree>
+            </field>
+         </record>
+
+
+        <record id="view_shared_service_allocation_filter" model="ir.ui.view">
+            <field name="name">shared.service.allocation.tree</field>
+            <field name="model">shared.service.allocation</field>
+            <field name="arch" type="xml">
+                <search string="Shared Service Allocation Filter">
+                      <field name="sbu_id" string="sbu/department"  filter_domain="['|',('sbu_id','ilike',self),('hr_department_id','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter  string="SBU" domain="[]" context="{'group_by':'sbu_id'}"/>
+                       <filter  string="Shared Service" domain="[]" context="{'group_by':'hr_department_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_shared_service_allocation" model="ir.actions.act_window" >
+            <field name="name" >Shared Service Allocation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">shared.service.allocation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="view_shared_service_allocation_filter"/>
+        </record>
+        <menuitem id="menu_shared_service_allocation" name="Shared Service Allocation" parent="account.account_account_menu" sequence="34" action="action_shared_service_allocation"/>
+
+
+<record id="invoice_form_extend_rog" model="ir.ui.view">
+            <field name="name">account.invoice.form.extend_rog</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form" />
+            <field name="arch" type="xml">
+                <field name="reference" position="after"  >
+                        <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                        <field name="hr_department_id"  domain="[('is_show_other_apps','=',True)]" options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+
+                </field>
+                <field name="date_due" position="after" >
+                    <group name="date_changes" string="Date Approvals">
+                        <field name="is_date_changed" readonly="1" />
+                        <field name="is_date_approved" readonly="1" />
+                        <field name="date_changed_by"  />
+                        <field name="date_approved_by"  />
+                    </group>
+                </field>
+            </field>
+</record>
+
+
+          <record id="invoice_supplier_form_extend_rog" model="ir.ui.view">
+            <field name="name">account.invoice.supplier.form.extend</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form" />
+            <field name="arch" type="xml">
+                <field name="reference" position="after" >
+                     <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                        <field name="hr_department_id" domain="[('is_show_other_apps','=',True)]" options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+                </field>
+                 <field name="date" position="after" >
+                    <group name="date_changes" string="Date Approvals">
+                        <field name="is_date_changed" readonly="1" />
+                        <field name="is_date_approved" readonly="1" />
+                        <field name="date_changed_by" readonly="1" />
+                        <field name="date_approved_by" readonly="1" />
+                    </group>
+                </field>
+            </field>
+          </record>
+
+         <record id="view_move_form_extend_rog" model="ir.ui.view" >
+            <field name="name" >account.move.form.extend.rog</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form" />
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after" >
+                    <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                    <field name="hr_department_id" domain="[('is_show_other_apps','=',True)]"  options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                    <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+                    <field name="is_ssa_allow_split" groups="rog_modifications.group_ssa_split_rog" />
+                    <field name="loan_id" domain="[('state','=','approve')]" options="{'no_open':True,'no_create':True}"  />
+                </field>
+            </field>
+         </record>
+
+        <!--<record id="view_account_payment_invoice_form_extend_rog" model="ir.ui.view">-->
+            <!--<field name="name">account.payment.invoice.form.extend.rog</field>-->
+            <!--<field name="model">account.payment</field>-->
+            <!--<field name="inherit_id" ref="account.view_account_payment_invoice_form" />-->
+            <!--<field name="arch" type="xml">-->
+               <!--<field name="communication" position="after">-->
+                    <!--<field name="is_ssd_sbu" widget="radio" required="1"  />-->
+                        <!--<field name="hr_department_id"  domain="[('is_show_other_apps','=',True)]" options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />-->
+                        <!--<field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />-->
+                <!--</field>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <record id="view_account_payment_form_extend_rog" model="ir.ui.view">
+            <field name="name">account.payment.form.extend.rog</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form" />
+            <field name="arch" type="xml">
+               <field name="communication" position="after">
+                    <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                        <field name="hr_department_id"  domain="[('is_show_other_apps','=',True)]" options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+                </field>
+                <!--<field name="payment_date" position="after" >-->
+                        <!--<field name="is_date_changed" readonly="1" />-->
+                        <!--<field name="is_date_approved" readonly="1" />-->
+                        <!--<field name="date_changed_by" readonly="1" />-->
+                        <!--<field name="date_approved_by" readonly="1" />-->
+                <!--</field>-->
+            </field>
+        </record>
+
+
+         <record model="ir.ui.view" id="view_purchase_receipt_form_extend_rog">
+            <field name="name">account.voucher.purchase.form.extend.rog</field>
+            <field name="model">account.voucher</field>
+             <field name="inherit_id" ref="account_voucher_extend.view_purchase_receipt_form" />
+            <field name="arch" type="xml">
+                <field name="reference" position="after"  >
+                     <field name="is_ssd_sbu" widget="radio" required="1"  groups="rog_modifications.group_ssa_rog"  />
+                        <field name="hr_department_id"  domain="[('is_show_other_apps','=',True)]" options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+                </field>
+            </field>
+         </record>
+
+
+         <record model="ir.ui.view" id="view_account_fiscalyear_closing_form_extend_rog">
+            <field name="name">account.fiscalyear.closing.form.extend.rog</field>
+            <field name="model">account.fiscalyear.closing</field>
+             <field name="inherit_id" ref="account_fiscal_year_closing.view_account_fiscalyear_closing_form" />
+            <field name="arch" type="xml">
+                <field name="closing_template_id" position="after"  >
+                     <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"   />
+                        <field name="hr_department_id"  domain="[('is_show_other_apps','=',True)]" options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+                </field>
+            </field>
+         </record>
+
+
+        <record model="ir.ui.view" id="view_bank_statement_form_extend_rog">
+            <field name="name">account.bank.statement.form.extend.rog</field>
+            <field name="model">account.bank.statement</field>
+             <field name="inherit_id" ref="account.view_bank_statement_form" />
+            <field name="arch" type="xml">
+
+                <field name="date" position="after"  >
+                     <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                        <field name="hr_department_id"  domain="[('is_show_other_apps','=',True)]" options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+                </field>
+            </field>
+         </record>
+
+
+
+
+        <record model="ir.ui.view" id="view_account_asset_asset_form_extend_rog">
+            <field name="name">account.asset.asset.form.extend.rog</field>
+            <field name="model">account.asset.asset</field>
+             <field name="inherit_id" ref="account_asset.view_account_asset_asset_form" />
+            <field name="arch" type="xml">
+                <field name="date" position="after"  >
+                     <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                        <field name="hr_department_id" domain="[('is_show_other_apps','=',True)]"   options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+                </field>
+                 <field name="category_id" position="after" >
+                  <field name="department_id" required="1" options="{'no_open':True,'no_create':True}" />
+                    <field name="code1"  />
+              </field>
+            </field>
+         </record>
+
+
+         <record id="view_move_line_form_rog_extend" model="ir.ui.view">
+            <field name="name">account.move.line.form.rog.extend</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_move_line_form"/>
+            <field name="arch" type="xml">
+                <field name="move_id" position="before">
+                    <field name="hr_department_id"   />
+                    <field name="loan_id" />
+                </field>
+            </field>
+        </record>
+
+
+         <record id="account_payment_group_view_form_rog_extend" model="ir.ui.view"  >
+            <field name="name" >account.payment.group.form.rog.extend</field>
+            <field name="model">account.payment.group</field>
+            <field name="inherit_id" ref="account_payment_group.view_account_payment_group_form" />
+            <field name="arch" type="xml" >
+                <notebook position="inside">
+                    <page string="Others">
+                       <group name="date_changes" string="Date Approvals">
+                            <field name="is_date_changed" readonly="1" />
+                            <field name="is_date_approved" readonly="1" />
+                            <field name="date_changed_by" readonly="1" />
+                            <field name="date_approved_by" readonly="1" />
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+         </record>
+
+
+<!-- Asset Extend -->
+        <record model="ir.ui.view" id="view_account_asset_category_form_extend">
+        <field name="name">account.asset.category.form</field>
+        <field name="model">account.asset.category</field>
+         <field name="inherit_id" ref="account_asset.view_account_asset_category_form" />
+        <field name="arch" type="xml">
+              <field name="prorata" position="after" >
+                  <field name="code"  required="1" />
+                  <field name="last_number" />
+              </field>
+        </field>
+        </record>
+
+
+
+    <record model="ir.ui.view" id="view_account_asset_asset_purchase_tree_extend">
+        <field name="name">account.asset.asset.purchase.tree</field>
+        <field name="model">account.asset.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_asset_purchase_tree" />
+        <field name="arch" type="xml">
+                <field name="category_id" position="after" >
+                     <field name="department_id" />
+                     <field name="code1" />
+              </field>
+        </field>
+    </record>
+
+          <record id="view_department_form_rog_extend" model="ir.ui.view">
+            <field name="name">hr.department.form</field>
+            <field name="model">hr.department</field>
+               <field name="inherit_id" ref="hr.view_department_form" />
+            <field name="arch" type="xml">
+                    <field name="company_id" position="after" >
+                     <field name="code" required="1" />
+              </field>
+            </field>
+          </record>
+
+
+
+         <record model="ir.ui.view" id="view_purchase_receipt_form_rog">
+            <field name="name">account.voucher.purchase.form.rog</field>
+            <field name="model">account.voucher</field>
+             <field name="inherit_id" ref="account_voucher_extend.view_purchase_receipt_form" />
+            <field name="arch" type="xml">
+                      <field name="partner_id" position="replace" >
+                          <field name="partner_id" string="Partner/Employee" options="{'no_open':True,'no_create':True}" />
+                      </field>
+            </field>
+         </record>
+
+
+
+        </data>
+</openerp>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+	<data>
+
+
+    <record model="ir.sequence" id="seq_vessel_charter_id">
+        <field name="name">VESSEL CHARTER ID</field>
+        <field name="code">vesselc_code</field>
+        <field name="prefix">VC</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+ <record model="ir.sequence" id="seq_ship_to_ship_id">
+        <field name="name">Ship To Ship</field>
+        <field name="code">sts_code</field>
+        <field name="prefix">STS</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+    <record model="ir.sequence" id="seq_rog_customer_id">
+        <field name="name">ROG Customer ID</field>
+        <field name="code">rog_code</field>
+        <field name="prefix"></field>
+        <field name="padding">10</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+   <record model="ir.sequence" id="seq_import_permit_id">
+        <field name="name">Import Permit</field>
+        <field name="code">ip_code</field>
+        <field name="prefix">IP</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+         <record model="ir.sequence" id="seq_tender_prop_id">
+        <field name="name">Tender Proposal Evaluation</field>
+        <field name="code">tpe_code</field>
+        <field name="prefix">TPE</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+         <record model="ir.sequence" id="seq_good_ver_id">
+        <field name="name">Goods Verification</field>
+        <field name="code">gv_code</field>
+        <field name="prefix">GV</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+         <record model="ir.sequence" id="seq_sup_eva_id">
+        <field name="name">Supplier Evaluation</field>
+        <field name="code">sev_code</field>
+        <field name="prefix">SEV</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+        <record model="ir.sequence" id="seq_rule_rog_id">
+        <field name="name">Rule ROG ID</field>
+        <field name="code">rule_rog_id_code</field>
+        <field name="prefix">RUL</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+
+
+	</data>
+</openerp>

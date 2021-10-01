@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="account_payment_group_view_form_extend" model="ir.ui.view"  >
+            <field name="name" >account.payment.group.form.extend</field>
+            <field name="model">account.payment.group</field>
+            <field name="inherit_id" ref="account_payment_group.view_account_payment_group_form" />
+            <field name="arch" type="xml" >
+
+                <button name="post" position="after" >
+                    <button name="action_receipt_sent" type="object" string="Send by Email"  states="posted" groups="kin_account_payment_group.group_show_send_by_email_button_receipt"/>
+                </button>
+
+
+                    <xpath  expr="//div[@class='oe_title']" position="replace">
+                                <div class="oe_title"  >
+                                    <h2><field name="name" attrs="{'invisible': [('state', '==', 'draft')]}"  /></h2>
+                                    <p attrs="{'invisible': [('state', '!=', 'draft')]}"  >Draft Receipt</p>
+                                </div>
+                    </xpath>
+                <field name="partner_id" position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+                <button name="post" position="attributes" >
+                    <attribute name="groups" >kin_account_payment_group.group_show_payment_validate_button</attribute>
+                </button>
+                <button name="cancel" position="attributes" >
+                    <attribute name="groups" >kin_account_payment_group.group_show_cancel_btn_payment_group</attribute>
+                </button>
+                <field name="selected_debt" position="after" >
+                    <field name="narration" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                    <field name="payment_voucher_no" attrs="{'readonly': [('state', '!=', 'draft')]}"  />
+                    <field name="partner_tag_ids"  widget="many2many_tags"  readonly="True" />
+                    <field name="user_id" readonly="1" />
+                </field>
+
+            </field>
+        </record>
+
+        <record id="account_payment_group_view_tree_extend" model="ir.ui.view"  >
+            <field name="name" >account.payment.group.tree.extend</field>
+            <field name="model">account.payment.group</field>
+            <field name="inherit_id" ref="account_payment_group.view_account_payment_group_tree" />
+            <field name="arch" type="xml" >
+                <field name="payment_date" position="before" >
+                    <field name="name" attrs="{'invisible': [('state', '==', 'draft')]}"  />
+                    <field name="payment_voucher_no" />
+<!--                    <field name="partner_tag_ids" />-->
+
+                </field>
+            </field>
+        </record>
+
+
+         <record id="account_payment_group_view_search_extend" model="ir.ui.view"  >
+            <field name="name" >account.payment.group.search.extend</field>
+            <field name="model">account.payment.group</field>
+            <field name="inherit_id" ref="account_payment_group.view_account_payment_group_search" />
+            <field name="arch" type="xml" >
+                <field name="display_name" position="after" >
+                    <field name="name" />
+                    <field name="payment_voucher_no" />
+                </field>
+                <field name="partner_id" position="after" >
+                    <field name="partner_tag_ids" widget="many2many_tags"  readonly="True" />
+                </field>
+            </field>
+        </record>
+
+
+ <record id="account_payment_transfer_form_extend" model="ir.ui.view"  >
+            <field name="name" >account.payment.transfer.form.extend</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account_payment_group.view_account_payment_form" />
+            <field name="arch" type="xml" >
+                <button name="post" position="attributes" >
+                        <attribute name="groups" >kin_account_payment_group.group_show_confirm_btn_bank_cash</attribute>
+                </button>
+                 <button name="cancel" position="attributes" >
+                        <attribute name="groups" >kin_account_payment_group.group_show_cancel_btn_bank_cash</attribute>
+                </button>
+                <field name="payment_type_copy" position="attributes" >
+                    <attribute name="groups" >kin_account_payment_group.group_show_payment_type_option</attribute>
+                </field>
+            </field>
+ </record>
+
+         <record id="account_payment_extend" model="ir.ui.view"  >
+            <field name="name" >account.payment.extend</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form" />
+            <field name="arch" type="xml" >
+                <field name="partner_id" position="after" >
+                    <field name="partner_tag_ids" widget="many2many_tags"  readonly="True" />
+                </field>
+                <field name="payment_date" position="attributes" >
+                    <!--Because of the internal transfer. so it has to be visible-->
+                    <attribute name="invisible" >False</attribute>
+                </field>
+                <field name="communication" position="attributes" >
+                    <attribute name="required" >True</attribute>
+                    <attribute name="help" >The Content Shows in the Partner Reference in the Journal Items</attribute>
+                </field>
+
+            </field>
+        </record>
+
+        <record id="account_payment_form_group_tree_extend" model="ir.ui.view"  >
+            <field name="name" >account.payment.tree.extend</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account_payment_group.view_account_payment_from_group_tree" />
+            <field name="arch" type="xml" >
+                <field name="amount_company_currency" position="before" >
+                    <field name="company_payment_id" invisible="1"  />
+                </field>
+
+            </field>
+          </record>
+
+  <menuitem id="customer_payment_analysis" string="Customer's Payment Analysis"  action="account.action_account_payments" parent="base.menu_sales"  groups="kin_account.group_show_customer_payment_analysis"  sequence="25"/>
+
+        <record model="ir.ui.view" id="view_company_payment_group_extend">
+                    <field name="name">res.company.form.payment.group.extend</field>
+                    <field name="inherit_id" ref="base.view_company_form"/>
+                    <field name="model">res.company</field>
+                    <field name="arch" type="xml">
+                        <notebook position="inside">
+                            <page string="Payment">
+                                <group>
+                                    <field name="is_restrict_payment_voucher_no"  />
+                                </group>
+                            </page>
+                        </notebook>
+                    </field>
+                </record>
+    </data>
+</openerp>

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<record id="paperformat_loading_ticket" model="report.paperformat">
+            <field name="name">Loading Ticket</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">160</field>
+            <field name="page_width">60</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">3</field>
+            <field name="margin_bottom">3</field>
+            <field name="margin_left">3</field>
+            <field name="margin_right">3</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">3</field>
+            <field name="dpi">130</field>
+        </record>
+		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
+		<!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
+		<report
+		    id="action_report_loading_ticket"
+		    model="stock.picking"
+		    string="Loading Ticket"
+		    report_type="qweb-pdf"
+		    name="kin_loading.report_loading_ticket"
+		    file="kin_loading.report_loading_ticket"
+		    attachment_use="False"
+			menu="False"
+			paperformat="paperformat_loading_ticket"
+		/>
+		<record id="action_report_loading_ticket" model="ir.actions.report.xml" >
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_no_one')])]"  />
+        </record>
+
+		<template id="report_loading_ticket">
+	    <t t-call="report.html_container">
+	        <t t-foreach="docs" t-as="o">
+				<t t-call="kin_loading.custom_loading_layout"  >
+				<div class="page"  >
+					<style type="text/css">
+							<t t-call="kin_loading.style"/>
+						</style>
+					<br />
+					<br />
+					<div class="row" >
+						<div class="col-xs-7" >
+							<span><b>LOADING TICKET</b></span>
+						</div>
+						<div class="col-xs-5" >
+							<b>No.</b>
+							<span t-field="o.name" />
+						</div>
+					</div>
+				<u>_______________________________________</u>
+					<div class="row" >
+						<div class="col-xs-11 col-xs-offset-1"  >
+							<span><b>AUTHORIZATION FORM NO. </b></span><span t-field="o.authorization_form_no" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-6">
+							<span><b>Product: </b></span><span t-field="o.move_lines[0].product_id" />
+						</div>
+						<div class="col-xs-6">
+							<span><b>Date:   </b></span><span t-field="o.ticket_date" />
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12">
+							<span><b>Truck No:  </b></span><span t-field="o.truck_no" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<span><b>Quantity Required:  </b></span><span t-field="o.move_lines[0].product_uom_qty" /> <span t-field="o.move_lines[0].product_uom" />
+						</div>
+					</div>
+					<br />
+						<div class="row">
+							<div class="col-xs-12" >
+								<table  style="width: 100%" class=" table-bordered-black" cellpadding="3" cellspacing="0" >
+									<thead>
+										<tr>
+											<td width="25%" class="text-center" ><span><b>Compt.</b></span></td>
+											<td width="25%" class="text-center" ><span><b>Quantity</b></span></td>
+											<td width="25%" class="text-center" ><span><b>Compt.</b></span></td>
+											<td width="25%" class="text-center" ><span><b>Quantity</b></span></td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td width="25%" class="text-center" ><span><b>1</b></span></td>
+											<td width="25%" class="text-center" ><span t-field="o.comp1_vol" /></td>
+											<td width="25%" class="text-center" ><span><b>5</b></span></td>
+											<td width="25%" class="text-center" ><span t-field="o.comp5_vol" /></td>
+										</tr>
+										<tr>
+											<td width="25%" class="text-center" ><span><b>2</b></span></td>
+											<td width="25%" class="text-center" ><span t-field="o.comp2_vol" /></td>
+											<td width="25%" class="text-center" ><span><b>6</b></span></td>
+											<td width="25%" class="text-center" ><span t-field="o.comp6_vol" /></td>
+										</tr>
+										<tr>
+											<td width="25%" class="text-center" ><span><b>3</b></span></td>
+											<td width="25%" class="text-center" ><span t-field="o.comp3_vol" /></td>
+											<td width="25%" class="text-center" ><span><b>7</b></span></td>
+											<td width="25%" class="text-center" ><span t-field="o.comp7_vol" /></td>
+										</tr>
+										<tr>
+											<td width="25%" class="text-center" ><span><b>4</b></span></td>
+											<td width="25%" class="text-center" ><span t-field="o.comp4_vol" /></td>
+											<td width="25%" class="text-center" ><span><b>8</b></span></td>
+											<td width="25%" class="text-center" ><span t-field="o.comp8_vol" /></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					<br />
+						<div class="row">
+							<div class="col-xs-12">
+								<span><b>Customer's Name:  </b></span><span t-field="o.partner_id" />
+							</div>
+							<div class="col-xs-12">
+								<span><b>Address:  </b></span><span t-field="o.receiving_station_address" />
+							</div>
+							<div class="col-xs-12">
+								<span><b>Location:  </b></span><span t-field="o.partner_id.street" />
+							</div>
+							<div class="col-xs-12">
+								<span><b>Loader's Name:  </b></span><span t-field="o.loader_id" />
+							</div>
+							<div class="col-xs-12">
+								<span><b>Signature and Date:  </b></span><span>_____________________</span>
+							</div>
+							<br />
+							<!--<div class="col-xs-12" t-if="o.pack_operation_product_ids" >-->
+								<!--<span><b>Quantity Loaded:  </b></span><span t-field="o.pack_operation_product_ids[0].qty_done" />-->
+							<!--</div>-->
+							<div class="col-xs-12" >
+								<span><b>Quantity Loaded:  </b></span><span>_____________________</span>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12">
+								<span><b>Haulage</b></span>
+							</div>
+							<div class="col-xs-12">
+								<table style="width: 100%" class=" table-bordered-black" cellpadding="3" cellspacing="0" >
+								<tbody>
+									<tr>
+									<td width="25%" class="text-center" ><span><b>1</b></span></td>
+									<td width="75%" class="text-center" ><span t-field="o.comp1_ullage" /></td>
+									</tr>
+									<tr>
+									<td width="25%" class="text-center" ><span><b>2</b></span></td>
+									<td width="75%" class="text-center" ><span t-field="o.comp2_ullage" /></td>
+									</tr>
+									<tr>
+									<td width="25%" class="text-center" ><span><b>3</b></span></td>
+									<td width="75%" class="text-center" ><span t-field="o.comp3_ullage" /></td>
+									</tr>
+									<tr>
+									<td width="25%" class="text-center" ><span><b>4</b></span></td>
+									<td width="75%" class="text-center" ><span t-field="o.comp4_ullage" /></td>
+									</tr>
+									<tr>
+									<td width="25%" class="text-center" ><span><b>5</b></span></td>
+									<td width="75%" class="text-center" ><span t-field="o.comp5_ullage" /></td>
+									</tr>
+									<tr>
+									<td width="25%" class="text-center" ><span><b>6</b></span></td>
+									<td width="75%" class="text-center" ><span t-field="o.comp6_ullage" /></td>
+									</tr>
+									<tr>
+									<td width="25%" class="text-center" ><span><b>7</b></span></td>
+									<td width="75%" class="text-center" ><span t-field="o.comp7_ullage" /></td>
+									</tr>
+									<tr>
+									<td width="25%" class="text-center" ><span><b>8</b></span></td>
+									<td width="75%" class="text-center" ><span t-field="o.comp8_ullage" /></td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12" >
+							<span><b>Seal No. TOP:  </b></span><span t-field="o.seal_no_top" />
+						</div>
+						<div class="col-xs-12" >
+							<span><b>Seal No. BOTTOM:  </b></span><span t-field="o.seal_no_bottom" />
+						</div>
+						<div class="col-xs-12" >
+								<span><b>Water Content:  </b></span><span t-field="o.is_water_content" />
+						</div>
+						<div class="col-xs-12" >
+							<span><b>Driver's Name:  </b></span><span t-field="o.driver_id" />
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12" >
+							<span><b>Dispatch Officer's Name:  </b></span><span>________________</span>
+						</div>
+						<div class="col-xs-12">
+								<span><b>Signature and Date:  </b></span><span>_____________________</span>
+						</div>
+						<div class="col-xs-12" >
+							<span><b>Supervisor's Name:  </b></span><span>_____________________</span>
+						</div>
+						<div class="col-xs-12">
+								<span><b>Signature and Date:  </b></span><span>_____________________</span>
+						</div>
+					</div>
+					<u>_______________________________________</u>
+					<div class="row">
+						<div class="col-xs-12" >
+							<span t-field="o.partner_id.company_id.loading_tc_note" />
+						</div>
+					</div>
+					<u>_______________________________________</u>
+
+					<div class="row">
+					</div>
+				</div>
+			</t>
+		</t>
+		</t>
+		</template>
+
+
+	</data>
+</openerp>

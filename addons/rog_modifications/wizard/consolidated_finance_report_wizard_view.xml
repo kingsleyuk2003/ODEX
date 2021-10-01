@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record  id="view_consolidated_finance_report_wizard" model="ir.ui.view" >
+                <field name="name">Consolidated Finance Report Wizard</field>
+                <field name="model">consolidated.finance.report.wizard</field>
+                <field name="arch" type="xml" >
+                <form string="Consolidated Finance Report Wizard" >
+                    <p>The white fields are not compulsory. The Blue fields are compulsory</p>
+                     <group col="4" colspan="4" >
+                         <field name="start_date" />
+                         <field name="type" required="1" />
+                         <field name="end_date" />
+                         <field name="summary_detail" />
+                    </group>
+                    <group col="4" colspan="4" >
+                         <field name="partner_id" options="{'no_open':True,'no_create':True}"  />
+                         <field name="product_ids"  widget="many2many_tags" domain="[('type','=','product')]"  options="{'no_open':True,'no_create':True}" />
+                    </group>
+                        <footer>
+                            <button default_focus="1" icon="gtk-execute" name="consolidated_finance_excel_report" string="Export" type="object"  colspan="2" class="oe_highlight" />
+                            or <button special="cancel" class="oe_link"  string="Cancel"  />
+                        </footer>
+                </form>
+             </field>
+        </record>
+
+		<record id="action_consolidated_finance_report_wizard" model="ir.actions.act_window">
+            <field name="name">Generate Consolidated Finance Report</field>
+            <field name="res_model">consolidated.finance.report.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_consolidated_finance_report_wizard"/>
+            <field name="context">{}</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="target">new</field>
+        </record>
+
+
+
+   </data>
+</openerp>

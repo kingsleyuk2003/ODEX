@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		   <record id="property_rule_employee_payslip_extend" model="ir.rule">
+        <field name="name">All Payslips</field>
+        <field name="model_id" ref="model_hr_payslip"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4,ref('base.group_hr_user'))]"/>
+    </record>
+
+         <record id="rule_resource_leave_calendar" model="ir.rule">
+        <field name="name">Resource Calendar Leaves Access</field>
+        <field name="model_id" ref="resource.model_resource_calendar_leaves"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+    </record>
+
+
+
+	</data>
+</openerp>

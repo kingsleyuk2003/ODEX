@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+        <record  id="view_pfa_report_wizard_rog" model="ir.ui.view" >
+                <field name="name">PFA Report Wizard</field>
+                <field name="model">pfa.report.wizard</field>
+              <field name="inherit_id" ref="kin_hr.view_pfa_report_wizard" />
+                <field name="arch" type="xml" >
+                 <field name="end_date" position="after"  >
+                     <field name="select_per" required="1" />
+                 </field>
+             </field>
+        </record>
+
+
+   </data>
+</openerp>

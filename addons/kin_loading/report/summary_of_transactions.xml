@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
+		<!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
+		<report
+		    id="action_report_summary_of_transactions"
+		    model="res.partner"
+		    string="Summary of Transactions "
+		    report_type="qweb-pdf"
+		    name="kin_loading.report_order_sot"
+		    file="kin_loading.report_order_sot"
+		    attachment_use="False"
+			menu="True"
+		/>
+
+
+		<template id="report_order_sot">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="kin_report.custom_layout"  >
+						<div class="page"  >  <!-- Start of Page -->
+							<style type="text/css">
+								<t t-call="kin_loading.style"/>
+							</style>
+							<br/>
+							<div class="row">
+								<div class="col-xs-12 text-center"  >
+									<h3><b>Summary of Transactions (SOT)</b></h3>
+								</div>
+							</div>
+							<br/>
+							<div class="row">
+								<div class="col-xs-6"  >
+									<b>Customer's Name : </b><span t-field="o.name" />
+								</div>
+								<div class="col-xs-6"  >
+									<b>Customer's No. : </b><span t-field="o.ref" />
+								</div>
+							</div>
+
+							<t t-set="total_balance" t-value="0" />
+							<t t-foreach="o.sale_order_ids" t-as="order"> <!-- Beg. of order loop -->
+								<br />
+								<br />
+								<div class="row">
+									<div class="col-xs-12"  >
+										<b>Order ID : <span t-field="order.name" /></b>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-12 text-center"  >
+										<b><u>Purchases</u></b>
+									</div>
+								</div>
+								<div class="row" >
+									<div class="col-xs-12"  >
+										<table  style="width: 100%;" class="mt8 table-bordered-black" cellpadding="3" cellspacing="0" >
+											<thead>
+												<tr>
+													<th><span>Date</span></th>
+													<th><span>Product</span></th>
+													<th><span>Qty. (Ltrs)</span></th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr t-foreach="order.order_line" t-as="order_line">
+													<td t-if="not order_line.order_id.parent_sales_order_transfer_id" ><span t-field="order_line.date_order"/></td>
+													<td t-if="not order_line.order_id.parent_sales_order_transfer_id" ><span t-field="order_line.product_id.name"/></td>
+													<td t-if="not order_line.order_id.parent_sales_order_transfer_id" ><span t-field="order_line.product_uom_qty"/></td>
+	<!--												<td t-if="p.appears_on_payslip" ><span t-esc="'{:,.2f}'.format(p.total)" /></td>-->
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-xs-12 text-center"  >
+										<b><u>Received From Others</u></b>
+									</div>
+								</div>
+								<div class="row" >
+									<div class="col-xs-12"  >
+										<table  style="width: 100%;" class="mt8 table-bordered-black" cellpadding="3" cellspacing="0" >
+											<thead>
+												<tr>
+													<th><span>Date</span></th>
+													<th><span>Received From</span></th>
+													<th><span>Product</span></th>
+													<th><span>Qty. (Ltrs)</span></th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr t-foreach="order.order_line" t-as="order_line">
+													<td t-if="order_line.order_id.parent_sales_order_transfer_id" ><span t-field="order_line.date_order"/></td>
+													<td t-if="order_line.order_id.parent_sales_order_transfer_id" ><span t-field="order_line.order_id.parent_sales_order_transfer_id.partner_id.name"/></td>
+													<td t-if="order_line.order_id.parent_sales_order_transfer_id" ><span t-field="order_line.product_id.name"/></td>
+													<td t-if="order_line.order_id.parent_sales_order_transfer_id" ><span t-field="order_line.product_uom_qty"/></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-xs-12 text-center"  >
+										<b><u>Transferred</u></b>
+									</div>
+								</div>
+								<div class="row" >
+									<div class="col-xs-12"  >
+										<table  style="width: 100%;" class="mt8 table-bordered-black" cellpadding="3" cellspacing="0" >
+											<thead>
+												<tr>
+													<th><span>Date</span></th>
+													<th><span>Transferred To</span></th>
+													<th><span>Product</span></th>
+													<th><span>Qty. (Ltrs)</span></th>
+												</tr>
+											</thead>
+											<tbody>
+												<t t-foreach="order.child_sale_order_transfer_ids" t-as="child_order">
+													<tr t-foreach="child_order.order_line" t-as="order_line">
+														<td><span t-field="order_line.date_order"/></td>
+														<td><span t-field="order_line.order_partner_id.name"/></td>
+														<td><span t-field="order_line.product_id.name"/></td>
+														<td><span t-field="order_line.product_uom_qty"/></td>
+													</tr>
+												</t>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-xs-12 text-center"  >
+										<b><u>Loaded</u></b>
+									</div>
+								</div>
+								<div class="row" >
+									<div class="col-xs-12"  >
+										<table  style="width: 100%;" class="mt8 table-bordered-black" cellpadding="3" cellspacing="0" >
+											<thead>
+												<tr>
+													<th><span>Date</span></th>
+													<th><span>Product</span></th>
+													<th><span>Qty. (Ltrs)</span></th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr t-foreach="order.picking_ids" t-as="picking_id">
+													<td t-if="picking_id.state == 'done'" ><span t-field="picking_id.loaded_date"/></td>
+													<td t-if="picking_id.state == 'done'" ><span t-field="picking_id.product_id.name"/></td>
+													<td t-if="picking_id.state == 'done'"><span t-field="picking_id.total_dispatch_qty"/></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<br />
+								<br />
+								<div class="row">
+									<div class="col-xs-12"  >
+										<t t-set="total_balance" t-value="total_balance + order.order_line[0].balance_qty" />
+										<b><span t-field="order.name" /> Balance Qty. : <span t-field="order.order_line[0].balance_qty" /></b>
+									</div>
+								</div>
+							</t> <!-- End of of order loop -->
+							<br />
+							<br />
+							<div class="row">
+								<div class="col-xs-12"  >
+									<h4><b>Total Balance Qty. for all Orders: <span t-esc="'{:,.2f}'.format(total_balance)" /></b></h4>
+								</div>
+							</div>
+
+						</div> <!-- End of Page -->
+					</t>
+				</t>
+			</t>
+		</template>
+
+
+	</data>
+</openerp>

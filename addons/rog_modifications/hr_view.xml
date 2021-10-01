@@ -1,0 +1,642 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+         <menuitem id="hr_recruitment.menu_hr_recruitment_root" parent="kin_hr.hr_menus" sequence="6" name="Recruitment"    />
+
+        <record model="ir.ui.menu" id="hr_holidays.menu_hr_holidays_root">
+            <field name="name" >Leave Management</field>
+        </record>
+
+        <record id="hr_rog_band_form" model="ir.ui.view">
+            <field name="name">hr.rog.band.form</field>
+            <field name="model">hr.rog.band</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="sequence" />
+                             <field name="name" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+         <record id="view_hr_rog_band_tree" model="ir.ui.view" >
+            <field name="name" >hr.rog.band.tree</field>
+            <field name="model">hr.rog.band</field>
+            <field name="arch" type="xml" >
+                <tree>
+                    <field name="sequence" />
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_hr_rog_band_form" model="ir.actions.act_window" >
+            <field name="name" >Band</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.rog.band</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="menu_hr_rog_band" name="Band" parent="hr.menu_human_resources_configuration" sequence="24" action="action_hr_rog_band_form"/>
+
+
+        <record id="hr_rog_location_form" model="ir.ui.view">
+            <field name="name">hr.rog.location.form</field>
+            <field name="model">hr.rog.location</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                             <field name="name" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+         <record id="view_hr_rog_location_tree" model="ir.ui.view" >
+            <field name="name" >hr.rog.location.tree</field>
+            <field name="model">hr.rog.location</field>
+            <field name="arch" type="xml" >
+                <tree>
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="action_hr_rog_location_form" model="ir.actions.act_window" >
+            <field name="name" >Location</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.rog.location</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="menu_hr_rog_location" name="Location" parent="hr.menu_human_resources_configuration" sequence="25" action="action_hr_rog_location_form"/>
+
+
+    <record id="hr_rog_function_form" model="ir.ui.view">
+            <field name="name">hr.rog.function.form</field>
+            <field name="model">hr.rog.function</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                             <field name="name" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+         <record id="view_hr_rog_function_tree" model="ir.ui.view" >
+            <field name="name" >hr.rog.function.tree</field>
+            <field name="model">hr.rog.function</field>
+            <field name="arch" type="xml" >
+                <tree>
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="action_hr_rog_function_form" model="ir.actions.act_window" >
+            <field name="name" >Function</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.rog.function</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="menu_hr_rog_function" name="Function" parent="hr.menu_human_resources_configuration" sequence="26" action="action_hr_rog_function_form"/>
+
+
+         <record id="hr_rog_grade_form" model="ir.ui.view">
+            <field name="name">hr.rog.grade.form</field>
+            <field name="model">hr.rog.grade</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="sequence" />
+                            <field name="name" />
+                            <field name="grade_code" />
+                            <field name="annual_leave" />
+                            <field name="sick_leave" />
+                            <field name="casual_leave" />
+                            <field name="maternity_leave" />
+                            <field name="paternity_leave" />
+                            <field name="compensatory_off_co" />
+                            <field name="leave_without_pay" />
+                            <field name="special_leave" />
+                            <field name="education_leave" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+         <record id="view_hr_rog_grade_tree" model="ir.ui.view" >
+            <field name="name" >hr.rog.grade.tree</field>
+            <field name="model">hr.rog.grade</field>
+            <field name="arch" type="xml" >
+                <tree>
+                            <field name="sequence" />
+                            <field name="name" />
+                            <field name="grade_code" />
+                            <field name="annual_leave" />
+                            <field name="sick_leave" />
+                            <field name="casual_leave" />
+                            <field name="maternity_leave" />
+                            <field name="paternity_leave" />
+                            <field name="compensatory_off_co" />
+                            <field name="leave_without_pay" />
+                            <field name="special_leave" />
+                            <field name="education_leave" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_hr_rog_grade_form" model="ir.actions.act_window" >
+            <field name="name" >Grade</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.rog.grade</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="menu_hr_rog_grade" name="Grade" parent="hr.menu_human_resources_configuration" sequence="23" action="action_hr_rog_grade_form"/>
+
+
+
+       <record id="hr_expense_form_view_extend_rog" model="ir.ui.view">
+            <field name="name">hr.expense.form.extend.rog</field>
+            <field name="model">hr.expense</field>
+           <field name="inherit_id" ref="hr_expense.hr_expense_form_view" />
+            <field eval="25" name="priority"/>
+            <field name="arch" type="xml">
+
+
+                <button name="submit_expenses"  position="attributes" >
+                    <attribute name="string">Submit to Manager</attribute>
+                    <attribute name="groups" >rog_modifications.group_show_submit_btn_hr_expense</attribute>
+                </button>
+                <button name="approve_expenses" position="attributes" >
+                     <attribute name="groups" >rog_modifications.group_show_approve_btn_hr_expense</attribute>
+                </button>
+                <button name="action_move_create" position="attributes" >
+                    <attribute name="groups" >rog_modifications.group_show_approve_btn_hr_expense</attribute>
+                </button>
+
+               <field name="tax_ids" position="after">
+                    <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                        <field name="hr_department_id" domain="[('is_show_other_apps','=',True)]"  options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+                </field>
+                 <field name="product_id" position="attributes" >
+                      <attribute name="string" >Expense Type (Account)</attribute>
+                      <attribute name="options" >{'no_open':True,'no_create':True}</attribute>
+                  </field>
+                <field name="employee_id" position="after" >
+                    <field name="emp_id" options="{'no_open':True,'no_create':True}"  required="True" />
+                </field>
+                <field name="employee_id" position="attributes" >
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="tax_ids" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_expenses_tree_rog" model="ir.ui.view">
+            <field name="name">hr.expense.tree.rog.extend</field>
+            <field name="model">hr.expense</field>
+         <field name="inherit_id" ref="hr_expense.view_expenses_tree" />
+            <field name="arch" type="xml">
+                    <field name="employee_id" position="after" >
+                            <field name="product_id" string="Expense Type (Account)" />
+                            <field name="emp_id" />
+                            <field name="description" />
+                    </field>
+                    <field name="employee_id" position="attributes" >
+                            <attribute name="invisible" >True</attribute>
+                    </field>
+            </field>
+         </record>
+
+
+        <record id="view_hr_payslip_form_extend_rog" model="ir.ui.view">
+            <field name="name">hr.payslip.form.extend.rog</field>
+            <field name="model">hr.payslip</field>
+           <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form" />
+            <field name="arch" type="xml">
+               <field name="struct_id" position="after">
+                       <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                        <field name="hr_department_id" domain="[('is_show_other_apps','=',True)]" options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" groups="rog_modifications.group_ssa_rog" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  groups="rog_modifications.group_ssa_rog" />
+
+                   <field name="function_id" options="{'no_open':True,'no_create':True}" />
+                          <field name="location_id"  options="{'no_open':True,'no_create':True}" />
+                        <field name="mgt_non_mgt" />
+                        <field name="band_id"  options="{'no_open':True,'no_create':True}" />
+                        <field name="grade_id"  options="{'no_open':True,'no_create':True}" />
+               </field>
+            </field>
+        </record>
+
+
+
+         <record id="view_employee_form_extend_kin_hr_rog" model="ir.ui.view">
+            <field name="name">hr.employee.form.extend.kin.hr.rog</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="kin_hr.view_employee_form_extend" />
+            <field name="arch" type="xml">
+<!--                        <group  name="qualification_grp" position="replace" />-->
+<!--                 <group  position="replace" name="guarantor_grp" />-->
+<!--                  <group position="replace" name="emerg_grp" />-->
+<!--                 <group position="replace" name="origin_grp" />-->
+
+                  <group position="attributes" name="nok_grp" >
+                            <attribute name="string" >Emergency Contact</attribute>
+                    </group>
+                 <field name="nok_relationship" position="after" >
+                     <field name="nok_address" />
+                     <field name="spouse_name" />
+                     <field name="spouse_phone_number" />
+                     <field name="spouse_address" />
+                 </field>
+
+<!-- the hr.contract prevents employees from seeing the public information  of other users-->
+<!--                <notebook position="inside">-->
+<!--                    <page name="contact" string="Contract Information" groups="rog_modifications.group_show_hr_rog_contract"  >-->
+<!--                                <group>-->
+<!--                                    <field name="contract_ids" nolabel="1" >-->
+<!--                                        <tree editable="bottom">-->
+<!--                                            <field name="name" />-->
+<!--                                            <field name="wage" />-->
+<!--                                            <field name="struct_id" />-->
+<!--                                        </tree>-->
+<!--                                    </field>-->
+
+<!--                                </group>-->
+<!--                            </page>-->
+
+<!--                </notebook>-->
+
+            </field>
+         </record>
+
+         <record id="view_employee_form_extend_rog" model="ir.ui.view">
+            <field name="name">hr.employee.form.extend.rog</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form" />
+            <field name="arch" type="xml">
+                <field name="country_id" position="after" >
+                     <field name="lga" />
+                    <field name="state_id" />
+                        <field name="tribe" />
+                     <field name="religion" />
+                </field>
+                 <xpath expr="//group[@name='active_group']" position="after" >
+                    <group string="Employee Details" >
+<!--                        <field name="qualification" />-->
+                        <field name="subject" />
+                        <field name="institution" />
+                        <field name="degree_class" />
+                         <field name="level" />
+                       <field name="function_id" options="{'no_open':True,'no_create':True}" />
+                        <field name="section" required="True" />
+                          <field name="location_id"  options="{'no_open':True,'no_create':True}" />
+                        <field name="mgt_non_mgt" />
+                        <field name="band_id"  options="{'no_open':True,'no_create':True}" />
+                        <field name="grade_id"  options="{'no_open':True,'no_create':True}" />
+                          <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                        <field name="hr_department_id" domain="[('is_show_other_apps','=',True)]"  options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+                       <field name="gross_without_fuel" />
+                        <field name="fuel" />
+                        <field name="net_initial_salary" />
+                        <field name="is_voluntary_pension" />
+                        <field name="is_maternity_initially_leave_granted" readonly="1" />
+                        <field name="is_employee_initially_leave_granted" readonly="1" />
+                    </group>
+                     <group string="Health" >
+                          <field name="blood_group" />
+                         <field name="genotype" />
+                     </group>
+
+                     <group string="Children Details">
+                        <field name="children_ids"  nolabel="1"  >
+                           <tree editable="bottom">
+                                <field name="name" />
+                                <field name="dob" />
+                                <field name="gender" />
+                           </tree>
+                        </field>
+                     </group>
+                 </xpath>
+
+                <field name="coach_id" position="attributes" >
+                    <attribute name="invisible" >1</attribute>
+                </field>
+            </field>
+         </record>
+
+         <record id="view_employee_form_extend_holiday_rog" model="ir.ui.view">
+            <field name="name">hr.employee.form.extend.holiday.rog</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr_holidays_multi_levels_approval.view_employee_form" />
+            <field name="arch" type="xml">
+                    <field name="transfer_holidays_approvals_to" position="after" >
+                         <group string="Leave Notifications" >
+                             <field name="overall_head_id" />
+                             <field name="reliever_id" />
+                             <field name="hr_id" />
+                        </group>
+                    </field>
+            </field>
+         </record>
+
+        <!-- extend the hr department -->
+            <record id="view_department_form_rog_dept_extend" model="ir.ui.view">
+            <field name="name">hr.department.form.dept.rog</field>
+            <field name="model">hr.department</field>
+               <field name="inherit_id" ref="hr.view_department_form" />
+            <field name="arch" type="xml">
+                <field name="company_id" position="after" >
+                     <field name="is_show_other_apps"  />
+                </field>
+            </field>
+          </record>
+
+
+<!--         <record id="view_department_filter_rog" model="ir.ui.view">-->
+<!--            <field name="name">Departments</field>-->
+<!--            <field name="model">hr.department</field>-->
+<!--             <field name="inherit_id" ref="hr.view_department_filter" />-->
+<!--            <field name="arch" type="xml">-->
+
+<!--                    <field name="name" position="attributes">-->
+<!--                        <attribute name="string">Dept./SBU</attribute>-->
+<!--                    </field>-->
+
+<!--             </field>-->
+<!--        </record>-->
+<!--        <record id="hr.open_module_tree_department" model="ir.actions.act_window">-->
+<!--            <field name="name">Dept./SBU</field>-->
+<!--        </record>-->
+<!--        <menuitem-->
+<!--            action="hr.open_module_tree_department"-->
+<!--            id="hr.menu_hr_department_tree"-->
+<!--            parent="hr.menu_hr_root"-->
+<!--            sequence="1"-->
+<!--            string="Dept./SBU"-->
+<!--            groups="base.group_hr_user"/>-->
+
+
+        <record id="view_salary_advance_extend_rog" model="ir.ui.view">
+            <field name="name">hr.salary.advance.rog</field>
+            <field name="model">salary.advance</field>
+           <field name="inherit_id" ref="ohrms_salary_advance.view_salary_advance_form" />
+            <field name="arch" type="xml">
+               <field name="exceed_condition" position="after">
+                       <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                        <field name="hr_department_id" domain="[('is_show_other_apps','=',True)]" options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}"  groups="rog_modifications.group_ssa_rog" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  groups="rog_modifications.group_ssa_rog" />
+                </field>
+                <field name="employee_id" position="attributes" >
+                    <attribute name="domain" >[('user_id.id','=',uid)]</attribute>
+                </field>
+                <field name="exceed_condition" position="attributes" >
+                    <attribute name="invisible" >1</attribute>
+                </field>
+            </field>
+        </record>
+
+         <record id="view_hr_loan_extend_rog" model="ir.ui.view">
+            <field name="name">hr.loan.rog</field>
+            <field name="model">hr.loan</field>
+           <field name="inherit_id" ref="ohrms_loan.hr_loan_form_view" />
+            <field name="arch" type="xml">
+                <field name="journal_id" position="after">
+                       <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                        <field name="hr_department_id" domain="[('is_show_other_apps','=',True)]" options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}"  groups="rog_modifications.group_ssa_rog" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  groups="rog_modifications.group_ssa_rog" />
+                </field>
+                <field name="employee_id" position="attributes" >
+                    <attribute name="domain" >[('user_id','=',uid)]</attribute>
+                </field>
+
+            </field>
+        </record>
+
+
+        <!--  Rule Adjustment -->
+         <record id="view_rule_adjustment_form" model="ir.ui.view" >
+            <field name="name" >rule.adjustment.form</field>
+            <field name="model">rule.adjustment</field>
+            <field name="arch" type="xml" >
+                <form string="Rule Adjustment" >
+                    <header>
+                        <button name="action_confirm" type="object" states="draft" string="Confirm" class="oe_highlight" groups="rog_modifications.group_show_confirm_rog_rule_adjustment" />
+                         <button name="action_approve" type="object" states="confirm" string="Approve" class="oe_highlight" groups="rog_modifications.group_show_approve_rog_rule_adjustment" />
+                        <button name="%(action_refund_rule_wizard)d" type="action" states="approve" string="Refund" groups="rog_modifications.group_show_refund_rog_rule_adjustment"  />
+                        <button name="action_cancel" states="draft,confirm,approve" type="object" string="Cancel" />
+                        <button name="action_draft" states="cancel" type="object" string="Reset to Draft"  />
+                        <field name="state" widget="statusbar"  />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                             <button type="object"  name="btn_view_refund_ra" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('refund_rule_count', '=', 0)]}"   >
+                                <field name="refund_rule_count" widget="statinfo" string="Refund Rule"/>
+                            </button>
+                            <button type="object"  name="btn_view_refund_par" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('parent_rule_count', '=', 0)]}"   >
+                                <field name="parent_rule_count" widget="statinfo" string="Parent Rule"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1" />
+                            </h1>
+                        </div>
+                        <group col="4" >
+                            <group col="2">
+                                 <field name="employee_id" required="1" options="{'no_open':True,'no_create':True}" attrs="{'readonly': [('state', 'not in', ['draft'])]}"  />
+                                 <field name="rule_type" required="1" attrs="{'readonly': [('state', 'not in', ['draft'])]}"  />
+                                <field name="date_from" required="1" attrs="{'readonly': [('state', 'not in', ['draft'])]}"  />
+                                <field name="date_to" required="1" attrs="{'readonly': [('state', 'not in', ['draft'])]}"  />
+                                <field name="other_amount" required="1" attrs="{'invisible': [('rule_type', 'not in', ['other_refund','reward'])]}"  />
+                                 <field name="description" attrs="{'required': [('rule_type', 'in', ['other_refund','reward'])],'readonly': [('state', 'not in', ['draft'])]}"  />
+                            </group>
+                            <group col="2">
+                               <field name="department_id" readonly="1"  />
+                                 <field name="no_of_days"  />
+                                <field name="month_days" />
+                               <field name="month_wdays" />
+                                 <field name="net_initial_salary"  readonly="1" />
+                                 <field name="amount"   />
+                            </group>
+                        </group>
+                        <notebook>
+                             <page string="Approvals/Dates">
+                                 <group col="4">
+                                     <field name="confirmed_by" readonly="1"  />
+                                     <field name="confirmed_date" readonly="1"  />
+                                      <field name="approved_by" readonly="1"  />
+                                     <field name="approved_date" readonly="1"  />
+                                     <field name="lrq_id" readonly="1" />
+                                 </group>
+                             </page>
+                         </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+         </record>
+
+        <record id="view_rule_adjustment_tree" model="ir.ui.view" >
+            <field name="name" >rule.adjustment.tree</field>
+            <field name="model">rule.adjustment</field>
+            <field name="arch" type="xml" >
+                <tree string="Rule Adjustment Record" >
+                            <field name="name" />
+                            <field name="employee_id" />
+                            <field name="date_from" />
+                            <field name="date_to" />
+                            <field name="no_of_days" />
+                            <field name="amount"  />
+                            <field name="department_id" />
+                            <field name="rule_type" />
+                            <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_rule_adjustment_filter" model="ir.ui.view">
+            <field name="name">rule.adjustment.select</field>
+            <field name="model">rule.adjustment</field>
+            <field name="arch" type="xml">
+                <search string="Rule Adjustment Record">
+                    <field name="name" string="Rule Adjustment Record" filter_domain="['|',('name','ilike',self),('employee_id','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Confirmed Date" domain="[]" context="{'group_by':'confirmed_date'}"/>
+                        <filter string="Rule Type" domain="[]" context="{'group_by':'rule_type'}"/>
+                       <filter string="Employee" domain="[]" context="{'group_by':'employee_id'}"/>
+                        <filter string="Department" domain="[]" context="{'group_by':'department_id'}"/>
+                        <filter string="Status" domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_rule_adjustment_form" model="ir.actions.act_window" >
+            <field name="name" >Rule Adjustment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rule.adjustment</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_rule_adjustment_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a Rule Adjustment Record
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_rule_adjustment" name="Rule Adjustment" parent="hr_payroll.menu_hr_payroll_root" sequence="5" action="action_rule_adjustment_form"/>
+
+
+
+        <!-- HR Holidays Status -->
+         <record model="ir.ui.view" id="edit_holiday_status_form_rog_extend">
+            <field name="name">hr.holidays.status.form.rog</field>
+            <field name="model">hr.holidays.status</field>
+             <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form" />
+            <field name="arch" type="xml">
+                 <field name="limit" position="after"  >
+                     <field name="grade_type" />
+                     <field name="is_allow_accumulation" />
+                     <field name="is_lwp" />
+                 </field>
+            </field>
+        </record>
+
+
+        <!-- HR Holiday -->
+        <record model="ir.ui.view" id="edit_holiday_new_rog">
+            <field name="name">Leave Request</field>
+            <field name="model">hr.holidays</field>
+            <field name="inherit_id" ref="hr_holidays.edit_holiday_new" />
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/group" position="before">
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_rule_adjustments"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                attrs="{'invisible': [('ra_count', '=', 0)]}" >
+                                <field  name="ra_count" widget="statinfo" string="Rule Adjustment(s)"/>
+                            </button>
+                        </div>
+                </xpath>
+
+            </field>
+        </record>
+
+
+         <record model="ir.ui.view" id="crm_case_form_view_job_rog">
+            <field name="name">Jobs - Recruitment Form</field>
+            <field name="model">hr.applicant</field>
+             <field name="inherit_id" ref="hr_recruitment.crm_case_form_view_job" />
+            <field name="arch" type="xml">
+                <field name="type_id" position="after" >
+                    <field name="no_of_year_experience" />
+                </field>
+            </field>
+         </record>
+
+        <record id="hr_salary_rule_form_rog_extend" model="ir.ui.view">
+            <field name="name">hr.salary.rule.form.rog.extend</field>
+            <field name="model">hr.salary.rule</field>
+            <field name="inherit_id" ref="hr_payroll.hr_salary_rule_form" />
+            <field name="arch" type="xml">
+                  <field name="appears_on_payslip" position="after" >
+                      <field name="is_leave_allowance" />
+                      <field name="is_addition" />
+                      <field name="is_deduction" />
+                  </field>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="view_company_kin_hr_rog">
+                    <field name="name">res.company.form.hr.rog</field>
+                    <field name="inherit_id" ref="base.view_company_form"/>
+                    <field name="model">res.company</field>
+                    <field name="arch" type="xml">
+                        <field name="currency_id" position="after" >
+                            <field name="employer_code" />
+                        </field>
+                    </field>
+                </record>
+
+         <record model="ir.ui.view" id="view_company_kin_report_rog" >
+                    <field name="name">res.company.form.rog.report</field>
+                    <field name="inherit_id" ref="kin_report.view_company_kin_reportd" />
+                    <field name="model">res.company</field>
+                    <field name="arch" type="xml">
+                         <field name="header_data"  position="after" >
+                              <field name="header_data_hr" />
+                         </field>
+                    </field>
+        </record>
+
+
+
+        </data>
+</openerp>

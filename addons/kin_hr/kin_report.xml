@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
+		<!-- Or by referencing the parent report id e.g. kin_report.receipt_custom -->
+        <!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
+		<report
+		    id="hr_payroll.action_report_payslip"
+		    model="hr.payslip"
+		    string="Payment Slip"
+		    report_type="qweb-pdf"
+		    name="kin_hr.report_payslip_custom"
+		    file="kin_hr.report_payslip_custom"
+		    attachment_use="False"
+		    		/>
+
+
+        <report
+		    id="payroll_excel_report"
+		    model="payroll.report.parser"
+		    string="Payroll Excel Report"
+		    report_type="xlsx"
+		    name="kin_hr.report_payroll_report"
+		    file="kin_hr.report_payroll_report"
+		    attachment_use="False"
+        />
+		<record id="payroll_excel_report" model="ir.actions.report.xml" >
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_hr_user')])]"  />
+        </record>
+
+
+		  <report
+		    id="pfa_excel_report"
+            model="pfa.report.wizard"
+		    string="PFA Report"
+		    report_type="xlsx"
+		    name="kin_report.report_pfa_excel"
+		    attachment_use="False"
+        />
+		<record id="pfa_excel_report" model="ir.actions.report.xml" >
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_hr_user')])]"  />
+        </record>
+
+
+
+        <report
+		    id="general_excel_report"
+            model="general.report.wizard"
+		    string="Pension General Format Report"
+		    report_type="xlsx"
+		    name="kin_hr.report_general_excel"
+		    attachment_use="False"
+        />
+		<record id="general_excel_report" model="ir.actions.report.xml" >
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_hr_user')])]"  />
+        </record>
+
+
+		<report
+		    id="bank_advice_excel_report"
+            model="bank.advice.report.wizard"
+		    string="Bank Advice Report"
+		    report_type="xlsx"
+		    name="kin_report.report_bank_advice_excel"
+		    attachment_use="False"
+        />
+		<record id="bank_advice_excel_report" model="ir.actions.report.xml" >
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_hr_user')])]"  />
+        </record>
+
+		<report
+		    id="paye_excel_report"
+            model="paye.report.wizard"
+		    string="P.A.Y.E Report"
+		    report_type="xlsx"
+		    name="kin_hr.report_paye_excel"
+		    attachment_use="False"
+        />
+		<record id="paye_excel_report" model="ir.actions.report.xml" >
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_hr_user')])]"  />
+        </record>
+
+
+    </data>
+</odoo>

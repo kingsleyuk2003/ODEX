@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sale_shipping_term_sales_man,sale.shipping.term sales order,kin_sales.model_sale_shipping_term,base.group_sale_salesman,1,1,1,1
+access_account_payment_term_sale_user,account.payment.term sales order,account.model_account_payment_term,base.group_sale_salesman,1,1,1,1
+access_account_payment_term_line_sale_user,account.payment.term.line sales order,account.model_account_payment_term_line,base.group_sale_salesman,1,1,1,1
+access_product_template_salesman,product.product.template salesman,product.model_product_template,base.group_sale_salesman,1,1,1,1
+access_product_product_sales_salesman,product.product.product salesman,product.model_product_product,base.group_sale_salesman,1,1,1,1
+access_product_price_history_sales_salesman,product.product.price.history salesman,product.model_product_price_history,base.group_sale_salesman,1,1,1,1
+access_purchase_report_sales_salesman,purchase.purchase.report salesman,purchase.model_purchase_report,base.group_sale_salesman,1,1,1,1

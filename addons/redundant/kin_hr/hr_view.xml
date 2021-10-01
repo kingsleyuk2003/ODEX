@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_employee_form_extend" model="ir.ui.view">
+            <field name="name">hr.employee.form.extend</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//page[@groups='base.group_hr_user']/group" position="inside">
+                        <group string="Names and State of Origin" >
+                            <field name="firstname" />
+                            <field name="lastname" />
+                            <field name="middlename" />
+                            <field name="state_id" />
+                        </group>
+                        <group string="Next of Kin Info." >
+                            <field name="next_of_kin" />
+                            <field name="nok_phone" />
+                            <field name="nok_relationship" />
+                        </group>
+                        <group string="Emergency">
+                            <field name="emergency_contact" />
+                            <field name="emergency_contact_phone" />
+                        </group>
+                        <group string="Guarantor Info.">
+                            <field  nolabel="1" name="guarantor_ids" />
+                        </group>
+                </xpath>
+                <xpath expr="//group[@name='active_group']" position="after" >
+                    <group string="Employment Details" >
+                        <field name="employment_date" />
+                        <field name="employment_status" />
+                    </group>
+                     <group string="Qualifications">
+                         <field  nolabel="1" name="qualification_ids" />
+                     </group>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="view_nok_relationship_form" model="ir.ui.view" >
+            <field name="name" >nok.relationship.form</field>
+            <field name="model" >nok.relationship</field>
+            <field name="arch" type="xml" >
+                <form string="Next of Kin Relationship" >
+                    <group>
+                        <field name="name" />
+                    </group>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="view_nok_relationship_tree" model="ir.ui.view" >
+            <field name="name" >nok.relationship.tree</field>
+            <field name="model" >nok.relationship</field>
+            <field name="arch" type="xml" >
+                <tree string="Next of Kin Relationship Tree">
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_guarantor_form" model="ir.ui.view" >
+            <field name="name" >guarantor.form</field>
+            <field name="model" >guarantor</field>
+            <field name="arch" type="xml" >
+                <form string="Guarantor" >
+                    <group>
+                        <field name="name" />
+                        <field name="gua_phone" />
+                        <field name="gua_address" />
+                    </group>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="view_guarantor_tree" model="ir.ui.view" >
+            <field name="name" >guarantor.tree</field>
+            <field name="model" >guarantor</field>
+            <field name="arch" type="xml" >
+                <tree string="Guarantor Tree">
+                    <field name="name" />
+                    <field name="gua_phone" />
+                    <field name="gua_address" />
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_qualification_title_form" model="ir.ui.view" >
+            <field name="name" >qualification.title.form</field>
+            <field name="model" >qualification.title</field>
+            <field name="arch" type="xml" >
+                <form string="Qualification Title" >
+                    <group>
+                        <field name="name" />
+                        <field name="description" />
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_qualification_title_tree" model="ir.ui.view" >
+            <field name="name" >qualification.title.tree</field>
+            <field name="model" >qualification.title</field>
+            <field name="arch" type="xml" >
+                <tree string="qualification Title Tree">
+                    <field name="name" />
+                    <field name="description" />
+                </tree>
+            </field>
+        </record>
+
+
+         <record id="view_school_attended_form" model="ir.ui.view" >
+            <field name="name" >school.attended.form</field>
+            <field name="model" >school.attended</field>
+            <field name="arch" type="xml" >
+                <form string="School Attended" >
+                    <group>
+                        <field name="name" />
+                         <field name="school_location" />
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_school_attended_tree" model="ir.ui.view" >
+            <field name="name" >school.attended.tree</field>
+            <field name="model" >school.attended</field>
+            <field name="arch" type="xml" >
+                <tree string="School Attended Tree">
+                    <field name="name" />
+                    <field name="school_location" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_qualification_form" model="ir.ui.view" >
+            <field name="name" >qualification.form</field>
+            <field name="model" >qualification</field>
+            <field name="arch" type="xml" >
+                <form string="Qualification" >
+                    <group>
+                        <field name="qualification_title_id" />
+                         <field name="school_id" />
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_qualification_tree" model="ir.ui.view" >
+            <field name="name" >qualification.tree</field>
+            <field name="model" >qualification</field>
+            <field name="arch" type="xml" >
+                <tree string="Qualification Tree">
+                    <field name="qualification_title_id" />
+                    <field name="school_id" />
+                </tree>
+            </field>
+        </record>
+
+
+
+
+
+    </data>
+</openerp>

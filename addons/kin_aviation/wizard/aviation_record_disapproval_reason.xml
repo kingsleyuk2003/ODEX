@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+
+        <!-- Aviation Record Disapproval -->
+        <record id="view_aviation_record_disapproval_reason" model="ir.ui.view">
+            <field name="name">Aviation Record Disapproval Reason</field>
+            <field name="model">aviation.record.disapproval.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Disapproval Reason">
+                     <p>You are disapprove the Aviation Record. Please enter the Reason for the Disapproval. </p>
+                    <group>
+                        <label for="msg" string="Reason"  />
+                        <field nolabel="1" name="msg"/>
+                    </group>
+                    <footer>
+                        <button name="action_disapprove" string="Disapprove" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_aviation_record_disapproval_reason" model="ir.actions.act_window">
+            <field name="name">Aviation Record Disapproval Reason</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">aviation.record.disapproval.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_aviation_record_disapproval_reason" />
+            <field name="target">new</field>
+            <!--<field name="groups_id" eval="[(4,ref('base.group_sale_salesman'))]"/>-->
+        </record>
+
+
+
+    </data>
+</openerp>

@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="invoice_supplier_form_extend" model="ir.ui.view">
+            <field name="name">account.invoice.supplier.form.extend</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/div" position="before" >
+                    <div class="oe_button_box" name="button_box">
+                         <button type="object"  name="btn_view_picking" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('picking_count', '=', 0)]}" >
+                            <field name="picking_count" widget="statinfo" string="Shipments"/>
+                        </button>
+                         <button type="object"  name="btn_view_po" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('po_count', '=', 0)]}" >
+                            <field name="po_count" widget="statinfo" string="Purchase Order"/>
+                        </button>
+                    </div>
+                </xpath>
+
+                <field name="partner_id" position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                 <button name="invoice_open" position="attributes" >
+                                <attribute name="groups" >kin_account.group_show_validate_btn_supplier_bill</attribute>
+                          </button>
+
+                 <button name="invoice_cancel" position="attributes" >
+                     <attribute name="groups" >kin_account.group_show_cancel_invoice_btn_supplier_bill</attribute>
+                 </button>
+
+                <field name="product_id" position="attributes"  >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                     <attribute name="groups" >kin_account.group_show_product_field_purchase_invoice</attribute>
+                </field>
+
+                <field name="account_id"  position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                <field name="account_analytic_id"  position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                <field name="uom_id"  position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                 <field name="invoice_line_tax_ids"   position="attributes" >
+                     <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                 </field>
+
+                <field name="reference" position="attributes" >
+                    <attribute name="attrs" >{'required': 1}</attribute>
+                </field>
+
+                <field name="discount"  position="after">
+                        <field name="discount_amt" groups="sale.group_discount_per_so_line" />
+                </field>
+
+                <field name="amount_total" position="after" >
+                    <field name="amt_discount_total" widget="monetary" options="{'currency_field': 'currency_id'}" />
+                </field>
+
+            </field>
+        </record>
+
+
+
+  <record id="invoice_form_extend" model="ir.ui.view">
+            <field name="name">account.invoice.form.extend</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form" />
+            <field name="arch" type="xml">
+            <xpath expr="//sheet/label" position="before" >
+                    <div class="oe_button_box" name="button_box">
+                         <button type="object"  name="btn_view_picking" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('picking_count', '=', 0)]}" >
+                            <field name="picking_count" widget="statinfo" string="Shipment"/>
+                        </button>
+                         <button type="object"  name="btn_view_so" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('so_count', '=', 0)]}" >
+                            <field name="so_count" widget="statinfo" string="Sales Order"/>
+                        </button>
+                    </div>
+                </xpath>
+
+                <field name="partner_id" position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                 <button name="invoice_open" position="attributes" >
+                     <attribute name="groups" >kin_account.group_show_validate_btn_customer_invoice</attribute>
+                 </button>
+
+                 <button name="invoice_cancel" position="attributes" >
+                     <attribute name="groups" >kin_account.group_show_cancel_invoice_btn_customer_invoice</attribute>
+                 </button>
+
+                <field name="user_id" position="attributes"  >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                  <field name="team_id" position="attributes"  >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                <field name="product_id" position="attributes"  >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                      <attribute name="groups" >kin_account.group_show_product_field_sale_invoice</attribute>
+                </field>
+
+                <field name="account_id"  position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                <field name="account_analytic_id"  position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                <field name="uom_id"  position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                 <field name="invoice_line_tax_ids"   position="attributes" >
+                     <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                 </field>
+
+                <field name="discount"  position="after">
+                        <field name="discount_amt" />
+                </field>
+
+                <field name="amount_total" position="after" >
+                    <field name="amt_discount_total" widget="monetary" options="{'currency_field': 'currency_id'}" />
+                </field>
+
+                <field name="payment_term_id" position="after" >
+                    <field name="reference" string="Reference"/>
+                </field>
+
+
+            </field>
+     </record>
+
+
+        <record id="view_invoice_line_form_account_extend" model="ir.ui.view">
+            <field name="name">account.invoice.line.form.account.extend</field>
+            <field name="model">account.invoice.line</field>
+            <field name="inherit_id" ref="account.view_invoice_line_form" />
+            <field name="arch" type="xml">
+                <field name="company_id" position="after" >
+                     <field name="invoice_id" readonly="1" />
+                    <field name="discount_analytic_line" readonly="1" />
+
+                   <field name="cos" readonly="1" />
+                    <field name="cos_total" readonly="1" />
+                    <field name="gross_profit" readonly="1"  />
+                    <field name="markup" readonly="1"  />
+                    <field name="gross_margin" readonly="1"  />
+                    <field name="price_subtotal" readonly="1"  />
+                </field>
+            </field>
+        </record>
+
+        <record id="invoice_tree_extend" model="ir.ui.view">
+            <field name="name">account.invoice.tree.extend</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_tree" />
+            <field name="arch" type="xml">
+                    <field name="reference" position="attributes">
+                        <attribute name="invisible">0</attribute>
+                        <attribute name="string" >Reference</attribute>
+                    </field>
+
+                     <field name="amount_total_signed" position="attributes">
+                         <attribute name="sum">Total</attribute>
+                         <attribute name="widget">monetary</attribute>
+                        <attribute name="options">{'currency_field': 'currency_id'}</attribute>
+                         </field>
+                    <field name="residual_signed" position="attributes">
+                        <attribute name="sum">Total Due</attribute>
+                        <attribute name="widget">monetary</attribute>
+                        <attribute name="options">{'currency_field': 'currency_id'}</attribute>
+
+                    </field>
+                    <field name="amount_total_signed" position="before" >
+                        <field name="amount_untaxed" sum="Total" />
+                    </field>
+            </field>
+        </record>
+
+         <record id="invoice_supplier_tree_extend" model="ir.ui.view">
+            <field name="name">account.invoice.supplier.tree.extend</field>
+            <field name="model">account.invoice</field>
+              <field name="inherit_id" ref="account.invoice_supplier_tree" />
+            <field name="arch" type="xml">
+                <field name="amount_total_signed" position="attributes">
+                         <attribute name="sum">Total</attribute>
+                         <attribute name="widget">monetary</attribute>
+                        <attribute name="options">{'currency_field': 'currency_id'}</attribute>
+                         </field>
+                    <field name="residual_signed" position="attributes">
+                        <attribute name="sum">Total Due</attribute>
+                        <attribute name="widget">monetary</attribute>
+                        <attribute name="options">{'currency_field': 'currency_id'}</attribute>
+
+                    </field>
+                <field name="amount_total_signed" position="before" >
+                        <field name="amount_untaxed" sum="Total" />
+                    </field>
+            </field>
+        </record>
+
+        <record id="view_account_payment_tree_extend" model="ir.ui.view">
+            <field name="name">account.payment.tree.extend</field>
+            <field name="model">account.payment</field>
+             <field name="inherit_id" ref="account.view_account_payment_tree" />
+            <field name="arch" type="xml">
+                <field name="amount" position="attributes">
+                         <attribute name="sum">Total</attribute>
+                         <attribute name="widget">monetary</attribute>
+                        <attribute name="options">{'currency_field': 'currency_id'}</attribute>
+                </field>
+
+            </field>
+        </record>
+
+        <record id="view_account_supplier_payment_tree_extend" model="ir.ui.view">
+            <field name="name">account.supplier.payment.tree.extend</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_supplier_payment_tree" />
+            <field name="arch" type="xml">
+               <field name="amount" position="attributes">
+                         <attribute name="sum">Total</attribute>
+                         <attribute name="widget">monetary</attribute>
+                        <attribute name="options">{'currency_field': 'currency_id'}</attribute>
+                </field>
+            </field>
+        </record>
+
+
+
+         <record id="view_invoice_line_tree_extend" model="ir.ui.view">
+            <field name="name">account.invoice.line.tree.extend</field>
+            <field name="model">account.invoice.line</field>
+            <field name="arch" type="xml">
+                <tree string="Margin Analysis" create="0" delete="0" edit="0"  decoration-success="gross_margin &gt;= 50" decoration-danger="gross_profit &lt; cos_total"  >
+                    <field name="invoice_id" />
+                    <field name="date_invoice" />
+                    <field name="name"/>
+                    <field name="categ_id"/>
+                    <field name="partner_id" />
+                    <field name="quantity" sum="Total"/>
+                    <field name="uom_id" groups="product.group_uom"/>
+                    <field name="price_unit"/>
+                     <field name="discount" groups="sale.group_discount_per_so_line"/>
+                    <field name="price_subtotal_signed" string="Net Sales(Net Revenue)" sum="Total"  help="Net sales = Gross sales – (customer discounts + returns + allowances)" />
+                    <field name="cos"/>
+                    <field name="cos_total" sum="Total" />
+                    <field name="markup"  />
+                    <field name="gross_profit"  sum="Total"  />
+                    <field name="gross_margin" />
+                    <button name="show_invoice" type="object" string="Invoice"/>
+                    <field name="currency_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+          <record model="ir.ui.view" id="account_invoice_line_pivot">
+            <field name="name">account.invoice.line.pivot</field>
+            <field name="model">account.invoice.line</field>
+            <field name="arch" type="xml">
+                <pivot string="Account Invoice Line" display_quantity="True" disable_linking="False" >
+                    <field name="date_invoice" interval="month" type="row"/>
+                    <field name="gross_profit" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="account_invoice_line_graph">
+            <field name="name">account.invoice.line.graph</field>
+            <field name="model">account.invoice.line</field>
+            <field name="arch" type="xml">
+                <graph string="Account Invoice Lines" type="line"  >
+                    <field name="date_invoice" interval="month" type="row"/>
+                    <field name="gross_profit" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="account_customer_invoice_line_search_extend" model="ir.ui.view">
+            <field name="name">account.invoice.line.customer.search.extend</field>
+            <field name="model">account.invoice.line</field>
+            <field name="arch" type="xml">
+                <search string="Search Customer's Invoices Lines">
+                    <field name="invoice_id" />
+                    <field name="product_id"/>
+                    <field name="partner_id" string="Customer" filter_domain="[('partner_id', 'child_of', self)]"/>
+                    <!--<filter name="hide_cancelled" string="Hide cancelled lines" domain="[('state', '!=', 'cancel')]"/>-->
+                    <group expand="0" string="Group By">
+                        <filter name="groupby_customer" string="Customer" domain="[]" context="{'group_by' : 'partner_id'}" />
+                        <filter name="groupby_product" string="Product" domain="[]" context="{'group_by' : 'product_id'}" />
+                        <filter string="Invoice" domain="[]" context="{'group_by' :'invoice_id'}"/>
+                         <filter string="Account" domain="[]" context="{'group_by' :'account_id'}"/>
+                        <filter string="Company" domain="[]" context="{'group_by' :'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_customer_invoice_line_tree_extend">
+            <!--<field name="context">{'search_default_groupby_product':1}</field>-->
+            <field name="domain">[('invoice_id.type', 'in', ['out_invoice', 'out_refund']),('invoice_id.state', 'not in', ['draft', 'cancel'])]</field>
+            <field name="name">Invoice Lines / Profit Analysis</field>
+            <field name="res_model">account.invoice.line</field>
+            <field name="view_type" >form</field>
+            <field name="view_mode">tree,pivot,graph</field>
+            <field name="view_id" ref="view_invoice_line_tree_extend"/>
+             <field name="search_view_id" ref="account_customer_invoice_line_search_extend"/>
+
+        </record>
+
+         <menuitem name="Invoice Lines / Profit Analysis" id="menu_customer_invoice_lines" action="action_customer_invoice_line_tree_extend"
+          parent="account.account_reports_management_menu" />
+
+
+
+        <record id="base.action_partner_customer_form" model="ir.actions.act_window">
+            <field name="name">Customers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="domain">[]</field>
+            <field name="context">{'default_customer':1, 'search_default_customer':1}</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add a contact in your address book.
+              </p><p>
+                Odoo helps you easily track all activities related to
+                a customer: discussions, history of business opportunities,
+                documents, etc.
+              </p>
+            </field>
+        </record>
+
+        <record id="base.action_partner_form" model="ir.actions.act_window">
+            <field name="name">Customers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="context">{"search_default_customer":1}</field>
+            <field name="search_view_id" ref="base.view_res_partner_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add a contact in your address book.
+              </p><p>
+                Odoo helps you easily track all activities related to
+                a customer; discussions, history of business opportunities,
+                documents, etc.
+              </p>
+            </field>
+        </record>
+
+        <record id="base.action_partner_supplier_form" model="ir.actions.act_window">
+            <field name="name">Vendors</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="domain">[]</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="context">{'search_default_supplier': 1,'default_customer': 0,'default_supplier': 1}</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add a contact in your address book.
+              </p><p>
+                Odoo helps you easily track all activities related to
+                a supplier: discussions, history of purchases,
+                documents, etc.
+              </p>
+            </field>
+        </record>
+
+
+         <!--<record id="view_partner_property_form_account_extend" model="ir.ui.view">-->
+            <!--<field name="name">res.partner.property.form.inherit.account.extend</field>-->
+            <!--<field name="model">res.partner</field>-->
+            <!--<field name="inherit_id" ref="account.view_partner_property_form"/>-->
+            <!--<field name="arch" type="xml">-->
+                    <!--<field name="credit" position="before" >-->
+                        <!--<field name="acct_analytic_sale_id" />-->
+                    <!--</field>-->
+            <!--</field>-->
+        <!--</record>-->
+
+    </data>
+</openerp>

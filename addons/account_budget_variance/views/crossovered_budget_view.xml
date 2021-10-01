@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="crossovered_budget_view_form" model="ir.ui.view">
+        <field name="name">Crossovered Budget Form</field>
+        <field name="model">crossovered.budget</field>
+        <field name="inherit_id" ref="account_budget.crossovered_budget_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook//field[@name='percentage']" position="after">
+                <field name="variance_amount"/>
+                <field name="variance_percent"/>
+            </xpath>
+            <xpath expr="//notebook//form//field[@name='planned_amount']" position="after">
+                <field name="variance_amount"/>
+                <field name="variance_percent"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

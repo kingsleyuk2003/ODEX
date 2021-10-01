@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		 <template id="customer_sales_order_tsc_extend" inherit_id="kin_report.report_sale_order">
+
+            <xpath expr="//div[@name='div_so_bottom']"  position="before">
+                   <div class="col-xs-12" name="div_so_bottom"  >
+						<div  class="row mt32 mb32"  >
+							<div class="col-xs-12" >
+									<span><b>Gross Profit:</b> </span>
+									<span t-esc="'{:,.2f}'.format(o.margin)"	 />
+									<span><b>   Total Cost:</b> </span>
+									<span t-esc="'{:,.2f}'.format(o.total_cost)"	 />
+									<span><b>   Gross Margin (%):</b> </span>
+									<span t-esc="'{:,.2f}'.format(o.total_gross_margin_perc)"	 />
+									<span><b>    Markup (%):</b> </span>
+									<span t-esc="'{:,.2f}'.format(o.total_markup_perc)"	 />
+							</div>
+						</div>
+				   </div>
+
+
+
+            </xpath>
+
+        </template>
+
+	</data>
+</openerp>

@@ -1,0 +1,48 @@
+<openerp>
+    <data>
+
+
+		<record id="mail_templ_sale_markup_approved" model="mail.template">
+			<field name="name" >Sales Order Document Markup Approved</field>
+			<field name="email_from">${ctx.get('system_email')}</field>
+			<field name="reply_to">${ctx.get('markup_approve_person_email')}</field>
+			<field name="subject">The Sales Order Markup (${object.name}) has been Approved</field>
+			<field name="email_to">${ctx.get('notify_person_email')}</field>
+			<field name="model_id"   model="ir.model"  search="[('model', '=', 'sale.order')]" />
+		    <field name="auto_delete" eval="True"/>
+			<field name="body_html"  >
+				<![CDATA[
+				<p>Dear ${ctx.get('notify_person_name')},</p>
+				<p>The Sales Order Markup (${object.name}) has been approved by ${ctx.get('markup_approve_person_name')}</p>
+				<p><a href="${ctx.get('url')}">Follow the Link to see the approved sales order markup</a></p>
+				<p>Regards and Thanks</p>
+				<p>This is an auto generated message</p>
+				]]>
+			</field>
+		</record>
+
+
+		<record id="mail_templ_sale_markup_disapproved" model="mail.template">
+			<field name="name" >Sales Order Markup Disapproved</field>
+			<field name="email_from">${ctx.get('system_email')}</field>
+			<field name="reply_to">${ctx.get('markup_disapprove_person_email')}</field>
+			<field name="subject">The Sales Order Markup (${object.name}) has been Disapproved</field>
+			<field name="email_to">${ctx.get('notify_person_email')}</field>
+			<field name="model_id"   model="ir.model"  search="[('model', '=', 'sale.order')]" />
+		    <field name="auto_delete" eval="True"/>
+			<field name="body_html"  >
+				<![CDATA[
+				<p>Dear ${ctx.get('notify_person_name')},</p>
+				<p>The Sales Order Document (${object.name}) has been disapproved by ${ctx.get('markup_disapprove_person_name')}</p>
+				<p><b>Reason for Sales Order Markup Disapproval</b></p>
+				<p>${ctx.get('reason_for_markup_disapproval')}</p>
+				<p><a href="${ctx.get('url')}">Follow the Link to see the disapproved sales order markup</a></p>
+				<p>Regards and Thanks</p>
+				<p>This is an auto generated message</p>
+				]]>
+			</field>
+		</record>
+
+
+	</data>
+</openerp>

@@ -1,0 +1,18 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_kin_receiving_pef_depot_pef_officer,kin.receiving.pef.depot pef officer,model_kin_receiving_pef_depot,group_pef_officer,1,0,0,0
+access_kin_receiving_pef_depot_pef_manager,kin.receiving.pef.depot pef manager,model_kin_receiving_pef_depot,group_pef_manager,1,1,1,1
+access_kin_retail_pef_station_pef_officer,kin.retail.pef.station pef officer,model_kin_retail_pef_station,group_pef_officer,1,0,0,0
+access_kin_retail_pef_station_pef_manager,kin.retail.pef.station pef manager,model_kin_retail_pef_station,group_pef_manager,1,1,1,1
+access_kin_bridging_rate_pef_officer,kin.bridging.rate pef officer,model_kin_bridging_rate,group_pef_officer,1,0,0,0
+access_kin_bridging_rate_pef_manager,kin.bridging.rate pef manager,model_kin_bridging_rate,group_pef_manager,1,1,1,1
+access_kin_pef_register_pef_officer,kin.pef.register pef officer,model_kin_pef_register,group_pef_officer,1,1,0,0
+access_kin_pef_register_pef_manager,kin.pef.register pef manager,model_kin_pef_register,group_pef_manager,1,1,1,1
+access_stock_picking_pef_manager,stock.picking pef manager,stock.model_stock_picking,group_pef_manager,1,0,0,0
+access_account_invoice_pef_officer,account.invoice pef officer,account.model_account_invoice,group_pef_officer,1,1,1,1
+access_account_invoice_pef_manager,account.invoice pef manager,account.model_account_invoice,group_pef_manager,1,1,1,1
+access_account_invoice_line_pef_officer,account.invoice.line pef officer,account.model_account_invoice_line,group_pef_officer,1,1,1,1
+access_account_invoice_line_pef_manager,account.invoice.line pef manager,account.model_account_invoice_line,group_pef_manager,1,1,1,1
+access_account_journal_pef_officer,account.journal pef officer,account.model_account_journal,group_pef_officer,1,0,0,0
+access_account_journal_pef_manager,account.journal pef officer,account.model_account_journal,group_pef_manager,1,0,0,0
+access_account_invoice_tax_pef_officer,account.invoice.tax pef officer,account.model_account_invoice_tax,group_pef_officer,1,0,0,0
+access_account_invoice_tax_pef_manager,account.invoice.tax pef manager,account.model_account_invoice_tax,group_pef_manager,1,0,0,0

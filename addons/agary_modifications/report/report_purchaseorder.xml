@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <template id="report_custom_purchase_order_agary_extend" inherit_id="kin_report.report_custom_purchase_order">
+
+            <xpath expr="//div[@name='div_acknowledge']"  position="replace">
+
+                <div class="row" name="div_acknowledge" >
+							<div class="col-xs-12" >
+								<div class="row">
+                                    <div class="col-xs-6" >
+                                        <div>
+										    Prepared By: <span t-field="o.user_id.name" />
+                                        </div>
+                                        <div class="mt8">
+                                            Signature: ...........................
+                                        </div>
+                                       <div class="mt8">
+                                            Date: ...................................
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6" >
+                                        <div class="mt8" >
+										    Authorised by: ..............................
+                                        </div>
+                                        <div class="mt8" >
+                                            Signature: ....................................
+                                        </div>
+                                        <div class="mt8" >
+                                            Date: ............................................
+                                        </div>
+                                    </div>
+
+								</div>
+
+							</div>
+                </div>
+            </xpath>
+        </template>
+
+</data>
+</openerp>

@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <menuitem name="Product Regulation"
+            id="kin_product_regulation"
+            groups="group_product_regulation_user,group_product_regulation_manager"
+            sequence="25" web_icon="kin_product_regulation,static/description/icon.png" />
+
+
+        <record id="product_regulation_form_view" model="ir.ui.view">
+            <field name="name">product.regulation.form</field>
+            <field name="model">product.regulation</field>
+            <field name="arch" type="xml">
+                <form string="Product Regulation">
+                    <header>
+                        <button name="btn_activate" type="object" states="deactivated" string="Activate Reminder" class="oe_highlight" />
+                        <button name="btn_reactivate" type="object" states="new_reg,renewal" string="Reactivate Reminder" class="oe_highlight" />
+                        <button name="btn_new_registration" type="object" states="activated,deactivated" string="New Registration"  />
+                        <button name="btn_renewal" type="object" states="activated,deactivated" string="Renewal"  />
+                        <button name="btn_deactivate" type="object" states="activated" string="Deactivate Reminder" />
+                       <field name="state" widget="statusbar"  />
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" />
+                                <field name="manufacturer_id" />
+                                <field name="nafdac_reg_no" />
+                                <field name="category_id" />
+                            </group>
+                            <group>
+                                <group>
+                                    <field name="issue_date" />
+                                   <field name="expiry_date" />
+                                </group>
+                                <group>
+                                    <field name="expiry_day_interval" />
+                                    <field name="days_remaining" />
+                                </group>
+                                <group>
+                                    <field name="product_id" />
+                                    <field name="user_id" />
+                                </group>
+                            </group>
+                             <group col="1" colspan="4" >
+                                <field name="note" nolable="1" />
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+       <record id="product_regulation_tree_view" model="ir.ui.view">
+            <field name="name">product.regulation.tree</field>
+            <field name="model">product.regulation</field>
+            <field name="arch" type="xml">
+                <tree string="Product regulation Tree"   decoration-success="days_remaining &gt;= expiry_day_interval"    decoration-danger="days_remaining &lt; expiry_day_interval and days_remaining &gt;= 0"   >
+                        <field name="name" />
+                        <field name="manufacturer_id" />
+                        <field name="nafdac_reg_no" />
+                        <field name="issue_date" />
+                        <field name="expiry_date" />
+                        <field name="days_remaining" />
+                        <field name="expiry_day_interval" />
+                        <field name="category_id" />
+                        <field name="state" />
+                    </tree>
+            </field>
+       </record>
+
+
+        <record id="view_product_regulation_filter" model="ir.ui.view">
+            <field name="name" >Product Regulation</field>
+            <field name="model">product.regulation</field>
+            <field name="arch" type="xml">
+                <search string="Product Regulation">
+                         <field name="name" string="name/manuf./categ./nafdac/note" filter_domain="['|', '|', '|','|',('name','ilike',self),('manufacturer_id','child_of',self),('category_id','child_of',self), ('nafdac_reg_no','ilike',self), ('note','ilike',self)]"/>
+                         <field name="manufacturer_id"   operator="child_of"/>
+                        <field name="category_id" />
+                        <field name="nafdac_reg_no" />
+                         <field name="state" domain="[]"/>
+                         <separator />
+                         <filter string="Activated Product Reminder" name="active_reminder" domain="[('state', '=', 'activated')]"/>
+                         <filter string="Deactivated Product Reminder" name="de-active_reminder" domain="[('state', '=', 'deactivated')]"/>
+                        <filter string="New Registration" name="is_new_reg" domain="[('state', '=', 'new_reg')]"/>
+                        <filter string="Renewal" name="is_renewal" domain="[('state', '=', 'renewal')]"/>
+                        <filter string="Is Expiring Soon" name="is_expiring_soon_reminder" domain="[('is_expiring_soon', '=', True)]"/>
+                        <filter string="Is Expired" name="is_expired_reminder" domain="[('is_expired', '=', True)]"/>
+                        <filter string="Good Status" name="good_status_reminder" domain="[('is_good_status', '=', True)]"/>
+
+                    <group expand="0" string="Group By" >
+                        <filter string="Regulatory Person" name="responsible" context="{'group_by':'user_id'}" />
+                        <filter string="Manufacturer" name="manufacturer" context="{'group_by':'manufacturer_id'}" />
+                        <filter string="Product Category" name="category" context="{'group_by':'category_id'}" />
+                        <filter string="Status" name="Status" context="{'group_by':'state'}" />
+                        <filter string="Company" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
+                        <separator/>
+                        <filter string="Issued Day" context="{'group_by':'issue_date:day'}" help="Issued Day"/>
+                        <filter string="Expiry Day" context="{'group_by':'expiry_date:day'}" help="Expiry Day"/>
+                        <filter string="Created Day" context="{'group_by':'create_date:day'}" help="Create Date"/>
+                    </group>
+                </search>
+
+            </field>
+        </record>
+
+
+        <record id="action_all_product_regulation" model="ir.actions.act_window">
+            <field name="name" >Product Regulation</field>
+            <field name="res_model">product.regulation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="help" type="html">
+                <p>
+                    Create Each Product that needs to be regulated
+                </p>
+            </field>
+        </record>
+
+        <record id="action_activated_product_regulation" model="ir.actions.act_window">
+            <field name="name" >Product Regulation Activated Reminder</field>
+            <field name="res_model">product.regulation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain">[('state', 'in', ['activated'])]</field>
+            <field name="help" type="html">
+                <p>
+                    Create Each Product that needs to be regulated
+                </p>
+            </field>
+        </record>
+
+        <record id="action_deactivated_product_regulation" model="ir.actions.act_window">
+            <field name="name" >Product Regulation Deactivated Reminder</field>
+            <field name="res_model">product.regulation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain">[('state', 'in', ['deactivated'])]</field>
+            <field name="help" type="html">
+                <p>
+                    Create Each Product that needs to be regulated
+                </p>
+            </field>
+        </record>
+
+        <record id="action_new_reg_product_regulation" model="ir.actions.act_window">
+            <field name="name" >Products Undergoing New Registration</field>
+            <field name="res_model">product.regulation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain">[('state', '=', 'new_reg')]</field>
+            <field name="help" type="html">
+                <p>
+                    Create Each Product that needs to be regulated
+                </p>
+            </field>
+        </record>
+
+        <record id="action_renewal_product_regulation" model="ir.actions.act_window">
+            <field name="name" >Products Undergoing Renewal</field>
+            <field name="res_model">product.regulation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain">[('state', '=', 'renewal')]</field>
+            <field name="help" type="html">
+                <p>
+                    Create Each Product that needs to be regulated
+                </p>
+            </field>
+        </record>
+
+
+
+        <record id="action_expiring_soon_product_regulation" model="ir.actions.act_window">
+            <field name="name" >Product Due for Registration/Renewal</field>
+            <field name="res_model">product.regulation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain">[('is_expiring_soon', '=', True)]</field>
+            <field name="help" type="html">
+                <p>
+                    Create Each Product that needs to be regulated
+                </p>
+            </field>
+        </record>
+
+        <record id="action_expired_product_regulation" model="ir.actions.act_window">
+            <field name="name" >Product Expired Registration</field>
+            <field name="res_model">product.regulation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain">[('is_expired', '=', True)]</field>
+            <field name="help" type="html">
+                <p>
+                    Create Each Product that needs to be regulated
+                </p>
+            </field>
+        </record>
+
+        <record id="action_good_status_product_regulation" model="ir.actions.act_window">
+            <field name="name" >Product In Good Status</field>
+            <field name="res_model">product.regulation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain">[('is_good_status', '=', True)]</field>
+            <field name="help" type="html">
+                <p>
+                    Create Each Product that needs to be regulated
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="product_regulation_pivot">
+            <field name="name">Product Regulation Pivot</field>
+            <field name="model">product.regulation</field>
+            <field name="arch" type="xml">
+                <pivot string="Tickets">
+                    <field name="manufacturer_id" type="row"/>
+                    <field name="state" type="col"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="product_regulation_graph">
+            <field name="name">Product Regulation Graph</field>
+            <field name="model">product.regulation</field>
+            <field name="arch" type="xml">
+                <graph string="Tickets" type="bar">
+                    <field name="category_id" type="row"/>
+                    <field name="state" interval="month" type="col"/>
+                </graph>
+            </field>
+        </record>
+
+        <menuitem id="menu_first_level_product_regulation" name="Product Regulation"  parent="kin_product_regulation"    sequence="10"/>
+        <menuitem id="menu_all_reg_product" name="All Regulated Products"  parent="menu_first_level_product_regulation"  action="action_all_product_regulation"  sequence="3"/>
+         <menuitem id="menu_activated_reg_product" name="All Activated Reminder Products"  parent="menu_first_level_product_regulation"  action="action_activated_product_regulation"  sequence="5"/>
+         <menuitem id="menu_deactivated_reg_product" name="All De-Activated Reminder Products"  parent="menu_first_level_product_regulation"  action="action_deactivated_product_regulation"  sequence="7"/>
+        <menuitem id="menu_new_reg_product" name="Products Undergoing New Registration"  parent="menu_first_level_product_regulation"  action="action_new_reg_product_regulation"  sequence="9"/>
+        <menuitem id="menu_renewal_reg_product" name="Products Undergoing Renewal"  parent="menu_first_level_product_regulation"  action="action_renewal_product_regulation"  sequence="11"/>
+        <menuitem id="menu_is_expiring_soon_product" name="Products Due for Registration/Renewal"  parent="menu_first_level_product_regulation"  action="action_expiring_soon_product_regulation"  sequence="13"/>
+        <menuitem id="menu_is_expired_product" name="Products with Expired Registration"  parent="menu_first_level_product_regulation"  action="action_expired_product_regulation"  sequence="15"/>
+        <menuitem id="menu_good_status_product" name="Products in Good Status"  parent="menu_first_level_product_regulation"  action="action_good_status_product_regulation"  sequence="17"/>
+
+
+        <!-- Product category -->
+        <record id="product_category_form_view" model="ir.ui.view">
+            <field name="name">kin.product.category.form</field>
+            <field name="model">kin.product.category</field>
+            <field name="arch" type="xml">
+                <form string="Product Category">
+                    <sheet>
+                         <group>
+                        <field name="name" />
+                    <field name="description" />
+                    </group>
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+
+        <record id="action_kin_product_category" model="ir.actions.act_window">
+            <field name="name" >Product Category</field>
+            <field name="res_model">kin.product.category</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p>
+                    Create Each Product Category for the Products
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_setting_level_product_regulation" name="Configurations"  parent="kin_product_regulation"    sequence="12"/>
+        <menuitem id="menu_kin_product_category" name="Product Category"  parent="menu_setting_level_product_regulation" action="action_kin_product_category"   sequence="3"/>
+
+
+        <record model="ir.ui.view" id="view_company_product_regulation">
+            <field name="name">res.company.form.product.regulation</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="model">res.company</field>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Product Regulation Settings">
+                        <group>
+                             <field name="expiry_date_interval"  />
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+    </data>
+</openerp>

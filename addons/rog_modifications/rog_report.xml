@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="view_company_kin_report_rog" >
+                    <field name="name">res.company.form.rog.report</field>
+                    <field name="inherit_id" ref="kin_report.view_company_kin_reportd" />
+                    <field name="model">res.company</field>
+                    <field name="arch" type="xml">
+                         <field name="header_data"  position="after" >
+                              <field name="header_data_rog_inventory" />
+                         </field>
+
+                    </field>
+        </record>
+
+
+
+
+         <report
+		    id="ml_excel_report_rog"
+            model="ml.report.wizard"
+		    string="Move Line Report"
+		    report_type="xlsx"
+		    name="rog_modifications.report_ml_excel_rog"
+		    attachment_use="False"
+        />
+
+
+         <report
+		    id="form_m_report"
+            model="form.m.wizard"
+		    string="Form M Report"
+		    report_type="xlsx"
+		    name="rog_modifications.form_m_report"
+			file="rog_modifications.form_m_report"
+		    attachment_use="False"
+        />
+
+		<report
+		    id="lc_bc_report"
+            model="lc.bc.wizard"
+		    string="LC BC Report"
+		    report_type="xlsx"
+		    name="rog_modifications.lc_bc_report"
+			file="rog_modifications.lc_bc_report"
+		    attachment_use="False"
+        />
+
+		<report
+		    id="pef_pppra_report"
+            model="pef.pppra.wizard"
+		    string="PEF PPPRA Report"
+		    report_type="xlsx"
+		    name="rog_modifications.pef_pppra_report"
+			file="rog_modifications.pef_pppra_report"
+		    attachment_use="False"
+        />
+
+
+        <report
+		    id="shipping_report"
+            model="shipping.wizard"
+		    string="Shipping Report"
+		    report_type="xlsx"
+		    name="rog_modifications.shipping_report"
+			file="rog_modifications.shipping_report"
+		    attachment_use="False"
+        />
+
+
+
+        <!-- HR Reports -->
+        <report
+		    id="epccos_excel_report_rog"
+            model="epccos.report.wizard"
+		    string="EPCCOS Format Report"
+		    report_type="xlsx"
+		    name="rog_modifications.report_epccos_excel_rog"
+		    attachment_use="False"
+        />
+		<record id="epccos_excel_report_rog" model="ir.actions.report.xml" >
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_hr_user')])]"  />
+        </record>
+
+        <report
+		    id="general_excel_report_rog"
+            model="general.report.wizard"
+		    string="Pension General Format Report"
+		    report_type="xlsx"
+		    name="rog_modifications.report_general_excel_rog"
+		    attachment_use="False"
+        />
+		<record id="general_excel_report_rog" model="ir.actions.report.xml" >
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_hr_user')])]"  />
+        </record>
+
+
+		 <report
+		    id="payroll_excel_report_rog"
+		    model="payroll.report.parser"
+		    string="Payroll Excel Report"
+		    report_type="xlsx"
+		    name="rog_modifications.report_payroll_report_rog"
+		    file="rog_modifications.report_payroll_report_rog"
+		    attachment_use="False"
+        />
+		<record id="payroll_excel_report_rog" model="ir.actions.report.xml" >
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_hr_user')])]"  />
+        </record>
+
+
+		  <report
+		    id="pfa_excel_report_rog"
+            model="pfa.report.wizard"
+		    string="PFA Report"
+		    report_type="xlsx"
+		    name="rog_modifications.report_pfa_excel_rog"
+		    attachment_use="False"
+        />
+		<record id="pfa_excel_report_rog" model="ir.actions.report.xml" >
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_hr_user')])]"  />
+        </record>
+
+
+		<report
+		    id="bank_advice_excel_report_rog"
+            model="bank.advice.report.wizard"
+		    string="Bank Advice Report"
+		    report_type="xlsx"
+		    name="rog_modifications.report_bank_advice_excel_rog"
+		    attachment_use="False"
+        />
+		<record id="bank_advice_excel_report_rog" model="ir.actions.report.xml" >
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_hr_user')])]"  />
+        </record>
+
+		<report
+		    id="salary_section_excel_report_rog"
+            model="salary.section.report.wizard"
+		    string="Salary Section Report"
+		    report_type="xlsx"
+		    name="rog_modifications.report_salary_section_excel_rog"
+		    attachment_use="False"
+        />
+		<record id="salary_section_excel_report_rog" model="ir.actions.report.xml" >
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_hr_user')])]"  />
+        </record>
+
+		<report
+		    id="paye_excel_report_rog"
+            model="paye.report.wizard"
+		    string="P.A.Y.E Report"
+		    report_type="xlsx"
+		    name="rog_modifications.report_paye_excel_rog"
+		    attachment_use="False"
+        />
+		<record id="paye_excel_report_rog" model="ir.actions.report.xml" >
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_hr_user')])]"  />
+        </record>
+
+		 <report
+		    id="sales_loading_report_rog"
+            model="sales.loading.report.wizard"
+		    string="Approved Order Lines Report ROG"
+		    report_type="xlsx"
+		    name="rog_modifications.report_sales_loading_report_rog"
+		    attachment_use="False"
+        />
+
+
+    </data>
+</openerp>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
+		<!-- Or by referencing the parent report id e.g. kin_report.receipt_custom -->
+        <!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
+		<report
+		    id="hr_payroll.action_report_payslip"
+		    model="hr.payslip"
+		    string="Payment Slip"
+		    report_type="qweb-pdf"
+		    name="kin_hr.report_payslip_custom"
+		    file="kin_hr.report_payslip_custom"
+		    attachment_use="False"
+		    		/>
+
+
+        <report
+		    id="payslip_excel_report"
+		    model="payslip.report.parser"
+		    string="Payslip Excel Report"
+		    report_type="xlsx"
+		    name="kin_hr.report_payslip_report"
+		    file="kin_hr.report_payslip_report"
+		    attachment_use="False"
+        />
+		<record id="payslip_excel_report" model="ir.actions.report.xml" >
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_hr_user')])]"  />
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record  id="view_bank_advice_report_wizard_rog" model="ir.ui.view" >
+                <field name="name">Bank Advice Report Wizard</field>
+                <field name="model">bank.advice.report.wizard</field>
+            <field name="inherit_id" ref="kin_hr.view_bank_advice_report_wizard" />
+                <field name="arch" type="xml" >
+                  <field name="end_date" position="after"  >
+                     <field name="select_per" required="1" />
+                      <field name="section" required="1" />
+                 </field>
+             </field>
+        </record>
+
+
+   </data>
+</openerp>

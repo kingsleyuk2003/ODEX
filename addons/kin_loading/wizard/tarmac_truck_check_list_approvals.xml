@@ -1,0 +1,81 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+<!-- Truck Failed Test Confirm -->
+        <record id="view_failed_test_truck_checklist" model="ir.ui.view">
+            <field name="name">Failed CheckList Confirmation</field>
+            <field name="model">tarmac.truck.checklist.approval.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Sales Orders Confirmation">
+                        <p>You are about to fail the selected truck check list(s). Please enter the Truck Violation </p>
+                    <group>
+                        <label for="msg" string="Violation"  />
+                        <field nolabel="1" name="msg"/>
+                    </group>
+                    <footer>
+                        <button name="action_fail_checklist" string="Fail Checklist" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_fail_test_checklist" model="ir.actions.act_window">
+            <field name="name">Failed Tarmac Truck Check Lists</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tarmac.truck.checklist.approval.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_failed_test_truck_checklist" />
+            <field name="target">new</field>
+            <!--<field name="groups_id" eval="[(4,ref('base.group_sale_salesman'))]"/>-->
+        </record>
+
+
+
+<!-- PAssed Closed Out Gaps Checklist -->
+        <record id="view_passed_test_truck_checklist" model="ir.ui.view">
+            <field name="name">Passed CheckList Confirmation</field>
+            <field name="model">tarmac.truck.checklist.approval.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Sales Orders Confirmation">
+                        <p>You are about to pass the selected truck check list(s) that was previous failed. Please enter the Closed out Gaps</p>
+                    <group>
+                        <label for="msg" string="Closed Out Gaps"  />
+                        <field nolabel="1" name="msg"/>
+                    </group>
+                    <footer>
+                        <button name="action_pass_checklist_close" string="Pass Checklist" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_passed_test_checklist" model="ir.actions.act_window">
+            <field name="name">Passed Tarmac Truck Check Lists</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tarmac.truck.checklist.approval.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_passed_test_truck_checklist" />
+            <field name="target">new</field>
+            <!--<field name="groups_id" eval="[(4,ref('base.group_sale_salesman'))]"/>-->
+        </record>
+
+
+
+
+        <!--<record model="ir.values" id="check_lists_multiple_confirm">-->
+            <!--<field name="model_id" ref="model_truck_check_list" />-->
+            <!--<field name="name">Confirm Truck Check Lists</field>-->
+            <!--<field name="key2">client_action_multi</field>-->
+            <!--<field name="value" eval="'ir.actions.act_window,' + str(ref('action_confirm_multiple_checklist'))" />-->
+            <!--<field name="key">action</field>-->
+            <!--<field name="model">truck.check.list</field>-->
+             <!--<field name="groups_id" eval="[(4,ref('kin_loading.group_safety_officer'))]"/>-->
+        <!--</record>-->
+    </data>
+</openerp>

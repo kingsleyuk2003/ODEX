@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+                <record  id="view_salary_section_report_wizard" model="ir.ui.view" >
+                <field name="name">Salary Section Report Wizard</field>
+                <field name="model">salary.section.report.wizard</field>
+                <field name="arch" type="xml" >
+                <form string="Salary Section Report Wizard" >
+                  <label string="This wizard will help you generate a salary section Report in .xlsx file" />
+                     <group col="4" colspan="4" >
+                         <field name="start_date" required="1" />
+                         <field name="end_date" required="1" />
+                         <field name="select_per" required="1" />
+                    </group>
+
+                        <footer>
+                            <button default_focus="1" icon="gtk-execute" name="salary_section_excel_report" string="Export as Excel" type="object"  colspan="2" class="oe_highlight" />
+                            or <button special="cancel" class="oe_link"  string="Cancel"  />
+                        </footer>
+                </form>
+             </field>
+        </record>
+
+		<record id="action_salary_section_report_wizard" model="ir.actions.act_window">
+            <field name="name">Generate Salary Section Report</field>
+            <field name="res_model">salary.section.report.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_salary_section_report_wizard"/>
+            <field name="context">{}</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="target">new</field>
+        </record>
+
+         <menuitem name="Salary Section Excel Report" id="menu_salary_section_report" action="action_salary_section_report_wizard"
+           parent="kin_hr.hr_payroll_kin_report" sequence="26"  icon="STOCK_PRINT" />
+
+
+   </data>
+</openerp>

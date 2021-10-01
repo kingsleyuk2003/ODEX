@@ -1,0 +1,172 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* itis_mail_cc_bcc
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 9.0c-20160205\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-09-01 07:58+0000\n"
+"PO-Revision-Date: 2016-09-01 10:59+0100\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 1.5.4\n"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.ui.view,arch_db:itis_mail_cc_bcc.email_compose_message_wizard_form_mail_cc_bcc
+#: model:ir.ui.view,arch_db:itis_mail_cc_bcc.view_message_form_mail_cc_bcc
+msgid "Add Bcc contacts to notify..."
+msgstr "Kontakte in BCC hinzufügen"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.ui.view,arch_db:itis_mail_cc_bcc.email_compose_message_wizard_form_mail_cc_bcc
+#: model:ir.ui.view,arch_db:itis_mail_cc_bcc.view_message_form_mail_cc_bcc
+msgid "Add Cc contacts to notify..."
+msgstr "Kontakte in CC hinzufügen"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model.fields,field_description:itis_mail_cc_bcc.field_document_followers_auto_add_followers
+msgid "Auto Add Followers"
+msgstr "Follower autom. hinzufügen"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.ui.menu,name:itis_mail_cc_bcc.menu_document_followers
+msgid "Auto Followers"
+msgstr "Auto Follower"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model.fields,field_description:itis_mail_cc_bcc.field_mail_compose_message_email_bcc
+#: model:ir.model.fields,field_description:itis_mail_cc_bcc.field_mail_mail_email_bcc
+msgid "Bcc"
+msgstr "Bcc"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model.fields,help:itis_mail_cc_bcc.field_mail_compose_message_email_bcc
+#: model:ir.model.fields,help:itis_mail_cc_bcc.field_mail_mail_email_bcc
+msgid "Blind Carbon copy message recipients"
+msgstr "BCC Empfänger"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model.fields,help:itis_mail_cc_bcc.field_mail_compose_message_email_cc
+msgid "Carbon copy message recipients"
+msgstr "CC Empfänger"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model.fields,field_description:itis_mail_cc_bcc.field_mail_compose_message_email_cc
+msgid "Cc"
+msgstr "CC"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model.fields,field_description:itis_mail_cc_bcc.field_document_followers_create_uid
+msgid "Created by"
+msgstr "Angelegt von"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model.fields,field_description:itis_mail_cc_bcc.field_document_followers_create_date
+msgid "Created on"
+msgstr "Angelegt am"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model.fields,field_description:itis_mail_cc_bcc.field_document_followers_display_name
+msgid "Display Name"
+msgstr "Anzeigename"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model,name:itis_mail_cc_bcc.model_document_followers
+msgid "Document Followers"
+msgstr "Dokumentenbeobachter"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model.fields,field_description:itis_mail_cc_bcc.field_mail_mail_email_partner_bcc
+#: model:ir.model.fields,field_description:itis_mail_cc_bcc.field_mail_message_email_partner_bcc
+msgid "Email Bcc"
+msgstr "Email Bcc"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model.fields,field_description:itis_mail_cc_bcc.field_mail_mail_email_partner_cc
+#: model:ir.model.fields,field_description:itis_mail_cc_bcc.field_mail_message_email_partner_cc
+msgid "Email Cc"
+msgstr "Email Cc"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model,name:itis_mail_cc_bcc.model_mail_compose_message
+msgid "Email composition wizard"
+msgstr "E-Mail Assistent"
+
+#. module: itis_mail_cc_bcc
+#: code:addons/mail_cc_bcc/models/mail_mail.py:82
+#, python-format
+msgid ""
+"Error without exception. Probably due do sending an email without computed "
+"recipients."
+msgstr ""
+"Error without exception. Probably due do sending an email without computed "
+"recipients."
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model.fields,field_description:itis_mail_cc_bcc.field_document_followers_external_follower_ids
+#: model:ir.ui.view,arch_db:itis_mail_cc_bcc.view_document_followers_form
+msgid "External Followers"
+msgstr "Externe Follower"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.actions.act_window,name:itis_mail_cc_bcc.action_view_document_followers
+#: model:ir.ui.view,arch_db:itis_mail_cc_bcc.view_document_followers_tree
+msgid "Followers"
+msgstr "Followers"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.ui.view,arch_db:itis_mail_cc_bcc.view_document_followers_form
+msgid "Followers Form"
+msgstr "Follower-Formular"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model.fields,field_description:itis_mail_cc_bcc.field_document_followers_id
+msgid "ID"
+msgstr "ID"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model.fields,field_description:itis_mail_cc_bcc.field_document_followers_internal_follower_ids
+#: model:ir.ui.view,arch_db:itis_mail_cc_bcc.view_document_followers_form
+msgid "Internal Followers"
+msgstr "Interne Follower"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model.fields,field_description:itis_mail_cc_bcc.field_document_followers___last_update
+msgid "Last Modified on"
+msgstr "Zuletzt geändert am"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model.fields,field_description:itis_mail_cc_bcc.field_document_followers_write_uid
+msgid "Last Updated by"
+msgstr "Zuletzt aktualisiert durch"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model.fields,field_description:itis_mail_cc_bcc.field_document_followers_write_date
+msgid "Last Updated on"
+msgstr "Zuletzt aktualisiert am"
+
+#. module: itis_mail_cc_bcc
+#: code:addons/mail_cc_bcc/models/mail_mail.py:148
+#, python-format
+msgid "Mail Delivery Failed"
+msgstr "Nachrichtenübermittlung fehlgeschlagen"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model,name:itis_mail_cc_bcc.model_mail_message
+msgid "Message"
+msgstr "Nachricht"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model.fields,field_description:itis_mail_cc_bcc.field_document_followers_model_id
+msgid "Model"
+msgstr "Modell"
+
+#. module: itis_mail_cc_bcc
+#: model:ir.model,name:itis_mail_cc_bcc.model_mail_mail
+msgid "Outgoing Mails"
+msgstr "Postausgang"

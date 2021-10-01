@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record  id="view_pfa_report_wizard" model="ir.ui.view" >
+                <field name="name">PFA Report Wizard</field>
+                <field name="model">pfa.report.wizard</field>
+                <field name="arch" type="xml" >
+                <form string="PFA Report Wizard" >
+                  <label string="This wizard will help you generate a PFA Report in .xlsx file" />
+                     <group col="4" colspan="4" >
+                         <field name="start_date" required="1" />
+                         <field name="end_date" required="1"  />
+                    </group>
+                    <notebook>
+                        <page string="PFAs" >
+                             <field name="pfa_ids"   />
+                        </page>
+                    </notebook>
+
+                        <footer>
+                            <button default_focus="1" icon="gtk-execute" name="pfa_excel_report" string="Export as Excel" type="object"  colspan="2" class="oe_highlight" />
+                            or <button special="cancel" class="oe_link"  string="Cancel"  />
+                        </footer>
+                </form>
+             </field>
+        </record>
+
+		<record id="action_pfa_report_wizard" model="ir.actions.act_window">
+            <field name="name">Generate PFA Report</field>
+            <field name="res_model">pfa.report.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_pfa_report_wizard"/>
+            <field name="context">{}</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="target">new</field>
+        </record>
+
+         <menuitem name="PFA Excel Report" id="menu_pfa_report" action="action_pfa_report_wizard"
+           parent="hr_payroll_kin_report" sequence="21"  icon="STOCK_PRINT" />
+
+
+   </data>
+</openerp>

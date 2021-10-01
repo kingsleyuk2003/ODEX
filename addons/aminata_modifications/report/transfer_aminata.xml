@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
+		<!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
+	<report
+		    id="transfer_order_aminata"
+		    model="stock.picking"
+		    string="Transfer"
+		    report_type="qweb-pdf"
+		    name="aminata_modifications.report_transfer_aminata"
+		    file="aminata_modifications.report_transfer_aminata"
+		    attachment_use="False"
+		    		/>
+
+
+<template id="report_transfer_aminata">
+	    <t t-call="report.html_container">
+	        <t t-foreach="docs" t-as="o">
+	            <t t-call="aminata_modifications.custom_layout_aminata_inventory"  >
+	                <div class="page"  style="font-size:large" >
+						<style type="text/css">
+							<t t-call="kin_report.style"/>
+						</style>
+						<div t-raw="o.company_id.html_after_header" />
+
+					<div class="row" >
+							<div class="col-xs-12 text-center" >
+								<h3 t-if="o.state == 'done'"><b>Transfer A <span t-field="o.transfer_no" /></b></h3>
+							</div>
+						</div>
+						<div class="row" >
+							<div class="col-xs-8" >
+								<div t-field="o.attn" />
+							</div>
+							<div class="col-xs-4" >
+								<span><b>Date:</b></span>
+								<div t-field="o.transfer_date" />
+							</div>
+						</div>
+						<br />
+
+						<div class="row"  >
+							<div class="col-xs-12" >
+								<p>The Management of Aminata and Sons, Inc. has authorized the lifting of the below mentioned quantities of petroleum products for the distributor herein mentioned below listed quantity of Petroleum Products:</p>
+								<p>Please allow them to lift same:</p>
+								<p><span><b>DISTRIBUTOR: <span t-field="o.distributor_id" /></b></span></p>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-12" >
+
+								<table  style="width: 100%" class="table-bordered-black" cellpadding="3" cellspacing="0" >
+										<thead style="display: table-row-group " >
+											<tr>
+												<td width="50%" ><span><b>Products</b></span></td>
+												<td class="text-right" ><span><b>Quantity (US Gallons)</b></span></td>
+											</tr>
+										</thead>
+										<tbody>
+
+											<tr  t-foreach="o.pack_operation_ids" t-as="pack_operation" >
+												<td style="padding-left: 2px" >
+													<span t-field="pack_operation.name"/>
+												</td>
+												<td class="text-right">
+													<span t-field="pack_operation.product_qty"/>
+												 	<t t-if="o.company_id.is_show_uom"><span  t-field="pack_operation.product_uom_id"/></t>
+												</td>
+											</tr>
+										</tbody>
+								</table>
+							</div>
+						</div>
+
+						<div class="row"  >
+							<div class="col-xs-12" >
+								<p/>
+								<p>Kind regards,</p>
+								<p>Very truly your</p>
+								<p>Aminata and Sons, Inc.</p>
+							</div>
+						</div>
+						<br />
+							<div  class="row" name="div_sign_picking" >
+								<div class="col-xs-6" >
+									<p>__________________________________</p>
+										<span>Aminata and Sons, Inc. Manager</span>
+								</div>
+								<div class="col-xs-6" >
+									<p>__________________________________</p>
+									<p><span t-field="o.lprc_manager_name" /></p>
+									<span><span t-field="o.lprc_manager_designation" /></span>
+								</div>
+							</div>
+						 	<br />
+						 	<div  class="row mt32 mt32" name="div_sign_picking1" >
+								<div class="col-xs-6" >
+									<span>__________________________________</span>
+									<span>OPERATIONS</span>
+								</div>
+							</div>
+						<br/>
+						<div class="row"  >
+							<div class="col-xs-12" >
+								<p><span t-field="o.cc_internal_transfer" /></p>
+							</div>
+						</div>
+						<div class="row"  >
+							<div class="col-xs-12" >
+								<p><h1><b><span t-field="o.document_copy_type" /></b></h1></p>
+							</div>
+						</div>
+					</div>
+
+	            </t>
+	        </t>
+    	</t>
+</template>
+	</data>
+</openerp>

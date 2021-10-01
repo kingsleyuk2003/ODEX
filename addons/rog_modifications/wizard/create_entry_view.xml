@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+            <record id="view_create_entry_rog" model="ir.ui.view">
+            <field name="name">Create Entry</field>
+            <field name="model">create.entry.wizard</field>
+            <field name="inherit_id" ref="kin_bank_reconcile.view_create_entry" />
+            <field name="arch" type="xml">
+                <group name="grp_entry" position="after" >
+                    <group  col="4" >
+                         <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                        <field name="hr_department_id"  domain="[('is_show_other_apps','=',True)]" options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+
+                    </group>
+                </group>
+
+            </field>
+        </record>
+
+
+    </data>
+</openerp>

@@ -1,0 +1,122 @@
+<openerp>
+    <data>
+        <template id="index" >
+            <title>Academy</title>
+            <t t-foreach="teachers"  t-as="teacher">
+                <!--1.) <p><t t-esc="teacher" /></p>-->
+                <p><t t-esc="teacher.id" /> <t t-esc="teacher.name" /></p>
+            </t>
+        </template>
+
+        <template id="index1" >
+            <t t-call="website.layout" >
+                <div class="oe-structure" >
+                    <div class="container">
+                        <t t-set="title" >Academy</t>
+                         <t t-foreach="teachers"  t-as="teacher">
+                            <!--<p><t t-esc="teacher.id" /> <t t-esc="teacher.name" /></p>-->
+                             <p><a t-attf-href="/kin/academy/teacher/{{slug(teacher)}}"><t t-esc="teacher.id" />  <t t-esc="teacher.name" /></a></p>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+            <template id="biography" >
+                <t t-call="website.layout" >
+                    <t t-set="title" >Biography</t>
+                    <div class="oe_structure" />
+                    <div class="oe_structure" >
+                        <div class="container" >
+                            <h3><t t-esc="person.id" />  <span t-field="person.name" /></h3>
+                            <p>Last Modified: <i t-field="person.write_date" t-field-options='{"format":"long","widget":"relative"}' /></p>
+                            <div t-field="person.biography"></div>
+                        </div>
+                    </div>
+                </t>
+            </template>
+
+
+
+<!-- https://www.odoo.com/documentation/9.0/reference/qweb.html -->
+        <template id="qweb_section" >
+            <t t-call="website.layout" >
+                <t class="oe-structure" >
+                    <div class="container" >
+                        <h4>My Password: </h4>
+                       <span t-esc="my_pass" />
+                         <h4>Setting Attrubutes Section</h4>
+                        <t t-foreach="[1,2]" t-as="i" >
+                           <table  style="width: 100%;" class="table-bordered-black" cellpadding="3" cellspacing="0" >
+                                <tr>
+                                   <td><p>size: <t t-raw="i_size" /></p></td>
+                                   <td> Is Even: <t t-esc="i_even" /></td>
+                                   <td>Is Odd: <t t-esc="i_odd" /></td>
+                                   <td> Parity:  <t t-esc="i_parity" /></td>
+                                    <td> Attribute<span t-att-class="white" /></td> <!-- e.g. <span class="white"  /> -->
+                                   <td><span t-att="['class','red']"  >Attribute Pair</span></td> <!-- e.g. <span class="red" >Attribute Pair</span>   -->
+                                   <td t-att="{'class':'blue','style':'font-weight: bold'}" >Multiple Attributes Mapping</td> <!-- e.g. <td class='blue' style='font-weight: bold;' >Multiple Attributes Mapping</td>  -->
+                                    <td  t-attf-class="myrow {{i_parity}}" > Zebra rows: </td> <!--e.g. output is <td class="myrow even" >Zebra rows:</td>  -->
+                                   <td>Index:  <t t-esc="i_index" /></td>
+                                   <td> Value: <t t-esc="i_value" /></td>
+                                   <td> All: <t t-esc="i_all" /></td>
+                                   <td>First: <t t-esc="i_first" /></td>
+                                   <td>last: <t t-esc="i_last" /></td>
+                                </tr>
+                            </table>
+                        </t>
+                         <div>
+                                <h4>Setting variables Section</h4>
+                                <t t-set="var" t-value="2+2" />
+                                <t t-esc="var" />
+                             <t t-set="foo" ><p>This node body is rendered if there is no t-value set</p></t>
+                             <t t-raw="foo" />
+                         </div>
+                        <div>
+                             <h4>Calling Sub Templates Section</h4>
+
+                            <t t-set="v" t-value="3000" />
+                             <h3>Other Template without rendering inner text of the call directive</h3>
+                            <t t-call="kin_website_academy.other_template" >
+
+                            </t>
+
+                            <h3>Other Template that renders inner text of the call directive</h3>
+                            <t t-call="kin_website_academy.other_template" >
+                                <p>This is the raw unescaped innertext content that will be rendered inside the call directive other template having the magical 0 variable </p>
+                                <p>This is the Global variable "v" value:<t t-esc="v" ></t></p>
+                            </t>
+
+                            <h3>Template Extension</h3>
+                             <t t-name="other_template_extend"  t-extend="kin_website_academy.other_template" >
+                                <t t-jquery="p" t-operation="replace" >
+                                    <span>This is an extension of the template</span>
+                                </t>
+                            </t>
+                            <t t-call="kin_website_academy.other_template" />
+
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <template id="other_template" >
+             <t t-raw='0' />  <!-- The magical 0 special variable are like placeholders that allows the inner test of the instantiated call directive template to be rendered -->
+            <t t-esc="0" />  <!-- The inner text in the t-call template body is html escaped  -->
+            <t t-raw="0" />
+            <p>This is the other template</p>
+            <t t-set="v" t-value="1000" />
+            <t t-log="v" />
+            <t t-debug="" />
+            <p>This is the local other template variable "v" value:<t t-esc="v" ></t></p>
+             <t t-raw="0" />
+            <t t-raw="0" />
+
+        </template>
+
+
+
+    </data>
+</openerp>

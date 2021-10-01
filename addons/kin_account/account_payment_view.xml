@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+
+          <record id="view_account_paymenkkokkact_search_extend" model="ir.ui.view">
+             <field name="name">account.payment.search.extend</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_search"/>
+            <field name="arch" type="xml">
+                 <search position="inside" >
+                      <group expand="0" string="Group By">
+                            <filter name="groupby_partner" string="Partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                        </group>
+                    </search>
+            </field>
+        </record>
+
+         <record model="ir.ui.view" id="account_payments_pivot_view">
+            <field name="name">Account Payments Pivot</field>
+            <field name="model">account.payment</field>
+            <field name="arch" type="xml">
+                <pivot string="Payments">
+                    <field name="partner_id" type="row"/>
+                    <field name="amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+
+        <record id="account.menu_action_account_payments_receivable" model="ir.ui.menu" >
+            <field name="name" >Customer's Payment Analysis</field>
+            <field name="sequence" >21</field>
+             <!--This will append the the new group to the existing ones-->
+		 <field name="groups_id" eval="[(4,ref('group_show_customer_payment_analysis'))]"  />
+     <!--This will completely replace the group with the new one-->
+       <!--<field name="groups_id" eval="[(6, 0, [ref('group_show_customer_payment_analysis'),ref('group_show_customer_payment_analysis')])]"/>  -->
+        </record>
+
+
+        <record id="account.menu_action_account_payments_payable" model="ir.ui.menu" >
+            <field name="name" >Supplier's Payment Analysis</field>
+            <field name="sequence" >21</field>
+             <field name="groups_id" eval="[(4,  ref('group_show_supplier_payment_analysis'))]"/>
+        </record>
+
+
+
+
+
+        <record id="account.action_account_payments" model="ir.actions.act_window">
+            <field name="name">Customer's Payment Analysis</field>
+            <field name="view_mode">pivot,tree,form,graph</field>
+            <field name="view_id" ref="account_payments_pivot_view" />
+        </record>
+
+        <record id="account.action_account_payments_payable" model="ir.actions.act_window">
+            <field name="name">Supplier's Payment Analysis</field>
+            <field name="view_mode">pivot,tree,form,graph</field>
+            <field name="view_id" ref="account_payments_pivot_view" />
+        </record>
+
+        <record id="view_account_payment_tree_extend" model="ir.ui.view">
+            <field name="name">account.payment.tree.extend</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_tree" />
+            <field name="arch" type="xml">
+                <field name="payment_method_id" position="after">
+                    <field name="ref_no" />
+                </field>
+            </field>
+        </record>
+
+        <record id="view_account_supplier_payment_tree_extend" model="ir.ui.view">
+            <field name="name">account.supplier.payment.tree.extend</field>
+            <field name="model">account.payment</field>
+            <field name="arch" type="xml">
+                 <field name="payment_method_id" position="after">
+                    <field name="ref_no" />
+                </field>
+            </field>
+        </record>
+
+        <record id="view_account_payment_search_extend" model="ir.ui.view">
+            <field name="name">account.payment.search.extend</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_search" />
+            <field name="arch" type="xml">
+                 <field name="name" position="after">
+                    <field name="ref_no" />
+                </field>
+            </field>
+        </record>
+
+
+        <record id="view_account_payment_form_extend" model="ir.ui.view">
+            <field name="name">account.payment.form.extend</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form" />
+            <field name="arch" type="xml">
+                <field name="communication" position="after">
+                    <field name="ref_no" />
+                </field>
+                 <!-- never ever attempt this again. This caused an issue on the account_payment_group that made it readonly and took tim to discover the cause -->
+                <!--<sheet position="after" >-->
+                     <!--<div class="oe_chatter">-->
+                        <!--<field name="message_follower_ids" widget="mail_followers"/>-->
+                        <!--<field name="message_ids" widget="mail_thread"/>-->
+                    <!--</div>-->
+                <!--</sheet>-->
+            </field>
+        </record>
+
+        <record id="view_account_payment_invoice_form_extend" model="ir.ui.view">
+            <field name="name">account.payment.invoice.form.extend</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_invoice_form" />
+            <field name="arch" type="xml">
+               <field name="communication" position="after">
+                    <field name="ref_no" />
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

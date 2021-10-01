@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+
+        <record id="confirm_sale_order_disapprove_view" model="ir.ui.view">
+            <field name="name">Sales Orders Disapproved Markup</field>
+            <field name="model">sale.order.disapprove.markup.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Sales Orders Disapproved Markup">
+                    <p>You are about the disapprove the sales order markup. </p>
+                    <group>
+                        <field name="msg"/>
+                    </group>
+                    <footer>
+                        <button name="disapprove_sales_orders_markup" string="Disapprove Sales Order(s) Markup" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_disapprove_sale_orders_markup" model="ir.actions.act_window">
+            <field name="name">Disapprove Sale Orders Markup</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order.disapprove.markup.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <!--<field name="groups_id" eval="[(4,ref('kin_sales_double_validation.group_show_disapprove_btn'))]"/>-->
+        </record>
+
+
+        <record model="ir.values" id="sale_order_multiple_disapprove_markup">
+            <field name="model_id" ref="sale.model_sale_order" />
+            <field name="name">Disapprove Sales Orders Markup</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('action_disapprove_sale_orders_markup'))" />
+            <field name="key">action</field>
+            <field name="model">sale.order</field>
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<menuitem id="hr_expense.menu_expense_to_approve" action="hr_expense.action_request_approve_expense" name="To Approve" parent="hr_expense.menu_hr_expense_root" />
+
+        <record id="hr_expense_form_view" model="ir.ui.view">
+            <field name="name">hr.expense.form</field>
+            <field name="model">hr.expense</field>
+            <field name="inherit_id" ref="hr_expense.hr_expense_form_view" />
+            <field name="arch" type="xml">
+
+
+                <div class="oe_button_box" position="inside" >
+                        <button name="action_view_exp_group"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                attrs="{'invisible': [('exp_group_count', '=', 0)]}" >
+                                <field  name="exp_group_count" widget="statinfo" string="Expense Group" />
+                         </button>
+                    </div>
+
+                  <field name="state" position="attributes" >
+                      <attribute name="statusbar_visible" >draft,submit,post,done</attribute>
+                      <attribute name="statusbar_colors" >{"submit":"blue","cancel":"red"}</attribute>
+                  </field>
+
+                  <field name="product_id" position="attributes" >
+                      <attribute name="string" >Expense Type (Account)</attribute>
+                      <attribute name="options" >{'no_open':True,'no_create':True}</attribute>
+                  </field>
+
+                <field name="unit_amount" position="attributes" >
+                    <attribute name="attrs" >{'readonly': [('state','not in', ['draft','approve'])]}</attribute>
+                </field>
+
+                <field name="quantity" position="attributes" >
+                    <attribute name="attrs" >{'readonly': [('state','not in', ['draft','approve'])]}</attribute>
+                </field>
+
+                 <field name="description" position="attributes" >
+                    <attribute name="attrs" >{'readonly': [('state','not in', ['draft'])]}</attribute>
+                </field>
+
+                <field name="tax_ids" position="attributes" >
+                    <attribute name="groups" >kin_hr.group_other_expense_fields</attribute>
+                </field>
+
+                 <field name="currency_id" position="attributes" >
+                    <attribute name="groups" >kin_hr.group_other_expense_fields</attribute>
+                </field>
+
+                <field name="analytic_account_id" position="attributes" >
+                    <attribute name="groups" >kin_hr.group_other_expense_fields</attribute>
+                </field>
+
+                <field name="company_id" position="attributes" >
+                    <attribute name="attrs" >{'readonly': [('state','not in', ['draft','submit'])]}</attribute>
+                    <attribute name="groups" >kin_hr.group_other_expense_fields</attribute>
+                </field>
+
+                <field name="journal_id" position="attributes" >
+                    <attribute name="groups" >kin_hr.group_other_expense_fields</attribute>
+                </field>
+
+                <field name="account_move_id" position="attributes" >
+                    <attribute name="groups" >kin_hr.group_other_expense_fields</attribute>
+                </field>
+
+                <field name="payment_mode" position="attributes" >
+                    <attribute name="groups" >kin_hr.group_other_expense_fields</attribute>
+                </field>
+
+                <field name="bank_journal_id" position="attributes" >
+                    <attribute name="groups" >kin_hr.group_other_expense_fields</attribute>
+                </field>
+
+                <field name="employee_id" position="attributes" >
+                    <attribute name="groups" >kin_hr.group_other_expense_fields</attribute>
+                </field>
+
+                <label for="payment_mode"  position="attributes"  >
+                      <attribute name="groups" >kin_hr.group_other_expense_fields</attribute>
+                </label>
+
+                <field name="company_id" position="after" >
+<!--                    <field name="department_manager_id" groups="kin_hr.group_other_expense_fields" />-->
+                    <field name="line_manager_id"   />
+                        <field name="emp_expense_group_acc_id" />
+                </field>
+            </field>
+        </record>
+
+
+    <!-- Expenses -->
+
+            <record id="hr_expense_tree" model="ir.ui.view">
+            <field name="name">hr.expense.tree</field>
+            <field name="model">hr.expense</field>
+            <field name="arch" type="xml">
+                <tree string="Expenses" decoration-warning="state=='draft'" editable="top" create="0" delete="0" edit="1" >
+<!--                     <field name="date" readonly="1" />-->
+<!--                    <field name="employee_id" readonly="1" />-->
+                    <field name="name"/>
+<!--                    <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>-->
+                     <field name="unit_amount" />
+                     <field name="quantity" />
+                    <field name="total_amount" sum="Total Amount" widget="monetary"/>
+                    <field name="company_id" invisible="1" />
+                    <field name="expense_group_id" readonly="1" />
+                    <field name="product_id" groups="account.group_account_user"  />
+                    <field name="bank_journal_id" attrs="{'invisible': [('payment_mode', '=', 'own_account')]}" domain="[('type','in',['bank','cash'])]" groups="account.group_account_user"  options="{'no_open': True, 'no_create': True}" />
+                     <button name="action_move_create" states="approve" string="Post" type="object" groups="account.group_account_user" class="oe_highlight"/>
+                     <button name="submit_expenses" states="draft" string="Submit" type="object" />
+                    <button name="approve_expenses" states="submit" string="Approve" type="object" groups="kin_hr.group_hr_expense_line_manager" />
+                    <button name="action_move_create" states="approve" string="Post" type="object" groups="account.group_account_user" class="oe_highlight"/>
+                    <button name="%(hr_expense.hr_expense_refuse_wizard_action)d" states="submit,approve" string="Refuse" type="action"   />
+                    <button name="reset_expenses" states="cancel" string="Reset" type="object" groups="kin_hr.group_hr_expense_group_reset" />
+                    <field name="refused_msg" readonly="1" />
+                    <field name="refused_by" readonly="1" />
+                    <field name="refused_date" readonly="1" />
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+
+
+
+     <!-- extend the company settings -->
+<!--     <record model="ir.ui.view" id="view_company_expense_modifications">-->
+<!--                    <field name="name">res.company.form.expense.modifications</field>-->
+<!--                    <field name="inherit_id" ref="view_company_modifications"/>-->
+<!--                    <field name="model">res.company</field>-->
+<!--                    <field name="arch" type="xml">-->
+<!--                        <field name="company_id" position="after"  >-->
+<!--                            <field name="accountant_group_id"   />-->
+<!--                        </field>-->
+<!--                    </field>-->
+<!--         </record>-->
+
+    <record model="ir.ui.view" id="view_company_inherit_form_expense_extend">
+            <field name="name">res.company.form.expense.extend</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="model">res.company</field>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Expense Config.">
+                        <group>
+                             <field name="accountant_group_id"   />
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+
+    <!-- HR Expense Group -->
+      <record id="hr_expense_group_form_view" model="ir.ui.view">
+            <field name="name">hr.expense.group.form</field>
+            <field name="model">hr.expense.group</field>
+            <field name="arch" type="xml">
+               <form string="Expense Group">
+                    <header>
+<!--                    <button name="btn_done" states="draft" string="Done"  type="object" class="oe_highlight"  />-->
+                    <button name="btn_reset" states="done" string="Reset"  type="object" groups="kin_hr.group_hr_expense_group_reset_button"   />
+                   <field name="state" widget="statusbar"  />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                     <group col="4">
+                         <field name="user_id" required="1" readonly="1" invisible="1" />
+                         <field name="date" required="1" readonly="1" />
+                         <field name="employee_id" required="1" readonly="1" />
+                         <field name="department_id"  required="1"  readonly="1"/>
+                         <field name="line_manager_id"  required="1" readonly="1" />
+                         <field name="emp_expense_group_general_id" readonly="1" invisible="1" />
+                     </group>
+                     <notebook>
+                        <page string="Expense Lines"  >
+                            <field name="expense_line_ids"  >
+                                <tree editable="bottom" >
+                                    <field name="date" readonly="1" />
+                                    <field name="employee_id" readonly="1" />
+                                    <field name="name" />
+                                    <field name="unit_amount" />
+                                    <field name="quantity" />
+                                    <field name="total_amount" />
+                                    <field name="company_id" invisible="1" options="{'no_open': True, 'no_create': True}"  />
+                                     <field name="product_id" string="Expense Type (Account)" groups="account.group_account_user"   />
+                                     <button name="submit_expenses" states="draft" string="Submit" type="object"  />
+                                    <button name="approve_expenses" states="submit" string="Approve" type="object" groups="kin_hr.group_hr_expense_line_manager" />
+
+                                    <button name="action_move_create" states="approve" string="Post" type="object" groups="account.group_account_user" class="oe_highlight"/>
+
+                                    <button name="%(hr_expense.hr_expense_refuse_wizard_action)d" states="submit,approve" string="Refuse" type="action"   />
+                                    <button name="reset_expenses" states="cancel" string="Reset" type="object" groups="kin_hr.group_hr_expense_group_reset" />
+
+                                     <field name="refused_msg" readonly="1" />
+                                            <field name="refused_by" readonly="1" />
+                                            <field name="refused_date" readonly="1" />
+                                    <field name="state" />
+                                </tree>
+                                <form>
+                                    <sheet>
+                                        <group col="4">
+                                             <field name="refused_msg" readonly="1" />
+                                            <field name="refused_by" readonly="1" />
+                                            <field name="refused_date" readonly="1" />
+                                            <field name="posted_by" readonly="1" />
+                                            <field name="posted_date" readonly="1" />
+                                             <field name="paid_by" readonly="1" />
+                                            <field name="paid_date" readonly="1" />
+                                        </group>
+                                    </sheet>
+                                     <div class="oe_chatter">
+                                        <field name="message_follower_ids" widget="mail_followers"/>
+                                        <field name="message_ids" widget="mail_thread"/>
+                                    </div>
+                                </form>
+                            </field>
+<!--                             <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">-->
+<!--                                <div class="oe_subtotal_footer oe_inline o_td_label">-->
+<!--                                    <label for="amount_total" />-->
+<!--                                    <button name="button_dummy"-->
+<!--                                         string="(update)" type="object" class="oe_edit_only oe_link"/>-->
+<!--                                </div>-->
+<!--                                <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>-->
+<!--                            </group>-->
+<!--                            <div class="oe_clear"/>-->
+
+<!--                         <button name="btn_submit_manager"  string="Submit All lines to Manager"  type="object" class="oe_highlight"  />-->
+
+                     </page>
+                     </notebook>
+
+                </sheet>
+                   <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+               </form>
+            </field>
+      </record>
+
+      <record model="ir.ui.view" id="hr_expense_group_tree_view">
+             <field name="name">hr.expense.group.tree</field>
+            <field name="model">hr.expense.group</field>
+              <field name="arch" type="xml">
+                  <tree string="Expense Group" >
+                      <field name="name" />
+                      <field name="date" />
+                      <field name="employee_id" />
+<!--                      <field name="user_id" />-->
+                      <field name="state" />
+                  </tree>
+              </field>
+        </record>
+
+
+    <record id="action_hr_my_expense_group" model="ir.actions.act_window">
+            <field name="res_model">hr.expense.group</field>
+            <field name="view_type">form</field>
+            <field name="name">My Expenses</field>
+           <field name="domain">[('employee_id.user_id', '=', uid)]</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+        </record>
+
+         <menuitem id="menu_hr_my_expense_group" name="My Expenses" parent="hr_expense.menu_expense_all" action="action_hr_my_expense_group" sequence="1"/>
+
+
+    <record id="action_hr_new_expense_group" model="ir.actions.act_window">
+            <field name="res_model">hr.expense.group</field>
+            <field name="view_type">form</field>
+            <field name="name">New Expenses by Requester</field>
+           <field name="domain">[('state', '=', 'draft'),('line_manager_id.user_id', '=', uid)]</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+        </record>
+
+         <menuitem id="menu_hr_new_expense_group" parent="hr_expense.menu_expense_all" action="action_hr_new_expense_group" sequence="2"/>
+
+
+     <record id="action_hr_done_expense_group" model="ir.actions.act_window">
+            <field name="res_model">hr.expense.group</field>
+            <field name="view_type">form</field>
+            <field name="name">Done Expenses by Manager</field>
+           <field name="domain">[('state', '=', 'done'),('line_manager_id.user_id', '=', uid)]</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+        </record>
+
+         <menuitem id="menu_hr_done_expense_group"  parent="hr_expense.menu_expense_all" action="action_hr_done_expense_group" sequence="3"/>
+
+
+         <record id="action_hr_expense_group" model="ir.actions.act_window">
+            <field name="res_model">hr.expense.group</field>
+            <field name="view_type">form</field>
+            <field name="name">All Expenses</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+        </record>
+
+         <menuitem id="menu_hr_expense_group" name="All Expenses" parent="hr_expense.menu_expense_all" action="action_hr_expense_group" sequence="4"/>
+
+
+
+
+    <!-- Expense Menus -->
+    <menuitem id="hr_expense.menu_expense_all" action="hr_expense.expense_all" name="Expenses" parent="hr_expense.menu_hr_expense_root"/>
+
+    <record model="ir.ui.menu" id="hr_expense.menu_expense_to_approve">
+		 <field name="groups_id" eval="[(6, 0, [ref('base.group_no_one')])]" />
+        </record>
+
+    <menuitem id="expense_status" name="Expense Status" parent="hr_expense.menu_hr_expense_root" groups="group_hr_expense_status"/>
+    <menuitem id="expense_fob_status" name="FOB Expense Status" parent="hr_expense.menu_hr_expense_root" groups="group_hr_expense_status"/>
+
+     <record id="view_hr_expense_filter" model="ir.ui.view">
+            <field name="name">hr.expense.filter</field>
+            <field name="model">hr.expense</field>
+         <field name="inherit_id" ref="hr_expense.view_hr_expense_filter" />
+            <field name="arch" type="xml">
+                  <filter  context="{'group_by': 'date'}" position="after">
+                      <filter name="grpEmployee"  string="Employee" domain="[]" context="{'group_by':'employee_id'}"/>
+                       <filter name="grpDay"  string="Day" domain="[]" context="{'group_by':'date:day'}"/>
+                  </filter>
+            </field>
+        </record>
+
+     <record id="expense_all" model="ir.actions.act_window">
+            <field name="name">Expense Lines</field>
+            <field name="res_model">hr.expense</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="view_hr_expense_filter"/>
+         <field name="context">{'search_default_grpEmployee': True,'search_default_grpDay': True }</field>
+        </record>
+     <record id="hr_expense_tree_action" model="ir.actions.act_window.view">
+            <field name="sequence" eval="0"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="hr_expense_tree"/>
+            <field name="act_window_id" ref="expense_all"/>
+        </record>
+    <menuitem id="menu_hr_expense_lines" name="Expense Lines" parent="hr_expense.menu_expense_all" action="expense_all" sequence="2"/>
+
+
+        <record id="expense_to_submit" model="ir.actions.act_window">
+            <field name="name">Awaiting Submission to Manager</field>
+            <field name="res_model">hr.expense</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="view_hr_expense_filter"/>
+            <field name="domain">[('state', 'in', ['draft']),('company_id','=',1)]</field>
+        </record>
+     <record id="hr_expense_tree_action_to_submit" model="ir.actions.act_window.view">
+            <field name="sequence" eval="0"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="hr_expense_tree"/>
+            <field name="act_window_id" ref="expense_to_submit"/>
+        </record>
+    <menuitem id="menu_hr_expense_lines_to_submit"    parent="expense_status" action="expense_to_submit" sequence="1"/>
+
+
+    <record id="expense_submitted" model="ir.actions.act_window">
+            <field name="name">Awaiting Line Manager Approval</field>
+            <field name="res_model">hr.expense</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="view_hr_expense_filter"/>
+            <field name="domain">[('state', 'in', ['submit']),('company_id','=',1)]</field>
+        </record>
+     <record id="hr_expense_tree_action_submitted" model="ir.actions.act_window.view">
+            <field name="sequence" eval="0"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="hr_expense_tree"/>
+            <field name="act_window_id" ref="expense_submitted"/>
+        </record>
+    <menuitem id="menu_hr_expense_lines_submitted"   parent="expense_status" action="expense_submitted" sequence="2"/>
+
+
+    <record id="expense_approve" model="ir.actions.act_window">
+            <field name="name">Awaiting Account Posting</field>
+            <field name="res_model">hr.expense</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="view_hr_expense_filter"/>
+            <field name="domain">[('state', 'in', ['approve']),('company_id','=',1)]</field>
+        </record>
+     <record id="hr_expense_tree_action_approve" model="ir.actions.act_window.view">
+            <field name="sequence" eval="0"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="hr_expense_tree"/>
+            <field name="act_window_id" ref="expense_approve"/>
+        </record>
+    <menuitem id="menu_hr_expense_lines_approve"   parent="expense_status" action="expense_approve" sequence="4"/>
+
+
+    <record id="expense_post" model="ir.actions.act_window">
+            <field name="name">Awaiting Payment</field>
+            <field name="res_model">hr.expense</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="view_hr_expense_filter"/>
+            <field name="domain">[('state', 'in', ['post']),('company_id','=',1)]</field>
+          <field name="context">{'search_default_grpEmployee': True,'search_default_grpDay': True }</field>
+        </record>
+     <record id="hr_expense_tree_action_post" model="ir.actions.act_window.view">
+            <field name="sequence" eval="0"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="hr_expense_tree"/>
+            <field name="act_window_id" ref="expense_post"/>
+        </record>
+    <menuitem id="menu_hr_expense_lines_post"   parent="expense_status" action="expense_post" sequence="5"/>
+
+
+   <record id="expense_done" model="ir.actions.act_window">
+            <field name="name">Paid Expenses</field>
+            <field name="res_model">hr.expense</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="view_hr_expense_filter"/>
+            <field name="domain">[('state', 'in', ['done']),('company_id','=',1)]</field>
+        <field name="context">{'search_default_grpEmployee': True,'search_default_grpDay': True }</field>
+        </record>
+     <record id="hr_expense_tree_action_done" model="ir.actions.act_window.view">
+            <field name="sequence" eval="0"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="hr_expense_tree"/>
+            <field name="act_window_id" ref="expense_done"/>
+        </record>
+    <menuitem id="menu_hr_expense_lines_done"   parent="expense_status" action="expense_done" sequence="6"/>
+
+
+     <record id="expense_cancel" model="ir.actions.act_window">
+            <field name="name">Refused Expenses</field>
+            <field name="res_model">hr.expense</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="view_hr_expense_filter"/>
+            <field name="domain">[('state', 'in', ['cancel']),('company_id','=',1)]</field>
+          <field name="context">{'search_default_grpEmployee': True,'search_default_grpDay': True }</field>
+        </record>
+     <record id="hr_expense_tree_action_cancel" model="ir.actions.act_window.view">
+            <field name="sequence" eval="0"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="hr_expense_tree"/>
+            <field name="act_window_id" ref="expense_cancel"/>
+        </record>
+    <menuitem id="menu_hr_expense_lines_cancel"   parent="expense_status" action="expense_cancel" sequence="7"/>
+
+
+
+
+
+<!-- Employee expense group -->
+          <record id="emp_expense_group_form" model="ir.ui.view">
+            <field name="name">emp.expense.group.form</field>
+            <field name="model">emp.expense.group</field>
+            <field name="arch" type="xml">
+                <form string="Employee Expense Groups">
+                    <sheet>
+                        <group col="4">
+                              <field name="name" />
+                            <field name="company_id" />
+                                <field name="user_ids"  widget="many2many_tags" />
+                            <field name="is_general" />
+                        </group>
+                    </sheet>
+
+                </form>
+            </field>
+          </record>
+
+        <record model="ir.ui.view" id="emp_expense_group_tree_view">
+            <field name="name">Employee Expense Group Tree</field>
+            <field name="model">emp.expense.group</field>
+              <field name="arch" type="xml">
+                  <tree string="Employee Expense Group" >
+                        <field name="name" />
+                  </tree>
+              </field>
+        </record>
+
+         <record id="action_emp_expense_group" model="ir.actions.act_window">
+            <field name="res_model">emp.expense.group</field>
+            <field name="view_type">form</field>
+            <field name="name">Employee Expense Group</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+        </record>
+         <menuitem id="menu_emp_expense_group" name="Employee Expense Group" parent="hr_expense.menu_hr_expense_configuration" action="action_emp_expense_group" sequence="11"/>
+
+    <record id="emp_expense_group_view_ticket_extend" model="ir.ui.view">
+            <field name="name">emp.expense.group</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <group  groups="base.group_light_multi_company" position="after" >
+                    <group string="Employee Expense Groups">
+                        <field name="emp_expense_group_ids"  widget="many2many_tags" />
+                    </group>
+                </group>
+            </field>
+        </record>
+
+    <!-- Client multi action server -->
+    <record id="hr_expense_manager_approve_action_server" model="ir.actions.server">
+            <field name="name">Line Manager Approve Expenses</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_hr_expense"/>
+            <field name="state">code</field>
+            <field name="code">
+                self.approve_expenses(cr, uid, context.get('active_ids', []), context=context)
+            </field>
+        </record>
+        <record id="action_hr_expense_manager_approve" model="ir.values">
+            <field name="name">action_hr_expense_manager_approve</field>
+            <field name="action_id" ref="hr_expense_manager_approve_action_server" />
+            <field name="value" eval="'ir.actions.server,' + str(ref('hr_expense_manager_approve_action_server'))" />
+            <field name="key">action</field>
+            <field name="model_id" ref="model_hr_expense"/>
+            <field name="model">hr.expense</field>
+            <field name="key2">client_action_multi</field>
+             <field name="groups_id" eval="[(4,ref('account.group_account_user'))]"/>
+        </record>
+
+
+
+
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+        <record id="send_to_manager_view" model="ir.ui.view">
+            <field name="name">Send to Manager Confirmation</field>
+            <field name="model">send.manager.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Send to Manager">
+                    <p>An Email Message for the Quote, will be sent to your Sales Manager</p>
+                    <footer>
+                        <button name="send_to_manager_ok" string="Ok" type="object" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</openerp>

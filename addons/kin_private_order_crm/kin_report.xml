@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
+		<!-- Or by referencing the parent report id e.g. kin_report.receipt_custom -->
+        <!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
+
+        <report
+		    id="activity_excel_report"
+		    model="activity.report.parser"
+		    string="Activity Excel Report"
+		    report_type="xlsx"
+		    name="kin_private_order_crm.report_activity_report"
+		    file="kin_private_order_crm.report_activity_report"
+		    attachment_use="False"
+        />
+		<record id="activity_excel_report" model="ir.actions.report.xml" >
+            <field name="groups_id" eval="[(6, 0, [ref('group_show_private_order_manager')])]"  />
+        </record>
+
+    </data>
+</odoo>

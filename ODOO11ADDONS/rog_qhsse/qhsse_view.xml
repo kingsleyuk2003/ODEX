@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+ <menuitem name="QHSSE"
+            id="menu_qhsse_app"
+            groups="group_qhsse"
+            sequence="25" web_icon="rog_qhsse,static/description/icon_qhsse.png" />
+  <menuitem id="menu_qhsse_menu" name="QHSSE" parent="menu_qhsse_app" sequence="4" groups="group_qhsse" />
+<menuitem id="menu_qhsse_report" name="Reporting" parent="menu_qhsse_app" sequence="5" groups="group_qhsse" />
+
+
+
+<!-- Legal and Advice -->
+         <record id="view_incident_report_form" model="ir.ui.view">
+            <field name="name">incident.report.form</field>
+            <field name="model">incident.report</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="button_submit" type="object"  states="draft" string="Submit" class="oe_highlight"   />
+                       <button name="button_done" type="object"  states="submit" string="Done" class="oe_highlight"   />
+                        <button name="button_cancel" type="object"  states="submit,done" string="Cancel"   />
+                        <button name="button_draft" type="object"  states="cancel" string="Reset"   />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,submit,done"/>
+                    </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                        <group col="2" >
+                            <field name="date"  required="1"  attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="incident" attrs="{'readonly': [('state', '=','done')]}"   />
+                             <field name="alert_by_person" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="alert_method" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="time" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="location" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="response_team" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="description_detail" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="action_taken" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="material_used" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="category" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="recommendation" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="is_investigation" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="user_id" attrs="{'readonly': [('state', '=','done')]}"  />
+
+                        </group>
+
+
+                </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_incident_report_tree" model="ir.ui.view" >
+            <field name="name" >incident.report.tree</field>
+            <field name="model">incident.report</field>
+            <field name="arch" type="xml" >
+                <tree>
+                    <field name="date" />
+                    <field name="alert_by_person"  />
+                    <field name="alert_method"  />
+                    <field name="time"  />
+                    <field name="location"  />
+                    <field name="response_team"  />
+                    <field name="category"  />
+                    <field name="is_investigation"  />
+                    <field name="user_id"  />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_incident_report_filter" model="ir.ui.view">
+            <field name="name">incident.report.select</field>
+            <field name="model">incident.report</field>
+            <field name="arch" type="xml">
+                <search>
+                     <field name="name" string="ID / Incident"  filter_domain="['|',('name','ilike',self),('incident','ilike',self)]"/>
+                      <group expand="0" string="Group By">
+                        <filter name="grpDate" string="Date" domain="[]" context="{'group_by':'date'}"/>
+                        <filter name="grpState" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                       <filter string="User" domain="[]" context="{'group_by':'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_incident_report_form" model="ir.actions.act_window" >
+            <field name="name" >Incident Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">incident.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="search_view_id" ref="view_incident_report_filter"/>
+        </record>
+        <menuitem id="menu_incident_report" name="Report Incident" parent="menu_qhsse_menu" sequence="1" action="action_incident_report_form"/>
+
+<!-- All Staff qhsse Meeting -->
+         <record id="view_qhsse_meeting_form" model="ir.ui.view">
+            <field name="name">qhsse.meeting.form</field>
+            <field name="model">qhsse.meeting</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="button_activate" type="object"  states="draft" string="Activate Reminder" class="oe_highlight"   />
+                       <button name="button_deactivate" type="object"  states="activated" string="De-Activate Reminder" class="oe_highlight"   />
+                        <button name="button_done" type="object"  states="deactivated" string="Done" class="oe_highlight"   />
+                        <button name="button_cancel" type="object"  states="activated,deactivated,done" string="Cancel"   />
+                        <button name="button_draft" type="object"  states="cancel" string="Reset"   />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,activated,deactivated,done"/>
+                    </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                        <group col="4" >
+                            <field name="quarters"  required="1"  attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="month" attrs="{'readonly': [('state', '=','done')]}"   />
+                             <field name="date" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="remark" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="user_id" readonly="1" attrs="{'readonly': [('state', '=','done')]}"  />
+
+                        </group>
+
+                </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_qhsse_meeting_tree" model="ir.ui.view" >
+            <field name="name" >qhsse.meeting.tree</field>
+            <field name="model">qhsse.meeting</field>
+            <field name="arch" type="xml" >
+                <tree>
+                    <field name="quarters" />
+                    <field name="month"  />
+                    <field name="date"  />
+                    <field name="remark"  />
+                    <field name="user_id"  />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_qhsse_meeting_filter" model="ir.ui.view">
+            <field name="name">qhsse.meeting.select</field>
+            <field name="model">qhsse.meeting</field>
+            <field name="arch" type="xml">
+                <search>
+                     <field name="name" string="ID"  filter_domain="['|',('name','ilike',self)]"/>
+                      <group expand="0" string="Group By">
+                        <filter name="grpDate" string="Date" domain="[]" context="{'group_by':'date'}"/>
+                        <filter name="grpState" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                       <filter string="User" domain="[]" context="{'group_by':'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_qhsse_meeting_form" model="ir.actions.act_window" >
+            <field name="name" >All Staff qhsse Meeting</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">qhsse.meeting</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="search_view_id" ref="view_qhsse_meeting_filter"/>
+        </record>
+        <menuitem id="menu_qhsse_meeting" name="All Staff QHSSE Meeting" parent="menu_qhsse_menu" sequence="2" action="action_qhsse_meeting_form"/>
+
+
+<!-- Emergency Drill -->
+                 <record id="view_emergency_drill_form" model="ir.ui.view">
+            <field name="name">emergency.drill.form</field>
+            <field name="model">emergency.drill</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="button_activate" type="object"  states="draft" string="Activate Reminder" class="oe_highlight"   />
+                       <button name="button_deactivate" type="object"  states="activated" string="De-Activate Reminder" class="oe_highlight"   />
+                        <button name="button_done" type="object"  states="deactivated" string="Done" class="oe_highlight"   />
+                        <button name="button_cancel" type="object"  states="activated,deactivated,done" string="Cancel"   />
+                        <button name="button_draft" type="object"  states="cancel" string="Reset"   />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,activated,deactivated,done"/>
+                    </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                        <group col="4" >
+                            <field name="year" required="1"  attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="quarters"  required="1"  attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="month" attrs="{'readonly': [('state', '=','done')]}"   />
+                             <field name="date" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="remark" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="user_id" readonly="1" attrs="{'readonly': [('state', '=','done')]}"  />
+
+                        </group>
+
+                </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_emergency_drill_tree" model="ir.ui.view" >
+            <field name="name" >emergency.drill.tree</field>
+            <field name="model">emergency.drill</field>
+            <field name="arch" type="xml" >
+                <tree>
+                    <field name="year" />
+                    <field name="quarters" />
+                    <field name="month"  />
+                    <field name="date"  />
+                    <field name="remark"  />
+                    <field name="user_id"  />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_emergency_drill_filter" model="ir.ui.view">
+            <field name="name">emergency.drill.select</field>
+            <field name="model">emergency.drill</field>
+            <field name="arch" type="xml">
+                <search>
+                     <field name="name" string="ID"  filter_domain="['|',('name','ilike',self)]"/>
+                      <group expand="0" string="Group By">
+                        <filter name="grpDate" string="Date" domain="[]" context="{'group_by':'date'}"/>
+                        <filter name="grpState" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                       <filter string="User" domain="[]" context="{'group_by':'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_emergency_drill_form" model="ir.actions.act_window" >
+            <field name="name" >Emergency Drill</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">emergency.drill</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="search_view_id" ref="view_emergency_drill_filter"/>
+        </record>
+        <menuitem id="menu_emergency_drill" name="Emergency Drill" parent="menu_qhsse_menu" sequence="3" action="action_emergency_drill_form"/>
+
+
+        <!-- Security Meeting -->
+         <record id="view_security_meeting_form" model="ir.ui.view">
+            <field name="name">security.meeting.form</field>
+            <field name="model">security.meeting</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="button_activate" type="object"  states="draft" string="Activate Reminder" class="oe_highlight"   />
+                       <button name="button_deactivate" type="object"  states="activated" string="De-Activate Reminder" class="oe_highlight"   />
+                        <button name="button_done" type="object"  states="deactivated" string="Done" class="oe_highlight"   />
+                        <button name="button_cancel" type="object"  states="activated,deactivated,done" string="Cancel"   />
+                        <button name="button_draft" type="object"  states="cancel" string="Reset"   />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,activated,deactivated,done"/>
+                    </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                        <group col="4" >
+                            <field name="month" attrs="{'readonly': [('state', '=','done')]}"   />
+                             <field name="date" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="remark" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="user_id" readonly="1" attrs="{'readonly': [('state', '=','done')]}"  />
+
+                        </group>
+
+                </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_security_meeting_tree" model="ir.ui.view" >
+            <field name="name" >security.meeting.tree</field>
+            <field name="model">security.meeting</field>
+            <field name="arch" type="xml" >
+                <tree>
+                    <field name="month"  />
+                    <field name="date"  />
+                    <field name="remark"  />
+                    <field name="user_id"  />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_security_meeting_filter" model="ir.ui.view">
+            <field name="name">security.meeting.select</field>
+            <field name="model">security.meeting</field>
+            <field name="arch" type="xml">
+                <search>
+                     <field name="name" string="ID"  filter_domain="['|',('name','ilike',self)]"/>
+                      <group expand="0" string="Group By">
+                        <filter name="grpDate" string="Date" domain="[]" context="{'group_by':'date'}"/>
+                        <filter name="grpState" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                       <filter string="User" domain="[]" context="{'group_by':'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_security_meeting_form" model="ir.actions.act_window" >
+            <field name="name" >Security Meeting</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">security.meeting</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="search_view_id" ref="view_security_meeting_filter"/>
+        </record>
+        <menuitem id="menu_security_meeting" name="Security Meeting" parent="menu_qhsse_menu" sequence="4" action="action_security_meeting_form"/>
+
+
+<!-- Inspection -->
+        <record id="view_inspection_form" model="ir.ui.view">
+            <field name="name">inspection.form</field>
+            <field name="model">inspection</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="button_activate" type="object"  states="draft" string="Activate Reminder" class="oe_highlight"   />
+                       <button name="button_deactivate" type="object"  states="activated" string="De-Activate Reminder" class="oe_highlight"   />
+                        <button name="button_done" type="object"  states="deactivated" string="Done" class="oe_highlight"   />
+                        <button name="button_cancel" type="object"  states="activated,deactivated,done" string="Cancel"   />
+                        <button name="button_draft" type="object"  states="cancel" string="Reset"   />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,activated,deactivated,done"/>
+                    </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                        <group col="4" >
+                            <field name="year"  attrs="{'readonly': [('state', '=','done')]}"   />
+                            <field name="month" attrs="{'readonly': [('state', '=','done')]}"   />
+                             <field name="date" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="remark" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="user_id" readonly="1" attrs="{'readonly': [('state', '=','done')]}"  />
+
+                        </group>
+                    <notebook>
+                        <page string="Responsible Persons" >
+                            <group>
+                                <!--<field name="user_ids" />-->
+                            </group>
+                        </page>
+                    </notebook>
+
+                </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_inspection_tree" model="ir.ui.view" >
+            <field name="name" >inspection.tree</field>
+            <field name="model">inspection</field>
+            <field name="arch" type="xml" >
+                <tree>
+                    <field name="year" />
+                    <field name="month"  />
+                    <field name="date"  />
+                    <!--<field name="user_ids" />-->
+                    <field name="remark"  />
+                    <field name="user_id"  />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_inspection_filter" model="ir.ui.view">
+            <field name="name">inspection.select</field>
+            <field name="model">inspection</field>
+            <field name="arch" type="xml">
+                <search>
+                     <field name="name" string="ID"  filter_domain="['|',('name','ilike',self)]"/>
+                      <group expand="0" string="Group By">
+                        <filter name="grpDate" string="Date" domain="[]" context="{'group_by':'date'}"/>
+                        <filter name="grpState" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                       <filter string="User" domain="[]" context="{'group_by':'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_inspection_form" model="ir.actions.act_window" >
+            <field name="name" >Inspection TimeTable</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">inspection</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="search_view_id" ref="view_inspection_filter"/>
+        </record>
+        <menuitem id="menu_inspection" name="Inspection Timetable" parent="menu_qhsse_menu" sequence="5" action="action_inspection_form"/>
+
+<!-- Regulatory Document -->
+        <record id="view_regulatory_document_form" model="ir.ui.view">
+            <field name="name">regulatory.document.form</field>
+            <field name="model">regulatory.document</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="button_activate" type="object"  states="draft" string="Activate Reminder" class="oe_highlight"   />
+                       <button name="button_deactivate" type="object"  states="activated" string="De-Activate Reminder" class="oe_highlight"   />
+                        <button name="button_done" type="object"  states="deactivated" string="Done" class="oe_highlight"   />
+                        <button name="button_cancel" type="object"  states="activated,deactivated,done" string="Cancel"   />
+                        <button name="button_draft" type="object"  states="cancel" string="Reset"   />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,activated,deactivated,done"/>
+                    </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                        <group col="4" >
+                            <field name="regulatory_authority" attrs="{'readonly': [('state', '=','done')]}"   />
+                            <field name="document_type" attrs="{'readonly': [('state', '=','done')]}"   />
+                            <field name="purpose_document" attrs="{'readonly': [('state', '=','done')]}"   />
+                            <field name="frequency" attrs="{'readonly': [('state', '=','done')]}"   />
+                            <field name="fees_amount" attrs="{'readonly': [('state', '=','done')]}"   />
+                            <field name="document_holder" attrs="{'readonly': [('state', '=','done')]}"   />
+                            <field name="last_date_issued" attrs="{'readonly': [('state', '=','done')]}"   />
+                            <field name="date" attrs="{'readonly': [('state', '=','done')]}"   />
+                            <field name="status" attrs="{'readonly': [('state', '=','done')]}"   />
+                            <field name="remark" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="user_id" readonly="1" attrs="{'readonly': [('state', '=','done')]}"  />
+
+                        </group>
+
+                </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_regulatory_document_tree" model="ir.ui.view" >
+            <field name="name" >regulatory.document.tree</field>
+            <field name="model">regulatory.document</field>
+            <field name="arch" type="xml" >
+                <tree>
+                    <field name="regulatory_authority"  />
+                    <field name="document_type"  />
+                    <field name="purpose_document"  />
+                    <field name="fees_amount"  />
+                    <field name="document_holder"  />
+                    <field name="last_date_issued"  />
+                    <field name="date"  />
+                    <field name="status"  />
+                    <field name="remark"  />
+                    <field name="user_id"  />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_regulatory_document_filter" model="ir.ui.view">
+            <field name="name">regulatory.document.select</field>
+            <field name="model">regulatory.document</field>
+            <field name="arch" type="xml">
+                <search>
+                     <field name="name" string="ID"  filter_domain="['|',('name','ilike',self)]"/>
+                      <group expand="0" string="Group By">
+                        <filter name="grpDate" string="Date" domain="[]" context="{'group_by':'date'}"/>
+                        <filter name="grpState" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                       <filter string="User" domain="[]" context="{'group_by':'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_regulatory_document_form" model="ir.actions.act_window" >
+            <field name="name" >Regulatory Document Validity Tracker</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">regulatory.document</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="search_view_id" ref="view_regulatory_document_filter"/>
+        </record>
+        <menuitem id="menu_regulatory_document" name="Regulatory Document Validity Tracker" parent="menu_qhsse_menu" sequence="6" action="action_regulatory_document_form"/>
+
+
+        <!-- Routine Activity -->
+        <record id="view_routine_activity_form" model="ir.ui.view">
+            <field name="name">routine.activity.form</field>
+            <field name="model">routine.activity</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="button_activate" type="object"  states="draft" string="Activate Reminder" class="oe_highlight"   />
+                       <button name="button_deactivate" type="object"  states="activated" string="De-Activate Reminder" class="oe_highlight"   />
+                        <button name="button_done" type="object"  states="deactivated" string="Done" class="oe_highlight"   />
+                        <button name="button_cancel" type="object"  states="activated,deactivated,done" string="Cancel"   />
+                        <button name="button_draft" type="object"  states="cancel" string="Reset"   />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,activated,deactivated,done"/>
+                    </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                        <group col="4" >
+                            <field name="activity" attrs="{'readonly': [('state', '=','done')]}"   />
+                            <field name="frequency" attrs="{'readonly': [('state', '=','done')]}" required="1"  />
+                            <field name="action" attrs="{'readonly': [('state', '=','done')]}"   />
+                            <field name="responsible_id" attrs="{'readonly': [('state', '=','done')]}"  options="{'no_open':True,'no_create':True}"  />
+                            <field name="last_execution_date" attrs="{'readonly': [('state', '=','done')]}"   />
+                            <field name="date" attrs="{'readonly': [('state', '=','done')]}"   />
+                            <field name="status" attrs="{'readonly': [('state', '=','done')]}"   />
+                            <field name="remark" attrs="{'readonly': [('state', '=','done')]}"  />
+                            <field name="user_id" readonly="1" attrs="{'readonly': [('state', '=','done')]}"  />
+
+                        </group>
+
+                </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_routine_activity_tree" model="ir.ui.view" >
+            <field name="name" >routine.activity.tree</field>
+            <field name="model">routine.activity</field>
+            <field name="arch" type="xml" >
+                <tree>
+                    <field name="activity"  />
+                    <field name="frequency"  />
+                    <field name="action"  />
+                    <field name="responsible_id"  />
+                    <field name="last_execution_date"  />
+                    <field name="date"  />
+                    <field name="status"  />
+                    <field name="remark"  />
+                    <field name="user_id"  />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_routine_activity_filter" model="ir.ui.view">
+            <field name="name">routine.activity.select</field>
+            <field name="model">routine.activity</field>
+            <field name="arch" type="xml">
+                <search>
+                     <field name="name" string="ID"  filter_domain="['|',('name','ilike',self)]"/>
+                      <field name="activity" string="Activity"  filter_domain="['|',('activity','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="grpDate" string="Date" domain="[]" context="{'group_by':'date'}"/>
+                        <filter name="grpState" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                       <filter string="User" domain="[]" context="{'group_by':'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_routine_activity_form" model="ir.actions.act_window" >
+            <field name="name" >Routine Activity</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">routine.activity</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="search_view_id" ref="view_routine_activity_filter"/>
+        </record>
+        <menuitem id="menu_routine_activity" name="Routine Activity" parent="menu_qhsse_menu" sequence="7" action="action_routine_activity_form"/>
+
+
+        <!--Company -->
+         <record model="ir.ui.view" id="view_company_qhsse_rog">
+                    <field name="name">res.company.form.qhsse</field>
+                    <field name="inherit_id" ref="base.view_company_form"/>
+                    <field name="model">res.company</field>
+                    <field name="arch" type="xml">
+                        <notebook position="inside">
+                            <page string="QHSSE">
+                                <group col="4">
+                                    <group >
+                                        <field name="is_qhsse_reminder"  />
+                                        <field name="qhsse_reminder_days"  />
+                                    </group>
+                                    <group>
+                                        <field name="is_emergency_drill_reminder" />
+                                        <field  name="emergency_drill_reminder_days" />
+                                    </group>
+                                    <group>
+                                        <field name="is_security_meeting_reminder" />
+                                        <field  name="security_meeting_reminder_days" />
+                                    </group>
+                                     <group>
+                                        <field name="is_inspection_reminder" />
+                                        <field  name="inspection_reminder_days" />
+                                    </group>
+                                    <group>
+                                        <field name="is_regulatory_document_reminder" />
+                                        <field  name="regulatory_document_reminder_days" />
+                                    </group>
+                                    <group>
+                                        <field name="is_routine_activity_reminder" />
+                                        <field  name="routine_activity_reminder_days" />
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </field>
+                </record>
+
+    </data>
+</odoo>
+
+

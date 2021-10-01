@@ -1,0 +1,755 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.menu" id="stock.menu_stock_root">
+		 <field name="groups_id" eval="[(6, 0, [ref('group_show_stock_app')])]"/>
+        </record>
+
+         <record model="ir.ui.menu" id="stock.menu_stock_config_settings">
+		 <field name="groups_id" eval="[(6, 0, [ref('group_show_stock_configuration')])]"/>
+        </record>
+
+         <record model="ir.ui.menu" id="stock.menu_stock_inventory_control">
+		 <field name="groups_id" eval="[(6, 0, [ref('group_show_inventory_control')])]"/>
+        </record>
+
+         <record model="ir.ui.menu" id="stock.menu_action_inventory_form">
+		 <field name="groups_id" eval="[(6, 0, [ref('group_show_inventory_adjustment')])]"/>
+        </record>
+
+         <record model="ir.ui.menu" id="stock.stock_picking_type_menu">
+		 <field name="groups_id" eval="[(6, 0, [ref('group_show_inventory_dashboard')])]"/>
+        </record>
+
+        <template id="kin_stock_assets_backend" name="kin_stock_assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/kin_stock/static/src/css/kin_stock.css"/>
+                <script type="text/javascript" src="/kin_stock/static/src/js/kin_stock.js"/>
+            </xpath>
+        </template>
+
+        <record id="action_client_kin_stock" model="ir.actions.client">
+            <field name="name">Kin Stock Widget</field>
+            <field name="tag">action_cliedddnt_kin_stock_tag</field>
+        </record>
+        <record id="action_client_kin_stock1" model="ir.actions.client">
+            <field name="name">Kin Stock Widgetss</field>
+            <field name="tag">ir_actions_actdsfsdfssj_close_wizard_and_reload_view</field>
+        </record>
+
+        <record id="view_picking_form_extend" model="ir.ui.view">
+            <field name="name">stock.picking.form.extend</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form" />
+            <field name="arch" type="xml">
+
+
+                   <field name="picking_type_id" position="attributes" >
+                    <attribute name="invisible" >1</attribute>
+                </field>
+
+                <field name="partner_id" position="attributes" >
+                    <attribute name="attrs" >{'readonly': [('picking_type_code', 'in', ['outgoing','incoming'])]}</attribute>
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                 <field name="location_id" position="attributes" >
+                     <attribute name="groups" >kin_stock.group_source_location_zone</attribute>
+                    <attribute name="attrs" >{'readonly': [('picking_type_code', 'in', ['outgoing','incoming'])]}</attribute>
+                </field>
+
+                <field name="location_id" position="before" >
+                     <field name="operation_type" invisible="1"  />
+                </field>
+
+                 <field name="location_dest_id" position="attributes"  >
+                     <attribute name="groups" >kin_stock.group_dest_location_zone</attribute>
+            		<!--<attribute name="attrs"   >{'readonly': [('state', 'not in', ['draft','assigned','confirmed'])],'readonly': [('operation_type', 'not in', ['incoming','internal'])]}</attribute>-->
+            	    <attribute name="options" >{'no_open': True, 'no_create': True}</attribute>
+                    <attribute name="domain" >[('is_dont_show_location','=',False)]</attribute>
+                </field>
+
+
+
+
+                <field name="move_type" position="after" >
+                    <field name="back_date" groups="kin_stock.group_force_stock_back_date" />
+                </field>
+
+                <xpath expr="//sheet/div[@name='button_box']" position="before">
+                    <div class="alert alert-success text-center o_form_header" attrs="{'invisible': [('show_alert_box', '!=', True)]}">
+                       <button name="close_alert_box" type="object" class="close" data-dismiss="modal"><span aria-hidden="true" class="fa fa-times"></span></button>
+                        <div>
+                            <strong>The accountant will receive an email notification for the transfer action</strong>
+                        </div>
+                         <field name="show_alert_box" invisible="1"/>
+                     </div>
+
+                 </xpath>
+
+                <field name="origin" position="after" >
+                    <field name="shipment_ref"  />
+                    <field name="previous_picking_id" readonly="1" attrs="{'invisible': [('previous_picking_id', '=', False)]}" />
+                    <field name="return_picking_ids" readonly="1"  widget="many2many_tags"  />
+                    <!--<field name="move_id" widget="many2many_tags" groups="account.group_account_manager" />-->
+                </field>
+
+
+                <field name="location_id" position="attributes"  >
+            		<attribute name="attrs"   >{'readonly': [('state', 'not in', ['draft','assigned','confirmed'])],'readonly': [('operation_type', 'not in', ['outgoing','internal'])]}</attribute>
+            	    <attribute name="options" >{'no_open': True, 'no_create': True}</attribute>
+                    <attribute name="domain" >[('is_dont_show_location','=',False)]</attribute>
+
+                </field>
+
+
+                 <button name="force_assign" position="attributes"  >
+                    <attribute name="groups" >kin_stock.group_force_availability_button</attribute>
+                 </button>
+
+                <button name="action_assign" position="attributes"  >
+                    <attribute name="groups" >kin_stock.group_check_availability_button</attribute>
+                 </button>
+
+                <button name="do_new_transfer" position="attributes"  >
+                    <attribute name="groups" >kin_stock.group_force_validate_button</attribute>
+                 </button>
+
+                <button name="%(stock.act_stock_return_picking)d" position="attributes"  >
+                    <attribute name="groups" >kin_stock.group_reverse_button</attribute>
+                 </button>
+
+                <button name="action_cancel" position="attributes"  >
+                    <attribute name="groups" >kin_stock.group_cancel_button</attribute>
+                 </button>
+
+                <button name="do_print_picking" position="attributes" >
+                    <attribute name="invisible" >True</attribute>
+                </button>
+
+                <button name="%(stock.act_stock_return_picking)d"  position="before" >
+                    <button name="action_shipped_notice" class="btn-primary" string="Mark as Shipped" states="done" type="object" groups="kin_stock.group_show_mark_as_shipped_btn"/>
+                    <button name="action_delivery_notice" class="btn-primary" string="Mark as Delivered" states="done,shipped" type="object" groups="kin_stock.group_show_mark_as_delivered_btn"/>
+                    <button name="%(action_stock_picking_reject_items)d"  string="Mark as Rejected" states="done,shipped,delivered" type="action" groups="kin_stock.group_show_mark_as_rejected_btn"/>
+                </button>
+
+                <button name="%(stock.act_stock_return_picking)d"  position="attributes" >
+                    <attribute name="states" >done,shipped,delivered,rejected</attribute>
+                </button>
+
+                <button name="action_assign" position="attributes"  >
+                    <attribute name="string">Check Availability and Reserve</attribute>
+                 </button>
+
+                <field name="move_lines" position="attributes"  >
+                      <attribute name="invisible">False</attribute>
+                    <attribute name="attrs" >{'readonly': [('picking_type_code', 'in', ['outgoing','incoming'])]}</attribute>
+                 </field>
+
+                 <field name="move_lines_related" position="attributes"  >
+                      <attribute name="invisible">True</attribute>
+                      <attribute name="readonly">True</attribute>
+                 </field>
+
+
+                 <div  name="button_box" position="inside">
+                     <button type="object"  name="btn_view_invoices" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('invoice_count', '=', 0)]}" >
+                            <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                    </button>
+                     <button type="object"  name="btn_view_po" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('po_count', '=', 0)]}" >
+                            <field name="po_count" widget="statinfo" string="Purchase Order"/>
+                    </button>
+                     <button type="object"  name="btn_view_so" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('so_count', '=', 0)]}" >
+                            <field name="so_count" widget="statinfo" string="Sales Order"/>
+                    </button>
+                      <button type="object"  name="btn_view_jnr" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('jnr_count', '=', 0)]}"  groups="account.group_account_manager" >
+                            <field name="jnr_count" widget="statinfo" string="Journal Entries"/>
+                    </button>
+
+                 </div>
+
+                <button name="show_details" position="attributes">
+                    <attribute name="invisible" >1</attribute>
+                </button>
+
+
+                <field name="priority" position="after" >
+                    <field name="salesperson_id" />
+                    <field name="shipment_date" />
+                    <field name="shipped_confirmed_by_user_id" />
+                    <field name="delivered_date" />
+                    <field name="delivery_confirmed_by_user_id" />
+                    <field name="rejection_date" />
+                    <field name="rejection_confirmed_by_user_id" />
+                </field>
+
+                <!--<field name="state" widget="statusbar" position="attributes">-->
+                    <!--<attribute name="statusbar_visible" >draft,confirmed,partially_available,assigned,done,shipped,delivered,returned</attribute>-->
+                <!--</field>-->
+
+
+            </field>
+        </record>
+
+        <!-- For the move_lines in the stock.view_picking_form -->
+         <record id="view_move_picking_tree_extend" model="ir.ui.view">
+            <field name="name">stock.move.tree.extend</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_picking_tree"/>
+            <field name="arch" type="xml">
+                  <field name="name" position="attributes" >
+                    <attribute name="invisible" >0</attribute>
+                     <attribute name="readonly" >1</attribute>
+                </field>
+
+            </field>
+        </record>
+
+        <record id="view_move_form_extend" model="ir.ui.view">
+            <field name="name">stock.move.form.extend</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_form"/>
+            <field name="arch" type="xml">
+                  <group name="destination_grp" position="after" >
+                      <group string="Others" groups="base.group_no_one" >
+                          <field name="purchase_order_line_id" groups="base.group_no_one" />
+                            <field name="sale_order_line_id" groups="base.group_no_one" />
+                      </group>
+                  </group>
+
+
+
+            </field>
+        </record>
+
+        <record id="view_move_picking_form_extend" model="ir.ui.view">
+            <field name="name">stock.move.form.extend</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_picking_form"/>
+            <field name="arch" type="xml">
+                  <group name="quants_grp"  position="before" >
+                      <group string="Others" groups="base.group_no_one" >
+                          <field name="purchase_order_line_id" groups="base.group_no_one" />
+                            <field name="sale_order_line_id" groups="base.group_no_one" />
+                      </group>
+                  </group>
+                    <button name="%(stock.move_scrap)d"  position="attributes" >
+                    <attribute name="invisible" >1</attribute>
+                </button>
+            </field>
+        </record>
+
+
+
+    <record id="view_location_form_extend" model="ir.ui.view">
+            <field name="name">stock.location.form.extend</field>
+            <field name="model">stock.location</field>
+            <field name="inherit_id" ref="stock.view_location_form"  />
+            <field name="arch" type="xml">
+                <field name="return_location" position="after" >
+                    <field name="is_default_option" />
+                    <field name="is_dont_show_location" />
+                </field>
+            </field>
+    </record>
+
+    <record id='view_stock_landed_cost_form_extend' model='ir.ui.view'>
+            <field name="name">stock.landed.cost.form.extend</field>
+            <field name="model">stock.landed.cost</field>
+             <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form"  />
+            <field name="arch" type="xml">
+
+                 <xpath position="attributes"  expr="//tree/field[@name='product_id']" >
+                    <attribute name="options" >{'no_open': True, 'no_create': True}</attribute>
+                </xpath>
+
+                <xpath position="attributes"  expr="//tree/field[@name='account_id']" >
+                    <attribute name="options" >{'no_open': True, 'no_create': True}</attribute>
+                </xpath>
+
+                <field name="picking_ids" position="attributes" >
+                    <attribute name="options" >{'no_open': True, 'no_create': True}</attribute>
+                </field>
+                <field name="account_journal_id" position="attributes" >
+                    <attribute name="options" >{'no_open': True, 'no_create': True}</attribute>
+                </field>
+                <field name="account_id" position="attributes" >
+                    <attribute name="options" >{'no_open': True, 'no_create': True}</attribute>
+                </field>
+            </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="view_picking_type_form_extend">
+            <field name="name">Picking Types</field>
+            <field name="model">stock.picking.type</field>
+            <field name="inherit_id" ref="stock.view_picking_type_form"  />
+            <field name="arch" type="xml">
+                <field name="barcode_nomenclature_id" position="after" >
+                    <field name="is_create_invoice" />
+                    <field name="is_validate_invoice" />
+                    <!--<field name="is_create_full_invoice" />-->
+                    <field name="is_send_invoice_notification" />
+                    <field name="is_send_quality_control_notification" />
+                </field>
+            </field>
+    </record>
+
+         <record model="ir.ui.view" id="view_stock_quant_form_extend">
+            <field name="name">stock.quant.form.extend</field>
+            <field name="model">stock.quant</field>
+            <field name="inherit_id" ref="stock.view_stock_quant_form" />
+            <field name="arch" type="xml">
+                <field name="inventory_value" position="attributes" >
+                   <attribute name="groups" >kin_stock.group_show_cost_values_quants</attribute>
+                </field>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="view_stock_quant_tree_extend">
+            <field name="name">stock.quant.tree.extend</field>
+            <field name="model">stock.quant</field>
+            <field name="inherit_id" ref="stock.view_stock_quant_tree"  />
+            <field name="arch" type="xml">
+                <field name="in_date" position="after" >
+                    <field name="reservation_id" />
+                    <field name="partner_id" />
+                    <field name="cost_price" groups="kin_stock.group_show_cost_values_quants" />
+                    <field name="cost" string="Purchase Unit Cost" groups="kin_stock.group_show_cost_values_quants"  />
+                    <field name="cost1" groups="kin_stock.group_show_cost_values_quants"  />
+                </field>
+                <field name="inventory_value" position="attributes" >
+                    <attribute name="groups" >kin_stock.group_show_cost_values_quants</attribute>
+                </field>
+            </field>
+        </record>
+
+
+
+        <record id="view_pack_operation_details_form_extend" model="ir.ui.view">
+            <field name="name">stock.pack.operation.details.form.extend</field>
+            <field name="model">stock.pack.operation</field>
+            <field name="inherit_id" ref="stock.view_pack_operation_details_form"  />
+            <field name="arch" type="xml">
+
+                  <field name="location_id" position="attributes"  >
+                    <attribute name="domain">[]</attribute>
+                    <attribute name="domain" >[('is_dont_show_location','=',False)]</attribute>
+                     <attribute name="options" >{'no_open': True, 'no_create': True}</attribute>
+                  </field>
+
+                <field name="location_dest_id" position="attributes"  >
+                    <attribute name="domain">[]</attribute>
+                    <attribute name="domain" >[('is_dont_show_location','=',False)]</attribute>
+                     <attribute name="options" >{'no_open': True, 'no_create': True}</attribute>
+                </field>
+
+            </field>
+        </record>
+
+
+
+        <record id="vpicktree_extend" model="ir.ui.view">
+            <field name="name">stock.picking.tree</field>
+            <field name="model">stock.picking</field>
+             <field name="inherit_id" ref="stock.vpicktree"  />
+            <field name="arch" type="xml">
+                <field name="name" position="after" >
+                    <field name="location_id"  />
+                </field>
+                <field name="name" position="after" >
+                    <field name="shipment_ref" />
+                </field>
+
+            </field>
+        </record>
+
+
+
+
+        <record id="view_picking_internal_search_extend" model="ir.ui.view">
+            <field name="name">stock.picking.internal.search.extend</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_internal_search" />
+            <field name="arch" type="xml">
+                    <field name="partner_id" position="before" >
+                        <field name="shipment_ref"/>
+                    </field>
+            </field>
+        </record>
+
+
+
+
+        <record id="view_immediate_transfer_extend" model="ir.ui.view">
+        <field name="name">view_immediate_transfer_extend</field>
+        <field name="model">stock.immediate.transfer</field>
+         <field name="inherit_id" ref="stock.view_immediate_transfer"  />
+        <field name="arch" type="xml">
+
+            <xpath expr="//form" position="replace">
+                <form string="Done Quantity is Required">
+                <group>
+                    <p>
+                        Please Set the "Done" Qty of the Products Below.
+                    </p>
+                </group>
+                <footer>
+                    <button string="Close" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+          </xpath>
+
+        </field>
+    </record>
+
+
+        <record id="stock_picking_type_kanban" model="ir.ui.view">
+            <field name="name">stock.picking.type.kanban</field>
+            <field name="model">stock.picking.type</field>
+            <field name="inherit_id" ref="stock.stock_picking_type_kanban" />
+            <field name="arch" type="xml">
+
+
+                <xpath expr="//div[@class='container o_kanban_card_content o_visible']" position="replace" >
+
+                        <div class="col-xs-24 o_kanban_primary_left row" style="margin:10px 10px 10px 10px">
+                        <div t-if="record.count_picking_waiting.raw_value > 0" class="row">
+                                <button class="btn btn-primary" name="get_action_picking_tree_waiting" type="object">
+                                    <span t-if="record.code.raw_value =='incoming'"><t t-esc="record.count_picking_waiting.value"/> - Waiting Availability</span>
+                                    <span t-if="record.code.raw_value =='outgoing'"><t t-esc="record.count_picking_waiting.value"/> - Waiting Availability</span>
+                                    <span t-if="record.code.raw_value =='internal'"><t t-esc="record.count_picking_waiting.value"/> - Waiting Availability</span>
+                                </button>
+                            </div>
+                    </div>
+
+                        <div class="col-xs-24 o_kanban_primary_left row" style="margin:10px 10px 10px 10px">
+                            <button class="btn btn-primary" name="get_action_picking_tree_ready" type="object">
+                                <span t-if="record.code.raw_value =='incoming'"><t t-esc="record.count_picking_ready.value"/> - Ready To Be Received</span>
+                                <span t-if="record.code.raw_value =='outgoing'"><t t-esc="record.count_picking_ready.value"/> - Available and Reserved</span>
+                                <span t-if="record.code.raw_value =='internal'"><t t-esc="record.count_picking_ready.value"/> - Internal Transfers</span>
+                            </button>
+                        </div>
+
+
+                        <div class="col-xs-12 o_kanban_primary_left row" style="margin-left:10px">
+                            <!--<div t-if="record.count_picking_ready.raw_value > 0" class="row">-->
+                            <!--</div>-->
+                            <!--<div t-if="record.count_picking_waiting.raw_value > 0" class="row">-->
+                                <!--<div class="col-xs-9">-->
+                                    <!--<a name="get_action_picking_tree_waiting" type="object">-->
+                                                    <!--Waiting Availabilty-->
+                                    <!--</a>-->
+                                <!--</div>-->
+                                <!--<div class="col-xs-3">-->
+                                    <!--<field name="count_picking_waiting"/>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div t-if="record.count_picking_late.raw_value > 0" class="row">-->
+                                <!--<div class="col-xs-9">-->
+                                    <!--<a class="oe_kanban_stock_picking_type_list" name="get_action_picking_tree_late" type="object">-->
+                                                    <!--Late-->
+                                    <!--</a>-->
+                                <!--</div>-->
+                                <!--<div class="col-xs-3">-->
+                                    <!--<field name="count_picking_late"/>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div t-if="record.count_picking_backorders.raw_value > 0" class="row">-->
+                                <!--<div class="col-xs-9">-->
+                                    <!--<a class="oe_kanban_stock_picking_type_list" name="get_action_picking_tree_backorder" type="object">-->
+                                        <!--Back Orders-->
+                                    <!--</a>-->
+                                <!--</div>-->
+                                <!--<div class="col-xs-3">-->
+                                    <!--<field name="count_picking_backorders"/>-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+                            <div class="row">
+                                <div class="col-xs-9">
+                                    <a class="oe_kanban_stock_picking_type_list" name="get_stock_picking_action_picking_type" type="object">
+                                        <b>All TRANSFERS</b>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_warehouse_orderpoint_form_extend" model="ir.ui.view">
+            <field name="name">stock.warehouse.orderpoint.form.extend</field>
+            <field name="model">stock.warehouse.orderpoint</field>
+            <field name="inherit_id" ref="stock.view_warehouse_orderpoint_form" />
+            <field name="arch" type="xml">
+                    <field name="active" position="after" >
+                        <field name="is_create_procurement" />
+                        <field name="is_notify_email" />
+                    </field>
+            </field>
+        </record>
+
+         <record model="ir.actions.act_window" id="stock.quantsact">
+            <field name="name">Quants</field>
+            <field name="res_model">stock.quant</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="context">{'search_default_internal_loc': 1, 'group_by': ['product_id', 'location_id']}</field>
+            <field name="help">This analysis gives you a fast overview on the current stock level of your products and their current inventory value.</field>
+        </record>
+
+
+
+         <menuitem id="stock.menu_stock_warehouse_mgmt" name="Operations / Reports" parent="stock.menu_stock_root" sequence="2" groups="stock.group_stock_manager,stock.group_stock_user" />
+         <menuitem id="menu_stock_level" name="Current Stock Level" parent="stock.menu_stock_warehouse_mgmt" sequence="3" action="stock.quantsact"/>
+        <menuitem action="stock.action_move_form2" id="stock.menu_action_move_form2" parent="stock.menu_stock_warehouse_mgmt" sequence="5"/>
+        <!--<menuitem  action="stock.stock_picking_type_action" id="stock_picking_type_menu_extend"   parent="stock.stock_picking_type_menu" sequence="0" name="Dashboard"/>-->
+        <!--<menuitem action="stock.stock_picking_type_action" id="stock.stock_picking_type_menu"   parent="stock.menu_stock_root" sequence="1" name="Dashboard"/>-->
+
+
+    <!--<template id="report_invoice_document_inherit_sale_stock_extend" inherit_id="sale_stock.report_invoice_document_inherit_sale_stock">-->
+            <!--<xpath expr="//div[@name='reference']" position="replace">-->
+                <!--<span name="reference" class="col-xs-2" t-if="o.incoterms_id" groups="sale.group_display_incoterm" >-->
+                    <!--<p t-field="o.incoterms_id.code"/>-->
+                <!--</span>-->
+
+                <!--&lt;!&ndash;<div class="col-xs-2" t-if="o.incoterms_id" >&ndash;&gt;-->
+                    <!--&lt;!&ndash;<strong>Incoterms:</strong>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<p t-field="o.incoterms_id.code"/>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+         <!---->
+            <!--</xpath>-->
+    <!--</template>-->
+
+
+        <record id="view_move_line_tree_stock_extend" model="ir.ui.view">
+            <field name="name">account.move.line.tree.stock.extend</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_move_line_tree"/>
+            <field name="arch" type="xml">
+                <field name="date_maturity" position="after" >
+                     <field name="picking_id" />
+                </field>
+            </field>
+        </record>
+
+        <record id="view_move_line_form_stock_extend" model="ir.ui.view">
+            <field name="name">account.move.line.form.stock.extend</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_move_line_form"/>
+            <field name="arch" type="xml">
+                <field name="move_id" position="before">
+                    <field name="picking_id"   />
+                </field>
+            </field>
+        </record>
+
+
+
+        <record id="view_move_form_stock_extend" model="ir.ui.view" >
+            <field name="name" >account.move.form.stock.extend</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form" />
+            <field name="arch" type="xml">
+                <field name="ref" position="after" >
+                    <field name="picking_id" />
+                </field>
+            </field>
+        </record>
+
+        <record id="view_account_move_filter_stock_extend" model="ir.ui.view">
+            <field name="name">account.move.select.stock.extend</field>
+            <field name="model">account.move</field>
+             <field name="inherit_id" ref="account.view_account_move_filter" />
+            <field name="arch" type="xml">
+                <field name="name" position="after" >
+                    <field name="picking_id"/>
+                </field>
+            </field>
+        </record>
+
+
+         <record id="view_stock_product_tree_extend" model="ir.ui.view">
+            <field name="name">product.stock.tree.inherit.extend</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="stock.view_stock_product_tree"/>
+            <field name="arch" type="xml">
+                 <field name="virtual_available" position="attributes" >
+                     <attribute name="invisible" >1</attribute>
+                 </field>
+            </field>
+        </record>
+
+
+        <record id="view_stock_product_tree_extend_purchase" model="ir.ui.view">
+            <field name="name">product.stock.tree.inherit.extend</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="kin_purchase.product_product_tree_view_purchase_extend"/>
+            <field name="arch" type="xml">
+                 <field name="categ_id" position="after" >
+                     <field name="qty_available" />
+                 </field>
+            </field>
+        </record>
+
+
+
+
+        <record id="product_product_action_product_stock_extend" model="ir.actions.act_window">
+            <field name="name">Products</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.product</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="view_type">form</field>
+             <field name="domain">[('type', 'not in', ['service'])]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to define a new product.
+                </p>
+            </field>
+        </record>
+
+
+        <record id="view_move_tree_extend" model="ir.ui.view">
+             <field name="name">stock.move.tree.extend1</field>
+                     <field name="model">stock.move</field>
+                <field name="inherit_id" ref="stock.view_move_tree" />
+            <field name="arch" type="xml">
+                <field name="location_dest_id" position="after" >
+                    <field name="partner_id" />
+                </field>
+            </field>
+        </record>
+
+
+         <record id="view_move_picking_tree" model="ir.ui.view">
+             <field name="name">stock.move.tree.extend</field>
+                     <field name="model">stock.move</field>
+                <field name="inherit_id" ref="stock.view_move_picking_tree" />
+            <field name="arch" type="xml">
+                  <button name="%(stock.move_scrap)d" position="attributes" >
+                      <attribute name="groups">kin_stock.group_force_scrapped_button</attribute>
+                  </button>
+                <field name="location_dest_id" position="after" >
+                    <field name="partner_id" />
+                </field>
+            </field>
+        </record>
+
+        <menuitem
+            action="product_product_action_product_stock_extend" id="stock.menu_product_variant_config_stock" name="Products"
+            parent="stock.menu_stock_inventory_control" sequence="1"/>
+
+         <menuitem id="stock.all_picking" name="All Transfers" parent="stock.menu_stock_warehouse_mgmt" sequence="2" action="stock.action_picking_tree_all" groups="base.group_no_one"/>
+
+
+        <!--  Stock Picking that are not Done -->
+
+        <!-- Incoming Pending Transfers -->
+         <record id="action_picking_tree_incoming_pending_extend" model="ir.actions.act_window">
+            <field name="name">Incoming Pending Transfers</field>
+            <field name="res_model">stock.picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar</field>
+            <!--<field name="domain">[('picking_type_id.code', '=', 'incoming')]</field>-->  <!-- This line works as expected -->
+              <!--<field name="domain" eval="[('picking_id.picking_type_id.code','=','incoming'), ('location_id.usage','!=','internal'), ('location_dest_id.usage', '=', 'internal')]"/>--> <!-- This line works but it exempts returns coming in -->
+            <field name="domain" eval="[('picking_type_id.code','=','incoming')]"/> <!-- This line works as expected. I just choose to use this -->
+             <field name="context">{
+                    'contact_display': 'partner_address',
+                    'search_default_draft': 1,
+                    'search_default_available': 1,
+                    'search_default_waiting': 1,
+                    'search_default_confirmed': 1,
+            }
+            </field>
+            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click here to create a new transfer.
+              </p><p>
+                You can either do it immediately or mark it as Todo for future processing. Use your scanner to validate the transferred quantity quicker.
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_incoming_pending_transfers" name="Incoming Pending Transfers" parent="stock.menu_stock_warehouse_mgmt" sequence="10" action="action_picking_tree_incoming_pending_extend" groups="stock.group_stock_manager,stock.group_stock_user"/>
+
+
+        <!-- Internal Pending Transfers -->
+<record id="action_picking_tree_internal_pending_extend" model="ir.actions.act_window">
+            <field name="name">Internal Pending Transfers</field>
+            <field name="res_model">stock.picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar</field>
+            <!--<field name="domain">[('picking_type_id.code', '=', 'incoming')]</field>-->  <!-- This line works as expected -->
+              <!--<field name="domain" eval="[('picking_id.picking_type_id.code','=','incoming'), ('location_id.usage','!=','internal'), ('location_dest_id.usage', '=', 'internal')]"/>--> <!-- This line works but it exempts returns coming in -->
+            <field name="domain" eval="[('picking_type_id.code','=','internal')]"/> <!-- This line works as expected. I just choose to use this -->
+             <field name="context">{
+                    'contact_display': 'partner_address',
+                    'search_default_draft': 1,
+                    'search_default_available': 1,
+                    'search_default_waiting': 1,
+                    'search_default_confirmed': 1,
+            }
+            </field>
+            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click here to create a new transfer.
+              </p><p>
+                You can either do it immediately or mark it as Todo for future processing. Use your scanner to validate the transferred quantity quicker.
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_internal_pending_transfers" name="Internal Pending Transfers" parent="stock.menu_stock_warehouse_mgmt" sequence="11" action="action_picking_tree_internal_pending_extend" groups="stock.group_stock_manager,stock.group_stock_user"/>
+
+
+         <!-- Outgoing Pending Transfers -->
+<record id="action_picking_tree_outgoing_pending_extend" model="ir.actions.act_window">
+            <field name="name">Outgoing Pending Transfers</field>
+            <field name="res_model">stock.picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar</field>
+            <!--<field name="domain">[('picking_type_id.code', '=', 'incoming')]</field>-->  <!-- This line works as expected -->
+              <!--<field name="domain" eval="[('picking_id.picking_type_id.code','=','incoming'), ('location_id.usage','!=','internal'), ('location_dest_id.usage', '=', 'internal')]"/>--> <!-- This line works but it exempts returns coming in -->
+            <field name="domain" eval="[('picking_type_id.code','=','outgoing')]"/> <!-- This line works as expected. I just choose to use this -->
+             <field name="context">{
+                    'contact_display': 'partner_address',
+                    'search_default_draft': 1,
+                    'search_default_available': 1,
+                    'search_default_waiting': 1,
+                    'search_default_confirmed': 1,
+            }
+            </field>
+            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click here to create a new transfer.
+              </p><p>
+                You can either do it immediately or mark it as Todo for future processing. Use your scanner to validate the transferred quantity quicker.
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_outgoing_pending_transfers" name="Outgoing Pending Transfers" parent="stock.menu_stock_warehouse_mgmt" sequence="12" action="action_picking_tree_outgoing_pending_extend" groups="stock.group_stock_manager,stock.group_stock_user"/>
+
+
+         <record model="ir.ui.view" id="view_company_inherit_form_extend_stock">
+            <field name="name">res.company.form.inherit.extend.stock</field>
+            <field name="inherit_id" ref="account.view_company_inherit_form"/>
+            <field name="model">res.company</field>
+            <field name="arch" type="xml">
+                <field name="anglo_saxon_accounting" position="after">
+                    <field name="is_enforce_landed_cost"/>
+                </field>
+
+            </field>
+         </record>
+
+    </data>
+</openerp>

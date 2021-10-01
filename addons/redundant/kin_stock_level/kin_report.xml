@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+<!-- Stock Level Excel Report -->
+        <report
+		    id="stock_level_excel_report"
+		    model="stock.level.parser"
+		    string="Current Stock Level Report"
+		    report_type="xlsx"
+		    name="kin_stock_level.report_stock_level"
+		    file="kin_stock_level.report_stock_level"
+		    attachment_use="False"
+        />
+
+
+    </data>
+</odoo>
+

@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+ <menuitem id="menu_rog_procurement" name="ROG Procurement"  parent="base.menu_purchase_root" sequence="1"  />
+<menuitem id="purchase_request.menu_purchase_request_pro_mgt" parent="kin_hr.hr_menus" action="purchase_request.purchase_request_form_action" sequence="7" name="Internal Purchase Request"    />
+
+
+        <record model="ir.ui.view" id="view_purchase_request_form_extend_rog">
+            <field name="name">purchase.request.form.extend</field>
+            <field name="model">purchase.request</field>
+            <field name="inherit_id" ref="purchase_request.view_purchase_request_form" />
+            <field name="arch" type="xml">
+
+                 <field name="requested_by"  position="before" >
+                          <field name="is_budget_approved_item" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                       <field name="budget_ref_no" attrs="{'invisible': [('is_budget_approved_item','=', 'no')],'readonly': [('is_editable','=', False)]}"/>
+                       <field name="req_type" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                     <field name="rog_request_id" readonly="1" />
+                 </field>
+
+                <field name="assigned_to" position="attributes" >
+                    <attribute name="attrs" >{'readonly': [('is_editable','=', False)],'invisible': [('state','=', 'draft')]}</attribute>
+                </field>
+
+
+            </field>
+        </record>
+
+
+    <!-- Tender Proposal Evaluation -->
+         <record id="tender_proposal_evaluation_form" model="ir.ui.view">
+            <field name="name">tender.proposal.evaluation.form</field>
+            <field name="model">tender.proposal.evaluation</field>
+            <field name="arch" type="xml">
+                <form string="Tender Proposal Evaluation">
+                <header>
+                     <button name="btn_initiate" type="object" states="draft" string="Initiate" class="oe_highlight" />
+                     <button name="btn_recommend" type="object" states="initiate" string="Recommend" class="oe_highlight" />
+                   <button name="btn_cancel" type="object" states="initiate,recommend" string="Cancel"  />
+                    <button name="btn_reset" type="object" states="cancel" string="Reset"  />
+                    <field name="state" widget="statusbar"  />
+
+                </header>
+                <sheet>
+
+                    <group col="4" >
+                         <field name="name" readonly="1" />
+                            <field name="proposal_purpose" required="1" />
+                            <field name="tender_floated_date"  />
+                            <field name="number_parties_sent" />
+                            <field name="nature_job" />
+                            <field name="is_budget_approved_item" />
+                            <field name="budget_ref_no" />
+                            <field name="evaluation_offers" />
+
+                    </group>
+                    <group string="Initial Evaluation of Vendors">
+                        <field name="initial_evaluation_ids" nolabel="1" >
+                            <tree editable="bottom" >
+                                <field name="product_id" options="{'no_open': True, 'no_create': True}" />
+                                <field name="partner_id" domain="[('supplier','=',True)]" options="{'no_open': True, 'no_create': True}" />
+                                <field name="qty" />
+                                <field name="rate" />
+                                <field name="amount" />
+                            </tree>
+                        </field>
+                    </group>
+                    <group col="4" string="Final Negotiation Done by">
+                        <field name="finance_user_id" options="{'no_open': True, 'no_create': True}" />
+                        <field name="user_user_id" options="{'no_open': True, 'no_create': True}" />
+                        <field name="audit_user_id" options="{'no_open': True, 'no_create': True}" />
+                        <field name="date_negotiation" />
+                    </group>
+                    <group string="Final Evaluation of Vendors (after negotiations)" >
+                        <field name="final_evaluation_ids" nolabel="1" >
+                            <tree editable="bottom" >
+                                <field name="product_id" options="{'no_open': True, 'no_create': True}" />
+                                <field name="partner_id" domain="[('supplier','=',True)]"  options="{'no_open': True, 'no_create': True}" />
+                                <field name="qty" />
+                                <field name="rate" />
+                                <field name="amount" />
+                            </tree>
+                        </field>
+                    </group>
+                    <group string="Payment Terms Offered by the Parties" >
+                        <field name="payment_term_ids" nolabel="1" >
+                            <tree editable="bottom" >
+                                <field name="product_id" options="{'no_open': True, 'no_create': True}" />
+                                <field name="partner_id" domain="[('supplier','=',True)]"  options="{'no_open': True, 'no_create': True}" />
+                                <field name="detail" />
+                            </tree>
+                        </field>
+                    </group>
+                    <group string="Final Rate and Amount for Approval">
+                         <field name="final_approval_ids" nolabel="1" >
+                            <tree editable="bottom" >
+                                <field name="product_id" options="{'no_open': True, 'no_create': True}" />
+                                <field name="partner_id" domain="[('supplier','=',True)]"  options="{'no_open': True, 'no_create': True}" />
+                                <field name="qty" />
+                                <field name="rate" />
+                                <field name="amount" />
+                            </tree>
+                        </field>
+                    </group>
+                    <group string="Final Payment Terms for Approval" >
+                        <field name="final_payment_term_ids" nolabel="1" >
+                            <tree editable="bottom" >
+                                <field name="product_id" options="{'no_open': True, 'no_create': True}" />
+                                <field name="partner_id" domain="[('supplier','=',True)]"  options="{'no_open': True, 'no_create': True}" />
+                                <field name="detail" />
+                            </tree>
+                        </field>
+                    </group>
+                    <group col="4">
+                        <field name="initiated_by_id" options="{'no_open': True, 'no_create': True}" />
+                        <field name="recommended_by_id" options="{'no_open': True, 'no_create': True}" />
+                    </group>
+
+
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+        </record>
+
+
+
+
+        <record model="ir.ui.view" id="tender_proposal_evaluation_tree_view">
+            <field name="name">Tender Proposal Evaluation Tree</field>
+            <field name="model">tender.proposal.evaluation</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" />
+                   <field name="proposal_purpose" />
+                            <field name="tender_floated_date"  />
+                            <field name="number_parties_sent" />
+                            <field name="nature_job" />
+                            <field name="is_budget_approved_item" />
+                            <field name="budget_ref_no" />
+                            <field name="evaluation_offers" />
+                </tree>
+            </field>
+        </record>
+
+         <record id="view_tender_proposal_evaluation_filter" model="ir.ui.view">
+            <field name="name">Tender Proposal Evaluation Search</field>
+            <field name="model">tender.proposal.evaluation</field>
+            <field name="arch" type="xml">
+                <search string="Tender Proposal Evaluation Search">
+                    <field name="proposal_purpose" string="Proposal Purpose" />
+
+                    <separator/>
+                   <filter string="Nature of Job" name="grNOJ" context="{'group_by':'nature_job'}" />
+                     <filter string="Budget Approved Items" name="grpBAI" context="{'group_by':'is_budget_approved_item'}"/>
+
+                    <group expand="0" string="Group By" >
+                        <filter string="Initiated By" name="Responsible" context="{'group_by':'initiated_by_id'}" />
+                        <filter string="Recommended By" name="Responsible" context="{'group_by':'recommended_by_id'}" />
+                        <separator/>
+                        <filter string="Create Day" context="{'group_by':'create_date:day'}" help="Create Date"/>
+                        <filter string="Last Message" name="group_message_last_post" context="{'group_by':'message_last_post:week'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="action_view_tender_proposal_evaluation" model="ir.actions.act_window">
+            <field name="res_model">tender.proposal.evaluation</field>
+            <field name="view_type">form</field>
+            <field name="name">Tender Proposal Evaluation</field>
+            <field name="view_mode">tree,form</field>
+<!--            <field name="context">{'search_default_grpTC': 1 , 'search_default_grpStatus' : 1}</field>-->
+              <!--<field name="domain">[('stage_id.categ_id.name','=','Installation')]</field>-->
+
+        </record>
+<!--         <menuitem id="menu_rog_tender_proposal_evaluation" name="Tender Proposal Evaluation"  parent="menu_rog_procurement" action="action_view_tender_proposal_evaluation"  />-->
+
+
+        <!-- Goods Received -->
+         <record id="goods_verification_form" model="ir.ui.view">
+            <field name="name">goods.verification.form</field>
+            <field name="model">goods.verification</field>
+            <field name="arch" type="xml">
+                <form string="Goods Verification">
+                <header>
+                     <button name="btn_user_acceptance" type="object" states="draft" string="User Accept" class="oe_highlight" />
+                     <button name="btn_qhsse_acceptance" type="object" states="user_acceptance" string="QHSSE Accept" class="oe_highlight" />
+                    <button name="btn_ica_acceptance"  type="object" states="qhsse_acceptance" string="I &amp; CA Accept" class="oe_highlight" />
+                    <button name="btn_cancel" type="object" states="user_acceptance,qhsse_acceptance,ica_acceptance" string="Cancel"  />
+                    <button name="btn_reset" type="object" states="cancel" string="Reset"  />
+                    <field name="state" widget="statusbar"  />
+                </header>
+                <sheet>
+
+                    <group col="4" >
+                         <field name="name" readonly="1" />
+                            <field name="supplier_id" required="1" options="{'no_open': True, 'no_create': True}" domain="[('supplier','=',True)]" />
+                            <field name="contact_details"  />
+                            <field name="goods_information" />
+                            <field name="po_no" />
+                         <field name="po_id" readonly="1" />
+                            <field name="delivery_slip_invoice" />
+                            <field name="date" />
+                            <field name="good_received_on" />
+
+                    </group>
+                    <group string="SPECIFICATIONS Vs ACTUAL">
+                        <field name="goods_verification_compare_ids" nolabel="1" >
+                            <tree editable="bottom" >
+                                <field name="description" />
+                                <field name="verification_result" />
+                                <field name="qhsse_risk_factor" />
+                                <field name="acceptable_reject" />
+                            </tree>
+                        </field>
+                    </group>
+                    <group col="4" string="ACCEPTANCE">
+                        <field name="ica_user_id" options="{'no_open': True, 'no_create': True}" />
+                        <field name="qhsse_user_id" options="{'no_open': True, 'no_create': True}" />
+                        <field name="user_id" options="{'no_open': True, 'no_create': True}" />
+
+                    </group>
+                    <group col="4" string="SUMMARY">
+                       <field name="total_received_qty" />
+                        <field name="total_acceptable_qty" />
+                        <field name="total_rejected_qty" />
+                        <field name="returned_qty_supplier" />
+                        <field name="under_testing_observation_qty" />
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+        </record>
+
+
+
+
+        <record model="ir.ui.view" id="goods_verification_tree_view">
+            <field name="name">Goods Verification Tree</field>
+            <field name="model">goods.verification</field>
+            <field name="arch" type="xml">
+                <tree>
+                     <field name="name"  />
+                     <field name="supplier_id"  />
+                            <field name="contact_details"  />
+                            <field name="goods_information" />
+                            <field name="po_no" />
+                            <field name="po_id" readonly="1" />
+                            <field name="delivery_slip_invoice" />
+                            <field name="date" />
+                            <field name="good_received_on" />
+
+                </tree>
+            </field>
+        </record>
+
+         <record id="view_goods_verification_filter" model="ir.ui.view">
+            <field name="name">Goods Verification Search</field>
+            <field name="model">goods.verification</field>
+            <field name="arch" type="xml">
+                <search string="Goods Verification Search">
+                    <field name="supplier_id" string="Supplier" />
+
+                    <separator/>
+                   <filter string="QHSSE Risk Factor" name="qhsse_risk_factor" context="{'group_by':'qhsse_risk_factor'}" />
+                     <filter string="Acceptable / Reject" name="acceptable_reject" context="{'group_by':'acceptable_reject'}"/>
+
+                    <group expand="0" string="Group By" >
+                          <filter string="QHSSE Risk Factor" name="qhsse_risk_factor" context="{'group_by':'qhsse_risk_factor'}" />
+                     <filter string="Acceptable / Reject" name="acceptable_reject" context="{'group_by':'acceptable_reject'}"/>
+                        <filter string="ICA User" name="Responsible" context="{'group_by':'ica_user_id'}" />
+                        <filter string="QHSSE User" name="Responsible" context="{'group_by':'qhsse_user_id'}" />
+                        <filter string="User" name="Responsible" context="{'group_by':'user_id'}" />
+                        <separator/>
+                        <filter string="Create Day" context="{'group_by':'create_date:day'}" help="Create Date"/>
+                        <filter string="Last Message" name="group_message_last_post" context="{'group_by':'message_last_post:week'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="action_view_goods_verification" model="ir.actions.act_window">
+            <field name="res_model">goods.verification</field>
+            <field name="view_type">form</field>
+            <field name="name">Goods Verification</field>
+            <field name="view_mode">tree,form</field>
+<!--            <field name="context">{'search_default_grpTC': 1 , 'search_default_grpStatus' : 1}</field>-->
+              <!--<field name="domain">[('stage_id.categ_id.name','=','Installation')]</field>-->
+
+        </record>
+         <menuitem id="menu_rog_goods_verification" name="Goods Verification"  parent="menu_rog_procurement" action="action_view_goods_verification"  />
+
+
+
+        <!-- Supplier Evaluation -->
+          <record id="supplier_evaluation_form" model="ir.ui.view">
+            <field name="name">supplier.evaluation.form</field>
+            <field name="model">supplier.evaluation</field>
+            <field name="arch" type="xml">
+                <form string="Supplier Evaluation">
+                <header>
+                     <button name="btn_user_supplier_evaluation" type="object" states="draft" string="User Accept" class="oe_highlight" />
+                     <button name="btn_proc_supplier_evaluation" type="object" states="user_sup_eval" string="Procurement Accept" class="oe_highlight" />
+                     <button name="btn_cancel" type="object" states="user_sup_eval,proc_sup_eval" string="Cancel"  />
+                    <button name="btn_reset" type="object" states="cancel" string="Reset"  />
+                    <field name="state" widget="statusbar"  />
+                </header>
+                <sheet>
+
+                    <group col="4" >
+                         <field name="name" readonly="1" />
+                            <field name="supplier_id" required="1" options="{'no_open': True, 'no_create': True}" domain="[('supplier','=',True)]" />
+                            <field name="department_id"  options="{'no_open': True, 'no_create': True}"  />
+                            <field name="address" />
+                            <field name="product_id" options="{'no_open': True, 'no_create': True}" />
+                            <field name="received_on" />
+                             <field name="po_id" readonly="1" />
+
+                    </group>
+                    <group string="User Department Supplier Evaluation" col="4">
+                        <field name="handling_of_rejections" />
+                        <field name="condition_of_goods_on_arrival" />
+                        <field name="frequency_of_rejections" />
+                        <field name="handling_of_complaints" />
+                        <field name="compliance_with_qhsse" />
+                        <field name="technical_assistance" />
+                        <field name="other_user_kpi" />
+
+                    </group>
+                   <group col="4" string="Procurement Department Supplier Evaluation" >
+                         <field name="on_time_delivery" />
+                        <field name="adherence_to_agreement" />
+                        <field name="delivers_information" />
+                        <field name="information_dissemination" />
+                        <field name="interpersonal_communication" />
+                        <field name="other_procurement_kpi" />
+                   </group>
+                    <group col="4" string="Rating and Score">
+                       <field name="percentage_score" />
+                        <field name="overall_rating" />
+                    </group>
+                    <group col="1" string="Action to be taken" >
+                        <field name="action_to_be_taken" nolabel="1" />
+                    </group>
+                    <group>
+                        <group col="2" string="User Department">
+                            <field name="user_id" />
+                            <field name="user_date" />
+                        </group>
+                        <group col="2"  string="Procurement Department" >
+                             <field name="user_proc_id" />
+                            <field name="user_proc_date" />
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+        </record>
+
+
+
+
+        <record model="ir.ui.view" id="supplier_evaluation_tree_view">
+            <field name="name">Supplier Evaluation Tree</field>
+            <field name="model">supplier.evaluation</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" />
+                     <field name="supplier_id"  />
+                            <field name="department_id"   />
+                            <field name="address" />
+                            <field name="product_id"  />
+                            <field name="received_on" />
+                             <field name="po_id" readonly="1" />
+                </tree>
+            </field>
+        </record>
+
+         <record id="view_supplier_evaluation_filter" model="ir.ui.view">
+            <field name="name">Supplier Evaluation Search</field>
+            <field name="model">supplier.evaluation</field>
+            <field name="arch" type="xml">
+                <search string="Supplier Evaluation Search">
+                    <field name="supplier_id" string="Supplier" />
+                    <field name="department_id" string="Department" />
+
+                    <separator/>
+                   <filter string="Supplier" name="supplier_id" context="{'group_by':'supplier_id'}" />
+                     <filter string="Department" name="department_id" context="{'group_by':'department_id'}"/>
+
+                    <group expand="0" string="Group By" >
+                         <filter string="Supplier" name="supplier_id" context="{'group_by':'supplier_id'}" />
+                     <filter string="Department" name="department_id" context="{'group_by':'department_id'}"/>
+                        <filter string="User" name="Responsible" context="{'group_by':'user_id'}" />
+                        <filter string="Procurement User" name="Responsible" context="{'group_by':'user_proc_id'}" />
+                        <separator/>
+                        <filter string="Create Day" context="{'group_by':'create_date:day'}" help="Create Date"/>
+                        <filter string="Last Message" name="group_message_last_post" context="{'group_by':'message_last_post:week'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="action_view_supplier_evaluation" model="ir.actions.act_window">
+            <field name="res_model">supplier.evaluation</field>
+            <field name="view_type">form</field>
+            <field name="name">Supplier Evaluation</field>
+            <field name="view_mode">tree,form</field>
+<!--            <field name="context">{'search_default_grpTC': 1 , 'search_default_grpStatus' : 1}</field>-->
+              <!--<field name="domain">[('stage_id.categ_id.name','=','Installation')]</field>-->
+
+        </record>
+         <menuitem id="menu_rog_supplier_evaluation" name="Supplier Evaluation"  parent="menu_rog_procurement" action="action_view_supplier_evaluation"  />
+
+
+
+        <!-- ROG Procurement Request Register -->
+         <record id="view_procurement_register_form" model="ir.ui.view">
+            <field name="name">procurement.register.form</field>
+            <field name="model">procurement.register</field>
+            <field name="arch" type="xml">
+                <form string="Procurement Register">
+                  <header>
+                     <button name="btn_ongoing" type="object" states="draft" string="Ongoing" class="oe_highlight" />
+                     <button name="btn_completed" type="object" states="ongoing" string="Completed" class="oe_highlight" />
+                     <button name="btn_cancel" type="object" states="ongoing,completed" string="Cancel"  />
+                    <button name="btn_reset" type="object" states="cancel" string="Reset"  />
+                    <field name="state" widget="statusbar"  />
+                </header>
+                    <sheet>
+                        <group col="4">
+                            <field name="department_id" readonly="1"  options="{'no_open':True,'no_create':True}" />
+                             <field name="request_received" readonly="1" />
+                             <field name="date_request" readonly="1" />
+                             <field name="action_taken" />
+                             <field name="vendor_awarded_id" readonly="1" domain="[('supplier','=',True)]"  options="{'no_open':True,'no_create':True}" />
+                             <field name="current_cost" readonly="1" />
+                             <field name="advance_paid" />
+                             <field name="status" />
+                             <field name="remark" />
+                             <field name="estimated_cost_saving_curr" />
+                             <field name="estimated_cost_saving_perc" />
+                             <field name="po_confirm_date" readonly="1" />
+                            <field name="po_id" readonly="1" />
+                             <field name="indent_po_days" />
+                             <field name="purchase_request_line_id"  readonly="1" />
+                        </group>
+                    </sheet>
+                     <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+         </record>
+
+         <record id="view_procurement_register_tree" model="ir.ui.view" >
+            <field name="name" >procurement.register.tree</field>
+            <field name="model">procurement.register</field>
+            <field name="arch" type="xml" >
+                <tree string="Procurement Register Limit" editable="bottom"  >
+                           <field name="department_id"  />
+                             <field name="request_received" />
+                             <field name="date_request" />
+                             <field name="action_taken" />
+                             <field name="vendor_awarded_id" />
+                             <field name="current_cost" />
+                             <field name="advance_paid" />
+                             <field name="status" />
+                             <field name="remark" />
+                             <field name="estimated_cost_saving_curr" />
+                             <field name="estimated_cost_saving_perc" />
+                            <field name="po_confirm_date" />
+                            <field name="po_id" />
+                             <field name="indent_po_days" />
+                             <field name="purchase_request_line_id" />
+                </tree>
+
+            </field>
+         </record>
+
+         <record id="view_procurement_register_filter" model="ir.ui.view">
+            <field name="name">procurement.register.filter</field>
+            <field name="model">procurement.register</field>
+            <field name="arch" type="xml">
+                <search string="Procurement Register Filter">
+                     <field name="department_id"  string="Department"  />
+                    <field name="vendor_awarded_id" string="Vendor Awarded" />
+                    <group expand="0" string="Group By">
+                        <filter  string="Department" domain="[]" context="{'group_by':'department_id'}"/>
+                        <filter  string="Vendor Awarded" domain="[]" context="{'group_by':'vendor_awarded_id'}"/>
+                        <filter  string="State" domain="[]" name="grpState" context="{'group_by':'state'}"/>
+                         <separator/>
+                        <filter string="Create Day" context="{'group_by':'create_date:day'}" help="Create Date"/>
+                        <filter string="Last Message" name="group_message_last_post" context="{'group_by':'message_last_post:week'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_procurement_register" model="ir.actions.act_window">
+            <field name="name">Procurement Register</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">procurement.register</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_grpState': True }</field>
+            <field name="search_view_id" ref="view_procurement_register_filter"/>
+        </record>
+         <menuitem id="menu_rog_procurement_register" name="Procurement Register"  parent="menu_rog_procurement" action="action_procurement_register"  />
+
+
+
+
+<!-- Purchase Order -->
+                <record id="purchase_order_form_extend_proc_rog" model="ir.ui.view">
+                <field name="name">purchase.order.form.extend.proc.rog</field>
+                <field name="model">purchase.order</field>
+                <field name="inherit_id" ref="purchase.purchase_order_form" />
+                <field name="arch" type="xml">
+                    <field name="date_order" position="after" >
+                        <field name="duration" />
+                    </field>
+                     <field name="incoterm_id" position="after">
+                         <field name="good_verification_id" />
+                         <field name="supplier_evaluation_id" />
+
+                     </field>
+                </field>
+                </record>
+
+    </data>
+</odoo>
+
+

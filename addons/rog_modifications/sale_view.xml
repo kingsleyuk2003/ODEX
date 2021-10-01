@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_order_form_extend_rog" model="ir.ui.view">
+            <field name="name">sale.order.form.extend.rog</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="arch" type="xml">
+                <field name="client_order_ref" position="after" >
+                    <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"   />
+                    <field name="hr_department_id"  domain="[('is_show_other_apps','=',True)]" options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                    <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+                </field>
+
+                 <group name="sale_pay" position="before">
+                      <group name="discount_changes" string="Discount Approvals">
+                          <field name="is_discount_changed"  readonly="1" />
+                          <field name="is_discount_approved" readonly="1" />
+                          <field name="discount_changed_by" readonly="1" />
+                          <field name="discount_approved_by" readonly="1" />
+                      </group>
+                 </group>
+
+
+
+            </field>
+        </record>
+    </data>
+</openerp>

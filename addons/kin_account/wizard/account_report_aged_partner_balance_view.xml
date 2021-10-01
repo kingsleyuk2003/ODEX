@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="account_aged_balance_view_extend" model="ir.ui.view">
+        <field name="name">Aged Partner Balance</field>
+        <field name="model">account.aged.trial.balance</field>
+        <field name="inherit_id" ref="account.account_aged_balance_view" />
+        <field name="arch" type="xml">
+           <xpath expr="//field[@name='result_selection']" position="after">
+               <field name="partner_ids" widget="many2many_tags"/>
+           </xpath>
+        </field>
+    </record>
+
+
+</odoo>

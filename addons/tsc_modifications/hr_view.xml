@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_employee_form_extend_tsc" model="ir.ui.view">
+            <field name="name">hr.employee.form.extend.tsc</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="kin_hr.view_employee_form_extend" />
+            <field name="arch" type="xml">
+                <field name="employment_status"  position="after" >
+                    <field name="exp_rel_pos" />
+                </field>
+            </field>
+        </record>
+
+
+
+
+
+    </data>
+</openerp>

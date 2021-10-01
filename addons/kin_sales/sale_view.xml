@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+       <record model="ir.ui.menu" id="base.menu_base_partner">
+		 <field name="groups_id" eval="[(6, 0, [ref('group_show_sales_app')])]"/>
+        </record>
+
+         <record model="ir.ui.menu" id="base.menu_sale_config">
+		 <field name="groups_id" eval="[(6, 0, [ref('group_show_sales_configuration')])]"/>
+        </record>
+
+        <!--Call the function to delete the menu-->
+        <function  model="sale.order" name="hide_invoice_order_from_tree"  />
+
+
+        <record id="crm_team_view_form_extend" model="ir.ui.view">
+            <field name="name">crm.team.form.extend</field>
+            <field name="model">crm.team</field>
+            <field name="inherit_id" ref="sales_team.crm_team_view_form" />
+            <field name="arch" type="xml">
+                <field name="active" position="after">
+                    <field name="warehouse_id" colspan="2" col="2" />
+                    <field name="sale_stock_location_ids" domain="[('usage','=','internal')]"  widget="many2many_tags"    />
+                </field>
+
+            </field>
+        </record>
+
+        <record id="view_order_form_extend" model="ir.ui.view">
+            <field name="name">sale.order.form.extend</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="arch" type="xml" >
+                <button name="action_cancel" position="before" >
+                    <!--<button name="show_advance_invoice_wizard" type="object"  states="draft,sent" class="oe_highlight"  string="Cash Sales"  groups="kin_sales.group_cash_sales_btn" />-->
+                    <!--<button name="set_credit_sale_state" type="object"  states="draft,sent" class="oe_highlight"  string="Credit Sales" groups="kin_sales.group_credit_sales_btn" />-->
+                    <button name="confirm_credit_limit_bypass" string="Confirm Credit Limit By Pass" class="btn-primary" type="object"  states="credit_limit_by_pass_request" groups="kin_sales.group_show_confirm_credit_limit_bypass" />
+                    <button name="approve_credit_limit_bypass" string="Approve Credit Limit By Pass" class="btn-primary" type="object"  states="credit_limit_by_pass_confirm" groups="kin_sales.group_show_approve_credit_limit_bypass" />
+                    <button name="%(action_credit_limit_disapproval_reason)d"   type="action"   string="Disapprove Credit Limit By Pass"  states="credit_limit_by_pass_request,credit_limit_by_pass_confirm"  groups="kin_sales.group_show_disapprove_credit_limit_bypass" />
+                    <button name="cancel_credit_limit_bypass" string="Cancel Credit Limit By Pass"  type="object"   states="credit_limit_by_pass_disapprove" confirm="Are you sure you want to cancel this credit limit workflow?" />
+                    <button name="reset_to_draft" string="Reset to Draft"  type="object"  states="credit_limit_by_pass_cancel" groups="kin_sales.group_show_reset_credit_limit_bypass" />
+                </button>
+
+                <xpath expr="//sheet/div[@name='button_box']" position="before">
+                    <div class="alert alert-success text-center o_form_header" attrs="{'invisible': [('show_alert_box1', '!=', True)]}">
+                       <button name="close_alert_box1" type="object" class="close" data-dismiss="modal"><span aria-hidden="true" class="fa fa-times"></span></button>
+                        <div>
+                            <strong>A new purchase request with email notification has been sent for the finished items</strong>
+                        </div>
+                         <field name="show_alert_box1" invisible="1"/>
+                     </div>
+                    <div class="alert alert-success text-center o_form_header" attrs="{'invisible': [('show_alert_box', '!=', True)]}">
+                       <button name="close_alert_box" type="object" class="close" data-dismiss="modal"><span aria-hidden="true" class="fa fa-times"></span></button>
+                        <div>
+                            <strong>The inventory personnel will receive an email to check availability and reserve items from the stock to the customer. An invoice notification will be sent to the accountant, after reservation and validation</strong>
+                        </div>
+                         <field name="show_alert_box" invisible="1"/>
+                     </div>
+                 </xpath>
+
+                <field name="client_order_ref" position="replace"/>
+                <field name="team_id" position="replace"/>
+                 <field name="user_id" position="replace"/>
+                 <field name="project_id" position="after" >
+                    <field name="client_order_ref" string="PO Reference"/>
+                     <field name="quote_name" string="Quote No"/>
+                     <field name="team_id" string="Sales Channel" required="1" />
+                      <field name="user_id" />
+                </field>
+<!-- is is better to copy the whole field from the source file and then add the position attributes to it. so that the system can locate the file in the parent view -->
+                 <button name="%(sale.action_view_sale_advance_payment_inv)d"  position="attributes"
+                        type="action" class="btn-primary"
+                        attrs="{'invisible': [('invoice_status', '!=', 'to invoice')]}" >
+                         <attribute name="groups">kin_sales.group_show_create_invoice_si_button</attribute>
+                 </button>
+
+                 <button name="%(sale.action_view_sale_advance_payment_inv)d" position="attributes"
+                        type="action" context="{'default_advance_payment_method': 'percentage'}"
+                        attrs="{'invisible': ['|',('invoice_status', '!=', 'no'), ('state', '!=', 'sale')]}" >
+                        <attribute name="groups">kin_sales.group_show_create_invoice_button</attribute>
+                </button>
+
+
+                <field name="pricelist_id" position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                <field name="project_id" position="attributes"  >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                <field name="team_id"  position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                <xpath expr="//tree/field[@name='product_id']" position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </xpath>
+
+                <xpath expr="//tree/field[@name='product_uom']" position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </xpath>
+
+                <xpath expr="//tree/field[@name='tax_id']" position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </xpath>
+
+                <xpath expr="//tree/field[@name='discount']" position="after" >
+                    <field name="discount_amt" groups="sale.group_discount_per_so_line" />
+                </xpath>
+
+                <xpath expr="//tree/field[@name='product_uom_qty']" position="after" >
+                    <field name="qty_available"  groups="kin_sales.group_show_qty_available_field"  />
+                </xpath>
+
+                 <xpath expr="//tree/field[@name='product_uom_qty']" position="attributes" >
+                    <attribute name="attrs" >{'readonly': [('state','=', 'sale')]}</attribute>
+                </xpath>
+
+                <xpath expr="//tree/field[@name='name']" position="attributes" >
+                    <attribute name="attrs" >{'readonly': [('state','=', 'sale')]}</attribute>
+                </xpath>
+
+                <xpath expr="//tree/field[@name='discount']" position="attributes" >
+                    <attribute name="attrs" >{'readonly': [('state','=', 'sale')]}</attribute>
+                </xpath>
+
+                <xpath expr="//tree/field[@name='discount_amt']" position="attributes" >
+                    <attribute name="attrs" >{'readonly': [('state','=', 'sale')]}</attribute>
+                </xpath>
+
+
+                 <!--<xpath expr="//tree/field[@name='name']" position="attributes">-->
+                    <!--<attribute name="attrs" >{'readonly': 1}</attribute>-->
+                 <!--</xpath>-->
+
+                <xpath expr="//tree/field[@name='product_uom']" position="attributes">
+                    <attribute name="attrs" >{'readonly': 1}</attribute>
+                 </xpath>
+
+                <field name="payment_term_id" options="{'no_create': True}" position="attributes">
+                    <attribute name="options" ></attribute>
+                </field>
+
+                <field name="payment_term_id"  position="after" >
+                    <field name="sale_shipping_term_id" attrs="{'readonly': [('invoice_status','=', 'invoiced')]}"  />
+                    <field name="bypass_msg" readonly="1" />
+                </field>
+
+                <xpath expr="//button[@name='action_confirm'][@states='sent']" position="attributes" >
+                    <attribute name="string" >Convert Quote to Sale Order</attribute>
+                    <attribute name="class" >oe_highlight</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_confirm'][@states='draft']" position="attributes" >
+                    <attribute name="string" >Convert Quote to Sale Order</attribute>
+                    <attribute name="class" >oe_highlight</attribute>
+                </xpath>
+
+
+                <button name="action_cancel" position="attributes" >
+                    <attribute name="groups" >kin_sales.group_show_cancel_sale_button</attribute>
+                </button>
+
+                <button name="action_done" position="attributes" >
+                    <attribute name="groups" >kin_sales.group_show_set_to_done_button</attribute>
+                </button>
+
+
+                <field name="date_order" position="before" >
+                    <field name="date_quote" string="Quote Date" attrs="{'invisible': [('state', 'not in', ['draft','sent'])]}" />
+                </field>
+
+                <field name="date_order" position="attributes" >
+                    <attribute name="invisible" >0</attribute>
+                    <attribute name="attrs" >{'invisible': [('state', 'in', ['draft','sent'])]}</attribute>
+                </field>
+
+
+                <button name="action_quotation_send" type="object" states="draft" class="btn-primary" position="attributes" >
+                        <attribute name="groups" >kin_sales.group_show_send_by_email_button</attribute>
+                </button>
+                <button name="action_quotation_send" type="object" states="sent,sale" position="attributes" >
+                        <attribute name="groups" >kin_sales.group_show_send_by_email_button</attribute>
+                </button>
+                <button name="print_quotation"  type="object" states="draft" class="btn-primary" position="attributes" >
+                        <attribute name="groups" >kin_sales.group_show_print_button</attribute>
+                </button>
+                <button name="print_quotation"  type="object" states="sent,sale" position="attributes" >
+                        <attribute name="groups" >kin_sales.group_show_print_button</attribute>
+                </button>
+
+                 <group name="sale_pay" position="before">
+                      <group name="credit_limit" string="Credit Limit By Pass">
+                             <field name="credit_limit_bypass_requested_by_id" />
+                          <field name="credit_limit_bypass_confirmed_by_id" />
+                          <field name="credit_limit_bypass_approved_by_id" />
+                          <field name="bypass_msg_disapproved" />
+                      </group>
+                 </group>
+
+
+                 <field name="validity_date"  position="attributes" >
+                    <attribute name="attrs" >{'readonly': False}</attribute>
+                </field>
+
+
+            </field>
+        </record>
+
+
+
+        <record id="view_quotation_tree_extend" model="ir.ui.view">
+            <field name="name">sale.order.tree.extend</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_quotation_tree" />
+            <field name="arch" type="xml">
+                <field name="date_order" position="replace" >
+                    <field name="date_quote"/>
+                </field>
+            </field>
+        </record>
+
+
+
+        <record id="view_order_form_inherit_sale_stock_extend" model="ir.ui.view">
+            <field name="name">sale.order.form.sale.stock.extend</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
+            <field name="arch" type="xml">
+
+                <field name="partner_id" position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                 <field name="picking_policy" position="attributes" >
+                    <attribute name="invisible" >True</attribute>
+                </field>
+
+                 <field name="warehouse_id" position="attributes" >
+                        <attribute name="invisible" >0</attribute>
+                 </field>
+
+                <field name="amount_total" position="after" >
+                    <field name="amt_discount_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <separator colspan="2" class="oe_subtotal_footer_separator" groups="kin_sales.group_show_customer_account_fields"  />
+                    <span colspan="2" groups="kin_sales.group_show_customer_account_fields" ><b><u>Account Information</u></b></span>
+                    <field name="credit" groups="kin_sales.group_show_customer_account_fields" />
+                    <field name="not_due_amount_receivable" groups="kin_sales.group_show_customer_account_fields" />
+                    <field name="due_amount_receivable" groups="kin_sales.group_show_customer_account_fields" />
+                    <field name="credit_limit" groups="kin_sales.group_show_customer_account_fields" />
+                    <field name="allowed_credit" groups="kin_sales.group_show_customer_account_fields" />
+                    <field name="is_credit_limit_bypass" readonly="True" groups="kin_sales.group_show_customer_account_fields"  />
+                </field>
+            </field>
+        </record>
+
+
+        <record id="view_order_tree_extend" model="ir.ui.view">
+            <field name="name">sale.order.tree.extend</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree" />
+            <field name="arch" type="xml">
+                <field name="user_id" position="after">
+                    <field name="client_order_ref" string="Order Reference"/>
+                </field>
+                <field name="amount_total" position="before">
+                    <field name="amount_untaxed" />
+                </field>
+            </field>
+        </record>
+
+
+
+          <record model="ir.ui.view" id="view_company_inherit_form_sale_extend">
+            <field name="name">res.company.form.sale.extend</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="model">res.company</field>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Extra Sales Config.">
+                        <group>
+                             <field name="is_po_check" />
+                            <field name="is_sales_order_stock_notification"  />
+                            <field name="is_send_stock_notification"  />
+                            <field name="is_sales_order_stock_purchase_request" />
+                            <field name="is_select_sales_team"  />
+                            <field name="is_contraint_sales_order_stock"  />
+                            <field name="is_invoice_before_delivery"  />
+                            <field name="is_send_invoice_notification"  />
+                            <field name="validity_date_interval"  />
+                            <field name="is_send_expiry_email_quote_notification"  />
+                            <field name="is_delete_quote_after_expiration_date" />
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+
+         <record id="view_order_line_tree_extend" model="ir.ui.view">
+            <field name="name">sale.order.line.tree.extend</field>
+            <field name="model">sale.order.line</field>
+            <field name="arch" type="xml">
+                <tree string="Sales Order Lines"  create="0" delete="0" edit="0"  >
+                    <field name="product_id" />
+                    <field name="order_id"/>
+                    <field name="order_partner_id"/>
+                    <field name="salesman_id"/>
+                    <field name="product_uom_qty" string="Qty"/>
+                    <field name="qty_delivered"/>
+                    <field name="qty_invoiced"/>
+                    <field name="qty_to_invoice"/>
+                    <field name="product_uom" string="Unit of Measure" groups="product.group_uom"/>
+                    <field name="price_subtotal" sum="Total" widget="monetary"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+         <record model="ir.ui.view" id="sales_order_line_pivot">
+            <field name="name">sale.order.line.pivot</field>
+            <field name="model">sale.order.line</field>
+            <field name="arch" type="xml">
+                <pivot string="Sales Order Line" >
+                    <field name="date_order" interval="month" type="row"/>
+                    <field name="price_subtotal" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="sales_order_line_graph">
+            <field name="name">sale.order.line.graph</field>
+            <field name="model">sale.order.line</field>
+            <field name="arch" type="xml">
+                <graph string="Sales Order Lines">
+                    <field name="date_order" interval="month" type="row"/>
+                    <field name="price_subtotal" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="view_sales_order_line_search_extend" model="ir.ui.view">
+            <field name="name">sale.order.line.search</field>
+            <field name="model">sale.order.line</field>
+            <field name="arch" type="xml">
+                <search string="Search Sales Order">
+                    <filter string="To Invoice" domain="[('qty_to_invoice','&lt;&gt;', 0)]"  help="Sales Order Lines ready to be invoiced"/>
+                    <separator/>
+                    <filter string="My Sales Order Lines" domain="[('salesman_id','=',uid)]" help="Sales Order Lines related to a Sales Order of mine"/>
+                    <field name="order_id"/>
+                    <field name="order_partner_id" operator="child_of"/>
+                    <field name="product_id"/>
+                    <field name="salesman_id"/>
+                    <group expand="0" string="Group By">
+                        <filter name="groupby_product" string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                         <filter name="groupby_cust" string="Customer" domain="[]" context="{'group_by':'order_partner_id'}"/>
+                        <filter name="groupby_order" string="Order" domain="[]" context="{'group_by':'order_id'}"/>
+                        <filter name="groupby_salesperson" string="Salesperson" domain="[]" context="{'group_by':'salesman_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_sale_order_lines" model="ir.actions.act_window">
+            <field name="name">Sale Order Lines</field>
+            <field name="res_model">sale.order.line</field>
+            <field name="context">{'search_default_groupby_product': 1,'search_default_groupby_cust': 1}</field>
+            <field name="domain">[('state', 'in', ['sale', 'done'])]</field>
+            <field name="view_type" >form</field>
+            <field name="view_mode">tree,pivot,graph</field>
+            <field name="view_id" ref="view_order_line_tree_extend"/>
+             <field name="search_view_id" ref="view_sales_order_line_search_extend"/>
+        </record>
+
+        <menuitem id="menu_sale_order_lines" name="Sale Order Lines Analysis"
+                action="action_sale_order_lines" parent="base.menu_sale_report"
+                sequence="31"/>
+
+
+
+        <record model="ir.ui.view" id="view_purchase_request_form_extend">
+            <field name="name">purchase.request.form.extend</field>
+            <field name="model">purchase.request</field>
+            <field name="inherit_id" ref="purchase_request.view_purchase_request_form" />
+            <field name="arch" type="xml">
+                <field name="assigned_to" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+            </field>
+        </record>
+
+         <record id="view_partner_property_form_extend" model="ir.ui.view">
+            <field name="name">res.partner.property.form.inherit.extend</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//sheet" position="before">
+                    <header>
+                         <button name="btn_approve_credit_limit" type="object"  string="Approve Credit Limit" class="oe_highlight" attrs="{'invisible': [('is_credit_limit_changed', '=', False)]}" groups="kin_sales.group_credit_limit_approval" />
+                    </header>
+                 </xpath>
+
+
+                    <field name="credit" position="attributes" >
+                            <attribute name="groups" ></attribute>
+                    </field>
+                    <field name="debit" position="attributes" >
+                            <attribute name="groups" ></attribute>
+                    </field>
+                    <field name="credit" position="after" >
+                        <field name="not_due_amount_receivable" />
+                        <field name="due_amount_receivable" />
+                        <field name="credit_limit"   />
+                        <field name="allowed_credit" />
+                        <field name="is_enforce_credit_limit_so" />
+                        <field name="is_credit_limit_changed" readonly="1" />
+                        <field name="is_credit_limit_changed_by" readonly="1" />
+                        <field name="is_credit_limit_approved" readonly="1" />
+                        <field name="is_credit_limit_last_approved_by"  readonly="1" />
+                    </field>
+                <field name="street2" position="attributes" >
+                    <attribute name="invisible" >1</attribute>
+                </field>
+                 <field name="city" position="attributes" >
+                    <attribute name="invisible" >1</attribute>
+                 </field>
+                 <field name="state_id"  position="attributes" >
+                        <attribute name="invisible" >1</attribute>
+                 </field>
+                <field name="zip"  position="attributes" >
+                    <attribute name="invisible" >1</attribute>
+                </field>
+                <field name="country_id" position="attributes" >
+                    <attribute name="invisible" >1</attribute>
+                </field>
+            </field>
+        </record>
+
+
+
+
+         <record id="view_partner_tree_sale_extend" model="ir.ui.view">
+            <field name="name">res.partner.sale.tree</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                  <field name="display_name" position="after">
+                      <field name="ref" />
+                      </field>
+
+                    <field name="email" position="after" >
+                        <field name="total_invoiced" />
+                        <field name="credit" sum="Total" />
+                        <field name="debit" sum="Total"  />
+                         <field name="not_due_amount_receivable" sum="Total" />
+                        <field name="due_amount_receivable" sum="Total" />
+                        <field name="credit_limit" sum="Total"  />
+                        <field name="allowed_credit"  />
+
+                    </field>
+            </field>
+        </record>
+
+
+ <record model="ir.ui.view" id="sale_margin_sale_order_line_form_extend">
+        <field name="name">sale.order.line.tree.margin.view.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_margin.sale_margin_sale_order_line_form"/>
+        <field name="arch" type="xml">
+           <xpath expr="//field[@name='order_line']/tree//field[@name='purchase_price']" position="attributes">
+               <attribute name="readonly">1</attribute>
+               <attribute name="groups" >kin_sales.group_show_margin_cost_fields</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree//field[@name='purchase_price']" position="after">
+               <field name="margin" groups="kin_sales.group_show_margin_cost_fields" />
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="sale_margin_sale_order_extend">
+        <field name="name">sale.order.margin.view.form.extend</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_margin.sale_margin_sale_order"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='sale_margin_grp']/field[@name='margin']" position="attributes">
+                <attribute name="groups" >kin_sales.group_show_margin_cost_fields</attribute>
+                <attribute name="string" >Gross Profit</attribute>
+            </xpath>
+             <xpath expr="//group[@name='sale_margin_grp']/field[@name='margin']" position="after">
+                <field name="total_cost" groups="kin_sales.group_show_margin_cost_fields" />
+                <field name="total_gross_margin_perc" groups="kin_sales.group_show_margin_cost_fields" />
+                <field name="total_markup_perc" groups="kin_sales.group_show_margin_cost_fields" />
+            </xpath>
+        </field>
+    </record>
+
+        <!--&lt;!&ndash; Extending the windows action &ndash;&gt;-->
+         <!--<record id="sale.action_orders" model="ir.actions.act_window">-->
+            <!--<field name="context">{'readonly_by_pass':True}</field>-->
+        <!--</record>-->
+
+        <!--<record id="sale.action_quotations" model="ir.actions.act_window">-->
+            <!--<field name="context">{'readonly_by_pass':True}</field>-->
+        <!--</record>-->
+
+
+
+ <!--<menuitem id="sales_team.menu_sales_team_act" action="sales_team.crm_team_salesteams_act" sequence="5" parent="base.menu_base_partner" name="Dashboard"/>-->
+ <!--<menuitem id="menu_sales_team_act_child" action="sales_team.crm_team_salesteams_act" sequence="1" parent="sales_team.menu_sales_team_act" name="Dashboard"/>-->
+
+        <menuitem id="sale.menu_sale_quotations" string="Quotations / Draft Sales Orders (SO)"  action="sale.action_quotations" parent="base.menu_sales"    sequence="11"/>
+ <menuitem id="base.menu_partner_form" parent="base.menu_sales" action="base.action_partner_form" sequence="13"/>
+
+
+        <!-- Take care of a bug for sales_count -->
+        <!--<record model="ir.ui.view" id="product_template_form_view_sale_order_button_extend">-->
+            <!--<field name="name">product.template.sale.order.button.extend</field>-->
+            <!--<field name="model">product.template</field>-->
+            <!--<field name="inherit_id" ref="sale.product_template_form_view_sale_order_button"/>-->
+            <!--<field name="groups_id" eval="[(4, ref('base.group_sale_salesman'))]"/>-->
+            <!--<field name="arch" type="xml">-->
+               <!--<field  name="sales_count"  position="replace" >-->
+                   <!--<span>Sale(s)</span>-->
+               <!--</field>-->
+            <!--</field>-->
+        <!--</record>-->
+
+         <record id="sale.action_view_sale_advance_payment_inv" model="ir.actions.act_window">
+            <field name="groups_id"  eval="[(6, 0, [ref('base.group_system')])]" />
+        </record>
+
+
+
+
+    </data>
+</openerp>

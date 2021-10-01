@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+<record id="view_users_form_password_extend" model="ir.ui.view">
+            <field name="name">res.users.form.password.extend</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                  <field name="partner_id" position="after" >
+                      <field name="is_password_user_changed" />
+                  </field>
+            </field>
+        </record>
+
+            </data>
+</openerp>

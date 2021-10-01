@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+         <template id="style">
+
+            /* reference: http://stackoverflow.com/questions/10040842/add-border-bottom-to-table-row-tr */
+        tr.border_bottom_head td {
+          border-bottom:2pt solid black;
+        }
+        tr.border_bottom_row td {
+          border-bottom:1pt solid #B6B6B4;
+
+        }
+        /* Uncomment this if you want the tables to have joined lines
+         *
+         table{
+            border-collapse: collapse;
+        }
+        */
+
+
+        table.withboarder, table.withboarder tr td{
+            border: 1px solid #B6B6B4;
+            border-collapse: collapse;
+        }
+
+        .custom_th {
+            background-color: #707070 ;
+            color : #FFFFFF;
+
+        }
+
+        .custom_charge {
+          background-color : #f2f2f2;
+        }
+
+
+        /* reference: ../addons/web/static/lib/bootstrap/css/bootstrap.css  */
+        .table-bordered-black {
+          border: 0.5px solid #000000;
+        }
+
+        .table-bordered-black > thead > tr > th,
+        .table-bordered-black > tbody > tr > th,
+        .table-bordered-black > tfoot > tr > th,
+        .table-bordered-black > thead > tr > td,
+        .table-bordered-black > tbody > tr > td,
+        .table-bordered-black > tfoot > tr > td {
+          border: 0.5px solid #000000;
+
+        }
+        .table-bordered-black > thead > tr > th,
+        .table-bordered-black > thead > tr > td {
+          border-bottom-width: 0px;
+        }
+
+        .table-bordered-black span {
+        margin-left: 2px ;
+             margin-right: 2px ;
+        }
+
+
+</template>
+
+
+
+<template id="report_delivery_receipt">
+	    <t t-call="report.html_container">
+	        <t t-foreach="docs" t-as="o">
+	            <t t-call="report.external_layout"  >
+	                <div class="page" >
+                         <style type="text/css">
+							<t t-call="kin_aviation.style"/>
+						</style>
+						<div class="row" >
+							<div class="col-xs-5">
+								<div t-if="o.aviation_station_id" ><span style="font-weight:bold">From:  </span> <span t-field="o.aviation_station_id" /></div>
+							</div>
+							<div class="col-xs-7">
+								<div class="row">
+									<div class="col-xs-6 col-xs-offset-6" >
+										<span style="font-weight:bold" >TO:</span><span t-field="o.customer_id" t-field-options='{"widget": "contact", "fields": ["address", "name", "phone", "fax"], "no_marker": true, "phone_icons": true}'/>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-12 text-center" >
+								<h3><b>
+									<span t-if="o.state == 'draft'">DRAFT DELIVERY RECEIPT</span>
+									<span t-if="o.state == 'cancel'">CANCELLED DELIVERY RECEIPT</span>
+									<span t-if="o.state == 'confirm'">DELIVERY RECEIPT</span>
+									<span t-field="o.name" /></b></h3>
+							</div>
+						</div>
+
+						<div class="row mt8">
+							<div class="col-xs-12" >
+
+								<table  style="width: 100%;" class="table-bordered-black" cellpadding="3" cellspacing="0" >
+
+										<thead >
+												<tr>
+													<td width="50%" ><span><b>Product</b></span></td>
+													<td class="text-right" ><span><b>Volume Sold</b></span></td>
+													<td class="text-right" ><span><b>Selling Price (<span t-field="o.currency_id.symbol" />)</b></span></td>
+													<td class="text-right" ><span><b>Total Price (<span t-field="o.currency_id.symbol" />)</b></span></td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td style="padding-left: 2px" ><span t-field="o.product_id"/></td>
+													<td class="text-right">
+														<span t-field="o.volume_sold"/>
+														<span  t-field="o.product_uom" />
+													</td>
+													<td class="text-right">
+														<span t-field="o.product_price"/>
+													</td>
+                                                    <td class="text-right">
+														<span t-esc="'{:,.2f}'.format(o.price_subtotal)" />
+													</td>
+												</tr>
+											</tbody>
+
+
+								</table>
+							</div>
+						</div>
+						<br />
+						<div class="row mt16" >
+							<div class="col-xs-12" >
+								<div class="row">
+									<div class="col-xs-6" >
+										 For: <span style="font-weight:bold" t-field="o.aviation_station_id"/> ....................
+									</div>
+									<div class="col-xs-6" >
+										<span><b>Customer's Signature:</b> ............................ </span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+	                </div>
+	            </t>
+	        </t>
+    	</t>
+</template>
+	</data>
+</openerp>

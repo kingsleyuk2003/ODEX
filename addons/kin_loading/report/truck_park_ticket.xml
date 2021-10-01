@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+
+		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
+		<!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
+		<report
+		    id="action_report_truck_park_ticket"
+		    model="truck.park.ticket"
+		    string="Truck Park Ticket"
+		    report_type="qweb-pdf"
+		    name="kin_loading.report_truck_park_ticket"
+		    file="kin_loading.report_truck_park_ticket"
+		    attachment_use="False"
+			menu="False"
+		/>
+		<record id="action_report_truck_park_ticket" model="ir.actions.report.xml" >
+            <field name="groups_id" eval="[(6, 0, [ref('group_depot_manager')])]"  />
+        </record>
+
+
+		<template id="report_truck_park_ticket">
+	    <t t-call="report.html_container">
+	        <t t-foreach="docs" t-as="o">
+				<t t-call="kin_loading.custom_loading_layout"  >
+				<div class="page" style="border:1px solid black" >
+					<style type="text/css">
+							<t t-call="kin_loading.style"/>
+						</style>
+					<div class="row" style="margin:10px" >
+						<div class="col-xs-12">
+
+
+						<div class="row" >
+
+							<div class="col-xs-7 text-center" >
+								<h3  t-if="o.state == 'draft'" ><b>DRAFT Truck Park Ticket</b></h3>
+								<h3 t-if="o.state == 'confirm'"><b>Truck Park Ticket</b></h3>
+								<h3 t-if="o.state == 'cancel'"><b>CANCELLED Truck Park Ticket</b></h3>
+							</div>
+
+							<div class="col-xs-4">
+								<b>No: </b>
+								<span t-field="o.ticket_no" />
+							</div>
+						</div>
+						<br />
+						<div class="row" >
+							<div class="col-xs-6">
+								<b><span t-field="o.product_id" /></b>
+							</div>
+							<div class="col-xs-3" >
+								<b>Truck No: </b>
+								<span t-field="o.truck_no" />
+							</div>
+							<div class="col-xs-3" >
+								<b>Date: </b>
+								<span t-field="o.park_date" />
+							</div>
+						</div>
+
+						<br />
+						<div class="row" >
+							<div class="col-xs-12" >
+								<b>Received From </b>
+								<span t-field="o.driver_id" />
+							</div>
+							<div class="col-xs-12" >
+								<b>The Sum of </b>
+								<span t-field="o.amount_words" />
+							</div>
+
+							<div class="col-xs-5" >
+								<b><span t-field="o.env.user.company_id.currency_id.symbol" /> </b>
+								<span t-field="o.amount" />
+							</div>
+							<div class="col-xs-7" >
+								<b>For: <span t-field="o.env.user.company_id.name" /> _____________________</b>
+							</div>
+						</div>
+
+						</div>
+					</div>
+				</div>
+			</t>
+		</t>
+		</t>
+		</template>
+
+
+	</data>
+</openerp>

@@ -1,0 +1,23 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_private_order,private.order,model_private_order,group_show_private_order,1,1,1,1
+access_private_order_line,private.order.line,model_private_order_line,group_show_private_order,1,1,1,1
+access_private_order_manager,private.order manager,model_private_order,group_show_private_order_manager,1,1,1,1
+access_private_order_line_manager,private.order.line manager,model_private_order_line,group_show_private_order_manager,1,1,1,1
+access_private_customer user,private.customer user,model_private_customer,group_show_private_order,1,1,1,1
+access_private_customer manager,private.customer manager,model_private_customer,group_show_private_order_manager,1,1,1,1
+access_customer_type_user,customer.type user,model_customer_type,group_show_private_order,1,0,0,0
+access_customer_type_manager,customer.type manager,model_customer_type,group_show_private_order_manager,1,1,1,1
+access_marketing_activity user,marketing.activity user,model_marketing_activity,group_show_private_order,1,1,1,1
+access_marketing_territory user,marketing.territory user,model_marketing_territory,group_show_private_order,1,0,0,0
+access_marketing_speciality user,marketing.speciality user,model_marketing_speciality,group_show_private_order,1,0,0,0
+access_marketing_product user,marketing.product user,model_marketing_product,group_show_private_order,1,1,1,1
+access_marketing_outcome user,marketing.outcome user,model_marketing_outcome,group_show_private_order,1,0,0,0
+access_marketing_appointment user,marketing.appointment user,model_marketing_appointment,group_show_private_order,1,0,0,0
+access_activity_type user,activity.type user,model_activity_type,group_show_private_order,1,0,0,0
+access_marketing_activity manager,marketing.activity manager,model_marketing_activity,group_show_private_order_manager,1,1,1,1
+access_marketing_territory manager,marketing.territory manager,model_marketing_territory,group_show_private_order_manager,1,1,1,1
+access_marketing_speciality manager,marketing.speciality manager,model_marketing_speciality,group_show_private_order_manager,1,1,1,1
+access_marketing_product manager,marketing.product manager,model_marketing_product,group_show_private_order_manager,1,1,1,1
+access_marketing_outcome manager,marketing.outcome manager,model_marketing_outcome,group_show_private_order_manager,1,1,1,1
+access_marketing_appointment manager,marketing.appointment manager,model_marketing_appointment,group_show_private_order_manager,1,1,1,1
+access_activity_type manager,activity.type manager,model_activity_type,group_show_private_order_manager,1,1,1,1

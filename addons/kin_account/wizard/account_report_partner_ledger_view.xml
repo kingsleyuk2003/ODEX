@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!--    <record id="account_report_partner_ledger_view_extend" model="ir.ui.view">-->
+<!--        <field name="name">Partner Ledger</field>-->
+<!--        <field name="model">account.report.partner.ledger</field>-->
+<!--        <field name="inherit_id" ref="account_extra_reports.account_report_partner_ledger_view"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <data>-->
+<!--                <xpath expr="//field[@name='reconciled']" position="after">-->
+<!--                        <field name="partner_ids" widget="many2many_tags"/>-->
+<!--                </xpath>-->
+<!--            </data>-->
+<!--        </field>-->
+<!--    </record>-->
+
+
+
+</odoo>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+		<record  id="purchase_discount_wizard_view_form" model="ir.ui.view" >
+			<field name="name">purchase.discount.wizard.form</field>
+            <field name="model">purchase.discount.wizard</field>
+            <field name="arch" type="xml">
+            	<form string="Purchase Discount" >
+					<group cols="4" colspan="4" >
+
+					</group>
+					<footer>
+						<button  name="purchase_discount_show" string="Get Purchase Discount" type="object" icon="gtk-execute" class="oe_highlight" />
+						or <button special="cancel" class="oe_link"  string="Cancel"  />
+					</footer>
+            </form>
+			</field>
+		</record>
+
+
+	<record id="action_account_balance_menu" model="ir.actions.act_window">
+        <field name="name">Trial Balance</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.balance.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="account_report_balance_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_general_Balance_report"
+        name="Trial Balance"
+        parent="account.menu_finance_legal_statement"
+        action="action_account_balance_menu"/>
+
+    <record id="action_account_balance_report_values1" model="ir.values">
+        <field name="model_id" ref="account.model_account_account" />
+        <field name="name">Trial Balance</field>
+        <field name="key2">client_print_multi</field>
+        <field name="value" eval="'ir.actions.act_window,' +str(ref('action_account_balance_menu'))" />
+        <field name="key">action</field>
+        <field name="model">account.account</field>
+    </record>
+
+
+		<act_window id="po_import_wizard_action"
+			name="Import PO Lines"
+			view_id="po_import_wizard_view_form"
+            key2="client_action_multi"
+            src_model="purchase.order"
+            res_model="po.import.wizard"
+            view_mode="form"
+            target="new"
+            view_type="form"
+        />
+
+
+    </data>
+</odoo>
+
+
+

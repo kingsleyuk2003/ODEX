@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
+		<!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
+		<report
+		    id="kin_report.receipt_custom"
+		    model="account.payment.group"
+		    string="Payment Receipt"
+		    report_type="qweb-pdf"
+		    name="rog_modifications.custom_receipt_rog"
+		    file="rog_modifications.custom_receipt_rog"
+		    attachment_use="False"
+		    		/>
+
+
+<template id="custom_receipt_rog">
+	    <t t-call="report.html_container">
+	        <t t-foreach="docs" t-as="o">
+	            <t t-call="rog_modifications.custom_layout_rog_receipt"  >
+					<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+	                <div class="page" >
+						<style type="text/css">
+							<t t-call="kin_report.style"/>
+						</style>
+						<div t-raw="o.company_id.html_after_header" />
+
+						<div class="row">
+							<div class="col-xs-12 text-center" >
+								<h3>
+									<b>
+									<span t-if="o.state == 'posted'">OFFICIAL RECEIPT</span>
+									<span t-if="o.state == 'draft'">DRAFT RECEIPT</span>
+									</b>
+								</h3>
+							</div>
+							<div class="col-xs-12" style="font-size:18px;">
+								<p class="col-xs-4" ><b>Date: </b><span t-field="o.payment_date" /></p>
+								<p class="col-xs-4" t-if="o.state == 'posted'" ><b>NO: <span t-field="o.name" /></b></p>
+								<p class="col-xs-4" />
+							</div>
+						</div>
+
+						<div class="row" style="border-style:solid;border-width:2px;padding:10px;" >
+								<div class="row" >
+									<div class="col-xs-12">
+										<p><b>Received from:-  </b><span style="font-style:oblique" t-field="o.partner_id.name" /></p>
+										<p><b>The sum of:- </b><span  style="font-style:oblique" t-esc="o.amount_to_text(o.payments_amount, o.currency_id)"/></p>
+										<!--<p t-if="o.get_paid_invoices()" >payment in respect of <b><span t-esc="o.get_paid_invoices()" /></b></p>-->
+										<p><b>Purpose:- </b><span style="font-style:oblique" t-field="o.narration" /></p>
+										<p><b>Amount:- </b><span style="font-style:oblique" t-field="o.payments_amount" /> </p>
+										<p><b>Chq/Teller No: </b><span style="font-style:oblique" t-esc="o.get_references()" /></p>
+										<p><b>Payment Method: </b><span style="font-style:oblique" t-esc="o.get_paymethods()" /></p>
+									</div>
+								</div>
+
+								<br />
+							<div  class="row"  >
+								<div class="col-xs-4" >
+									<p>_____________________________</p>
+									<span><b>Prepared By:-</b></span>
+								</div>
+								<div class="col-xs-4" >
+									<p>_____________________________</p>
+										<b><span>Authorized By:-</span></b>
+								</div>
+								<div class="col-xs-4" >
+									<p>_____________________________</p>
+									<span><b>Approved By:-</b></span>
+								</div>
+							</div>
+						 	<br />
+						</div>
+
+
+
+					</div>
+	            </t>
+	        </t>
+    	</t>
+</template>
+	</data>
+</openerp>
+
+

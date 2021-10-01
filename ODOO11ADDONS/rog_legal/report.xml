@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        		<report
+		    id="case_file_report"
+            model="case.file.wizard"
+		    string="Case File Report"
+		    report_type="xlsx"
+		    name="rog_legal.case_file_report"
+			file="rog_legal.case_file_report"
+		    attachment_use="False"
+        />
+
+
+    </data>
+</odoo>
+

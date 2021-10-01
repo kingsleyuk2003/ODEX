@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+        <record id="ifrs_cf" model="mis.report" >
+            <field name="name">Statement of cash flows</field>
+        </record>
+
+
+
+        <record id="ifrs_cf_cash_flows_from_operating_activi" model="mis.report.kpi" >
+            <field name="sequence" >1</field>
+            <field name="description" >Cash flows from operating activities</field>
+            <field name="name">cash_flows_from_operating_activi</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="style_id" ref="mis_report_style_indent_0_bold" />
+            <field name="expression" >AccountingNone</field>
+             <field name="report_id" ref="ifrs_cf" />
+        </record>
+
+        <record id="ifrs_cf_cash_generated_from_operations" model="mis.report.kpi" >
+            <field name="sequence" >2</field>
+            <field name="description" >Cash generated from operations</field>
+            <field name="name">cash_generated_from_operations</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="style_id" ref="mis_report_style_indent_1" />
+            <field name="expression" >AccountingNone</field>
+             <field name="report_id" ref="ifrs_cf" />
+        </record>
+
+        <record id="ifrs_cf_cash_received_from_customers" model="mis.report.kpi" >
+            <field name="sequence" >3</field>
+            <field name="description" >Cash received from customers</field>
+            <field name="name">cash_received_from_customers</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >-balp[('report_head_id.name', '=', 'Revenue')] - (bale[('report_head_id.name', '=', 'Trade receivables')] - bali[('report_head_id.name', '=', 'Trade receivables')])</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_cf" />
+        </record>
+
+        <record id="ifrs_cf_cash_paid_to_suppliers" model="mis.report.kpi" >
+            <field name="sequence" >4</field>
+            <field name="description" >Cash paid to suppliers</field>
+            <field name="name">cash_paid_to_suppliers</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Cost of sales of goods')] +  (bale[('report_head_id.name', '=', 'Inventories')] - bali[('report_head_id.name', '=', 'Inventories')]) + (bale[('report_head_id.name', '=', 'Trade payables')] -- bali[('report_head_id.name', '=', 'Trade payables')])</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_cf" />
+        </record>
+
+        <record id="ifrs_cf_cash_for_operating_expenses" model="mis.report.kpi" >
+            <field name="sequence" >5</field>
+            <field name="description" >Cash for operating expenses</field>
+            <field name="name">cash_for_operating_expenses</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >(balp[('report_head_id.name', '=', 'Distribution costs')] + balp[('report_head_id.name', '=', 'Administrative expenses')] - balp[('name', '=', 'Depreciation Expense Account')]) + (bale[('sub_classification.name', '=', 'Prepayment')] - bali[('sub_classification.name', '=', 'Prepayment')]) +  (bale[('sub_classification.name', '=', 'Accruals')] -- bali[('sub_classification.name', '=', 'Accruals')])</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_cf" />
+        </record>
+
+        <record id="ifrs_cf_cash_for_interest" model="mis.report.kpi" >
+            <field name="sequence" >6</field>
+            <field name="description" >Cash for interest</field>
+            <field name="name">cash_for_interest</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >cash_received_from_customers - balp[('report_head_id.name', '=', 'Finance costs')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_cf" />
+        </record>
+
+        <record id="ifrs_cf_cash_for_taxes" model="mis.report.kpi" >
+            <field name="sequence" >7</field>
+            <field name="description" >Cash for taxes</field>
+            <field name="name">cash_for_taxes</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >cash_received_from_customers - balp[('report_head_id.name', '=', 'Income tax expense')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_cf" />
+        </record>
+
+        <record id="ifrs_cf_net_cash_inflow_from_operating" model="mis.report.kpi" >
+            <field name="sequence" >8</field>
+            <field name="description" >Net cash inflow from operating activities</field>
+            <field name="name">net_cash_inflow_from_operating</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_1_bold" />
+            <field name="expression" >cash_received_from_customers + cash_paid_to_suppliers + cash_for_operating_expenses  + cash_for_interest + cash_for_taxes</field>
+            <field name="report_id" ref="ifrs_cf" />
+        </record>
+
+
+
+        <record id="ifrs_cf_space_1" model="mis.report.kpi" >
+            <field name="sequence" >9</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_cf" />
+        </record>
+
+
+
+
+
+    </data>
+</openerp>

@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+
+          <record id="view_police_report" model="ir.ui.view">
+            <field name="name">Police Report</field>
+            <field name="model">police.report.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Ticket Recovered">
+                        <h3>Do you have Police Report and Court Affidavit?</h3>
+                    <footer>
+                        <button name="action_police_report_confirm" string="Yes" type="object" context="{'is_police_report':True}"  />
+                        or
+                         <button name="action_police_report_wizard" string="No" type="object"   context="{'is_police_report':False}"   />
+                        or
+                        <button special="cancel" class="oe_link"  string="Close"  />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_police_report" model="ir.actions.act_window">
+            <field name="name">Police Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">police.report.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_police_report" />
+            <field name="target">new</field>
+            <!--<field name="groups_id" eval="[(4,ref('base.group_sale_salesman'))]"/>-->
+        </record>
+
+
+
+
+    </data>
+</openerp>

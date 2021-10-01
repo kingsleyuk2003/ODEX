@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+
+        <record id="kin_sms_create_view" model="ir.ui.view">
+            <field name="name">SMS Form View</field>
+            <field name="model">kin.sms.wizard</field>
+            <field name="arch" type="xml">
+                <form string="SMS Wizard">
+                    <p>Send SMS to Selected Contacts </p>
+                    <group>
+                        <field name="msg"/>
+                    </group>
+                    <footer>
+                        <button name="send_sms" string="Send SMS" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_kin_sms" model="ir.actions.act_window">
+            <field name="name">Send SMS</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.sms.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <!--<field name="groups_id" eval="[(4,ref('group_kin_sms'))]"/>-->
+        </record>
+
+
+        <record model="ir.values" id="kin_sms_multi">
+            <field name="model_id" ref="base.model_res_partner" />
+            <field name="name">Send SMS</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('action_kin_sms'))" />
+            <field name="key">action</field>
+            <field name="model">res.partner</field>
+             <field name="groups_id" eval="[(4,ref('group_kin_sms'))]"/>
+        </record>
+
+    </data>
+</openerp>

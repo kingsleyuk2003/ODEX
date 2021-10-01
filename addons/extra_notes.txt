@@ -1,0 +1,7 @@
+The invoicing policy and the control purchase bills for "All services" should be "Ordered quantities" and "On received quantities",
+ so that you can be able to create invoice, since there is no shipment picking to receive.
+ Otherwise you will not be able to create invoice if you choose "based on delivered quantities"
+
+Note that Consumables are what the business uses up. So no need for accounting stock valuation.
+The expenses can be recorded from the purchase invoice. But it can be received into the warehouse
+with the a recorded inventory value.

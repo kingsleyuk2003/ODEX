@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+
+        <record id="change_price_wizard_view" model="ir.ui.view">
+            <field name="name">Change Price Wizard</field>
+            <field name="model">change.price.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Change Price Confirmation">
+                    <p>Please Enter the New Price for the selected pumps </p>
+                    <group>
+                        <field  name="new_price" />
+                    </group>
+                    <footer>
+                        <button name="action_change_price" string="Change Selected Pump Prices" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Close" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_change_price_pumps" model="ir.actions.act_window">
+            <field name="name">Change Pump Prices</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">change.price.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <!--<field name="groups_id" eval="[(4,ref('base.group_hr_user'))]"/>           -->
+        </record>
+
+
+        <record model="ir.values" id="change_price_pump_multi">
+            <field name="model_id" ref="model_kin_fuel_pump" />
+            <field name="name">Change Fuel Pump Prices</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('action_change_price_pumps'))" />
+            <field name="key">action</field>
+            <field name="model">kin.fuel.pump</field>
+            <field name="groups_id" eval="[(4,ref('group_change_price'))]"/>
+        </record>
+
+    </data>
+</openerp>

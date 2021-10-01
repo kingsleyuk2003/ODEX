@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+           <record  id="view_import_biometric_wizard" model="ir.ui.view" >
+                <field name="name">Import Biometric Wizard</field>
+                <field name="model">import.biometric.wizard</field>
+                <field name="arch" type="xml" >
+                <form>
+                  <label string="This wizard will help you import the biometric file" />
+                     <group col="4" colspan="4" >
+                         <field name="file_csv" required="True" />
+                    </group>
+                        <footer>
+                            <button default_focus="1" icon="gtk-execute" name="btn_import_biometric" string="Import" type="object"  colspan="2" class="oe_highlight" />
+                            or <button special="cancel" class="oe_link"  string="Cancel"  />
+                        </footer>
+                </form>
+             </field>
+        </record>
+
+		<record id="action_import_biometric_wizard" model="ir.actions.act_window">
+            <field name="name">Import Biometric</field>
+            <field name="res_model">import.biometric.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_import_biometric_wizard"/>
+            <field name="context">{}</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="target">new</field>
+        </record>
+
+<menuitem id="menu_rog_import_biometric" name="Import Biometric"  parent="hr_attendance.menu_hr_attendance_root" action="action_import_biometric_wizard"  />
+
+
+    </data>
+</openerp>

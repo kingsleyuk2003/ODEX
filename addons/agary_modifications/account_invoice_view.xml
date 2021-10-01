@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="invoice_customer_form_extend_agary" model="ir.ui.view">
+            <field name="name">account.invoice.customer.agary.form.extend</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[2]" position="after" >
+                    <page string="Agary Header Info." >
+                        <group>
+                            <group>
+                                <field name="supplier_ref" />
+                                <field name="buyer_order_no" />
+                                <field name="dispatch_doc_no" />
+                                <field name="dispatched_through" />
+                                <field name="terms_of_delivery" />
+                            </group>
+                            <group>
+                                <field name="other_ref" />
+                                 <field name="buyer_order_no_dated" />
+                                <field name="dispatch_doc_no_dated" />
+                                <field name="destination" />
+                                <!--<field name="delivery_note" />-->
+                            </group>
+                        </group>
+
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+
+
+    </data>
+</openerp>

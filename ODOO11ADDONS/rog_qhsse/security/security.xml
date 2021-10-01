@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+
+	<record model="ir.module.category" id="module_category_rog_modification_qhsse">
+            <field name="name">ROG Modifications - QHSSE</field>
+     </record>
+
+
+
+<!-- QHSE -->
+		<record id="group_qhsse" model="res.groups">
+			<field name="name">Show QHSSE Application</field>
+			<field name="category_id" ref="module_category_rog_modification_qhsse"/>
+	</record>
+
+	<record id="group_receive_qhsse_email_notification" model="res.groups">
+		<field name="name">Receive QHSSE Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_qhsse"/>
+	</record>
+
+	<record id="group_receive_emergency_drill_email_notification" model="res.groups">
+		<field name="name">Receive Emergency Drill Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_qhsse"/>
+	</record>
+
+		<record id="group_receive_security_meeting_email_notification" model="res.groups">
+		<field name="name">Receive Security Meeting Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_qhsse"/>
+	</record>
+
+	<record id="group_receive_inspection_email_notification" model="res.groups">
+		<field name="name">Receive Inspection Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_qhsse"/>
+	</record>
+
+    <record id="group_receive_regulatory_document_email_notification" model="res.groups">
+		<field name="name">Receive Regulatory Document Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_qhsse"/>
+	</record>
+
+	    <record id="group_receive_routine_activity_email_notification" model="res.groups">
+		<field name="name">Receive Routine Activity Email Notification</field>
+		<field name="category_id" ref="module_category_rog_modification_qhsse"/>
+	</record>
+
+
+
+
+
+</data>
+</odoo>

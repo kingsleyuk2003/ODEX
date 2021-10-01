@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
+		<!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
+		<report
+		    id="action_report_empty_truck_exit"
+		    model="empty.truck.exit"
+		    string="Empty Truck Exit"
+		    report_type="qweb-pdf"
+		    name="kin_loading.report_empty_truck_exit"
+		    file="kin_loading.report_empty_truck_exit"
+		    attachment_use="False"
+		/>
+
+		<template id="report_empty_truck_exit">
+	    <t t-call="report.html_container">
+	        <t t-foreach="docs" t-as="o">
+				<t t-call="kin_loading.custom_loading_layout"  >
+				<div class="page"   >
+					<style type="text/css">
+							<t t-call="kin_loading.style"/>
+						</style>
+
+					<div class="row" >
+						<div class="col-xs-12 text-center" >
+							<h3 t-if="o.state == 'draft'" ><b>Draft Empty Truck Exit</b></h3>
+							<h3 t-if="o.state == 'security_approve'"><b>Empty Truck Exit</b></h3>
+							<h3 t-if="o.state == 'cancel'"><b>Cancelled Empty Truck Exit</b></h3>
+							<h3 t-if="o.state in ('confirm,hse_approve,operation_approve,ica_approve')"><b>Ongoing Approval</b></h3>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12" >
+							<table  style="width: 100%" class=" table-bordered-black" cellpadding="3" cellspacing="0" >
+								<tr>
+									<td width="20%" ><span><b>Truck Number </b></span></td>
+									<td  width="30%" ><span t-field="o.truck_no" /></td>
+									<td width="15%"  ><span><b>Date</b></span></td>
+									<td width="35%" ><span t-field="o.ete_date" /></td>
+								</tr>
+								<tr>
+									<td><span><b>Customer Name </b></span></td>
+									<td colspan="3" ><span t-field="o.customer_id" /></td>
+								</tr>
+								<tr>
+									<td><span><b>Ticket Number</b></span></td>
+									<td colspan="3" ><span t-field="o.loading_ticket_id" /></td>
+								</tr>
+								<tr>
+									<td><span><b>Reason for Leaving Empty</b></span></td>
+									<td colspan="3" ><span t-field="o.reason" /></td>
+								</tr>
+								<tr>
+									<td width="20%" ><span><b>Date In </b></span></td>
+									<td  width="30%" ><span t-field="o.date_in" /></td>
+									<td width="15%"  ><span><b>Date Out</b></span></td>
+									<td width="35%" ><span t-field="o.date_out" /></td>
+								</tr>
+							</table>
+							<br /><br />
+							<table  style="width: 100%" class=" table-bordered-black" cellpadding="3" cellspacing="0" >
+								<tr>
+									<td width="20%" >
+										<span><b>Customer Representative</b></span>
+									</td>
+									<td width="80%" >
+										<table  style="width: 100%" class=" table-bordered-black" cellpadding="3" cellspacing="0" >
+												<tr>
+													<td style="width: 20%" colspan="1" ><span><b>Name </b></span></td>
+													<td style="width: 80%" colspan="3"  ><span t-field="o.customer_rep_id" /></td>
+												</tr>
+												<tr>
+													<td style="width: 25%" ><span><b>Signature </b></span></td>
+													<td style="width: 25%" ></td>
+													<td style="width: 25%"  ><span><b>Date </b></span></td>
+													<td style="width: 25%"  ><span t-field="o.customer_rep_date" /></td>
+												</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+							<br /><br />
+							<table  style="width: 100%" class=" table-bordered-black" cellpadding="3" cellspacing="0" >
+								<tr>
+									<td width="20%" >
+										<span><b>Checklist</b></span>
+									</td>
+									<td width="80%" >
+										<table  style="width: 100%" class=" table-bordered-black" cellpadding="3" cellspacing="0" >
+												<tr>
+													<td><span>a.) Open foot valves to ensure tank compartment are empty. </span></td>
+												</tr>
+												<tr>
+													<td><span>b.) Check tanks from top openings of compartments to see if it is empty </span></td>
+												</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+							<br/><br />
+							<table  style="width: 100%" class=" table-bordered-black" cellpadding="3" cellspacing="0" >
+								<tr>
+									<td width="20%" colspan="1" ><span><b>Truck Checked By: </b></span></td>
+									<td  width="80%" colspan="3" ><span t-field="o.truck_checked_by" /></td>
+								</tr>
+								<tr>
+									<td width="25%"   ><span><b>Department / Unit </b></span></td>
+									<td width="25%"  class="text-center"  ><span><b>Name </b></span></td>
+									<td width="25%"  class="text-center"  ><span><b>Signature </b></span></td>
+									<td width="25%"  class="text-center"  ><span><b>Date </b></span></td>
+								</tr>
+								<tr>
+									<td><span><b>HSE </b></span></td>
+									<td class="text-center"  ><span t-field="o.hse_id" /></td>
+									<td></td>
+									<td class="text-center"  ><span t-field="o.hse_date" /></td>
+								</tr>
+								<tr>
+									<td><span><b>Operations </b></span></td>
+									<td class="text-center"  ><span t-field="o.operation_id" /></td>
+									<td></td>
+									<td class="text-center"  ><span t-field="o.operation_date" /></td>
+								</tr>
+								<tr>
+									<td><span><b>Internal Control and Audit </b></span></td>
+									<td class="text-center"  ><span t-field="o.ica_id" /></td>
+									<td></td>
+									<td class="text-center"  ><span t-field="o.ica_date" /></td>
+								</tr>
+								<tr>
+									<td><span><b>Security </b></span></td>
+									<td class="text-center"  ><span t-field="o.security_id" /></td>
+									<td></td>
+									<td class="text-center"  ><span t-field="o.security_date" /></td>
+								</tr>
+
+							</table>
+						</div>
+					</div>
+
+
+
+					<div class="row">
+					</div>
+				</div>
+			</t>
+		</t>
+		</t>
+		</template>
+
+
+	</data>
+</openerp>

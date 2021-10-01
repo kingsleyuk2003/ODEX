@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
+		<!-- Or by referencing the parent report id e.g. kin_report.receipt_custom -->
+        <!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
+		<report
+		    id="kin_aviation.action_report_delivery_receipt"
+		    model="kin.fuel.delivery.receipt"
+		    string="Delivery Receipt"
+		    report_type="qweb-pdf"
+		    name="kin_aviation.report_delivery_receipt"
+		    file="kin_aviation.report_delivery_receipt"
+		    attachment_use="False"
+		    		/>
+
+
+
+    </data>
+</odoo>

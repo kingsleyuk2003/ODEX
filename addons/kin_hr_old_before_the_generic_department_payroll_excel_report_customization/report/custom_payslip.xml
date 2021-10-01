@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+
+
+<template id="report_payslip_custom">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="o">
+           <t t-call="kin_hr.hr_custom_layout"  >
+                <div class="page">
+                    <style type="text/css">
+							<t t-call="kin_report.style"/>
+						</style>
+
+                    <br />
+                    <br />
+                    <!--<div t-raw="o.contract_id.operating_unit_id.html_after_header" />-->
+                    <p  align="center"  ><b> <span style="font-size:18px" t-field="o.name"/></b></p>
+                    <table  style="width: 100%;" class="mt8 table-bordered-black table.withboarder" cellpadding="3" cellspacing="0" >
+                        <tr>
+                            <td><span><strong>Name</strong></span></td>
+                            <td><span t-field="o.employee_id"/></td>
+                            <td><span><strong>Designation</strong></span></td>
+                            <td><span t-field="o.employee_id.job_id"/></td>
+                        </tr>
+                        <tr>
+                            <td><span><strong>Address</strong></span></td>
+                            <td colspan="3">
+                                <div t-field="o.employee_id.address_home_id"
+                                    t-field-options='{"widget": "contact", "fields": ["address", "name", "phone", "fax"], "no_marker": true, "phone_icons": true}'/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span><strong>Email</strong></span></td>
+                            <td><span t-field="o.employee_id.work_email"/></td>
+                            <td><span><strong>Identification No</strong></span></td>
+                            <td><span t-field="o.employee_id.identification_id"/></td>
+                        </tr>
+                        <tr>
+                            <td><span><strong>Reference</strong></span></td>
+                            <td><span t-field="o.number"/></td>
+                            <td><span><strong>Bank Account</strong></span></td>
+                            <td><span t-field="o.employee_id.bank_account_id"/></td>
+                        </tr>
+                        <tr>
+                            <td><span><strong>Date From</strong></span></td>
+                            <td><span t-field="o.date_from"/></td>
+                            <td><span><strong>Date To</strong></span></td>
+                            <td><span t-field="o.date_to"/></td>
+                        </tr>
+                    </table>
+                    <p />
+						<div class="row mt16">
+							<div class="col-xs-12 text-center" >
+								<span style="font-weight:bold" >.................................... Salary  Information ....................................</span>
+							</div>
+						</div>
+						<p />
+                    <table  style="width: 100%;" class="mt8 table-bordered-black" cellpadding="3" cellspacing="0" >
+                        <thead>
+                            <tr>
+                                <th><span>Name</span></th>
+                                <!--<th><span>Salary Category</span></th>-->
+                                <th><span>Amount(<span t-field="o.company_id.currency_id.symbol" />)</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="get_payment_slip_lines(o.line_ids)" t-as="p">
+                                <td t-if="p.appears_on_payslip"  ><span t-field="p.name"/></td>
+                                <!--<td t-if="p.appears_on_payslip" ><span t-field="p.category_id"/></td>-->
+                                <td t-if="p.appears_on_payslip" ><span t-esc="'{:,.2f}'.format(p.total)" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!--<br />-->
+                    <!--<br />-->
+                    <!--<p class="text-right"><strong>Authorized signature ..................................</strong></p>-->
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+	</data>
+</openerp>

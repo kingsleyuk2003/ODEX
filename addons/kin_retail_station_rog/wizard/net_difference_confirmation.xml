@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+        <record id="view_net_difference_confirmation" model="ir.ui.view">
+            <field name="name">Net Difference Confirmation</field>
+            <field name="model">net.difference.confirmation.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Net Difference Confirmation">
+                        <p>There is a Net Difference of <b style="color:red" ><field name="net_difference" readonly="1" class="oe_inline" /></b> in the cash control. </p>
+                    <p>Do you want to go ahead with the submission?</p>
+                    <footer>
+                        <button name="action_confirm_wizard" string="Yes, go ahead and submit" type="object" />
+                        or
+                        <button string="No, wait. Let me Check" special="cancel" class="oe_highlight" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_net_difference_confirmation" model="ir.actions.act_window">
+            <field name="name">Net Difference Confirmation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">net.difference.confirmation.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_net_difference_confirmation" />
+            <field name="target">new</field>
+            <!--<field name="groups_id" eval="[(4,ref('base.group_sale_salesman'))]"/>-->
+        </record>
+
+
+
+
+
+    </data>
+</openerp>

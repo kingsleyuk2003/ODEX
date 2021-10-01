@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_kin_product_location_see_own_leads,kin.product.location see own leads,model_kin_product_location,base.group_sale_salesman,1,0,0,0
+access_kin_product_location_delivery_rate_officer,kin.product.location delivery rate officer,model_kin_product_location,group_delivery_rate_officer,1,1,1,1
+access_kin_product_location_stock_user,kin.product.location stock user,model_kin_product_location,stock.group_stock_user,1,0,0,0
+access_kin_delivery_rate_see_own_leads,kin.delivery.rate see own leads,model_kin_delivery_rate,base.group_sale_salesman,1,1,1,1
+access_kin_delivery_rate_delivery_rate_officer,kin.delivery.rate delivery rate officer,model_kin_delivery_rate,group_delivery_rate_officer,1,1,1,1
+access_kin_delivery_rate_stock_user,kin.delivery.rate stock user,model_kin_delivery_rate,stock.group_stock_user,1,0,0,0
+access_kin_delivery_register_stock_user,kin.delivery.register stock user,model_kin_delivery_register,stock.group_stock_user,1,1,1,1
+access_kin_delivery_register_stock_manager,kin.delivery.register stock manager,model_kin_delivery_register,stock.group_stock_manager,1,1,1,1
+access_kin_delivery_register_delivery_rate_officer,kin.delivery.register delivery rate officer,model_kin_delivery_register,group_delivery_rate_officer,1,1,1,1
+access_kin_delivery_register_account_billing,kin.delivery.register account billing,model_kin_delivery_register,account.group_account_invoice,1,0,0,0
+access_kin_trucker_delivery_rate_officer,kin.trucker delivery rate officer,model_kin_trucker,group_delivery_rate_officer,1,1,1,1
+access_kin_trucker_stock_user,kin.trucker stock user,model_kin_trucker,stock.group_stock_user,1,0,0,0

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_custom_accounting_report" name="Custom Accounting Reports" parent="account.menu_finance_reports" sequence="9" groups="kin_account.group_show_account_custom_reports"  />
+
+        <record model="ir.ui.view" id="view_company_kin_reportd">
+                    <field name="name">res.company.form.kin.report</field>
+                    <field name="inherit_id" ref="base.view_company_form"/>
+                    <field name="model">res.company</field>
+                    <field name="arch" type="xml">
+                        <notebook position="inside">
+                            <page string="Report Config">
+                                <group>
+                                     <field name="header_logo"  />
+                                    <field name="footer_banner"  />
+                                    <field name="header_data"  />
+                                    <field name="footer_data" />
+                                     <field name="po_note"  />
+                                    <field name="inv_note" />
+                                    <!--<field name="logo_text"  />-->
+                                    <field name="html_after_header" />
+                                </group>
+                                <group string="Others" >
+                                    <field name="is_show_uom" />
+                                </group>
+                            </page>
+                        </notebook>
+                    </field>
+                </record>
+
+        <record model="ir.ui.view" id="view_operating_unit_extend">
+                    <field name="name">kin.operating.unit.extend</field>
+                    <field name="inherit_id" ref="operating_unit.view_operating_unit_form"/>
+                    <field name="model">operating.unit</field>
+                    <field name="arch" type="xml">
+                        <field name="company_id" position="after" >
+
+                                     <field name="header_logo"  />
+                                    <field name="footer_banner"  />
+                                    <field name="header_data"  />
+                                    <field name="footer_data" />
+                                     <field name="po_note"  />
+                                    <field name="inv_note" />
+                                    <!--<field name="logo_text"  />-->
+                                    <field name="html_after_header" />
+
+
+                        </field>
+
+                    </field>
+        </record>
+
+<!-- Stock Level Excel Report -->
+        <report
+		    id="stock_level_excel_report"
+		    model="stock.level.wizard"
+		    string="Current Stock Level Excel Report"
+		    report_type="xlsx"
+		    name="kin_report.report_stock_level"
+		    attachment_use="False"
+        />
+
+        <report
+		    id="balance_sheet_excel_report"
+		    model="balance.sheet.wizard"
+		    string="Balance Sheet Excel Report"
+		    report_type="xlsx"
+		    name="kin_report.report_balance_sheet"
+		    attachment_use="False"
+        />
+
+        <report
+		    id="income_statement_excel_report"
+		    model="income.statement.wizard"
+		    string="Income Statement Excel Report"
+		    report_type="xlsx"
+		    name="kin_report.report_income_statement"
+		    attachment_use="False"
+        />
+
+        <report
+		    id="cash_flow_excel_report"
+		    model="cash.flow.wizard"
+		    string="Cash Flow Statement Excel Report"
+		    report_type="xlsx"
+		    name="kin_report.report_cash_flow"
+		    attachment_use="False"
+        />
+        <report
+		    id="trial_balance_excel_report"
+		    model="trial.balance.wizard"
+		    string="Trial Balance Excel Report"
+		    report_type="xlsx"
+		    name="kin_report.report_trial_balance"
+		    attachment_use="False"
+        />
+
+
+        <report
+		    id="sales_report"
+            model="sales.report.wizard"
+		    string="Sales Excel Report"
+		    report_type="xlsx"
+		    name="kin_report.report_sales_report"
+		    attachment_use="False"
+        />
+
+        <report
+		    id="purchase_report"
+            model="purchase.report.wizard"
+		    string="Purchase Excel Report"
+		    report_type="xlsx"
+		    name="kin_report.report_purchase_report"
+		    attachment_use="False"
+        />
+
+
+         <!--<menuitem id="menu_financial_statement_excel" name="Financial Reports" parent="account.menu_finance_reports" sequence="4" />-->
+
+
+
+    </data>
+</odoo>
+

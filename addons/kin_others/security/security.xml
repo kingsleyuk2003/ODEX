@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+		<record id="group_mail_delivery_failed" model="res.groups">
+			<field name="name">Receive Mail Delivery Failed Email Notification</field>
+		</record>
+</data>
+</openerp>

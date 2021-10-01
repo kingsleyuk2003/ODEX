@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+  <record id="product_template_form_extend" model="ir.ui.view">
+            <field name="name">product.template.form.extend</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <field name="uom_po_id" position="after" >
+                    <field name="min_alert_qty" />
+                    <field name="is_included_in_min_alert_qty" />
+                </field>
+            </field>
+        </record>
+
+         <record id="product_product_view_form_easy_inherit_stock_extend" model="ir.ui.view">
+            <field name="name">product.product.view.form.easy.inherit.stock.extend</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="stock.product_product_view_form_easy_inherit_stock"/>
+            <field name="arch" type="xml">
+
+                <button name="%(stock.action_view_change_product_quantity)d"  position="attributes"  >
+            		<attribute name="attrs" >{'invisible': 1}</attribute>
+                </button>
+
+                 <button name="%(stock.act_make_procurement)d"  position="attributes"  >
+            		<attribute name="attrs" >{'invisible': 1}</attribute>
+                </button>
+
+            </field>
+        </record>
+
+
+
+         <record id="product_normal_form_view_extend" model="ir.ui.view">
+            <field name="name">product.normal.form.view.extend</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+              <label for="warranty" position="before">
+                   <field name="sale_delay" />
+              </label>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="product_form_view_procurement_button_extend">
+            <field name="name">product.product.procurement.extend</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="stock.product_form_view_procurement_button"/>
+            <field name="arch" type="xml">
+                <button name="%(stock.action_view_change_product_quantity)d"  position="attributes"  >
+            		<attribute name="attrs" >{'invisible': 1}</attribute>
+                </button>
+
+                 <button name="%(stock.act_make_procurement)d"  position="attributes"  >
+            		<attribute name="attrs" >{'invisible': 1}</attribute>
+                </button>
+
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="product_template_form_view_procurement_button_extend">
+            <field name="name">product.template_procurement.extend</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="stock.product_template_form_view_procurement_button"/>
+            <field name="arch" type="xml">
+                <button name="%(stock.action_view_change_product_quantity)d"  position="attributes"  >
+            		<attribute name="attrs" >{'invisible': 1}</attribute>
+                </button>
+
+                 <button name="%(stock.act_make_procurement)d"  position="attributes"  >
+            		<attribute name="attrs" >{'invisible': 1}</attribute>
+                </button>
+            </field>
+        </record>
+
+
+        <!-- Product Cost Price History -->
+        <record model="ir.ui.view"  id="product_cost_price_history_tree_view" >
+            <field name="name" >product.cost.price.history</field>
+            <field name="model" >product.price.history</field>
+            <field name="arch" type="xml">
+                <tree string="Product Cost History" >
+                    <field name="product_id" />
+                    <field name="cost" />
+                    <field name="datetime" />
+                    <field String="Company" name="company_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_product_cost_price_filter" model="ir.ui.view">
+            <field name="name">Product Cost Price History Search</field>
+            <field name="model">product.price.history</field>
+            <field name="arch" type="xml">
+                <search string="Product Cost Price History Search">
+                    <field name="product_id" />
+                    <field name="cost" />
+                    <field name="datetime" />
+                    <field name="company_id" />
+                     <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="groupby_product" string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+          <record id="action_product_cost_price_history" model="ir.actions.act_window">
+            <field name="name">Product Cost Price History</field>
+            <field name="res_model">product.price.history</field>
+            <field name="context">{'search_default_groupby_product': 1}</field>
+            <field name="view_type" >form</field>
+            <field name="view_mode">tree,pivot</field>
+            <field name="view_id" ref="product_cost_price_history_tree_view"/>
+             <field name="search_view_id" ref="view_product_cost_price_filter"/>
+        </record>
+
+        <record model="ir.ui.view" id="product_pricelist_view_extend">
+            <field name="name">product.pricelist.form.extend</field>
+            <field name="model">product.pricelist</field>
+            <field name="inherit_id" ref="product.product_pricelist_view"/>
+            <field name="arch" type="xml">
+                <field name="company_id" position="after">
+                    <field name="operating_unit_id"/>
+                </field>
+            </field>
+        </record>
+
+     <menuitem id="menu_product_cost_price_history" name="Product Cost Price History"  action="action_product_cost_price_history" parent="base.menu_sale_report" groups="kin_product.group_see_product_cost_history"    sequence="32"/>
+
+
+
+        <!-- Product Selling Price History -->
+
+        <record model="ir.ui.view"  id="product_sale_price_history_tree_view" >
+            <field name="name" >product.sale.price.history</field>
+            <field name="model" >product.sale.price.history</field>
+            <field name="arch" type="xml">
+                <tree string="Product Sale History" >
+                    <field name="product_id" />
+                    <field name="uom_id" />
+                    <field name="price" />
+                    <field String="Company" name="company_id" />
+                    <field name="user_id" />
+                    <field name="date_change" />
+                    <field name="prev_price" />
+                    <field name="pricelist_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_product_sale_price_filter" model="ir.ui.view">
+            <field name="name">Product Sale Price History Search</field>
+            <field name="model">product.sale.price.history</field>
+            <field name="arch" type="xml">
+                <search string="Product Sale Price History Search">
+                    <field name="product_id" />
+                    <field name="price" />
+                    <field name="date_change" />
+                    <field name="company_id" />
+                     <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="groupby_product" string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                        <!--<filter name="groupby_product_category" string="Product Category" domain="[]" context="{'group_by':'categ_id'}"/>-->
+                        <filter name="groupby_user" string="User" domain="[]" context="{'group_by':'user_id'}"/>
+                         <filter name="groupby_pricelist" string="Pricelist" domain="[]" context="{'group_by':'pricelist_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+          <record id="action_product_sale_price_history" model="ir.actions.act_window">
+            <field name="name">Product Sale Price History</field>
+            <field name="res_model">product.sale.price.history</field>
+            <field name="context">{'search_default_groupby_product': 1}</field>
+            <field name="view_type" >form</field>
+            <field name="view_mode">tree,pivot</field>
+            <field name="view_id" ref="product_sale_price_history_tree_view"/>
+             <field name="search_view_id" ref="view_product_sale_price_filter"/>
+        </record>
+
+     <menuitem id="menu_product_sale_price_history" name="Product Sale Price History"  action="action_product_sale_price_history" parent="base.menu_sale_report" groups="kin_product.group_see_product_sale_history"    sequence="31"/>
+
+
+
+         <record id="product_form_view_extend" model="ir.ui.view">
+            <field name="name">product.product.form.extend</field>
+            <field name="model">product.product</field>
+            <!--<field name="mode">primary</field>-->
+            <!--<field eval="7" name="priority"/>-->
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[3]" position="after">
+                    <page string="Product Cost Price History" >
+                         <field name="product_cost_price_history_ids"  >
+                             <tree edit="false"  editable="top" create="false" delete="false"  >
+                                 <field name="product_id"  />
+                                  <field name="cost" />
+                                 <field name="datetime" />
+                                 <field name="company_id" />
+                             </tree>
+                         </field>
+                    </page>
+                    <page string="Product Sale Price History"  >
+                         <field name="product_sale_price_history_ids" >
+                             <tree edit="false"  editable="top" create="false" delete="false"  >
+                                 <field name="product_id"  />
+                                 <field name="uom_id" />
+                                  <field name="price" />
+                                 <field name="company_id" />
+                                 <field name="user_id" />
+                                 <field name="date_change" />
+                                 <field name="prev_price" />
+                                 <field name="pricelist_id" />
+                             </tree>
+                         </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+
+        <!-- Hide Products field and Expose Product Variants fields -->
+         <record id="product_product_tree_view_sales_extend" model="ir.ui.view">
+            <field name="name">product.product.sale.extend.tree</field>
+            <field name="model">product.product</field>
+             <field name="inherit_id" ref="product.product_product_tree_view" />
+            <field eval="7" name="priority"/>
+            <field name="arch" type="xml">
+                <field name="attribute_value_ids" position="attributes" >
+                    <attribute name="invisible" >1</attribute>
+                </field>
+                <field name="lst_price" position="after" >
+                    <field name="categ_id" />
+                </field>
+            </field>
+        </record>
+
+        <menuitem action="product.product_template_action"
+            id="product.menu_product_template_action"
+            parent="base.menu_sales" sequence="13" groups="group_see_product_menu" />
+
+
+        <record id="product_search_form_view_extend" model="ir.ui.view">
+            <field name="name">product.search.form.extend</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_search_form_view"/>
+            <field name="arch" type="xml">
+                 <search position="inside" >
+                      <group expand="0" string="Group By">
+                            <filter name="groupby_product_categ" string="Product Category" domain="[]" context="{'group_by':'categ_id'}"/>
+                        </group>
+                    </search>
+            </field>
+        </record>
+
+
+        <record id="product_pricelist_view_extend" model="ir.ui.view">
+        <field name="name">product.pricelist.form.extend</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view" />
+        <field name="arch" type="xml">
+             <field name="price" position="after" >
+                 <field name="uom_id" />
+                 <field name="user_id" />
+                 <field name="date_change" />
+                 <field name="prev_price" />
+             </field>
+        </field>
+        </record>
+
+
+        <!-- Pricelist Items -->
+        <record model="ir.ui.view"  id="product_pricelist_item_tree_view" >
+            <field name="name" >product.pricelist.item</field>
+            <field name="model" >product.pricelist.item</field>
+            <field name="arch" type="xml">
+                <tree string="Product Price list Items" >
+                    <field name="product_id" />
+                    <field name="uom_id" />
+                    <field name="fixed_price"  />
+                    <field String="Company" name="company_id" />
+                    <field name="user_id" />
+                    <field name="date_change" />
+                    <field name="prev_price" />
+                    <field name="pricelist_id" />
+                    <!--<field name="categ_id" />-->
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_product_pricelist_item_filter" model="ir.ui.view">
+            <field name="name">Product Price List Search</field>
+            <field name="model">product.pricelist.item</field>
+            <field name="arch" type="xml">
+                <search string="Product Price List Search">
+                    <field name="product_id" />
+                    <field name="price" type="Float" />
+                    <field name="date_change" />
+                    <field name="company_id" />
+                     <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="groupby_product" string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                        <!--<filter name="groupby_product_category" string="Product Category" domain="[]" context="{'group_by':'categ_id'}"/>-->
+                        <filter name="groupby_user" string="User" domain="[]" context="{'group_by':'user_id'}"/>
+                         <filter name="groupby_pricelist" string="Pricelist" domain="[]" context="{'group_by':'pricelist_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+          <record id="action_product_price_list_item" model="ir.actions.act_window">
+            <field name="name">Current Product Price List Items</field>
+            <field name="res_model">product.pricelist.item</field>
+            <field name="context">{'search_default_groupby_pricelist': 1}</field>
+            <field name="view_type" >form</field>
+            <field name="view_mode">tree,pivot</field>
+            <field name="view_id" ref="product_pricelist_item_tree_view"/>
+             <field name="search_view_id" ref="view_product_pricelist_item_filter"/>
+        </record>
+
+     <menuitem id="menu_product_pricel_list_items" name="Current Product Price List Items"  action="action_product_price_list_item" parent="base.menu_sale_report" groups="kin_product.group_see_product_sale_history"    sequence="34"/>
+
+
+         <record id="product_category_form_view_extend" model="ir.ui.view">
+            <field name="name">product.category.form</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_form_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside" >
+                         <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="0">
+
+        <record id="group_see_sale_note" model="res.groups">
+			<field name="name">Show Sales Person Note Text Field</field>
+		</record>
+
+	<record id="group_see_account_note" model="res.groups">
+			<field name="name">Show Account Person Note Field</field>
+		</record>
+
+	<record id="group_reverse_button_agary" model="res.groups">
+			<field name="name">Show "Reverse" Btn</field>
+	</record>
+
+
+</data>
+</openerp>

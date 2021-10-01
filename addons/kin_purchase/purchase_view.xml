@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+ <!-- <delete model="ir.ui.menu" id="purchase.menu_purchase_rfq"/> -->
+
+        <record model="ir.ui.menu" id="base.menu_purchase_root">
+		   <field name="groups_id" eval="[(6, 0, [ref('group_show_purchase_app')])]"/>
+        </record>
+
+         <record model="ir.ui.menu" id="purchase.menu_purchase_config">
+		 <field name="groups_id" eval="[(6, 0, [ref('group_show_purchase_configuration')])]"/>
+        </record>
+
+        <record id="purchase_order_form_extend" model="ir.ui.view">
+            <field name="name">purchase.order.form.extend</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form" />
+            <field name="arch" type="xml">
+
+                <xpath expr="//form" position="attributes">
+                         <attribute name="duplicate" >0</attribute>
+                 </xpath>
+
+                    <field name="partner_id" position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                 <field name="account_analytic_id" position="attributes" >
+                     <attribute name="invisible">1</attribute>
+                 </field>
+
+                <xpath expr="//sheet/div[@name='button_box']" position="before">
+                    <div class="alert alert-success text-center o_form_header" attrs="{'invisible': [('show_alert_box', '!=', True)]}">
+                       <button name="close_alert_box" type="object" class="close" data-dismiss="modal"><span aria-hidden="true" class="fa fa-times"></span></button>
+                        <div>
+                            <strong>An email notification will be sent to the inventory personnel for the incoming items. Depending on the configuration, a purchase bill may have been created, and notification will be sent to accountant</strong>
+                        </div>
+                         <field name="show_alert_box" invisible="1"/>
+                     </div>
+                 </xpath>
+
+                <field name="currency_id" position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                <field name="product_id" position="attributes"  >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                <field name="product_uom"  position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                 <field name="taxes_id"   position="attributes" >
+                     <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                 </field>
+
+                <field name="price_unit" position="after" >
+                    <field name="discount" />
+                    <field name="discount_amt" groups="sale.group_discount_per_so_line" />
+                </field>
+
+                <!--<xpath expr="//tree/field[@name='name']" position="attributes">-->
+                    <!--<attribute name="attrs" >{'readonly': 1}</attribute>-->
+                 <!--</xpath>-->
+
+                <field name="product_uom" position="attributes" >
+                    <attribute name="string" >UOM</attribute>
+                </field>
+
+                 <button  name="action_view_invoice" position="replace" >
+                     <button type="object"  name="action_view_invoice" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': [('invoice_count', '=', 0)]}" >
+                            <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                    </button>
+                 </button>
+
+                 <field name="amount_total" position="after" >
+                      <field name="amt_discount_total" widget="monetary" options="{'currency_field': 'currency_id'}"  />
+                 </field>
+
+                <field name="payment_term_id" options="{'no_open': True, 'no_create': True}" attrs="{'readonly': [('invoice_status','=', 'invoiced')]}" position="replace" />
+
+                <field name="date_order" position="after" >
+                    <field name="response_due_date" />
+                    <field name="payment_term_id"  attrs="{'readonly': [('invoice_status','=', 'invoiced')]}"/>
+                </field>
+
+                <field name="invoice_status" position="after" >
+                    <field name="user_id" />
+                </field>
+
+                 <field name="payment_term_id"  position="after" >
+                    <field name="purchase_shipping_term_id"  attrs="{'readonly': [('invoice_status','=', 'invoiced')]}" />
+                </field>
+
+
+                <field name="date_order" position="before" >
+                    <field name="date_rfq" string="RFQ Date"/>
+                </field>
+
+                <button name="action_rfq_send" states="draft" position="attributes" >
+                    <attribute name="groups" >kin_purchase.group_show_send_rfq_email_btn</attribute>
+                </button>
+
+                <button name="action_rfq_send" states="sent" position="attributes" >
+                    <attribute name="groups" >kin_purchase.group_show_send_rfq_email_btn</attribute>
+                </button>
+
+                <button name="action_rfq_send" states="purchase" position="attributes" >
+                    <attribute name="groups" >kin_purchase.group_show_send_rfq_email_btn</attribute>
+                </button>
+
+                <button name="print_quotation"  states="draft" position="attributes" >
+                    <attribute name="groups" >kin_purchase.group_show_print_rfq_btn</attribute>
+                </button>
+
+                <button name="print_quotation" states="sent" position="attributes" >
+                    <attribute name="groups" >kin_purchase.group_show_print_rfq_btn</attribute>
+                </button>
+
+                <button name="button_confirm" states="draft"  position="attributes" >
+                    <attribute name="groups" >kin_purchase.group_show_confirm_order_btn</attribute>
+                </button>
+
+                <button name="button_confirm"  states="sent"  position="attributes" >
+                    <attribute name="groups" >kin_purchase.group_show_confirm_order_btn</attribute>
+                </button>
+
+                <button name="button_approve"  states='to approve'  position="attributes" >
+                    <attribute name="groups" >kin_purchase.group_show_approve_order_btn</attribute>
+                    <attribute name="attrs" >{'invisible': ['|',('is_approver', '!=', True)]}</attribute>
+
+                </button>
+
+                <button name="button_cancel" states="draft,to approve,sent,purchase"  position="attributes" >
+                    <attribute name="groups" >kin_purchase.group_show_cancel_btn</attribute>
+                </button>
+
+                <button name="action_view_picking"  position="attributes" >
+                    <attribute name="groups" >kin_purchase.group_show_receive_products_btn</attribute>
+                </button>
+
+                <button name="button_done"  position="attributes" >
+                    <attribute name="groups" >kin_purchase.group_show_set_to_done_btn</attribute>
+                </button>
+
+                <field name="date_approve" position="after" >
+                     <field name="is_approver" invisible="0" />
+                </field>
+
+                <notebook position="inside" >
+                    <page string="Approvers" >
+                        <field name="poa_ids"  attrs="{'readonly': [('state', '=', 'to approve')]}"  >
+                            <tree string="Purchase Order Approvers"    >
+                                <field name="user_id"   />
+                                 <field name="has_approved"   />
+                                <field name="date_approver"   />
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+
+            </field>
+        </record>
+
+        <!--<record id="purchase_order_line_form2_extend" model="ir.ui.view">-->
+            <!--<field name="name">purchase.order.line.form2.extend</field>-->
+            <!--<field name="model">purchase.order.line</field>-->
+            <!--<field name="inherit_id" ref="purchase.purchase_order_line_form2"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<field name="price_unit" position="after" >-->
+                    <!--<field name="discount" />-->
+                    <!--<field name="discount_amt" />-->
+                <!--</field>-->
+            <!--</field>-->
+        <!--</record>-->
+
+
+
+         <record id="purchase_order_line_tree_extend" model="ir.ui.view">
+            <field name="name">purchase.order.line.tree.extend</field>
+            <field name="model">purchase.order.line</field>
+            <field name="arch" type="xml">
+                <tree string="Purchase Order Lines" create="0" delete="0" edit="0"  >
+                    <field name="order_id"/>
+                    <field name="product_id"/>
+                    <field name="partner_id" string="Vendor" />
+                    <field name="price_unit"/>
+                    <field name="discount" />
+                    <field name="discount_amt" />
+                    <field name="product_qty"/>
+                    <field name="qty_received" />
+                    <field name="qty_invoiced" />
+                    <field name="product_uom" groups="product.group_uom"/>
+                    <field name="price_subtotal" widget="monetary"/>
+                    <field name="name"/>
+                    <field name="date_planned"  widget="date"/>
+                </tree>
+            </field>
+        </record>
+
+         <record model="ir.ui.view" id="purchase_order_line_pivot">
+            <field name="name">purchase.order.line.pivot</field>
+            <field name="model">purchase.order.line</field>
+            <field name="arch" type="xml">
+                <pivot string="Purchase Order Line" >
+                    <field name="date_order" interval="month" type="row"/>
+                    <field name="price_subtotal" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="purchase_order_line_graph">
+            <field name="name">purchase.order.line.graph</field>
+            <field name="model">purchase.order.line</field>
+            <field name="arch" type="xml">
+                <graph string="Purchase Order Lines">
+                    <field name="date_order" interval="month" type="row"/>
+                    <field name="price_subtotal" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+
+        <record id="purchase_order_line_search_extend" model="ir.ui.view">
+            <field name="name">purchase.order.line.search.extend</field>
+            <field name="model">purchase.order.line</field>
+            <field name="arch" type="xml">
+                <search string="Search Purchase Order">
+                    <field name="order_id"/>
+                    <field name="product_id"/>
+                    <field name="partner_id" string="Vendor" filter_domain="[('partner_id', 'child_of', self)]"/>
+                    <filter name="hide_cancelled" string="Hide cancelled lines" domain="[('state', '!=', 'cancel')]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="groupby_supplier" string="Vendor" domain="[]" context="{'group_by' : 'partner_id'}" />
+                        <filter name="groupby_product" string="Product" domain="[]" context="{'group_by' : 'product_id'}" />
+                        <filter string="Order Reference" domain="[]" context="{'group_by' :'order_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_purchase_line_product_tree_extend">
+            <field name="context">{'search_default_groupby_product':1}</field>
+            <field name="domain">[('state', 'in', ['purchase', 'done'])]</field>
+            <field name="name">Purchase Lines</field>
+            <field name="res_model">purchase.order.line</field>
+            <field name="view_type" >form</field>
+            <field name="view_mode">tree,pivot,graph</field>
+            <field name="view_id" ref="purchase_order_line_tree_extend"/>
+             <field name="search_view_id" ref="purchase_order_line_search_extend"/>
+        </record>
+
+
+        <record model="ir.ui.view" id="view_company_inherit_form_purchase_extend">
+            <field name="name">res.company.form.purchase.extend</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="model">res.company</field>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Extra Purchase Config.">
+                        <group>
+                             <field name="is_create_invoice_after_po_confirm"  />
+                            <field name="is_activate_purchase_request_approver" />
+                            <field name="is_activate_purchase_order_limit" />
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+
+        <record id="purchase_request_line_tree_extend" model="ir.ui.view">
+            <field name="name">purchase.request.line.tree</field>
+            <field name="model">purchase.request.line</field>
+            <field name="inherit_id" ref="purchase_request.purchase_request_line_tree" />
+            <field name="arch" type="xml">
+                <field name="supplier_id" position="after">
+                    <field name="origin" />
+                </field>
+
+            </field>
+        </record>
+
+        <record id="view_purchase_request_search_extend" model="ir.ui.view">
+            <field name="name">purchase.request.list.select.extend</field>
+            <field name="model">purchase.request</field>
+            <field name="inherit_id" ref="purchase_request.view_purchase_request_search" />
+            <field name="arch" type="xml">
+                    <field name="name" position="attributes" >
+                        <attribute name="filter_domain" >['|',('name','ilike',self),('origin','ilike',self)]</attribute>
+                    </field>
+            </field>
+        </record>
+
+         <record id="purchase_request_line_search_extend" model="ir.ui.view">
+            <field name="name">purchase.request.line.search.extend</field>
+            <field name="model">purchase.request.line</field>
+             <field name="inherit_id" ref="purchase_request.purchase_request_line_search" />
+            <field name="arch" type="xml">
+              <field name="request_id" position="attributes" >
+                  <attribute name="filter_domain" >['|',('request_id','ilike',self),('origin','ilike',self)]</attribute>
+              </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_purchase_request_form_extend">
+            <field name="name">purchase.request.form.extend</field>
+            <field name="model">purchase.request</field>
+            <field name="inherit_id" ref="purchase_request.view_purchase_request_form" />
+            <field name="arch" type="xml">
+                <!--<field name="assigned_to" position="attributes" >-->
+                    <!--<attribute name="required">1</attribute>-->
+                    <!--<attribute name="readonly">1</attribute>-->
+                <!--</field>-->
+                <xpath expr="//tree/field[@name='name']" position="attributes" >
+                    <attribute name="readonly" >1</attribute>
+                </xpath>
+                <xpath expr="//form/sheet/group/group/field[@name='name']" position="attributes" >
+                    <attribute name="readonly" >1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+
+        <menuitem id="purchase_report" name="Purchase" parent="base.purchase_report" sequence="1"
+        groups="purchase.group_purchase_manager" action="purchase.action_purchase_order_report_all"/>
+
+          <menuitem name="PO Lines Analysis" id="menu_purchase_order_lines" action="action_purchase_line_product_tree_extend"
+          parent="base.purchase_report" />
+
+
+        <!-- edit the product menu -->
+
+        <record id="product_product_tree_view_purchase_extend" model="ir.ui.view">
+            <field name="name">product.product.purchase.extend.tree</field>
+            <field name="model">product.product</field>
+            <field eval="7" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Products">
+                    <field name="default_code"/>
+                    <field name="name"/>
+                    <!--<field name="attribute_value_ids" widget="many2many_tags" groups="product.group_product_variant"/>-->
+                    <field name="standard_price"/>
+                    <field name="categ_id" />
+                    <field name="price" invisible="not context.get('pricelist',False)"/>
+                    <field name="uom_id" options="{'no_open': True, 'no_create': True}"/>
+                    <field name="barcode"/>
+                    <field name="state" invisible="1"/>
+                    <field name="product_tmpl_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+
+
+     <record id="product_normal_action_puchased_extend" model="ir.actions.act_window">
+        <field name="name">Products</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.product</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="context">{"search_default_filter_to_purchase":1}</field>
+         <field name="search_view_id" ref="product.product_search_form_view" />
+        <field name="view_id" ref="product_product_tree_view_purchase_extend"/>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to define a new product.
+          </p><p>
+            You must define a product for everything you purchase, whether
+            it's a physical product, a consumable or services you buy to
+            subcontractants.
+          </p><p>
+            The product form contains detailed information to improve the
+            purchase process: prices, procurement logistics, accounting data,
+            available vendors, etc.
+          </p>
+        </field>
+    </record>
+
+        <menuitem  name="Products" id="purchase.menu_procurement_partner_contact_form" action="product_normal_action_puchased_extend"
+          parent="purchase.menu_procurement_management" sequence="20"/>
+
+
+
+        <!--<delete model="ir.ui.menu" id="purchase_request.parent_menu_purchase_request" />-->
+        <!--<delete model="ir.ui.menu" id="purchase_request.menu_purchase_request_line_act" />-->
+        <!--<delete model="ir.ui.menu" id="purchase_request.menu_purchase_request_act" />-->
+        <!--<menuitem-->
+            <!--id="purchase_request.menu_purchase_request_pro_mgt"-->
+            <!--parent="purchase.menu_procurement_management"-->
+            <!--action="purchase_request.purchase_request_form_action" sequence="11"/>-->
+        <!--<menuitem-->
+            <!--action="purchase_request.purchase_request_line_form_action"-->
+            <!--id="purchase_request.menu_purchase_request_line"-->
+            <!--parent="purchase.menu_procurement_management"  sequence="12" />-->
+
+
+    <!--  Take care of a bug with purchase_count -->
+        <!--<record id="view_product_template_purchase_buttons_from_extend" model="ir.ui.view">-->
+            <!--<field name="name">product.template.purchase.button.inherit.extend</field>-->
+            <!--<field name="model">product.template</field>-->
+            <!--<field name="inherit_id" ref="purchase.view_product_template_purchase_buttons_from"/>-->
+            <!--<field name="groups_id" eval="[(4, ref('purchase.group_purchase_user'))]"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<field  name="purchase_count" position="replace" >-->
+                    <!--<span>Purchase(s)</span>-->
+                <!--</field>-->
+            <!--</field>-->
+        <!--</record>-->
+
+<!-- Purchase Request Limit -->
+         <record id="view_purchase_request_approver_form" model="ir.ui.view">
+            <field name="name">purchase.request.approver.form</field>
+            <field name="model">purchase.request.approver</field>
+            <field name="arch" type="xml">
+                <form string="Purchase Request Limit">
+                    <sheet>
+                        <group>
+                            <field name="department_id" />
+                             <field name="approver_id" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+         </record>
+
+         <record id="view_purchase_request_approver_tree" model="ir.ui.view" >
+            <field name="name" >purchase.request.approver.tree</field>
+            <field name="model">purchase.request.approver</field>
+            <field name="arch" type="xml" >
+                <tree string="Purchase Request Limit" editable="bottom"  >
+                           <field name="department_id" required="True" options="{'no_open':True,'no_create':True}" />
+                               <field name="approver_id" required="True"  options="{'no_open':True,'no_create':True}" />
+                </tree>
+
+            </field>
+         </record>
+
+         <record id="view_purchase_request_approver_filter" model="ir.ui.view">
+            <field name="name">purchase.request.approver.filter</field>
+            <field name="model">purchase.request.approver</field>
+            <field name="arch" type="xml">
+                <search string="Purchase Request Limit Filter">
+                     <field name="approver_id" string="Approver"  />
+                      <field name="department_id" string="Department"  />
+                    <group expand="0" string="Group By">
+                        <filter  string="Approver" domain="[]" context="{'group_by':'approver_id'}"/>
+                       <filter  string="Department" domain="[]" context="{'group_by':'department_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_purchase_request_approver" model="ir.actions.act_window">
+            <field name="name">Purchase Request Limit</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.request.approver</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_purchase_request_approver_filter"/>
+        </record>
+        <menuitem
+            id="menu_purchase_request_approver" name="Purchase Request Approver"
+            parent="purchase.menu_purchase_config" action="action_purchase_request_approver" sequence="31" groups="base.group_no_one"/>
+
+        <!-- Purchase Order Limit -->
+         <record id="view_purchase_order_limit_form" model="ir.ui.view">
+            <field name="name">purchase.order.limit.form</field>
+            <field name="model">purchase.order.limit</field>
+            <field name="arch" type="xml">
+                <form string="Purchase Order Limit">
+                    <sheet>
+                        <group>
+                            <field name="from_value" />
+                             <field name="to_value" />
+                             <field name="approver_id" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+         </record>
+
+         <record id="view_purchase_order_limit_tree" model="ir.ui.view" >
+            <field name="name" >purchase.order.limit.tree</field>
+            <field name="model">purchase.order.limit</field>
+            <field name="arch" type="xml" >
+                <tree string="Purchase Order Limit" editable="bottom"  >
+                            <field name="from_value" required="True"  />
+                             <field name="to_value" required="True"  />
+                             <field name="approver_id" required="True"  options="{'no_open':True,'no_create':True}" />
+                </tree>
+
+            </field>
+         </record>
+
+         <record id="view_purchase_order_limit_filter" model="ir.ui.view">
+            <field name="name">purchase.order.limit.filter</field>
+            <field name="model">purchase.order.limit</field>
+            <field name="arch" type="xml">
+                <search string="Purchase Order Limit Filter">
+                     <field name="approver_id" string="Approver"  />
+                    <group expand="0" string="Group By">
+                        <filter  string="Approver" domain="[]" context="{'group_by':'approver_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_purchase_order_limit" model="ir.actions.act_window">
+            <field name="name">Purchase Order Limit</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order.limit</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_purchase_order_limit_filter"/>
+        </record>
+        <menuitem
+            id="menu_purchase_order_limit" name="Purchase Order Limit"
+            parent="purchase.menu_purchase_config" action="action_purchase_order_limit" sequence="31" groups="base.group_no_one"/>
+
+
+
+    </data>
+</openerp>
+
+

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <!-- Product Received Register -->
+    <record id="kin_product_received_register_manager_rule" model="ir.rule">
+        <field name="name">Retail Station Manager Product Received Register</field>
+        <field ref="model_product_received_register" name="model_id"/>
+         <field name="domain_force">['|',('retail_station_manager_id','=',user.id),('retail_station_manager_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('group_retail_manager'))]"/>
+    </record>
+
+
+    <!-- Retail Station Sale Order -->
+    <record id="kin_retail_station_sale_attendant_rule" model="ir.rule">
+        <field name="name">Retail Station Attendant Retail Sale Order / DO</field>
+        <field ref="model_retail_sale_order" name="model_id"/>
+        <field name="domain_force">['|',('retail_station_manager_id','=',user.id),('user_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_retail_attendant'))]"/>
+    </record>
+
+    <record id="kin_retail_station_sale_supervisor_rule" model="ir.rule">
+        <field name="name">Retail Station Supervisor Retail Sale Order / DO</field>
+        <field ref="model_retail_sale_order" name="model_id"/>
+        <field name="domain_force">['|',('retail_station_manager_id','=',user.id),('user_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_station_shift_supervisor'))]"/>
+    </record>
+
+    <record id="kin_retail_station_sale_manager_rule" model="ir.rule">
+        <field name="name">Retail Station Manager Retail Sale Order / DO</field>
+        <field ref="model_retail_sale_order" name="model_id"/>
+        <field name="domain_force">[('retail_station_manager_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_retail_manager'))]"/>
+    </record>
+
+        <!-- Retail Station Sale Order Line-->
+    <record id="kin_retail_station_sale_line_attendant_rule" model="ir.rule">
+        <field name="name">Retail Station Attendant Retail Sale Order Line / DO</field>
+        <field ref="model_retail_sale_order_line" name="model_id"/>
+        <field name="domain_force">['|','|',('retail_station_manager_id','=',user.id),('salesman_id','=',user.id),('retail_station_manager_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('group_retail_attendant'))]"/>
+    </record>
+
+    <record id="kin_retail_station_sale_line_supervisor_rule" model="ir.rule">
+        <field name="name">Retail Station Supervisor Retail Sale Order Line / DO</field>
+        <field ref="model_retail_sale_order_line" name="model_id"/>
+        <field name="domain_force">['|','|',('retail_station_manager_id','=',user.id),('salesman_id','=',user.id),('retail_station_manager_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('group_station_shift_supervisor'))]"/>
+    </record>
+
+    <record id="kin_retail_station_sale_line_manager_rule" model="ir.rule">
+        <field name="name">Retail Station Manager Retail Sale Order Line / DO</field>
+        <field ref="model_retail_sale_order_line" name="model_id"/>
+        <field name="domain_force">['|','|',('retail_station_manager_id','=',user.id),('salesman_id','=',user.id),('retail_station_manager_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('group_retail_manager'))]"/>
+    </record>
+
+    <!--  Stock Control Restriction -->
+    <record id="kin_stock_control_sale_supervisor_rule" model="ir.rule">
+        <field name="name">Retail Station Supervisor Stock Control</field>
+        <field ref="model_kin_stock_control" name="model_id"/>
+        <field name="domain_force">['|',('user_id','=',user.id),('user_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('group_station_shift_supervisor'))]"/>
+    </record>
+
+    <record id="kin_stock_control_sale_manager_rule" model="ir.rule">
+        <field name="name">Retail Station Manager Stock Control</field>
+        <field ref="model_kin_stock_control" name="model_id"/>
+        <field name="domain_force">['|',('retail_station_manager_id','=',user.id),('retail_station_manager_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('group_retail_manager'))]"/>
+    </record>
+
+
+    <!--  Bank Lodgments -->
+    <record id="kin_bank_lodgement_retail_station_manager_rule" model="ir.rule">
+        <field name="name">Retail Station Manager Bank Lodgments</field>
+        <field ref="model_kin_bank_lodgement" name="model_id"/>
+        <field name="domain_force">['|',('retail_station_id.retail_station_manager_id','=',user.id),('retail_station_id.retail_station_manager_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('group_retail_manager'))]"/>
+    </record>
+
+
+    <!-- Retail Station Expenses -->
+    <record id="kin_retail_station_expense_retail_station_manager_rule" model="ir.rule">
+        <field name="name">Retail Station Manager Retail Expenses</field>
+        <field ref="model_kin_retail_station_general_expense" name="model_id"/>
+        <field name="domain_force">['|',('retail_station_manager_id','=',user.id),('retail_station_manager_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('group_retail_manager'))]"/>
+    </record>
+
+
+
+    <record id="kin_retail_station_customer_supervisor_rule" model="ir.rule">
+        <field name="name">Retail Station Supervisor Retail Station Customer</field>
+        <field ref="model_retail_station_customer" name="model_id"/>
+        <field name="domain_force">['|',('user_id','=',user.id),('user_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('group_station_shift_supervisor'))]"/>
+    </record>
+
+    <record id="kin_retail_station_customer_manager_rule" model="ir.rule">
+        <field name="name">Retail Station Manager Retail Station Customer</field>
+        <field ref="model_retail_station_customer" name="model_id"/>
+        <field name="domain_force">['|',('retail_station_manager_id','=',user.id),('retail_station_manager_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('group_retail_manager'))]"/>
+    </record>
+
+
+
+    <!-- Master Data Section -->
+
+    <!--- Restrict By Retail Station -->
+    <record id="kin_retail_station_station_supervisor_rule" model="ir.rule">
+        <field name="name">Retail Station Supervisor for Retail Station</field>
+        <field ref="model_kin_retail_station_general" name="model_id"/>
+         <field name="domain_force">['|',('shift_supervisor_ids.id','=', user.id), ('shift_supervisor_ids.id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('group_station_shift_supervisor'))]"/>
+    </record>
+
+    <record id="kin_retail_station_retail_manager_rule" model="ir.rule">
+        <field name="name">Retail Station Manager for Retail Station</field>
+        <field ref="model_kin_retail_station_general" name="model_id"/>
+         <field name="domain_force">['|',('retail_station_manager_id.id','=', user.id), ('retail_station_manager_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('group_retail_manager'))]"/>
+    </record>
+
+    <!-- Restrict by Tank Storage -->
+    <record id="kin_tank_storage_station_supervisor_rule" model="ir.rule">
+        <field name="name">Retail Station Supervisor for Tank Storage</field>
+        <field ref="model_kin_tank_storage" name="model_id"/>
+         <field name="domain_force">[('retail_station_id.shift_supervisor_ids','=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_station_shift_supervisor'))]"/>
+    </record>
+
+    <record id="kin_tank_storage_retail_manager_rule" model="ir.rule">
+        <field name="name">Retail Station Manager for Tank Storage</field>
+        <field ref="model_kin_tank_storage" name="model_id"/>
+         <field name="domain_force">['|',('retail_station_id.retail_station_manager_id.id','=', user.id), ('retail_station_id.retail_station_manager_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('group_retail_manager'))]"/>
+    </record>
+
+    <!-- Pumps -->
+    <record id="kin_fuel_pump_station_supervisor_rule" model="ir.rule">
+        <field name="name">Retail Station Supervisor for Fuel Pumps</field>
+        <field ref="model_kin_fuel_pump" name="model_id"/>
+         <field name="domain_force">['|',('retail_station_id.shift_supervisor_ids','=', user.id), ('retail_station_id.shift_supervisor_ids.id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('group_station_shift_supervisor'))]"/>
+    </record>
+
+    <record id="kin_fuel_pump_retail_manager_rule" model="ir.rule">
+        <field name="name">Retail Station Manager for Fuel Pumps</field>
+        <field ref="model_kin_fuel_pump" name="model_id"/>
+         <field name="domain_force">['|',('retail_station_id.retail_station_manager_id.id','=', user.id), ('retail_station_id.retail_station_manager_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('group_retail_manager'))]"/>
+    </record>
+
+        <!-- Shifts -->
+    <!--<record id="kin_shift_station_supervisor_rule" model="ir.rule">-->
+        <!--<field name="name">Retail Station Supervisor for Sales Shift</field>-->
+        <!--<field ref="model_kin_shift" name="model_id"/>-->
+         <!--<field name="domain_force">['|',('retail_station_ids.shift_supervisor_ids.id','=', user.id), ('retail_station_id.shift_supervisor_ids.id','=',False)]</field>-->
+        <!--<field name="groups" eval="[(4, ref('group_station_shift_supervisor'))]"/>-->
+    <!--</record>-->
+
+    <!--<record id="kin_shift_retail_manager_rule" model="ir.rule">-->
+        <!--<field name="name">Retail Station Manager for Sales Shift</field>-->
+        <!--<field ref="model_kin_shift" name="model_id"/>-->
+         <!--<field name="domain_force">['|',('retail_station_ids.retail_station_manager_id.id','=', user.id), ('retail_station_id.retail_station_manager_id','=',False)]</field>-->
+        <!--<field name="groups" eval="[(4, ref('group_retail_manager'))]"/>-->
+    <!--</record>-->
+
+
+
+</data>
+</openerp>

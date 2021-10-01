@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		    	<!-- Expense Employees  -->
+	 <record id="user_hr_expense_user_accountant_rule" model="ir.rule">
+            <field name="name" >HR Expense Accountant User</field>
+            <field name="model_id" ref="model_hr_expense"/>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="domain_force">[('emp_expense_group_acc_id','in', [g.id for g in user.emp_expense_group_ids])]</field>
+            <field name="active" eval="True"/>
+        </record>
+
+
+
+    <record id="hr_expense_group_employee_rule" model="ir.rule">
+            <field name="name" >HR Expense Employee rule</field>
+            <field name="model_id" ref="model_hr_expense_group"/>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="domain_force">['|',('employee_id.user_id.id','=',user.id),('employee_id.user_id.id','=',False)]</field>
+            <field name="active" eval="True"/>
+        </record>
+
+    <record id="hr_expense_line_manager_rule" model="ir.rule">
+            <field name="name" >HR Expense Line Manager rule</field>
+            <field name="model_id" ref="model_hr_expense"/>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="domain_force">['|',('line_manager_id.user_id','=',user.id),('line_manager_id.user_id','=',False)]</field>
+            <field name="active" eval="True"/>
+        </record>
+
+    	<record id="hr_expense_group_line_manager_rule" model="ir.rule">
+            <field name="name" >HR Expense Line Group Manager rule</field>
+            <field name="model_id" ref="model_hr_expense_group"/>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="domain_force">['|',('line_manager_id.user_id','=',user.id),('line_manager_id.user_id','=',False)]</field>
+            <field name="active" eval="True"/>
+        </record>
+
+    <record id="hr_expense_group_general_rule" model="ir.rule">
+            <field name="name" >HR Expense General Group rule</field>
+            <field name="model_id" ref="model_hr_expense_group"/>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+         <field name="domain_force">[('emp_expense_group_general_id','in', [g.id for g in user.emp_expense_group_ids])]</field>
+            <field name="active" eval="True"/>
+        </record>
+
+	</data>
+</openerp>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+
+		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
+		<!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
+		<report
+		    id="action_report_loading_programme"
+		    model="loading.programme"
+		    string="Loading Programme"
+		    report_type="qweb-pdf"
+		    name="kin_loading.report_loading_programme"
+		    file="kin_loading.report_loading_programme"
+		    attachment_use="False"
+			paperformat="paperformat_a4_landscape"
+			menu="True"
+		/>
+
+
+
+		<template id="report_loading_programme">
+	    <t t-call="report.html_container">
+	        <t t-foreach="docs" t-as="o">
+				<t t-call="kin_loading.custom_loading_programme_layout"  >
+				<div class="page">
+					<style type="text/css">
+							<t t-call="kin_loading.style"/>
+						</style>
+
+
+					<div class="row" >
+						<div class="col-xs-4" >
+								<h3  t-if="o.state == 'draft'" ><b>DRAFT LOADING PROGRAMME</b></h3>
+								<h3 t-if="o.state == 'dm_approve'"><b>LOADING PROGRAMME</b></h3>
+								<h3 t-if="o.state == 'cancel'"><b>CANCELLED LOADING PROGRAMME</b></h3>
+								<h3 t-if="o.state in ('confirm,om_approve,dpr_approve')"><b>ONGOING APPROVAL LOADING PROGRAMME</b></h3>
+						</div>
+						<div class="col-xs-3">
+							<h3><b><span t-field="o.name" /></b></h3>
+						</div>
+						<div class="col-xs-2" >
+							<!--<b>Time: </b>-->
+							<!--<span t-field="o.programme_date" />-->
+						</div>
+						<div class="col-xs-3" >
+							<b>Date and Time: </b>
+							<span t-field="o.programme_date" />
+						</div>
+					</div>
+
+					<br />
+
+						<div class="row">
+							<div class="col-xs-12" >
+								<t t-set="sn" t-value="0"/>
+								<table  style="width: 100%" class=" table-bordered-black" cellpadding="3" cellspacing="0" >
+									<thead>
+										<tr>
+											<td width="3%" class="text-center" ><span><b>S/N.</b></span></td>
+											<td width="10%" class="text-center" ><span><b>TICKET NO.</b></span></td>
+											<td width="8%" class="text-center" ><span><b>TRUCK NO.</b></span></td>
+											<td width="5%" class="text-center" ><span><b>PRD.</b></span></td>
+											<td width="8%" class="text-center" ><span><b>QTY.</b></span></td>
+											<td width="10%" class="text-center" ><span><b>COY NAME</b></span></td>
+											<td width="18%" class="text-center" ><span><b>RECEIVING ADDRESS</b></span></td>
+											<td width="15%" class="text-center" ><span><b>LOCATION</b></span></td>
+											<td width="6%" class="text-center" ><span><b>STATE</b></span></td>
+											<td width="7%" class="text-center" ><span><b>STATION CODE</b></span></td>
+											<td width="10%" class="text-center" ><span><b>DPR NO.</b></span></td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr t-foreach="o.ticket_ids" t-as="lp" >
+											<t t-set="sn" t-value="sn + 1"/>
+											<td class="text-center" ><span t-esc="sn" /></td>
+											<td class="text-center" ><span t-field="lp.name" /></td>
+                                            <td class="text-center" ><span t-field="lp.truck_no" /></td>
+											<td class="text-center" ><span t-field="lp.product_id" /></td>
+											<td class="text-center" ><span t-field="lp.ticket_load_qty" /></td>
+											<td class="text-center" ><span t-field="lp.partner_id" /></td>
+											<td class="text-center" ><span t-field="lp.receiving_station_address" /></td>
+											<td class="text-center" ><span t-field="lp.location_addr_id" /></td>
+											<td class="text-center" ><span t-field="lp.dpr_state" /></td>
+											<td class="text-center" ><span t-field="lp.station_code" /></td>
+											<td class="text-center" ><span t-field="lp.dpr_no" /></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					<br />
+
+
+				</div>
+			</t>
+		</t>
+		</t>
+		</template>
+
+
+	</data>
+</openerp>

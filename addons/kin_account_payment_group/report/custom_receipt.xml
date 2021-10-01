@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
+		<!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
+		<report
+		    id="receipt_custom"
+		    model="account.payment.group"
+		    string="Payment Receipt"
+		    report_type="qweb-pdf"
+		    name="kin_account_payment_group.custom_receipt"
+		    file="kin_account_payment_group.custom_receipt"
+		    attachment_use="False"
+		    		/>
+
+
+<template id="custom_receipt">
+	    <t t-call="report.html_container">
+	        <t t-foreach="docs" t-as="o">
+	            <t t-call="kin_account_payment_group.custom_layout"  >
+					<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+	                <div class="page" >
+						<style type="text/css">
+							<t t-call="kin_account_payment_group.style"/>
+						</style>
+						<div t-raw="o.company_id.html_after_header" />
+
+						<div class="row">
+							<div class="col-xs-12 text-center" >
+								<h3><b>
+									<span t-if="o.state == 'posted'">PAYMENT RECEIPT</span>
+									<span t-if="o.state == 'draft'">DRAFT RECEIPT</span>
+									<span t-if="o.state == 'posted'" t-field="o.name" /></b></h3>
+							</div>
+						</div>
+						<div class="row"  style="border-style:solid;border-width:2px;padding:10px;" >
+							<div class="col-xs-12">
+								<p>Date: <b><span t-field="o.payment_date" /></b></p>
+								<p>Received from  <b><span t-field="o.partner_id.name" /></b></p>
+								<p>the sum of <b><span  t-esc="o.amount_to_text(o.payments_amount, o.currency_id)"/></b></p>
+								<!--<p t-if="o.get_paid_invoices()" >payment in respect of <b><span t-esc="o.get_paid_invoices()" /></b></p>-->
+								<p t-if="o.narration" >Narration: <span t-field="o.narration" /></p>
+								<p>Amount: <b><span t-field="o.payments_amount" /></b> </p>
+                                <p>Reference No: <b><span t-esc="o.get_references()" /></b></p>
+                                <p>Payment Method: <b><span t-esc="o.get_paymethods()" /></b></p>
+								<p>FOR: <b><span t-field="o.company_id.name" /></b>  <img t-if="o.user_id.img_signature" t-att-src="'data:image/png;base64,%s' % o.user_id.img_signature" style="max-height: 14px;" /> <span  t-if="not o.user_id.img_signature" >....................</span></p>
+							</div>
+						</div>
+
+
+	                </div>
+	            </t>
+	        </t>
+    	</t>
+</template>
+	</data>
+</openerp>

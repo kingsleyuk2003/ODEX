@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+        <record id="view_discharged_discrepancy_confirmation_aviation" model="ir.ui.view">
+            <field name="name">Discharged Discrepancy Confirmation</field>
+            <field name="model">discharged.discrepancy.confirmation.wizard.aviation</field>
+            <field name="arch" type="xml">
+                <form string="Discharged Discrepancy Confirmation">
+                        <p>The Quantity Discharged: <b><field name="prod_alloc" class="oe_inline" readonly="1"/><field name="prod_uom_name" class="oe_inline" readonly="1" />  </b> is <b style="color:red" >NOT EQUAL</b> to the Quantity Received:  <b><field name="qty_rec" readonly="1" class="oe_inline" /><field name="prod_uom_name" class="oe_inline" readonly="1" /></b></p>
+                    <p>Are you sure of your action?</p>
+                    <footer>
+                        <button name="action_confirm_wizard" string="Yes, I am Sure" type="object" class="oe_highlight"/>
+                        or
+                        <button string="No, I am Not Sure. Let me Check" special="cancel" class="oe_highlight" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_discharged_discrepancy_confirmation_aviation" model="ir.actions.act_window">
+            <field name="name">Discharged Discrepancy Confirmation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">discharged.discrepancy.confirmation.wizard.aviation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_discharged_discrepancy_confirmation_aviation" />
+            <field name="target">new</field>
+            <!--<field name="groups_id" eval="[(4,ref('base.group_sale_salesman'))]"/>-->
+        </record>
+
+
+
+
+
+    </data>
+</openerp>

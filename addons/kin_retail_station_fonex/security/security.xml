@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+	<record id="group_show_validate_inventory_button" model="res.groups">
+			<field name="name">Show Validate Inventory Button</field>
+			<field name="category_id" ref="kin_retail_station_general.module_category_retail_station"/>
+		</record>
+
+</data>
+</openerp>

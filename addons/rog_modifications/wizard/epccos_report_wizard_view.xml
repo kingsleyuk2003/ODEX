@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record  id="view_epccos_report_wizard" model="ir.ui.view" >
+                <field name="name">Epccos Report Wizard</field>
+                <field name="model">epccos.report.wizard</field>
+                <field name="arch" type="xml" >
+                <form string="EPCCOS Report Wizard" >
+                  <label string="This wizard will help you generate a Epccos Report in .xlsx file" />
+                     <group col="4" colspan="4" >
+                         <field name="start_date" required="1" />
+                         <field name="end_date" required="1" />
+                         <field name="select_per" required="1" />
+                    </group>
+                    <notebook>
+                        <page string="EPCCOS Format" >
+                             <field name="pfa_ids"   />
+                        </page>
+                    </notebook>
+
+                        <footer>
+                            <button default_focus="1" icon="gtk-execute" name="epccos_excel_report" string="Export as Excel" type="object"  colspan="2" class="oe_highlight" />
+                            or <button special="cancel" class="oe_link"  string="Cancel"  />
+                        </footer>
+                </form>
+             </field>
+        </record>
+
+		<record id="action_epccos_report_wizard" model="ir.actions.act_window">
+            <field name="name">Generate Epccos Report</field>
+            <field name="res_model">epccos.report.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_epccos_report_wizard"/>
+            <field name="context">{}</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="target">new</field>
+        </record>
+
+         <menuitem name="EPCCOS Excel Report" id="menu_epccos_report" action="action_epccos_report_wizard"
+           parent="kin_hr.hr_payroll_kin_report" sequence="22"  icon="STOCK_PRINT" />
+
+
+   </data>
+</openerp>

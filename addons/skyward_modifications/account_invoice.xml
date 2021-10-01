@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+
+<record id="invoice_form_skyward_extend" model="ir.ui.view">
+    <field name="name">account.invoice.form.skyward.extend</field>
+    <field name="model">account.invoice</field>
+    <field name ="inherit_id" ref="account.invoice_form" />
+             <field name="arch" type="xml">
+             <field name="amount_untaxed" position="after" >
+                 <field name="empties_total" />
+             </field>
+        </field>
+</record>
+
+
+<template id="report_invoice_document_skyward_extend" inherit_id="account.report_invoice_document">
+        <xpath expr="//div[@class='col-xs-4 pull-right']/table/tr[@class='border-black']" position="after">
+              <tr>
+                  <td><strong>Total Value of Empties</strong></td>
+                            <td class="text-right">
+                                <span t-field="o.empties_total" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                            </td>
+              </tr>
+          </xpath>
+    </template>
+
+</data>
+</openerp>

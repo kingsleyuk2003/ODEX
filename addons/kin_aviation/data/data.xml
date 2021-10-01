@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+        <record id="product_discrepancy_journal_aviation" model="account.journal">
+            <field name="name">Product Discrepancy Aviation</field>
+            <field name="code">PDA</field>
+            <field name="type">general</field>
+            <field name="update_posted" eval="True" />
+        </record>
+
+        <record id="aviation_station_stock_gain_loss_journal_aviation" model="account.journal">
+            <field name="name">Stock Gain/Loss Aviation</field>
+            <field name="code">SGLA</field>
+            <field name="type">general</field>
+            <field name="update_posted" eval="True" />
+        </record>
+
+         <record forcecreate="True" id="decimal_density_conductivity" model="decimal.precision">
+            <field name="name">Density and Conductivity</field>
+            <field name="digits" eval="4"/>
+        </record>
+
+    </data>
+</openerp>

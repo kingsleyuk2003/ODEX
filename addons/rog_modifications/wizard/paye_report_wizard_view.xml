@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record  id="view_paye_report_wizard_rog" model="ir.ui.view" >
+                <field name="name">PAYE Report Wizard</field>
+                <field name="model">paye.report.wizard</field>
+              <field name="inherit_id" ref="kin_hr.view_paye_report_wizard" />
+                <field name="arch" type="xml" >
+                <field name="end_date" position="after"  >
+                     <field name="select_per" required="1" readonly="1" />
+                 </field>
+             </field>
+        </record>
+
+
+
+   </data>
+</openerp>

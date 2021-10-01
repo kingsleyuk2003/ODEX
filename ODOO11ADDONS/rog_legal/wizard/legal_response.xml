@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+
+        <record id="legal_response_wizard_view" model="ir.ui.view">
+            <field name="name">Legal Response Wizard</field>
+            <field name="model">legal.response.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Legal Response Confirmation">
+                    <p><b>Legal Response to the Requester</b></p>
+                    <group>
+                        <field nolabel="1" name="legal_response" />
+                    </group>
+                    <footer>
+                        <button name="action_legal_response" string="Send Legal Response" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Close" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_legal_response" model="ir.actions.act_window">
+            <field name="name">Legal Response</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">legal.response.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <!--<field name="groups_id" eval="[(4,ref('base.group_hr_user'))]"/>           -->
+        </record>
+
+
+
+
+    </data>
+</odoo>

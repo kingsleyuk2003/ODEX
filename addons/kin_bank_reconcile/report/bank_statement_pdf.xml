@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+
+		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
+		<!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
+		<report
+		    id="action_report_bank_statement"
+		    model="bank.statement"
+		    string="Bank Reconciliation Statement"
+		    report_type="qweb-pdf"
+		    name="kin_bank_reconcile.report_bank_statement"
+		    file="kin_bank_reconcile.report_bank_statement"
+		    attachment_use="False"
+			paperformat="paperformat_a4_landscape"
+		/>
+
+
+
+		<template id="report_bank_statement">
+	    <t t-call="report.html_container">
+	        <t t-foreach="docs" t-as="o">
+				 <t t-call="report.internal_layout">
+<!--				<t t-call="kin_bank_reconcile.custom_bank_statement_layout"  >-->
+				<div class="page">
+					<style type="text/css">
+							<t t-call="kin_bank_reconcile.style"/>
+						</style>
+
+					<div class="row" >
+						<div class="col-xs-12" >
+								<h3><b><span t-field="o.company_id.name" /></b></h3>
+						</div>
+					</div>
+
+					<div class="row" >
+						<div class="col-xs-12" >
+								<h3><b><span t-field="o.name" /></b></h3>
+						</div>
+					</div>
+
+					<div class="row" >
+						<div class="col-xs-12" >
+								<h3><b>Bank Reconciliation Statement</b></h3>
+						</div>
+					</div>
+
+					<div class="row" >
+						<div class="col-xs-7">
+							<b>Bank: </b>
+							<span t-field="o.account_id" />
+						</div>
+						<div class="col-xs-5" >
+							<b t-if="o.start_date" >Start Date: </b>
+							<span t-if="o.start_date" t-field="o.start_date" />
+							<b  t-if="o.end_date" >End Date: </b>
+							<span  t-if="o.end_date" t-field="o.end_date" />
+						</div>
+					</div>
+					<br/>
+					<div class="row" >
+						<div class="col-xs-12" >
+								<b>Balance as per Company Books: </b>
+							<span t-field="o.gl_balance" />
+						</div>
+					</div>
+					<div class="row" >
+						<div class="col-xs-12" >
+								<b>Balance as per Bank: </b>
+							<span t-field="o.bank_reconciled_balance" />
+						</div>
+					</div>
+					<div class="row" >
+						<div class="col-xs-12" >
+								<b>Amounts not reflected in Bank: </b>
+							<span t-field="o.unreconciled_balance" />
+						</div>
+					</div>
+
+
+					<br />
+
+						<div class="row">
+							<div class="col-xs-12" >
+								<t t-set="sn" t-value="0"/>
+								<table  style="width: 100%" class=" table-bordered-black" cellpadding="3" cellspacing="0" >
+									<thead>
+										<tr>
+											<td width="3%" class="text-center" ><span><b>Date</b></span></td>
+											<td width="10%" class="text-center" ><span><b>Journal Entry</b></span></td>
+											<td width="25%" class="text-center" ><span><b>Label</b></span></td>
+											<td width="10%" class="text-center" ><span><b>Partner Reference</b></span></td>
+											<td width="10%" class="text-center" ><span><b>Partner</b></span></td>
+											<td width="10%" class="text-center" ><span><b>Amt. Currency</b></span></td>
+											<td width="20%" class="text-center" ><span><b>Amount</b></span></td>
+											<td width="12%" class="text-center" ><span><b>Reconcile</b></span></td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr t-foreach="o.move_line_ids" t-as="line" >
+											<td class="text-center" ><span t-field="line.date" /></td>
+											<td class="text-center" ><span t-field="line.move_id" /></td>
+											<td class="text-center" ><span t-field="line.name" /></td>
+											<td class="text-center" ><span t-field="line.ref" /></td>
+											<td class="text-center" ><span t-field="line.partner_id" /></td>
+											<td class="text-center" ><span t-field="line.amount_currency" /></td>
+											<td class="text-center" ><span t-field="line.balance" /></td>
+											<td class="text-center" ><span t-field="line.is_bank_reconciled" /></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					<br />
+
+
+				</div>
+			</t>
+		</t>
+		</t>
+		</template>
+
+
+	</data>
+</openerp>

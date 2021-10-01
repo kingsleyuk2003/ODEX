@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+   <record id="view_order_form_double_tsc_extend" model="ir.ui.view">
+            <field name="name">sale.order.form.double.tsc.extend</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="arch" type="xml">
+
+                 <button name="action_confirm" states="sent"  class="btn-primary" type="object" context="{'show_sale': True}" position="before" >
+                    <button  name="action_approve_markup" string="Approve Sales Order Markup" class="btn-primary" type="object"  attrs="{'invisible':[('state', '!=', 'so_to_approve_markup')]}" context="{'show_sale': True}" groups="tsc_modifications.group_show_approve_markup_btn"/>
+                    <button name="%(action_disapprove_sale_orders_markup)d"   string="Disapprove Sale Order Markup" class="btn-primary" type="action"  attrs="{'invisible':[('state', '!=', 'so_to_approve_markup')]}" context="{'show_sale': True}" groups="tsc_modifications.group_show_approve_markup_btn"/>
+                 </button>
+
+                <field name="user_id" position="after" >
+                    <field name="markup_approved_by_user_id" />
+                    <field name="markup_disapproved_by_user_id" />
+                </field>
+            </field>
+        </record>
+
+    <record id="view_order_form_double_tsc1_extend" model="ir.ui.view">
+            <field name="name">sale.order.form.double.tsc1.extend</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="kin_sales_double_validation.view_order_form_double_extend" />
+            <field name="arch" type="xml">
+
+                 <button name="action_cancel" states="draft,sent,sale,waiting,to_confirm,so_to_approve,no_sale" type="object"  position="attributes">
+                     <attribute name="states">draft,sent,sale,waiting,to_confirm,so_to_approve,no_sale,so_to_approve_markup,so_to_approve_markup_ok,no_sale_approve</attribute>
+                 </button>
+
+                 <field name="state" widget="statusbar" statusbar_visible="draft,sent,waiting,to_confirm,so_to_approve,sale,done" position="attributes">
+                    <attribute name="statusbar_visible" >draft,sent,waiting,to_confirm,so_to_approve,so_to_approve_markup,so_to_approve_markup_ok,done</attribute>
+                </field>
+
+
+            </field>
+        </record>
+
+         <record id="action_orders_sale_double_validation_approve_markup" model="ir.actions.act_window">
+            <field name="name">Sales Orders Markup to Approve</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
+            <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+            <field name="context">{'show_sale': True}</field>
+            <field name="domain">[('state', '=', 'so_to_approve_markup')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a Quotation, the first step of a new sale.
+                </p><p>
+                    Your next actions should flow efficiently: confirm the Quotation to a Sale Order, then create the Invoice and collect the Payment.
+                </p><p>
+                    Note that once a Quotation becomes a Sale Order, it will be moved from the Quotations list to the Sales Order list.
+                </p>
+            </field>
+        </record>
+
+     <menuitem action="action_orders_sale_double_validation_approve_markup" id="menu_sale_order_markup_accounting" parent="account.menu_finance_receivables" sequence="2" groups="tsc_modifications.group_show_sales_order_to_approve_markup_menu" />
+
+</data>
+</openerp>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <template id="report_custom_purchase_order_rog_extend" inherit_id="kin_report.report_custom_purchase_order">
+
+            <xpath expr="//div[@name='div_acknowledge']"  position="replace">
+
+                <div class="row" name="div_acknowledge" >
+							<div class="col-xs-12" >
+								<div class="row">
+                                    <div class="col-xs-4" >
+                                        <div class="mt8" >
+                                            <b> Delivery Location: DEPOT, APAPA</b>
+                                        </div>
+                                        <div class="mt8" >
+                                            <h3>Job Acceptance </h3>
+                                            I undertake to carry out this job as specified and at the rate agreed on this PO
+                                        </div>
+                                        <div class="mt8">
+                                            <b>Signature: ...........................</b>
+                                        </div>
+                                       <div class="mt8">
+                                           <b>Date: ...................................</b>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4" >
+                                        <div class="mt8" >
+                                            <b>Authorised by:  Procurement Department</b>
+                                        </div>
+                                        <div class="mt8" >
+                                            <b>Name :  ..............................</b>
+                                        </div>
+                                        <div class="mt8" >
+                                            <b>Signature: ....................................</b>
+                                        </div>
+                                        <div class="mt8" >
+                                            <b> Date: ............................................</b>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4" >
+                                        <div class="mt8" >
+                                            <b>User Department:</b>
+                                        </div>
+                                        <div class="mt8" >
+                                            <b>Name: ..............................</b>
+                                        </div>
+                                        <div class="mt8" >
+                                            <b>Signature: ....................................</b>
+                                        </div>
+                                        <div class="mt8" >
+                                            <b> Date: ............................................</b>
+                                        </div>
+                                    </div>
+
+
+								</div>
+
+							</div>
+                </div>
+            </xpath>
+        </template>
+
+</data>
+</openerp>

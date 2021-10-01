@@ -1,0 +1,64 @@
+<openerp>
+    <data>
+
+
+		<record id="mail_templ_next_activity_created" model="mail.template">
+			<field name="name" >A New Task has been Assigned</field>
+			<field name="email_from">${ctx.get('system_email')}</field>
+			<field name="reply_to">${ctx.get('system_email')}</field>
+			<field name="subject">A New ${ctx.get('next_activity_type')} Task has been assigned to you for the ${ctx.get('opp_name')}  </field>
+			<field name="email_to">${ctx.get('sales_person_email')}</field>
+			<field name="model_id"   model="ir.model"  search="[('model', '=', 'crm.lead')]" />
+		    <field name="auto_delete" eval="True"/>
+			<field name="body_html"  >
+				<![CDATA[
+				<p>Dear ${ctx.get('sales_person_name')},</p>
+				<p>A New ${ctx.get('next_activity_type')} with the title ${ctx.get('task_title')} for the ${ctx.get('opp_name')}  has been assigned to you. With expected done date as ${ctx.get('task_date')}</p>
+				<p><a href="${ctx.get('url')}">Follow the link to see the next activity to perform</a></p>
+				<p>Regards and Thanks</p>
+				<p>This is an auto-generated message</p>
+				]]>
+			</field>
+		</record>
+
+		<record id="mail_templ_cancel_activity_created" model="mail.template">
+			<field name="name" >A New Task has been Cancelled</field>
+			<field name="email_from">${ctx.get('system_email')}</field>
+			<field name="reply_to">${ctx.get('system_email')}</field>
+			<field name="subject">The ${ctx.get('next_activity_type')} Task assigned to you has been cancelled for the ${ctx.get('opp_name')}  </field>
+			<field name="email_to">${ctx.get('sales_person_email')}</field>
+			<field name="model_id"   model="ir.model"  search="[('model', '=', 'crm.lead')]" />
+		    <field name="auto_delete" eval="True"/>
+			<field name="body_html"  >
+				<![CDATA[
+				<p>Dear ${ctx.get('sales_person_name')},</p>
+				<p>The ${ctx.get('next_activity_type')} Task assigned to you has been cancelled with title ${ctx.get('task_title')} for the ${ctx.get('opp_name')}. With expected done date as ${ctx.get('task_date')}</p>
+				<p><a href="${ctx.get('url')}">Follow the link to see the cancelled task</a></p>
+				<p>Regards and Thanks</p>
+				<p>This is an auto-generated message</p>
+				]]>
+			</field>
+		</record>
+
+		<record id="mail_templ_done_activity_created" model="mail.template">
+			<field name="name" > The Task has been completed</field>
+			<field name="email_from">${ctx.get('system_email')}</field>
+			<field name="reply_to">${ctx.get('system_email')}</field>
+			<field name="subject">The ${ctx.get('next_activity_type')} Task for the ${ctx.get('opp_name')} has been marked as DONE, belonging to ${ctx.get('sales_person_name')} </field>
+			<field name="email_to">${ctx.get('sales_person_email')}</field>
+			<field name="model_id"   model="ir.model"  search="[('model', '=', 'crm.lead')]" />
+		    <field name="auto_delete" eval="True"/>
+			<field name="body_html"  >
+				<![CDATA[
+				<p>Dear ${ctx.get('sales_person_name')},</p>
+				<p>The ${ctx.get('next_activity_type')} Task with the title ${ctx.get('task_title')} for the ${ctx.get('opp_name')}  has been marked as DONE, belonging to ${ctx.get('sales_person_name')}. With expected done date as ${ctx.get('task_date')}</p>
+				<p><a href="${ctx.get('url')}">Follow the link to see the completed task</a></p>
+				<p>Regards and Thanks</p>
+				<p>This is an auto-generated message</p>
+				]]>
+			</field>
+		</record>
+
+		
+	</data>
+</openerp>

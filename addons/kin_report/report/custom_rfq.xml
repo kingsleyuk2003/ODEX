@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+			<report
+		    id="purchase_custom_rfq"
+		    model="purchase.order"
+		    string="Request for Quotation"
+		    report_type="qweb-pdf"
+		    name="kin_report.report_custom_rfq"
+		    file="kin_report.report_custom_rfq"
+		    attachment_use="False"
+		    		/>
+
+		<!-- No Footer Image for PO and RFQ -->
+<template id="custom_layout_for_rfq">
+    <t t-call="kin_report.custom_header" />
+    <t t-raw="0" />
+
+	 <t t-if="o and 'company_id' in o">
+        <t t-set="company" t-value="o.company_id"></t>
+    </t>
+    <t t-if="not o or not 'company_id' in o">
+        <t t-set="company" t-value="res_company"></t>
+    </t>
+
+    <div class="footer" >
+        <div class="row"  >
+               <div class="col-xs-10 text-center"   >
+                   <span t-if="company.footer_data" t-field="company.footer_data" />
+                </div>
+            <div class="col-xs-2 text-right"   >
+                            Page: <span class="page"/> / <span class="topage"/>
+                </div>
+           </div>
+    </div>
+</template>
+
+
+<template id="report_custom_rfq">
+	    <t t-call="report.html_container">
+	        <t t-foreach="docs" t-as="o">
+	            <t t-call="kin_report.custom_layout_for_rfq"  >
+	                <div class="page" >
+						<style type="text/css">
+							<t t-call="kin_report.style"/>
+						</style>
+						<div t-raw="o.company_id.html_after_header" />
+						<div class="row" >
+							<div class="col-xs-4">
+								<div><span style="font-weight:bold">Response Due Date: </span> <span t-field="o.response_due_date" /></div>
+							</div>
+							<div class="col-xs-8">
+								<div class="row">
+									<div class="col-xs-6 col-xs-offset-6" style="font-weight:bold">
+										<span>Vendor:</span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6 col-xs-offset-6">
+										<div t-field="o.partner_id" t-field-options='{"widget": "contact", "fields": ["address", "name", "phone", "fax"], "no_marker": true, "phone_icons": true}'/>
+										<p t-if="o.partner_id.vat">VAT: <span t-field="o.partner_id.vat"/></p>
+									</div>
+						    	</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-12 text-center" >
+								<h3><b>REQUEST FOR QUOTATION <span t-field="o.name" /></b></h3>
+							</div>
+						</div>
+
+						<table  style="width: 100%" class="table-bordered-black" cellpadding="3" cellspacing="0" >
+									<thead>
+										<tr>
+											<th><span>Payment Terms</span></th>
+											<th><span>Shipping Terms</span></th>
+											<th><span>Requested By</span></th>
+											<th><span>Delivery/Due Date</span></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><span t-field="o.payment_term_id.name" />
+											</td><td><span t-field="o.purchase_shipping_term_id.name" /></td>
+											<td><span t-field="o.user_id.name" /></td>
+											<td><span t-field="o.date_planned" /></td>
+										</tr>
+									</tbody>
+						</table>
+						<br />
+						<div class="row">
+							<div class="col-xs-12" >
+								<table  style="width: 100%" class="mt8 table-bordered-black" cellpadding="3" cellspacing="0" >
+
+										<thead>
+												<tr>
+													<td width="50%" ><span><b>Description</b></span></td>
+													<td><span><b>Expected Delivery Date</b></span></td>
+													<td class="text-right" ><span><b>Quantity</b></span></td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr  t-foreach="o.order_line" t-as="line" >
+													<td style="padding-left: 2px" ><span t-field="line.name"/></td>
+													<td><span t-field="line.date_planned"/></td>
+													<td class="text-right">
+														<span t-esc="line.product_qty"/>
+													<t t-if="o.company_id.is_show_uom"><span  t-field="line.product_uom.name" groups="product.group_uom"/></t>
+													</td>
+												</tr>
+											</tbody>
+								</table>
+							</div>
+						</div>
+
+
+	                </div>
+	            </t>
+	        </t>
+    	</t>
+</template>
+	</data>
+</openerp>

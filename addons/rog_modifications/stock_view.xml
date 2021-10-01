@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+       <record id="view_picking_form_extend_rog" model="ir.ui.view">
+            <field name="name">stock.picking.form.extend.rog</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form" />
+            <field name="arch" type="xml">
+               <field name="location_dest_id" position="after">
+                    <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                        <field name="hr_department_id" domain="[('is_show_other_apps','=',True)]"  options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+
+               </field>
+
+
+            </field>
+        </record>
+
+        <record id="view_picking_throughput_form_extend_rog" model="ir.ui.view">
+            <field name="name">stock.picking.throughput.form.extend.rog</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="kin_loading.view_picking_throughput_form" />
+            <field name="arch" type="xml">
+               <field name="location_dest_id" position="after">
+                    <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                        <field name="hr_department_id" domain="[('is_show_other_apps','=',True)]"  options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+                </field>
+            </field>
+        </record>
+
+         <record id="view_picking_internal_use_form_extend_rog" model="ir.ui.view">
+            <field name="name">stock.picking.internal.use.form.extend.rog</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="kin_loading.view_picking_internal_use_form" />
+            <field name="arch" type="xml">
+               <field name="location_dest_id" position="after">
+                    <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                        <field name="hr_department_id" domain="[('is_show_other_apps','=',True)]"  options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+                </field>
+            </field>
+        </record>
+
+         <record id="view_picking_depot_form_extend_rog" model="ir.ui.view">
+            <field name="name">stock.picking.form.depot.extend.rog</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="kin_loading.view_picking_depot_form" />
+                <field name="arch" type="xml">
+                   <field name="location_dest_id" position="after">
+                        <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                            <field name="hr_department_id" domain="[('is_show_other_apps','=',True)]"  options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                            <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+
+                   </field>
+
+                </field>
+        </record>
+
+
+        <record id="view_inventory_form_extend_rog" model="ir.ui.view">
+            <field name="name">stock.inventory.form.extend.rog</field>
+            <field name="model">stock.inventory</field>
+            <field name="inherit_id" ref="stock.view_inventory_form" />
+            <field name="arch" type="xml">
+                <field name="filter" position="after" >
+                    <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                        <field name="hr_department_id" domain="[('is_show_other_apps','=',True)]" options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+                </field>
+
+            </field>
+        </record>
+
+         <record id="view_stock_landed_cost_form_extend_rog" model="ir.ui.view">
+            <field name="name">stock.landed.cost.form.extend.rog</field>
+            <field name="model">stock.landed.cost</field>
+            <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form" />
+            <field name="arch" type="xml">
+                <field name="picking_ids" position="after" >
+                    <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                        <field name="hr_department_id" domain="[('is_show_other_apps','=',True)]" options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+                </field>
+            </field>
+        </record>
+
+          <record id="view_picking_form_extend_rog" model="ir.ui.view">
+            <field name="name">stock.picking.form.extend.rog</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form" />
+            <field name="arch" type="xml">
+                 <button name="%(stock.act_stock_return_picking)d"  position="before" >
+                    <button name="button_bank_inspection_on_discharged_product" string="Bank Inspection on Discharged Product" states="done" type="object" groups="rog_modifications.group_receive_bank_inspection_on_discharged_product_email_notification" />
+                    <button name="button_bank_monitoring_stock"  string="Bank Monitoring of Stock" states="done,bank_inspection_on_discharged_product" type="object" groups="rog_modifications.group_receive_bank_monitoring_stock_email_notification" />
+                </button>
+
+                <button name="%(stock.act_stock_return_picking)d"  position="attributes" >
+                    <attribute name="states" >bank_inspection_on_discharged_product,done,bank_monitoring_stock</attribute>
+                </button>
+
+                <field name="backorder_id" position="after" >
+                     <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                        <field name="hr_department_id"  domain="[('is_show_other_apps','=',True)]" options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+
+                </field>
+                <field name="return_picking_ids" position="after" >
+                      <field name="ullage_bdischarge_mt"  />
+                                <field name="ullage_bdischarge_ltrs" />
+                                <field name="ullage_report_ltrs" />
+                </field>
+            </field>
+        </record>
+
+         <record id="view_throughput_receipt_form_extend_rog" model="ir.ui.view">
+            <field name="name">stock.picking.throughput.receipt.form.extend.rog</field>
+            <field name="model">kin.throughput.receipt</field>
+            <field name="inherit_id" ref="kin_loading.view_throughput_receipt_form" />
+            <field name="arch" type="xml">
+               <field name="user_validated_date" position="after">
+                    <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                        <field name="hr_department_id" domain="[('is_show_other_apps','=',True)]"  options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+                </field>
+            </field>
+        </record>
+
+
+        <record id="view_internal_use_form_extend_rog" model="ir.ui.view" >
+            <field name="name" >kin.internal.use.form.extend.rog</field>
+            <field name="model">kin.internal.use</field>
+            <field name="inherit_id" ref="kin_loading.view_internal_use_form" />
+            <field name="arch" type="xml">
+               <field name="user_validated_date" position="after">
+                    <field name="is_ssd_sbu" widget="radio" required="1" groups="rog_modifications.group_ssa_rog"  />
+                        <field name="hr_department_id" domain="[('is_show_other_apps','=',True)]"  options="{'no_open':True,'no_create':True}"  attrs="{'required': [('is_ssd_sbu', '=', 'ssd')], 'invisible': [('is_ssd_sbu', '!=', 'ssd')]}" />
+                        <field name="sbu_id" options="{'no_open':True,'no_create':True}" attrs="{'required': [('is_ssd_sbu', '=', 'sbu')],'invisible': [('is_ssd_sbu', '!=', 'sbu')]}"  />
+                </field>
+            </field>
+        </record>
+
+
+        </data>
+</openerp>

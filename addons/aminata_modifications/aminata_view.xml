@@ -1,0 +1,1284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <menuitem id="menu_aminata_retail_operation" name="Aminata Retail Operations"   groups="aminata_modifications.group_show_retail_operation_aminata" sequence="1" web_icon="kin_retail_station_general,static/description/icon.png" />
+        <menuitem id="menu_stock_level_aminata_retail" name="Stock Level" parent="menu_aminata_retail_operation" sequence="1" action="stock.quantsact" groups="aminata_modifications.group_show_current_stock_level_retail_aminata"/>
+          <menuitem id="menu_stock_card_aminata_retail" name="Stock Card" parent="menu_aminata_retail_operation" sequence="1" action="opnsynid_stock_card_aeroo_report.print_stock_card_action" groups="aminata_modifications.group_show_stock_card_retail_aminata"/>
+       <record id="action_account_debt_line_aminata" model="ir.actions.act_window">
+        <field name="name">Account Debt Lines</field>
+        <field name="res_model">account.debt.line</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,graph,pivot</field>
+        <field name="context">{'search_default_grppartner': 1}</field>
+    </record>
+
+
+        <record id="view_fixing_table_tree" model="ir.ui.view" >
+            <field name="name" >fixing.table.tree</field>
+            <field name="model">fixing.table</field>
+            <field name="arch" type="xml" >
+                <tree string="Fixing Table" editable="bottom"  create="false" edit="false" delete="false" >
+                    <field name="fixing_date" />
+                    <field name="product_id"  />
+                    <field name="mt_qty" sum="Total" />
+                    <field name="platt_price"  />
+                    <field name="premium_price" />
+                    <field name="line_price"  />
+                    <field name="line_amount" sum="Total" />
+                    <field name="company_id" readonly="1" />
+                </tree>
+            </field>
+        </record>
+
+         <record id="view_fixing_table_filter" model="ir.ui.view">
+            <field name="name">fixing.table.select</field>
+            <field name="model">fixing.table</field>
+            <field name="arch" type="xml">
+                <search string="Fixing Table">
+                    <group expand="0" string="Group By">
+                        <filter string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter string="AGO Purchase Contract" domain="[]" context="{'group_by':'ago_purchase_contract_id'}"/>
+                        <filter string="PMS Purchase Contract" domain="[]" context="{'group_by':'pms_purchase_contract_id'}"/>
+
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_fixing_table_form" model="ir.actions.act_window" >
+            <field name="name" >Fixing Table</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">fixing.table</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,pivot</field>
+            <field name="search_view_id" ref="view_fixing_table_filter"/>
+        </record>
+
+        <menuitem id="menu_stock_fixing_table_form" name="Fixing Table Lines Report" parent="purchase.menu_procurement_management" sequence="0" action="action_fixing_table_form"  groups="aminata_modifications.group_show_purchase_contract_menu" />
+
+
+         <record id="view_purchase_contract_form" model="ir.ui.view" >
+            <field name="name" >purchase.contract.form</field>
+            <field name="model">purchase.contract</field>
+            <field name="arch" type="xml" >
+                <form string="Purchase Contract" >
+                    <header>
+                        <button name="%(action_create_po)d" type="action" string="Create PO / Stock Release based on Fixing Table"   class="oe_highlight" groups="aminata_modifications.group_show_create_po_stock_release_fixing_table_button" />
+                        <button name="action_create_po" type="object" string="Create PO / Stock Release"   groups="aminata_modifications.group_show_create_po_stock_release_button" />
+                        <!--<button name="action_cancel" states="validate" type="object" string="Cancel" confirm="Are you sure you want to Cancel the document?" groups="base.group_no_one" />-->
+                        <!--<button name="action_draft" states="cancel" type="object" string="Reset to Draft" groups="kin_retail_station.group_purchase_contract"   />-->
+                        <!--<field name="state" widget="statusbar"  />-->
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                             <button type="object"  name="btn_view_purchase_order" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('purchase_order_count', '=', 0)]}"   >
+                                <field name="purchase_order_count" widget="statinfo" string="Purchase Order"/>
+                            </button>
+                        </div>
+
+                        <div class="oe_title">
+                             <label for="name" string="Vessel"   />
+                            <h1>
+                                <field name="name" required="1" />
+                            </h1>
+                        </div>
+                        <group col="4">
+                            <field name="partner_id" domain="[('supplier','=',True)]" />
+                            <field name="date_contract" required="1" />
+                             <field name="date_expiry" required="1" />
+                            <field name="interest_charge" />
+                            <field name="company_id" readonly="1" />
+                        </group>
+                        <group>
+                        <group col="2" string="PMS" >
+                            <field name="qty_contract_pms"  />
+                           <field name="qty_released_pms"  />
+                            <field name="qty_bal_pms" />
+                            <field name="premium_freight_insurance_mt_pms" />
+                            <field name="total_amount_pms" />
+                             <field name="total_fixed_pms"  groups="aminata_modifications.group_show_create_po_stock_release_fixing_table_button" />
+                            <field name="balance_to_fix_pms"  groups="aminata_modifications.group_show_create_po_stock_release_fixing_table_button" />
+                            <field name="amount_fixed_pms"  groups="aminata_modifications.group_show_create_po_stock_release_fixing_table_button" />
+                            <field name="average_price_pms" groups="aminata_modifications.group_show_create_po_stock_release_fixing_table_button" />
+                        </group>
+                        <group col="2" string="AGO" >
+                             <field name="qty_contract_ago"  />
+                           <field name="qty_released_ago"  />
+                            <field name="qty_bal_ago" />
+                            <field name="premium_freight_insurance_mt_ago" />
+                            <field name="total_amount_ago" />
+                                                        <field name="total_fixed_ago" groups="aminata_modifications.group_show_create_po_stock_release_fixing_table_button" />
+                            <field name="balance_to_fix_ago"  groups="aminata_modifications.group_show_create_po_stock_release_fixing_table_button" />
+                            <field name="amount_fixed_ago"  groups="aminata_modifications.group_show_create_po_stock_release_fixing_table_button" />
+                            <field name="average_price_ago" groups="aminata_modifications.group_show_create_po_stock_release_fixing_table_button" />
+                        </group>
+                        </group>
+                        <label for="note" string="Note"  />
+                         <field name="note"  />
+                        <notebook>
+                            <page  string="PMS Stock Releases" >
+                                <field  name="pms_purchase_order_line_ids" readonly="1"  />
+                            </page>
+                            <page  string="AGO Stock Releases" >
+                                <field  name="ago_purchase_order_line_ids" readonly="1"  />
+                            </page>
+                            <page  string="PMS Fixing Table" groups="aminata_modifications.group_show_create_po_stock_release_fixing_table_button" >
+                                <field  name="pms_fixing_table_ids"   >
+                                        <tree string="Fixing Table" editable="bottom"   >
+                                            <field name="fixing_date" />
+                                            <field name="product_id"  domain="[('white_product','in',['pms','ago','kero'])]" options="{'no_open':True,'no_create':True}" />
+                                            <field name="mt_qty" sum="Total" />
+                                            <field name="platt_price"  />
+                                            <field name="premium_price" />
+                                            <field name="line_price"  />
+                                            <field name="line_amount" sum="Total" />
+                                        </tree>
+                                </field>
+                            </page>
+                            <page  string="AGO Fixing Table" groups="aminata_modifications.group_show_create_po_stock_release_fixing_table_button" >
+                                <field  name="ago_fixing_table_ids"   >
+                                        <tree string="Fixing Table" editable="bottom"   >
+                                            <field name="fixing_date" />
+                                            <field name="product_id"  domain="[('white_product','in',['pms','ago','kero'])]" options="{'no_open':True,'no_create':True}" />
+                                            <field name="mt_qty" sum="Total" />
+                                            <field name="platt_price"  />
+                                            <field name="premium_price" />
+                                            <field name="line_price"  />
+                                            <field name="line_amount" sum="Total" />
+                                        </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="view_kin_purchase_contract_tree" model="ir.ui.view" >
+            <field name="name" >purchase.contract.tree</field>
+            <field name="model">purchase.contract</field>
+            <field name="arch" type="xml" >
+                <tree string="Purchase Contract" >
+                    <field name="name" />
+                     <field name="partner_id" />
+                           <field name="partner_id" domain="[('supplier','=',True)]" />
+                            <field name="date_contract"  />
+                             <field name="date_expiry" />
+                            <field name="interest_charge" />
+                            <field name="qty_contract_pms"   />
+                           <field name="qty_released_pms"  />
+                            <field name="qty_bal_pms" />
+                     <field name="qty_contract_ago"  />
+                           <field name="qty_released_ago"  />
+                            <field name="qty_bal_ago" />
+
+                </tree>
+            </field>
+        </record>
+
+         <record id="view_kin_purchase_contract_filter" model="ir.ui.view">
+            <field name="name">purchase.contract.select</field>
+            <field name="model">purchase.contract</field>
+            <field name="arch" type="xml">
+                <search string="Purchase Contract">
+                    <field name="name" string="ID/Vendor"  filter_domain="['|',('name','ilike',self),('partner_id','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Vendor" domain="[]" context="{'group_by':'partner_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_purchase_contract_form" model="ir.actions.act_window" >
+            <field name="name" >Purchase Contract</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.contract</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <!--<field name="context">{'search_default_grpstatus': 1}</field>-->
+            <field name="search_view_id" ref="view_kin_purchase_contract_filter"/>
+        </record>
+
+        <menuitem id="menu_stock_purchase_contract_form" name="Purchase Contract" parent="purchase.menu_procurement_management" sequence="0" action="action_purchase_contract_form"  groups="aminata_modifications.group_show_purchase_contract_menu" />
+
+
+
+         <record id="purchase_order_form_contract_extend" model="ir.ui.view">
+            <field name="name">purchase.order.form.contract.extend</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="kin_purchase.purchase_order_form_extend" />
+            <field name="arch" type="xml">
+                 <field name="partner_ref" position="after" >
+                     <field name="purchase_contract_id"  attrs="{'readonly':[('state','!=','draft')]}" />
+                 </field>
+
+                <xpath expr="//button[@name='button_confirm'][@states='sent']" position="attributes" >
+                    <attribute name="string" >Create PO / Stock Release</attribute>
+                    <attribute name="class" >btn-primary</attribute>
+                </xpath>
+                <xpath expr="//button[@name='button_confirm'][@states='draft']" position="attributes" >
+                    <attribute name="string" >Create PO / Stock Release</attribute>
+                    <attribute name="class" >btn-primary</attribute>
+                </xpath>
+
+                 <!--<field name="product_id" position="after"  >-->
+                     <!--<field name="pms_purchase_contract_id" />-->
+                     <!--<field name="ago_purchase_contract_id" />-->
+                <!--</field>-->
+
+                 <field name="product_uom" position="after"  >
+                    <field name="conv_rate" groups="aminata_modifications.group_show_conversion_rate_field" />
+                 </field>
+
+
+
+
+
+            </field>
+         </record>
+
+
+         <record id="product_template_form_extend_aminata" model="ir.ui.view">
+            <field name="name">product.template.form.extend.aminata</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <page name="notes" position="before" >
+                    <page string="Station Sales Prices">
+                        <field name="station_sales_price_ids" >
+                            <tree editable="bottom">
+                                <field name="stock_location_id"  required="1" options="{'no_open':True,'no_create':True}" />
+                                <field name="product_id"   domain="[('id','=',parent.id)]" required="1" options="{'no_open':True,'no_create':True}" />
+                                <field name="sale_price" required="1" />
+                                <field name="currency_id" invisible="1"  />
+                            </tree>
+                        </field>
+                    </page>
+                </page>
+            </field>
+        </record>
+
+
+         <record id="view_res_partner_aminata_extend" model="ir.ui.view">
+            <field name="name" >res.partner.aminata.extend</field>
+            <field name="model" >res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                 <field name="street" position="attributes" >
+                     <attribute name="attrs" >{'required': 1}</attribute>
+                 </field>
+                 <field name="phone" position="attributes" >
+                     <attribute name="attrs" >{'required': 1}</attribute>
+                 </field>
+
+                <field name="phone" position="before" >
+                    <field name="warehouse_id"   options="{'no_open':True,'no_create':True}" />
+                    <field name="is_aminata_retail_reserve"  />
+                    <field name="is_aminata_sons" />
+                    <field name="is_service_station" />
+                    <field  name="internal_location_id" attrs="{'required':[('is_service_station','=',True)],'invisible':[('is_service_station','=',False)]}" />
+                    <field name="is_service_station_mgr" />
+                    <field name="station_mgr_location_id"  attrs="{'required':[('is_service_station_mgr','=',True)],'invisible':[('is_service_station_mgr','=',False)]}"  />
+
+                </field>
+
+            </field>
+        </record>
+
+         <record id="view_kin_delivery_register_form_extend_aminata" model="ir.ui.view" >
+            <field name="name" >kin.delivery.register.form.extend.aminata</field>
+            <field name="model">kin.delivery.register</field>
+            <field name="inherit_id" ref="kin_delivery.view_kin_delivery_register_form" />
+            <field name="arch" type="xml" >
+                    <field name="user_id" position="after" >
+                        <field name="is_duty_free" />
+                    </field>
+            </field>
+         </record>
+
+         <record id="view_kin_delivery_register_aminata_tree" model="ir.ui.view" >
+            <field name="name" >kin.delivery.register.tree.aminata</field>
+            <field name="model">kin.delivery.register</field>
+             <field name="inherit_id" ref="kin_delivery.view_kin_delivery_register_tree" />
+            <field name="arch" type="xml" >
+                 <field name="partner_id" position="after" >
+                        <field name="is_duty_free" />
+                    </field>
+            </field>
+         </record>
+
+
+          <record id="view_picking_form_aminata_extend" model="ir.ui.view">
+            <field name="name">stock.picking.form.aminata.extend</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form" />
+            <field name="arch" type="xml">
+                <field name="origin"  position="after" >
+                     <field name="ref_do" />
+                    <field name="ref_tlo" />
+                    <field  name="driver_name" />
+                </field>
+
+               <notebook position="inside">
+                    <page string="Internal Transfer Information" attrs="{'invisible': [('picking_type_code', '!=', 'internal')]}" >
+                        <group col="4">
+                            <field name="attn" />
+                            <field name="distributor_id" options="{'no_open':True,'no_create':True}"/>
+                            <field string="Transfer Date" name="transfer_date" />
+                            <field name="transfer_no" />
+                            <field name="lprc_manager_name" />
+                            <field name="lprc_manager_designation" />
+                            <field name="cc_internal_transfer" />
+                            <field name="document_copy_type" />
+                        </group>
+                    </page>
+                </notebook>
+
+
+            </field>
+        </record>
+
+          <record model="ir.ui.view" id="view_company_aminata_transfer">
+                    <field name="name">res.company.form.aminata.transfer</field>
+                    <field name="inherit_id" ref="base.view_company_form"/>
+                    <field name="model">res.company</field>
+                    <field name="arch" type="xml">
+                        <notebook position="inside">
+                            <page string="Aminata Transfers">
+                                <group>
+                                    <field name="attn" />
+                                    <field name="distributor_id" options="{'no_open':True,'no_create':True}"/>
+                                    <field name="lprc_manager_name" />
+                                    <field name="lprc_manager_designation" />
+                                    <field name="cc_internal_transfer" />
+                                    <field name="document_copy_type" />
+                                    <field name="is_enable_product_received_register_ido" />
+                                </group>
+                            </page>
+                            <page string="Other Parameters" >
+                                    <group>
+                                        <field name="restrict_days" />
+                                    </group>
+                            </page>
+
+                        </notebook>
+
+                    </field>
+                </record>
+
+        <record model="ir.ui.view" id="view_company_inherit_form_purchase_aminata_extend">
+            <field name="name">res.company.form.purchase.extend</field>
+            <field name="inherit_id" ref="kin_purchase.view_company_inherit_form_purchase_extend"/>
+            <field name="model">res.company</field>
+            <field name="arch" type="xml">
+                    <field name="is_create_invoice_after_po_confirm" position="after" >
+                                <field name="ago_product_id"  domain="[('white_product','in',['pms','ago','kero'])]" options="{'no_open':True,'no_create':True}" />
+                                    <field name="pms_product_id"  domain="[('white_product','in',['pms','ago','kero'])]" options="{'no_open':True,'no_create':True}" />
+                            </field>
+
+            </field>
+        </record>
+
+         <record id="view_employee_form_aminata_extend" model="ir.ui.view">
+            <field name="name">hr.employee.form.aminata.extend</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form" />
+            <field name="arch" type="xml">
+                <field name="bank_account_id" position="after" >
+                    <field name="bank_account_number_lrd" />
+                    <field name="bank_account_number_usd" />
+                </field>
+            </field>
+          </record>
+
+
+        <record id="view_hr_employee_grade_form_extend_aminata" model="ir.ui.view">
+            <field name="name">hr.payroll.structure.form.extend.aminata</field>
+            <field name="model">hr.payroll.structure</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_employee_grade_form" />
+            <field name="arch" type="xml">
+                <field name="parent_id" position="after" >
+                    <field name="lrd_rate" />
+                </field>
+            </field>
+        </record>
+
+         <!--<record id="hr_contract_form_inherit_extend_aminata" model="ir.ui.view">-->
+            <!--<field name="name">hr.contract.view.form.inherit.extend.aminata</field>-->
+            <!--<field name="model">hr.contract</field>-->
+            <!--<field name="inherit_id" ref="hr_payroll.hr_contract_form_inherit"/>-->
+            <!--<field name="arch" type="xml">-->
+                    <!--<field name="struct_id" position="after" >-->
+                        <!--<field name="lrd_rate" />-->
+                    <!--</field>-->
+            <!--</field>-->
+        <!--</record>-->
+
+         <record id="hr_contract_view_form_extend_aminata" model="ir.ui.view">
+            <field name="name">hr.contract.view.form.extend.aminata</field>
+            <field name="model">hr.contract</field>
+             <field name="inherit_id" ref="hr_contract.hr_contract_view_form" />
+            <field name="arch" type="xml">
+                 <group name="duration_group" position="after" >
+                     <group string="Others" >
+                          <field name="hourly_rate" />
+                          <field name="lrd_rate" invisible="1"   />
+                     </group>
+
+                 </group>
+            </field>
+         </record>
+
+
+         <!-- Stock Move -->
+        <record id="view_move_form_retail_station_aminata_extend" model="ir.ui.view">
+            <field name="name">stock.move.form.retail.station.aminata.extend</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_form" />
+            <field name="arch" type="xml">
+                    <group name="destination_grp" position="after" >
+                        <group string="Product Distribution" colspan="4">
+                            <field name="lift_id" />
+                        </group>
+                    </group>
+            </field>
+        </record>
+
+
+         <record id="view_picking_form_lift_aminata_extend" model="ir.ui.view">
+            <field name="name">stock.picking.form.lift.aminata.extend</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="kin_lifting.view_picking_form_lift_extend" />
+            <field name="arch" type="xml">
+                <field name="customer_invoice_id" position="after" >
+                    <field name="move_id" groups="stock.group_stock_manager" readonly="1" />
+                    <field name="prr_id" groups="kin_retail_station_general.group_retail_station_management" readonly="1" />
+                </field>
+            </field>
+         </record>
+
+
+
+         <record id="view_product_received_register_other_company_aminata_form" model="ir.ui.view" >
+            <field name="name" >product.received.register.other.company.aminata.form</field>
+            <field name="model">product.received.register</field>
+             <field name="inherit_id" ref="kin_retail_station_general.view_product_received_register_other_company_form" />
+            <field name="arch" type="xml" >
+                     <field name="loading_date" position="attributes" >
+                         <attribute name="string" >Lifting Date</attribute>
+                     </field>
+                <field name="waybill_no" position="attributes" >
+                         <attribute name="string" >D.O Number</attribute>
+                     </field>
+                <field name="ticket_ref" position="attributes" >
+                         <attribute name="string" >I.D.O Number</attribute>
+                     </field>
+                <field name="quantity_loaded" position="attributes" >
+                         <attribute name="string" >Qty. Lifted (gals)</attribute>
+                     </field>
+                <field name="qty_received" position="attributes" >
+                         <attribute name="string" >Qty. Received (gals)</attribute>
+                     </field>
+                <field name="qty_discrepancy" position="attributes" >
+                         <attribute name="string" >Qty. Difference (gals)</attribute>
+                     </field>
+                 <field name="receiving_date"  position="attributes" >
+                        <attribute name="required" >1</attribute>
+                    </field>
+                    <field name="truck_no"  position="attributes" >
+                        <attribute name="required" >1</attribute>
+                    </field>
+                  <field name="driver_name"  position="attributes" >
+                        <attribute name="invisible" >1</attribute>
+                    </field>
+                <field name="driver_mobile_no"  position="attributes" >
+                        <attribute name="invisible" >1</attribute>
+                    </field>
+                <field name="from_stock_location_id"  position="attributes" >
+                        <attribute name="invisible" >1</attribute>
+                    </field>
+                <field name="product_uom"  position="attributes" >
+                        <attribute name="invisible" >1</attribute>
+                    </field>
+                <field name="product_price"  position="attributes" >
+                        <attribute name="invisible" >1</attribute>
+                    </field>
+                <field name="amt_discrepancy"  position="attributes" >
+                        <attribute name="invisible" >1</attribute>
+                    </field>
+                <field name="resolution_message"  position="attributes" >
+                        <attribute name="invisible" >1</attribute>
+                    </field>
+                <field name="resolution_notice_date"  position="attributes" >
+                        <attribute name="invisible" >1</attribute>
+                    </field>
+                <field name="other_ref"  position="attributes" >
+                        <attribute name="invisible" >1</attribute>
+                    </field>
+                <field name="user_id"  position="attributes" >
+                        <attribute name="invisible" >1</attribute>
+                    </field>
+            </field>
+         </record>
+
+
+        <record id="view_product_received_register_aminata_tree" model="ir.ui.view" >
+            <field name="name" >product.received.register.tree</field>
+            <field name="model">product.received.register</field>
+            <field name="inherit_id" ref="kin_retail_station_general.view_product_received_register_tree" />
+            <field name="arch" type="xml" >
+
+                <field name="waybill_no" position="attributes" >
+                         <attribute name="string" >D.O Number</attribute>
+                     </field>
+
+                <field name="quantity_loaded" position="attributes" >
+                         <attribute name="string" >Qty. Lifted (gals)</attribute>
+                     </field>
+                <field name="qty_received" position="attributes" >
+                         <attribute name="string" >Qty. Received (gals)</attribute>
+                     </field>
+                <field name="qty_discrepancy" position="attributes" >
+                         <attribute name="string" >Qty. Difference (gals)</attribute>
+                     </field>
+
+                 <field name="driver_name"  position="attributes" >
+                        <attribute name="invisible" >1</attribute>
+                    </field>
+                <field name="driver_mobile_no"  position="attributes" >
+                        <attribute name="invisible" >1</attribute>
+                    </field>
+                <field name="from_stock_location_id"  position="attributes" >
+                        <attribute name="invisible" >1</attribute>
+                    </field>
+
+                 <field name="waybill_no" position="after" >
+                         <field name="ticket_ref" string="I.D.O Number" />
+                     </field>
+
+            </field>
+        </record>
+
+
+      <record id="invoice_form_aminata" model="ir.ui.view">
+                <field name="name">account.invoice.form.aminata</field>
+                <field name="model">account.invoice</field>
+                <field name="inherit_id" ref="account.invoice_form" />
+                <field name="arch" type="xml">
+                     <field name="user_id"  position="after" >
+                        <field name="ref_do" />
+                        <field name="ref_tlo" />
+                         <field name="delivery_location_id" />
+                    </field>
+
+                </field>
+      </record>
+
+
+        <record id="invoice_supplier_form_aminata" model="ir.ui.view">
+            <field name="name">account.invoice.supplier.form.aminata</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form" />
+            <field name="arch" type="xml">
+                <field name="currency_id"  position="after" >
+                        <field name="ref_do" />
+                        <field name="ref_tlo" />
+                    </field>
+            </field>
+        </record>
+
+
+          <record id="view_move_form_extend_aminata" model="ir.ui.view" >
+            <field name="name" >account.move.form.extend.aminata</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form" />
+            <field name="arch" type="xml">
+               <button name="post" position="before" >
+                    <button name="button_first_approval" states="first_approval" string="ACOMS First Approval" type="object" class="oe_highlight" groups="aminata_modifications.group_acoms_first_approver"/>
+                    <button name="button_second_approval" states="second_approval" string="ACOMS Second Approval" type="object" class="oe_highlight" groups="aminata_modifications.group_acoms_second_approver"/>
+               </button>
+            </field>
+        </record>
+
+
+         <record id="view_stock_location_form_extend_aminata" model="ir.ui.view">
+            <field name="name">stock.location.form.extend.aminata</field>
+            <field name="model">stock.location</field>
+            <field name="inherit_id" ref="stock.view_location_form"  />
+            <field name="arch" type="xml">
+                <field name="return_location" position="after" >
+                    <field name="is_internal_parent_view" />
+                    <field name="is_internal_source_location" />
+                </field>
+            </field>
+    </record>
+
+ <!-- Station Lifting Order -->
+    <record id="station_lifting_order_form_view" model="ir.ui.view">
+            <field name="name">station.lifting.order.form</field>
+            <field name="model">station.lifting.order</field>
+            <field name="arch" type="xml">
+               <form string="Station Lifting Order">
+                    <header>
+                        <button name="action_confirm" type="object" states="draft" string="Confirm and Submit"   class="oe_highlight" groups="aminata_modifications.group_lifting_order_aminata_confirm_btn"  />
+                        <button name="action_approve" type="object" states="confirm" string="Approve"   class="oe_highlight" groups="aminata_modifications.group_lifting_order_aminata_approve_btn"   />
+                        <button name="action_draft" states="confirm,approve" type="object" string="Reset to Draft" groups="aminata_modifications.group_lifting_order_aminata_approve_btn"  />
+                        <button name="action_create_station_distribution" states="approve" type="object" class="oe_highlight" string="Create Mother D.O"   groups="aminata_modifications.group_show_create_service_station_distr_button" />
+                        <field name="state" widget="statusbar"  />
+                    </header>
+                <sheet>
+                 <div class="oe_button_box" name="button_box">
+                            <button name="btn_view_station_distribution"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                attrs="{'invisible': [('station_distr_count', '=', 0)]}" >
+                                <field  name="station_distr_count" widget="statinfo" string="Mother D.O(s)"/>
+                            </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                     <group col="4">
+                         <field name="product_id" required="1" domain="[('white_product','in',['pms','ago','kero'])]" options="{'no_open':True,'no_create':True}"   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                         <field name="date" required="1"  attrs="{'readonly': [('state', '!=', 'draft')]}"  />
+                         <field name="product_uom" required="1" readonly="1" />
+                         <field name="total_product_qty"  required="1"  attrs="{'readonly': [('state', '!=', 'draft')]}"  />
+                         <field name="current_pump_price"  required="1" invisible="1"  />
+                         <field name="user_id"  required="1" readonly="1" />
+                         <field name="company_id" readonly="1" />
+                     </group>
+                     <notebook>
+                        <page string="Station Lifting Order Lines"   >
+                            <field name="lifting_order_line_ids"  attrs="{'readonly': [('state', '!=', 'draft')]}"  >
+                                <tree editable="bottom"   >
+                                    <field name="partner_id" required="1" domain="[('is_service_station','=',True)]"  options="{'no_open':True,'no_create':True}" />
+                                    <field name="requested_qty" sum="Total" required="1" />
+                                    <field name="lifted_qty" sum="Total" readonly="1" />
+                                    <field name="balance_qty" sum="Total"  />
+                                </tree>
+                            </field>
+                        </page>
+                     </notebook>
+                </sheet>
+                   <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+               </form>
+            </field>
+      </record>
+
+        <record id="view_station_lifting_order_aminata_tree" model="ir.ui.view" >
+            <field name="name" >station.lifting.order.tree</field>
+            <field name="model">station.lifting.order</field>
+            <field name="arch" type="xml" >
+                <tree string="Station Lifting Order"   >
+                    <field name="name" />
+                    <field name="date"  />
+                    <field name="product_id"  />
+                    <field name="product_uom"  />
+                    <field name="total_product_qty"  />
+                    <field name="user_id" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+         <record id="view_station_lifting_order_filter" model="ir.ui.view">
+            <field name="name">station.lifting.order.select</field>
+            <field name="model">station.lifting.order</field>
+            <field name="arch" type="xml">
+                <search string="Station Lifting Order Filter">
+                    <field name="name" string="ID"  filter_domain="[('station_lifting_order_id','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter name="grpstatus" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                        <filter name="grp_year"  string="Year" domain="[]" context="{'group_by':'date:year'}"/>
+                        <filter name="grp_month"  string="Month" domain="[]" context="{'group_by':'date:month'}"/>
+                        <filter name="grp_product" string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_station_lifting_order_form" model="ir.actions.act_window" >
+            <field name="name" >Service Station Lifting Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">station.lifting.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+<!--             <field name="context">{'search_default_grp_month':1,"search_default_grp_year":1,'search_default_grp_product':1}</field>-->
+            <field name="search_view_id" ref="view_station_lifting_order_filter"/>
+        </record>
+
+        <menuitem id="menu_station_lifting_order_form" name="Lifting Order" parent="menu_aminata_retail_operation" sequence="3"  action="action_station_lifting_order_form" groups="aminata_modifications.group_station_lifting_order_aminata" />
+
+
+
+        <!-- Station distribution (Mother D.O) -->
+         <record id="station_distribution_form_view" model="ir.ui.view">
+            <field name="name">station.distribution.form</field>
+            <field name="model">station.distribution</field>
+            <field name="arch" type="xml">
+               <form string="Mother D.O">
+                    <header>
+<!--                          <button name="action_done" type="object" states="draft" string="Done"   class="oe_highlight"  />-->
+<!--                         <button name="action_draft" states="done" type="object" string="Reset to Draft"  />-->
+                         <button name="action_print_mdo"  states="progress,done"  string="Print Mother D.O" class="oe_highlight"  type="object"    />
+                        <field name="state" widget="statusbar"  />
+                    </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                             <button type="object"  name="btn_view_stock_pick" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('stock_pick_count', '=', 0)]}"  groups="stock.group_stock_manager" >
+                                <field name="stock_pick_count" widget="statinfo" string="Shortage Transfer"/>
+                            </button>
+                        </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                     <group col="4">
+                         <field name="product_id" required="1" domain="[('white_product','in',['pms','ago','kero'])]" attrs="{'readonly': [('state', '=', 'done')]}" />
+                         <field name="date" required="1" attrs="{'readonly': [('state', '=', 'done')]}"  />
+                         <field name="product_uom" required="1" readonly="1" />
+                         <field name="product_qty"  required="1" attrs="{'readonly': [('state', '=', 'done')]}" />
+                          <field name="trucker_id" required="1" domain="[('state','=','approve')]"   options="{'no_open':True,'no_create':True}" attrs="{'readonly': [('state', '=', 'done')]}" />
+                         <field name="partner_truck_id" readonly="1" />
+                         <field name="driver_name" attrs="{'readonly': [('state', '=', 'done')]}"  required="1" />
+                         <field name="is_duty_free"  />
+                         <field name="user_id"  required="1" readonly="1" />
+                         <field name="company_id" readonly="1" />
+                         <field name="station_lifting_order_id"  readonly="1"  />
+                          <field name="lifting_order_partner_ids" invisible="1" />
+                    </group>
+                     <notebook>
+                        <page string="Instant Delivery Orders"   >
+                            <field name="station_product_dist_ids"    >
+                                <tree editable="bottom"   >
+                                    <field name="name" readonly="1" string="ID" />
+                                    <field name="partner_id" required="1" domain="[('id','in',parent.lifting_order_partner_ids and parent.lifting_order_partner_ids[0][2] or [])]"  attrs="{'readonly': [('state', '=', 'validate')]}" options="{'no_open':True,'no_create':True}" />
+                                     <field name="qty" required="1"  attrs="{'readonly': [('state', '=', 'validate')]}"  sum="Total" />
+                                    <field name="to_product_location_id"  required="1"  attrs="{'readonly': [('state', '=', 'validate')]}"   options="{'no_open':True,'no_create':True}" />
+                                    <field name="delivery_rate" />
+                                     <field name="delivered_qty"  attrs="{'readonly': [('state', '=', 'validate')]}" sum="Total" />
+                                    <field name="from_product_location_id" invisible="1" />
+                                    <field name="source_location_id"  invisible="1" />
+                                    <field name="destination_location_id"  invisible="1" />
+                                    <button name="action_transit" type="object" states="draft" string="Mark In Transit" groups="aminata_modifications.group_internal_transfer_aminata_transit_btn"  class="oe_highlight"  />
+                                    <button name="action_print_ido"  states="transit,validate"  string="Print I.D.O" class="oe_highlight"  type="object"    />
+                                    <button name="action_validate" type="object" states="transit" string="Validate Delivered Qty." groups="aminata_modifications.group_retail_ido_transfer_aminata_validate_btn"  class="oe_highlight" confirm="You are about to validate that the following product with the stated quantity. If you have not finished entering the required information, please click 'Cancel' button, otherwise click 'Ok' button" />
+                                     <button name="action_draft" states="transit" type="object" string="Reset to Draft" groups="aminata_modifications.group_internal_transfer_aminata"   />
+                                    <field name="state"  readonly="1" />
+                                </tree>
+
+                            </field>
+                     </page>
+                     <page string="Shortage Information" >
+                         <group col="4"  >
+                              <field name="total_lifted_qty" readonly="1" />
+                             <field name="total_delivered_qty" readonly="1" />
+                             <field name="total_shortage_qty" readonly="1" />
+                                <field name="sales_price" readonly="1" />
+                             <field name="is_shortage" readonly="1" />
+                             <field name="order_shortage_id" readonly="1" />
+                             <field name="shortage_invoice_id" readonly="1" />
+                         </group>
+                     </page>
+                     </notebook>
+
+                </sheet>
+                   <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+               </form>
+            </field>
+      </record>
+
+        <record id="view_station_distribution_aminata_tree" model="ir.ui.view" >
+            <field name="name" >station.distribution.tree</field>
+            <field name="model">station.distribution</field>
+            <field name="arch" type="xml" >
+                <tree string="Mother D.O"  create="0" delete="0" edit="0"    >
+                    <field name="name" />
+                    <field name="product_id"  />
+                    <field name="date"  />
+                    <field name="product_uom"  />
+                    <field name="product_qty"  />
+                    <field name="trucker_id" />
+                    <field name="partner_truck_id" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+         <record id="view_station_distribution_filter" model="ir.ui.view">
+            <field name="name">station.distribution.select</field>
+            <field name="model">station.distribution</field>
+            <field name="arch" type="xml">
+                <search string="Station Order Filter">
+                    <field name="name" string="ID"  filter_domain="[('name','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                         <filter name="grpstatus" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                        <filter name="grp_year"  string="Year" domain="[]" context="{'group_by':'date:year'}"/>
+                        <filter name="grp_month"  string="Month" domain="[]" context="{'group_by':'date:month'}"/>
+                        <filter name="grp_product" string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_station_distribution_form" model="ir.actions.act_window" >
+            <field name="name" >Mother Delivery Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">station.distribution</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+<!--             <field name="context">{'search_default_grp_month':1,"search_default_grp_year":1,'search_default_grp_product':1}</field>-->
+            <field name="search_view_id" ref="view_station_distribution_filter"/>
+        </record>
+
+        <menuitem id="menu_station_distribution_form" name="Mother D.Os" parent="menu_aminata_retail_operation" sequence="4"  action="action_station_distribution_form" groups="aminata_modifications.group_station_distribution_aminata" />
+
+
+
+        <!-- Station Product Distribution  (I.D.O)-->
+        <record id="view_station_product_distribution_aminata_form" model="ir.ui.view" >
+            <field name="name" >station.product.distribution.form</field>
+            <field name="model">station.product.distribution</field>
+            <field name="arch" type="xml" >
+                <form string="Service Station Product Distribution" >
+                    <header>
+                        <field name="state" widget="statusbar"  />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                             <button type="object"  name="btn_view_stock_pick" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('stock_pick_count', '=', 0)]}"  groups="stock.group_stock_manager" >
+                                <field name="stock_pick_count" widget="statinfo" string="Stock Transfer(s)"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1" />
+                            </h1>
+                        </div>
+                        <group col="4">
+                            <field name="partner_id" domain="[('is_service_station','=',True)]" required="1" options="{'no_open':True,'no_create':True}" />
+                            <field name="date_move" attrs="{'readonly': [('state', '!=', 'draft')]}"  required="1" />
+                            <field name="product_id"   required="1"  attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_open':True,'no_create':True}" />
+                            <field name="product_uom" readonly="1" />
+                            <field name="qty"  />
+                             <field name="delivered_qty"  attrs="{'readonly': [('state', '!=', 'draft')], 'invisible': [('state', '!=', 'transit')]}"  />
+                             <field name="source_location_id"  readonly="1" required="1"  />
+                              <field name="destination_location_id"   required="1" invisible="1" />
+                            <field name="user_id" readonly="1"  />
+                            <field name="note"  attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                        </group>
+                        <notebook>
+                            <page  string="Trucker / Shortage Information" >
+                                <group col="4" string="Trucker">
+                                    <field name="from_product_location_id"  readonly="1"   />
+                                     <field name="to_product_location_id"  attrs="{'readonly': [('state', '!=', 'draft')]}" required="1" options="{'no_open':True,'no_create':True}"  domain="[('name','!=','PST')]"/>
+                                     <field  name="delivery_rate"  readonly="1" />
+                                     <field  name="trucker_invoice_id"  readonly="1"  />
+                                </group>
+                            </page>
+                            <page  string="Other Information" >
+                                <group col="4">
+                                    <field name="create_date" readonly="1" />
+                                    <field name="user_confirmed_date" readonly="1" />
+                                    <field name="user_validate_id" readonly="1"  />
+                                    <field name="user_validated_date" readonly="1"  />
+                                    <field name="company_id" readonly="1" />
+                                </group>
+                            </page>
+                        </notebook>
+                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_station_product_distribution_aminata_tree" model="ir.ui.view" >
+            <field name="name" >station.product.distribution.tree</field>
+            <field name="model">station.product.distribution</field>
+            <field name="arch" type="xml" >
+                <tree string="Station Product Distribution"  create="0" delete="0" edit="0" >
+                    <field name="station_distribution_id" string="Mother D.O"/>
+                     <field name="name" string="I.D.O"/>
+                    <field name="date_move"  />
+                    <field name="product_id"  />
+                    <field name="product_uom"  />
+                    <field name="qty" />
+                     <field name="delivered_qty" />
+                    <field name="user_id" />
+                    <field name="source_location_id"  />
+                    <field name="destination_location_id" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+
+         <record id="view_station_product_distribution_filter" model="ir.ui.view">
+            <field name="name">station.product.distribution.select</field>
+            <field name="model">station.product.distribution</field>
+            <field name="arch" type="xml">
+                <search string="Station Distribution Filter">
+                    <field name="station_distribution_id" string="Mother D.O"  />
+                      <field name="name" string="I.D.O"  />
+                    <field name="destination_location_id" string="Service Station"  />
+                    <group expand="0" string="Group By">
+                        <filter string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                         <filter name="grpstatus" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                        <filter name="grp_year"  string="Year" domain="[]" context="{'group_by':'date_move:year'}"/>
+                        <filter name="grp_month"  string="Month" domain="[]" context="{'group_by':'date_move:month'}"/>
+                        <filter name="grp_product" string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_station_product_distribution_form" model="ir.actions.act_window" >
+            <field name="name" >I.D.O</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">station.product.distribution</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+             <field name="context">{'search_default_grp_month':1,"search_default_grp_year":1,'search_default_grp_product':1}</field>
+            <field name="search_view_id" ref="view_station_product_distribution_filter"/>
+        </record>
+
+        <menuitem id="menu_station_product_distribution_form" name="I.D.O Report" parent="menu_aminata_retail_operation" sequence="10"  action="action_station_product_distribution_form" groups="aminata_modifications.group_station_product_distribution_report_aminata" />
+
+
+  <!-- Station Internal Transfer  -->
+        <record id="view_internal_transfer_aminata_form" model="ir.ui.view" >
+            <field name="name" >aminata.internal.transfer.form</field>
+            <field name="model">aminata.internal.transfer</field>
+            <field name="arch" type="xml" >
+                <form string="Service Station Internal Transfer" >
+                    <header>
+                        <button name="action_confirm" type="object" states="draft" string="Confirm" groups="aminata_modifications.group_internal_transfer_aminata_confirm_btn"  class="oe_highlight"  />
+                        <button name="action_validate" type="object" states="confirm" string="Validate" groups="aminata_modifications.group_internal_transfer_aminata_validate_btn"  class="oe_highlight" confirm="You are about to validate that the following product with the stated quantity. If you have not finished entering the required information, please click 'Cancel' button, otherwise click 'Ok' button" />
+                        <!--<button name="action_cancel" states="validate" type="object" string="Cancel and Reverse" confirm="Are you sure you want to Cancel the document?" groups="base.group_no_one" />-->
+                        <button name="action_draft" states="confirm" type="object" string="Reset to Draft" groups="aminata_modifications.group_internal_transfer_aminata"   />
+                        <button name="action_print_sts"  states="draft,confirm,validate"  string="Print Station to Station Transfer" class="oe_highlight"  type="object"    />
+                        <field name="state" widget="statusbar"  />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                             <button type="object"  name="btn_view_stock_pick" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('stock_pick_count', '=', 0)]}"  groups="stock.group_stock_manager" >
+                                <field name="stock_pick_count" widget="statinfo" string="Stock Transfer"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1" />
+                            </h1>
+                        </div>
+                        <group col="4">
+                            <field name="partner_from_id" domain="[('is_service_station','=',True)]" required="1" options="{'no_open':True,'no_create':True}"  />
+                            <field name="partner_to_id" domain="[('is_service_station','=',True)]" required="1" options="{'no_open':True,'no_create':True}"  />
+                            <field name="product_id"   required="1" domain="[('white_product','in',['pms','ago','kero'])]"  attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_open':True,'no_create':True}" />
+                             <field name="date_move" attrs="{'readonly': [('state', '!=', 'draft')]}"  required="1" />
+                            <field name="product_uom" readonly="1" />
+                            <field name="qty"  />
+                             <field name="location_id"  required="1" options="{'no_open':True,'no_create':True}"  invisible="1"  />
+                            <field name="destination_location_id"   required="1" options="{'no_open':True,'no_create':True}"  invisible="1"  />
+                            <field name="user_id" readonly="1"  />
+                            <field name="note"  attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                           <field name="create_date" readonly="1" />
+                            <field name="user_confirmed_date" readonly="1" />
+                            <field name="user_validate_id" readonly="1"  />
+                            <field name="user_validated_date" readonly="1"  />
+                        </group>
+
+                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_internal_transfer_aminata_tree" model="ir.ui.view" >
+            <field name="name" >internal.transfer.aminata.tree</field>
+            <field name="model">aminata.internal.transfer</field>
+            <field name="arch" type="xml" >
+                <tree string="Station Internal Transfers" >
+                     <field name="name"  />
+                    <field name="date_move"  />
+                    <field name="product_id"  />
+                    <field name="product_uom"  />
+                    <field name="qty" />
+                    <field name="user_id" />
+                    <field name="location_id" />
+                    <field name="destination_location_id" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+
+         <record id="view_internal_transfer_aminata_filter" model="ir.ui.view">
+            <field name="name">aminata.internal.transfer.select</field>
+            <field name="model">aminata.internal.transfer</field>
+            <field name="arch" type="xml">
+                <search string="Station Internal Transfer Filter">
+                    <field name="name" string="ID"  filter_domain="['|',('name','ilike',self),('location_id','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                         <filter name="grpstatus" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                        <filter name="grp_year"  string="Year" domain="[]" context="{'group_by':'date_move:year'}"/>
+                        <filter name="grp_month"  string="Month" domain="[]" context="{'group_by':'date_move:month'}"/>
+                        <filter name="grp_product" string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_internal_transfer_aminata_form" model="ir.actions.act_window" >
+            <field name="name" >Station to Station Transfer</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">aminata.internal.transfer</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{"search_default_grp_year":1,'search_default_grp_month':1,'search_default_grp_product':1}</field>
+            <field name="search_view_id" ref="view_internal_transfer_aminata_filter"/>
+        </record>
+
+        <menuitem id="menu_internal_transfer_aminata_form" name="Station to Station Transfer" parent="menu_aminata_retail_operation" sequence="6"  action="action_internal_transfer_aminata_form" groups="aminata_modifications.group_internal_transfer_aminata" />
+
+
+        <!-- Station Sales -->
+        <record id="view_station_sales_aminata_form" model="ir.ui.view" >
+            <field name="name" >station.sales.form</field>
+            <field name="model">station.sales</field>
+            <field name="arch" type="xml" >
+                <form string="Service Station Sales" >
+                    <header>
+                        <button name="action_confirm" type="object" states="draft" string="Confirm and Submit" groups="aminata_modifications.group_station_sales_aminata_confirm_btn"  class="oe_highlight"  />
+                        <button name="action_validate" type="object" states="confirm" string="Validate" groups="aminata_modifications.group_station_sales_aminata_validate_btn"  class="oe_highlight" confirm="You are about to validate that the following sales record. If you have not finished entering the required information, please click 'Cancel' button, otherwise click 'Ok' button" />
+                        <!--<button name="action_cancel" states="validate" type="object" string="Cancel and Reverse" confirm="Are you sure you want to Cancel the document?" groups="base.group_no_one" />-->
+                        <button name="action_draft" states="confirm" type="object" string="Reset to Draft" groups="aminata_modifications.group_station_sales_aminata"   />
+                        <button name="action_print_invoice"  states="validate"  string="Print Invoice" class="oe_highlight"  type="object"    />
+                        <field name="state" widget="statusbar"  />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                             <button type="object"  name="btn_view_stock_pick" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('stock_pick_count', '=', 0)]}"  groups="stock.group_stock_manager" >
+                                <field name="stock_pick_count" widget="statinfo" string="Stock Dispatch"/>
+                            </button>
+                             <button type="object"  name="btn_view_invoices" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('invoice_count', '=', 0)]}"  groups="account.group_account_user" >
+                                <field name="invoice_count" widget="statinfo" string="Invoice"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1" />
+                            </h1>
+                        </div>
+                        <group col="4">
+                            <field name="partner_head_id" domain="[('is_service_station_mgr','=',True)]"  attrs="{'readonly': [('state', '!=', 'draft')]}" required="1" options="{'no_open':True,'no_create':True}" groups="aminata_modifications.group_station_sales_partner_editable_aminata"  />
+                            <field name="partner_id" domain="[('is_service_station_mgr','=',True)]" readonly="1" required="1" options="{'no_open':True,'no_create':True}"  />
+                            <field name="date" attrs="{'readonly': [('state', '!=', 'draft')]}"  required="1" />
+                           <field name="station_mgr_location_id" readonly="1" />
+                            <field name="note" required="1"  attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                        </group>
+                        <notebook>
+                            <page string="Station Sales Lines"  >
+                                <field name="station_sales_line_ids"  attrs="{'readonly': [('state', '!=', 'draft')]}"  >
+                                    <tree editable="bottom"  >
+                                        <field name="product_id" required="1" domain="[('white_product','in',['pms','ago','kero'])]" options="{'no_open':True,'no_create':True}"  />
+                                        <field name="product_uom" readonly="1" required="1" options="{'no_open':True,'no_create':True}"  />
+                                        <field name="pump_price" required="1"  options="{'no_open':True,'no_create':True}"  />
+                                       <field name="opening_dip" required="1" />
+                                        <field name="product_received" required="1" />
+                                        <field name="closing_dip" required="1" />
+                                        <field name="qty" required="1" sum="Total" />
+                                       <field name="line_amount" />
+                                        <field name="currency_id" readonly="1"  />
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right" colspan="2" >
+                                        <field name="amount_total" readonly="1" />
+                                </group>
+                            </page>
+                            <page string="Other Information">
+                                <group col="4">
+                                    <field name="user_id" readonly="1"  />
+                                   <field name="create_date" readonly="1" />
+                                    <field name="user_confirmed_date" readonly="1" />
+                                    <field name="user_validate_id" readonly="1"  />
+                                    <field name="user_validated_date" readonly="1"  />
+                                    <field name="order_id" readonly="1" />
+                                     <field name="currency_id" readonly="1"  />
+                                     <field name="company_id" readonly="1" />
+                                </group>
+                            </page>
+                        </notebook>
+                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_station_sales_aminata_tree" model="ir.ui.view" >
+            <field name="name" >station.sales.aminata.tree</field>
+            <field name="model">station.sales</field>
+            <field name="arch" type="xml" >
+                <tree string="Station Sales" >
+                     <field name="name"  />
+                    <field name="date"  />
+                    <field name="partner_id"  />
+                    <field name="station_mgr_location_id"  />
+                    <field name="amount_total" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+         <record id="view_station_sales_aminata_filter" model="ir.ui.view">
+            <field name="name">station.sales.select</field>
+            <field name="model">station.sales</field>
+            <field name="arch" type="xml">
+                <search string="Station Sales Filter">
+                    <field name="name" string="ID"  filter_domain="['|',('name','ilike',self),('station_mgr_location_id','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Station Manager" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter name="gprstation" string="Station" domain="[]" context="{'group_by':'station_mgr_location_id'}"/>
+                         <filter name="grpstatus" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                        <filter name="grp_year"  string="Year" domain="[]" context="{'group_by':'date:year'}"/>
+                        <filter name="grp_month"  string="Month" domain="[]" context="{'group_by':'date:month'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_station_sales_aminata_form" model="ir.actions.act_window" >
+            <field name="name" >Service Station Sales</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">station.sales</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{"search_default_gprstation":1}</field>
+            <field name="search_view_id" ref="view_station_sales_aminata_filter"/>
+        </record>
+
+        <menuitem id="menu_station_sales_aminata_form" name="Service Station Sales" parent="menu_aminata_retail_operation" sequence="7"  action="action_station_sales_aminata_form" groups="aminata_modifications.group_station_sales_aminata" />
+
+        <!--Company -->
+         <record model="ir.ui.view" id="view_company_aminata_retail_station">
+                    <field name="name">res.company.form.aminata.retail.station</field>
+                    <field name="inherit_id" ref="base.view_company_form"/>
+                    <field name="model">res.company</field>
+                    <field name="arch" type="xml">
+                        <notebook position="inside">
+                            <page string="Aminata Retail Station">
+                                <group col="4">
+                                    <field name="overage_stock_location_id"  />
+                                </group>
+                            </page>
+                        </notebook>
+                    </field>
+                </record>
+
+
+        <record model="ir.ui.view" id="view_purchase_receipt_form_aminata_extend">
+            <field name="name">account.voucher.purchase.form.aminata</field>
+            <field name="model">account.voucher</field>
+            <field name="inherit_id" ref="account_voucher_extend.view_purchase_receipt_form" />
+            <field name="arch" type="xml">
+                    <field name="account_analytic_id" position="attributes" >
+                        <attribute name="required" >True</attribute>
+                        <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                    </field>
+            </field>
+        </record>
+
+
+<!--Station Sales Price-->
+        <record id="view_station_sales_price_form" model="ir.ui.view" >
+            <field name="name" >station.sales.price.form</field>
+            <field name="model">station.sales.price</field>
+            <field name="arch" type="xml" >
+                <form string="Station Sales Prices" >
+                    <sheet>
+                        <group col="4">
+                            <field name="stock_location_id"  required="1" options="{'no_open':True,'no_create':True}" />
+                            <field name="product_id"  domain="[('white_product','in',['pms','ago','kero'])]" required="1" options="{'no_open':True,'no_create':True}" />
+                            <field name="sale_price" required="1" />
+                            <field name="currency_id" invisible="1"  />
+                        </group>
+                     </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_station_sales_price_tree" model="ir.ui.view" >
+            <field name="name" >station.sales.price.tree</field>
+            <field name="model">station.sales.price</field>
+            <field name="arch" type="xml" >
+                <tree string="Station Sales Price Tree" editable="bottom" >
+                   <field name="stock_location_id"  required="1" options="{'no_open':True,'no_create':True}" />
+                    <field name="product_id"  domain="[('white_product','in',['pms','ago','kero'])]" required="1" options="{'no_open':True,'no_create':True}" />
+                    <field name="sale_price" required="1" />
+                    <field name="currency_id" invisible="1"  />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_station_sales_price_filter" model="ir.ui.view">
+            <field name="name">station.sales.price.select</field>
+            <field name="model">station.sales.price</field>
+            <field name="arch" type="xml">
+                <search string="Station Sales Price Filter">
+                    <field name="stock_location_id" string="Service Station"  filter_domain="[('stock_location_id','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                         <filter name="grpstation" string="Service Station" domain="[]" context="{'group_by':'stock_location_id'}"/>
+                        <filter name="grpproduct" string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_station_sales_price_form" model="ir.actions.act_window" >
+            <field name="name" >Station Sales Price</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">station.sales.price</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+<!--             <field name="context">{'search_default_grpproduct':True}</field>-->
+             <field name="search_view_id" ref="view_station_sales_price_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a station sales price
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_station_sales_price_form" name="Station Sales Price" parent="menu_aminata_retail_operation" sequence="11" action="action_station_sales_price_form" groups="aminata_modifications.group_station_sales_price_aminata" />
+
+
+
+
+    </data>
+</openerp>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <template id="assets_backend" name="kincotech_css" inherit_id="web.assets_backend">
+
+            <xpath expr="." position="inside">
+
+            <link rel="stylesheet" href="/custom_css/static/src/css/changes.css"/>
+            <script type="text/javascript" src="/custom_css/static/src/js/javascript.js"/>
+            </xpath>
+        </template>
+
+
+        <!--REMEBER THIS IS ALREADY REPLICATED IN THE KINCOTECH MODULE, SO AS TO AVOI THE following Error details while Installation of module:-->
+<!--Element '<xpath expr="//script[@src='/mail/static/src/js/announcement.js']">' cannot be located in parent viewOID -->
+
+         <!--#Uncaught SecurityError: Failed to read the 'rules' property from 'CSSStyleSheet': Cannot access rules-->
+<!--see source: https://github.com/odoo/odoo/issues/22517#issuecomment-361088637-->
+        <template id="mail_assets_backend" name="mail assets" inherit_id="mail.assets_backend">
+    <xpath expr="//script[@src='/mail/static/src/js/announcement.js']" position="replace"/>
+</template>
+        <!--#other alternative manual fix: https://github.com/odoo/odoo/issues/22517#issuecomment-361217543-->
+
+
+    
+    </data>
+</openerp>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+        <record id="product_discrepancy_journal" model="account.journal">
+            <field name="name">Product Discrepancy</field>
+            <field name="code">PD</field>
+            <field name="type">general</field>
+            <field name="update_posted" eval="True" />
+        </record>
+
+        <!--<record id="product_discharged_discrepancy_journal" model="account.journal">-->
+            <!--<field name="name">Product Discharged Discrepancy</field>-->
+            <!--<field name="code">PDD</field>-->
+            <!--<field name="type">general</field>-->
+            <!--<field name="update_posted" eval="True" />-->
+        <!--</record>-->
+
+        <record id="retail_station_stock_gain_loss_journal" model="account.journal">
+            <field name="name">Stock Gain/Loss</field>
+            <field name="code">SGL</field>
+            <field name="type">general</field>
+            <field name="update_posted" eval="True" />
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_incident_report user,Incident.report user,model_incident_report,group_qhsse,1,1,1,1
+access_qhsse_meeting user,qhsse.meeting user,model_qhsse_meeting,group_qhsse,1,1,1,1
+access_emergency_drill user,emergency.drill user,model_emergency_drill,group_qhsse,1,1,1,1
+access_security_meeting user,security.meeting user,model_security_meeting,group_qhsse,1,1,1,1
+access_inspection user,inspection user,model_inspection,group_qhsse,1,1,1,1
+access_regulatory_document user,regulatory.document user,model_regulatory_document,group_qhsse,1,1,1,1
+access_routine_activity user,routine.activity user,model_routine_activity,group_qhsse,1,1,1,1

@@ -1,0 +1,123 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+<!-- Truck Checklist Confirm -->
+        <record id="view_confirm_multiple_truck_checklist" model="ir.ui.view">
+            <field name="name">Truck CheckList Confirmation</field>
+            <field name="model">truck.checklist.approval.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Sales Orders Confirmation">
+                        <p>You are about the confirm the selected truck check list(s). </p>
+                    <p>Ensure you have checked the entries before confirmation</p>
+                    <footer>
+                        <button name="action_confirm" string="Confirm Checklist(s)" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_confirm_multiple_checklist" model="ir.actions.act_window">
+            <field name="name">Confirm Truck Check Lists</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">truck.checklist.approval.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_confirm_multiple_truck_checklist" />
+            <field name="target">new</field>
+            <!--<field name="groups_id" eval="[(4,ref('base.group_sale_salesman'))]"/>-->
+        </record>
+
+        <record model="ir.values" id="check_lists_multiple_confirm">
+            <field name="model_id" ref="model_truck_check_list" />
+            <field name="name">Confirm Truck Check Lists</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('action_confirm_multiple_checklist'))" />
+            <field name="key">action</field>
+            <field name="model">truck.check.list</field>
+             <field name="groups_id" eval="[(4,ref('kin_loading.group_safety_officer'))]"/>
+        </record>
+
+
+        <!--  Truck Check List Approved -->
+        <record id="view_approve_multiple_truck_checklist" model="ir.ui.view">
+            <field name="name">Truck CheckList Approval</field>
+            <field name="model">truck.checklist.approval.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Sales Orders Confirmation">
+                        <p>You are about the approve the selected truck check list(s). </p>
+                    <p>Ensure you have checked the entries before confirmation</p>
+                    <footer>
+                        <button name="action_approve" string="Approve Checklist(s)" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_approve_multiple_checklist" model="ir.actions.act_window">
+            <field name="name">Approve Truck Check Lists</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">truck.checklist.approval.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_approve_multiple_truck_checklist" />
+            <field name="target">new</field>
+            <!--<field name="groups_id" eval="[(4,ref('base.group_sale_salesman'))]"/>-->
+        </record>
+
+        <record model="ir.values" id="check_lists_multiple_approve">
+            <field name="model_id" ref="model_truck_check_list" />
+            <field name="name">Approve Truck Check Lists</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('action_approve_multiple_checklist'))" />
+            <field name="key">action</field>
+            <field name="model">truck.check.list</field>
+             <field name="groups_id" eval="[(4,ref('kin_loading.group_safety_officer'))]"/>
+        </record>
+
+
+        <!-- Pass All Checks -->
+        <record id="view_pass_all_truck_checklist" model="ir.ui.view">
+            <field name="name">Truck CheckList Pass All Checks</field>
+            <field name="model">truck.checklist.approval.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Sales Orders Confirmation">
+                        <p>You are about the pass all the checks for the selected truck check list(s). </p>
+                    <p>Ensure you have checked the entries before confirmation</p>
+                    <footer>
+                        <button name="action_pass_all_checks" string="Pass All Checks" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_pass_all_multiple_checklist" model="ir.actions.act_window">
+            <field name="name">Pass All Checks</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">truck.checklist.approval.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="view_pass_all_truck_checklist" />
+            <field name="groups_id" eval="[(4,ref('group_show_pass_all_checks'))]"/>
+        </record>
+
+        <record model="ir.values" id="check_lists_multiple_pass_all">
+            <field name="model_id" ref="model_truck_check_list" />
+            <field name="name">Pass all Checks</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('action_pass_all_multiple_checklist'))" />
+            <field name="key">action</field>
+            <field name="model">truck.check.list</field>
+             <field name="groups_id" eval="[(4,ref('kin_loading.group_safety_officer'))]"/>
+        </record>
+
+
+
+    </data>
+</openerp>

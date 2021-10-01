@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem name="Financial Accounting" id="account.menu_finance" />
+        <menuitem name="Cost &amp; Management Accounting" id="base.menu_mrp_root" />
+        <menuitem name="Procurement" id="base.menu_purchase_root" />
+
+<!-- Profit or Loss Report-->
+        <report
+		    id="income_statement_excel_report_agary"
+		    model="income.statement.parser"
+		    string="Profit or Loss"
+		    report_type="xlsx"
+		    name="agary_modifications.report_income_statement_agary"
+		    file="agary_modifications.report_income_statement_agary"
+		    attachment_use="False"
+        />
+
+        <record model="ir.ui.menu" id="kin_report.menu_excel_income_statement">
+                    <field name="name">Profit or Loss</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="kin_report.action_income_statement_wizard">
+                    <field name="name">Profit or Loss Report</field>
+        </record>
+
+
+<!-- Statement of Financial Position -->
+         <report
+		    id="balance_sheet_excel_report_agary"
+		    model="income.statement.parser"
+		    string="Statement of Financial Position"
+		    report_type="xlsx"
+		    name="agary_modifications.report_balance_sheet_agary"
+		    file="agary_modifications.report_balance_sheet_agary"
+		    attachment_use="False"
+        />
+
+        <record model="ir.ui.menu" id="kin_report.menu_excel_balance_sheet">
+                    <field name="name">Statement of Financial Position</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="kin_report.action_balance_sheet_wizard">
+                    <field name="name">Statement of Financial Position Report</field>
+        </record>
+
+
+
+    </data>
+</odoo>
+

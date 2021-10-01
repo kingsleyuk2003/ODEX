@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- Add Cc, Bcc to the mail.compose.message wizard view -->
+        <record model="ir.ui.view" id="email_compose_message_wizard_form_mail_cc_bcc">
+            <field name="name">email.compose.message.wizard.form.mail.cc.bcc</field>
+            <field name="model">mail.compose.message</field>
+            <field name="inherit_id" ref="mail.email_compose_message_wizard_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='subject']" position="before">
+                    <field name="email_cc" widget="many2many_tags_email" placeholder="Add Cc contacts to notify..."
+                           context="{'force_email':True, 'show_email':True}"
+                           attrs="{'invisible': [('composition_mode', '!=', 'comment')]}"/>
+                    <field name="email_bcc" widget="many2many_tags_email" placeholder="Add Bcc contacts to notify..."
+                           context="{'force_email':True, 'show_email':True}"
+                           attrs="{'invisible': [('composition_mode', '!=', 'comment')]}"/>
+                </xpath>
+            </field>
+        </record>        
+    </data>
+</openerp>

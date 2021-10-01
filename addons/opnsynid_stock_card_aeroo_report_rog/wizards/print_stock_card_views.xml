@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 OpenSynergy Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<openerp>
+<data>
+
+<record id="print_stock_card_view_form" model="ir.ui.view">
+    <field name="name">stock.print_stock_operation form</field>
+    <field name="model">stock.print_stock_card</field>
+    <field name="arch" type="xml">
+        <form string="Print Stock Operation Report">
+            <group name="group_1" colspan="4" col="2">
+                <field name="company_id"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <separator string="Location(s)" colspan="2"/>
+                <field name="location_ids" nolabel="1" colspan="2" widget="many2many_tags" />
+                <separator string="Product(s)" colspan="2"/>
+                <field name="product_ids" domain="[('type','!=','service')]" nolabel="1" colspan="2" >
+                        <tree>
+                            <field name="name" />
+                        </tree>
+                </field>
+                <field name="output_format"/>
+            </group>
+            <footer>
+                <button name="action_print"
+                        type="object"
+                        string="Generate Full Stock Moves"
+                        class="oe_highlight"/>
+                <button name="action_print_summary"
+                        type="object"
+                        string="Generate Stock Summary"
+                        class="oe_highlight"/>
+                or
+                <button special="cancel"
+                        string="Cancel"/>
+            </footer>
+        </form>
+    </field>
+</record>
+
+<record id="print_stock_card_action" model="ir.actions.act_window">
+    <field name="name">Generate Stock Operation Report</field>
+    <field name="res_model">stock.print_stock_card</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+</record>
+
+<menuitem
+    id="print_stock_card_menu"
+    name="Stock Operation Report"
+    action="print_stock_card_action"
+    parent="stock.menu_stock_warehouse_mgmt" sequence="4"
+/>
+
+
+</data>
+</openerp>

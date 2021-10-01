@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+base.access_res_partner_group_partner_manager,res_partner group_partner_manager extend,account.model_res_partner,base.group_partner_manager,1,0,0,0
+stock.access_stock_location_path_sale_manager,stock.location.path partner salemanager extend,stock.model_stock_location_path,base.group_sale_manager,1,0,0,0
+crm.access_res_partner_manager,res.partner.crm.manager extend,account.model_res_partner,base.group_sale_manager,1,0,0,0
+sale.access_res_partner_sale_user,res.partner.sale.user extend,account.model_res_partner,base.group_sale_salesman,1,0,0,0
+crm.access_res_partner,res.partner.crm.user extend,account.model_res_partner,base.group_sale_salesman,1,0,0,0
+access_res_users_salesman,sales_user custom,auth_crypt.model_res_users,base.group_sale_salesman,1,0,0,0
+sale.access_product_group_res_partner_sale_manager,res_partner group_sale_manager extend,account.model_res_partner,base.group_sale_manager,1,0,0,0
+sale.access_res_partner_sale_manager,res.partner.sale.manager extend,account.model_res_partner,base.group_sale_manager,1,1,0,0
+access_res_users_sales_manager_internal,sales_manager_internal extend,auth_crypt.model_res_users,kin_sales_access_rights.group_sale_manager_internal,1,1,0,0

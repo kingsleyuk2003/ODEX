@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+	<record model="ir.module.category" id="module_category_pef">
+            <field name="name">Petroleum Equalisation Fund</field>
+            <field name="description">Petroleum Equalisation Fund</field>
+            <!--<field name="sequence">7</field>-->
+        </record>
+
+
+		<record id="group_pef_officer" model="res.groups">
+			<field name="name">PEF Officer</field>
+			<field name="category_id" ref="module_category_pef"/>
+		</record>
+
+		<record id="group_pef_manager" model="res.groups">
+			<field name="name">PEF Manager</field>
+			<field name="implied_ids" eval="[(4, ref('group_pef_officer'))]"/>
+			<field name="category_id" ref="module_category_pef"/>
+		</record>
+
+
+</data>
+</openerp>

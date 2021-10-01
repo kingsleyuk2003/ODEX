@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+	<data>
+    <record model="ir.sequence" id="seq_receipt_id">
+        <field name="name">Receipt ID</field>
+        <field name="code">receipt_id_code</field>
+        <field name="prefix">RE</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False" />
+    </record>
+	</data>
+</openerp>

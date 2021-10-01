@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+
+        <record id="mis_report_style_indent_0" model="mis.report.style" >
+            <field name="name">Indent 0</field>
+            <field name="dp_inherit" eval="False" />
+            <field name="dp" >2</field>
+            <field name="font_weight_inherit" eval="0" />
+        </record>
+
+         <record id="mis_report_style_indent_1" model="mis.report.style" >
+            <field name="name">Indent 1</field>
+            <field name="indent_level_inherit" eval="False" />
+            <field name="indent_level" >1</field>
+        </record>
+
+         <record id="mis_report_style_indent_2" model="mis.report.style" >
+            <field name="name">Indent 2</field>
+            <field name="indent_level_inherit" eval="False" />
+            <field name="indent_level" >2</field>
+        </record>
+
+        <record id="mis_report_style_indent_3" model="mis.report.style" >
+            <field name="name">Indent 3</field>
+            <field name="indent_level_inherit" eval="False" />
+            <field name="indent_level" >3</field>
+        </record>
+
+        <record id="mis_report_style_indent_4" model="mis.report.style" >
+            <field name="name">Indent 4</field>
+            <field name="indent_level_inherit" eval="False" />
+            <field name="indent_level" >4</field>
+        </record>
+
+        <record id="mis_report_style_indent_0_bold" model="mis.report.style" >
+            <field name="name">Indent 0 Bold</field>
+            <field name="font_weight_inherit" eval="False" />
+            <field name="font_weight" >bold</field>
+        </record>
+
+         <record id="mis_report_style_indent_1_bold" model="mis.report.style" >
+            <field name="name">Indent 1 Bold</field>
+            <field name="font_weight_inherit" eval="False" />
+            <field name="font_weight" >bold</field>
+              <field name="indent_level_inherit" eval="False" />
+            <field name="indent_level" >1</field>
+        </record>
+
+
+
+
+
+
+    </data>
+</openerp>

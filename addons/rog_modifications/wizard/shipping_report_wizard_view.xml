@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record  id="view_shipping_report_wizard" model="ir.ui.view" >
+                <field name="name">Shipping Report Wizard</field>
+                <field name="model">shipping.wizard</field>
+                <field name="arch" type="xml" >
+                <form>
+                  <label string="This wizard will help you generate a Shipping Report per product in .xlsx file" />
+                     <group col="4" colspan="4" >
+                         <field name="start_date" />
+                         <field name="end_date" />
+                          <field name="product_ids" widget="many2many_tags"   options="{'no_open':True,'no_create':True}" />
+                    </group>
+                        <footer>
+                            <button default_focus="1" icon="gtk-execute" name="shipping_excel_report" string="Export as Excel" type="object"  colspan="2" class="oe_highlight" />
+                            or <button special="cancel" class="oe_link"  string="Cancel"  />
+                        </footer>
+                </form>
+             </field>
+        </record>
+
+		<record id="action_shipping_report_wizard" model="ir.actions.act_window">
+            <field name="name">Generate Shipping Report</field>
+            <field name="res_model">shipping.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_shipping_report_wizard"/>
+            <field name="context">{}</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="target">new</field>
+        </record>
+
+         <!--<menuitem name="Shipping Report" id="menu_shipping_report" action="action_shipping_report_wizard"-->
+          <!--parent="menu_shipping_report_menu" sequence="5"  icon="STOCK_PRINT" />-->
+
+
+   </data>
+</odoo>

@@ -1,0 +1,145 @@
+<openerp>
+    <data>
+		<record id="mail_templ_send_for_confirmation" model="mail.template">
+			<field name="name" >Quotation Document Sent to be Converted to Sales Order</field>
+			<field name="email_from">${ctx.get('system_email')}</field>
+			<field name="reply_to">${object.user_id.partner_id.email}</field>
+			<field name="subject">A Quotation Document (${object.name}) is Awaiting Conversion to Sales Order</field>
+			<field name="email_to">${ctx.get('confirm_person_email')}</field>
+			<field name="model_id"   model="ir.model"  search="[('model', '=', 'sale.order')]" />
+		    <field name="auto_delete" eval="True"/>
+			<field name="body_html"  >
+				<![CDATA[
+				<p>Dear ${ctx.get('confirm_person_name')},</p>
+				<p>A New Quotation (${object.name}) has been accepted by the customer and is awaiting conversion to sales order from ${object.user_id.name}</p>
+				<p><a href="${ctx.get('url')}">Follow the Link to check, confirm or cancel the quotation</a></p>
+				<p>Regards and Thanks</p>
+				<p>This is an auto generated message</p>
+				]]>
+			</field>
+		</record>
+
+		<record id="mail_templ_quote_confirmed" model="mail.template">
+			<field name="name" >The Quotation has been Converted to Sales Order</field>
+			<field name="email_from">${ctx.get('system_email')}</field>
+			<field name="reply_to">${ctx.get('confirm_person_email')}</field>
+			<field name="subject">The Quotation Document (${object.name}) has been converted to sales order</field>
+			<field name="email_to">${ctx.get('notify_person_email')}</field>
+			<field name="model_id"   model="ir.model"  search="[('model', '=', 'sale.order')]" />
+		    <field name="auto_delete" eval="True"/>
+			<field name="body_html"  >
+				<![CDATA[
+				<p>Dear ${ctx.get('notify_person_name')},</p>
+				<p>For Your Information, the Quotation Document (${object.name}) has been converted to sales order by ${ctx.get('confirm_person_name')}</p>
+				<!--<p><a href="${ctx.get('url')}">follow the Link to see view the sales order</a></p>-->
+				<p>You are not required to perform any sales operation at this point. It is just for your information</p>
+				<p>Regards and Thanks</p>
+				<p>This is an auto generated message</p>
+				]]>
+			</field>
+		</record>
+
+		<record id="mail_templ_quote_confirmed_to_approve" model="mail.template">
+			<field name="name" >The Quotation has been Converted to Sales Order and Requires Approval or Disapproval</field>
+			<field name="email_from">${ctx.get('system_email')}</field>
+			<field name="reply_to">${ctx.get('confirm_person_email')}</field>
+			<field name="subject">The Quotation Document (${object.name}) has been converted to sales order and requires approval or disapproval from you</field>
+			<field name="email_to">${ctx.get('notify_person_email')}</field>
+			<field name="model_id"   model="ir.model"  search="[('model', '=', 'sale.order')]" />
+		    <field name="auto_delete" eval="True"/>
+			<field name="body_html"  >
+				<![CDATA[
+				<p>Dear ${ctx.get('notify_person_name')},</p>
+				<p>The Quotation Document (${object.name}) has been converted to sales order by ${ctx.get('confirm_person_name')}, and it requires approval or disapproval from you</p>
+				<p><a href="${ctx.get('url')}">follow the Link to approve or disapprove the sales order</a></p>
+				<p>Regards and Thanks</p>
+				<p>This is an auto generated message</p>
+				]]>
+			</field>
+		</record>
+
+		<record id="mail_templ_sale_approved" model="mail.template">
+			<field name="name" >Sales Order Document Approved</field>
+			<field name="email_from">${ctx.get('system_email')}</field>
+			<field name="reply_to">${ctx.get('approve_person_email')}</field>
+			<field name="subject">The Sales Order Document (${object.name}) has been Approved</field>
+			<field name="email_to">${ctx.get('notify_person_email')}</field>
+			<field name="model_id"   model="ir.model"  search="[('model', '=', 'sale.order')]" />
+		    <field name="auto_delete" eval="True"/>
+			<field name="body_html"  >
+				<![CDATA[
+				<p>Dear ${ctx.get('notify_person_name')},</p>
+				<p>The Sales Order Document (${object.name}) has been approved by ${ctx.get('approve_person_name')}</p>
+				<p><a href="${ctx.get('url')}">Follow the Link to see or approve the approved sales order</a></p>
+				<p>Regards and Thanks</p>
+				<p>This is an auto generated message</p>
+				]]>
+			</field>
+		</record>
+
+		<record id="mail_templ_sale_send_to_manager" model="mail.template">
+			<field name="name" >Sales Order Send to Manager</field>
+			<field name="email_from">${ctx.get('system_email')}</field>
+			<field name="reply_to">${ctx.get('sender_person_email')}</field>
+			<field name="subject">The Quote has been (${object.name}) has been created</field>
+			<field name="email_to">${ctx.get('notify_person_email')}</field>
+			<field name="model_id"   model="ir.model"  search="[('model', '=', 'sale.order')]" />
+		    <field name="auto_delete" eval="True"/>
+			<field name="body_html"  >
+				<![CDATA[
+				<p>Dear ${ctx.get('notify_person_name')},</p>
+				<p>A Quote (${object.name}) has been created by ${ctx.get('sender_person_name')}</p>
+
+				<p><a href="${ctx.get('url')}">Follow the Link to see the quotation order, and you may forward it for conversion to sales order</a></p>
+				<p>Regards and Thanks</p>
+				<p>This is an auto generated message</p>
+				]]>
+			</field>
+		</record>
+
+
+		<record id="mail_templ_sale_disapproved" model="mail.template">
+			<field name="name" >Sales Order Document Disapproved</field>
+			<field name="email_from">${ctx.get('system_email')}</field>
+			<field name="reply_to">${ctx.get('disapprove_person_email')}</field>
+			<field name="subject">The Sales Order Document (${object.name}) has been Disapproved</field>
+			<field name="email_to">${ctx.get('notify_person_email')}</field>
+			<field name="model_id"   model="ir.model"  search="[('model', '=', 'sale.order')]" />
+		    <field name="auto_delete" eval="True"/>
+			<field name="body_html"  >
+				<![CDATA[
+				<p>Dear ${ctx.get('notify_person_name')},</p>
+				<p>The Sales Order Document (${object.name}) has been disapproved by ${ctx.get('disapprove_person_name')}</p>
+				<p><b>Reason for Sales Order Disapproval</b></p>
+				<p>${ctx.get('reason_for_dispproval')}</p>
+				<p><a href="${ctx.get('url')}">Follow the Link to see the disapproved sales order</a></p>
+				<p>Regards and Thanks</p>
+				<p>This is an auto generated message</p>
+				]]>
+			</field>
+		</record>
+
+
+
+		<record id="mail_templ_sale_canceled" model="mail.template">
+			<field name="name" >Sales Order Document Cancelled</field>
+			<field name="email_from">${ctx.get('system_email')}</field>
+			<field name="reply_to">${ctx.get('confirm_person_email')}</field>
+			<field name="subject">The Sales Order Document (${object.name}) is Cancelled</field>
+			<field name="email_to">${object.user_id.partner_id.email}</field>
+			<field name="model_id"   model="ir.model"  search="[('model', '=', 'sale.order')]" />
+		    <field name="auto_delete" eval="True"/>
+			<field name="body_html"  >
+				<![CDATA[
+				<p>Dear ${object.user_id.name},</p>
+				<p>The Sales Order Document (${object.name}) has been Cancelled by ${ctx.get('confirm_person_name')}. You may ask the approver for reasons, and possibly check and re-submit the sales order for confirmation</p>
+				<p><a href="${ctx.get('url')}">Follow the Link to see the cancelled sales order</a></p>
+				<p>Regards and Thanks</p>
+				<p>This is an auto generated message</p>
+				]]>
+			</field>
+		</record>
+
+
+	</data>
+</openerp>

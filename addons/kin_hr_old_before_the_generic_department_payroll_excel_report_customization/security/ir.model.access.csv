@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_school_attended_hr_manager,school.attended hr manager,model_school_attended,base.group_hr_user,1,1,1,1
+access_qualification_title_hr_manager,qualification.title hr manager,model_qualification_title,base.group_hr_user,1,1,1,1
+access_qualification_hr_manager,qualification hr manager,model_qualification,base.group_hr_user,1,1,1,1
+access_guarantor_hr_manager,guarantor hr manager,model_guarantor,base.group_hr_user,1,1,1,1
+access_nok_relationship_hr_manager,nok.relationship hr manager,model_nok_relationship,base.group_hr_user,1,1,1,1
+access_qualification_hr_employee,qualification hr_employee,model_qualification,base.group_user,1,0,0,0
+access_guarantor_hr_employee,guarantor hr_employee,model_guarantor,base.group_user,1,0,0,0
+access_res_partner_hr_manager,res.partner hr manager,base.model_res_partner,base.group_hr_user,1,1,0,0

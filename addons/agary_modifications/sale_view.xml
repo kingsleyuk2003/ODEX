@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+ <record model="ir.ui.view" id="sale_margin_sale_order_line_form_extend_agary">
+        <field name="name">sale.order.line.tree.margin.view.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_margin.sale_margin_sale_order_line_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree//field[@name='purchase_price']" position="after">
+                <field name="sp_price"  />
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree//field[@name='price_unit']" position="attributes">
+               <attribute name="groups" >kin_sales.group_show_margin_cost_fields</attribute>
+            </xpath>
+        </field>
+    </record>
+
+
+         <record id="view_order_form_extend_agary" model="ir.ui.view">
+            <field name="name">sale.order.form.extend.agary</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="arch" type="xml">
+
+                <field name="sale_shipping_term_id" position="after" >
+                    <field name="sale_note" groups="agary_modifications.group_see_sale_note" />
+                    <field name="account_note" groups="agary_modifications.group_see_account_note" />
+                </field>
+
+                <field name="partner_id"  position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                <field name="partner_invoice_id"  position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+                <field name="partner_shipping_id"  position="attributes" >
+                    <attribute name="options">{'no_open':True,'no_create':True}</attribute>
+                </field>
+
+            </field>
+         </record>
+
+
+         <record id="action_partner_customer_form_agary" model="ir.actions.act_window">
+            <field name="name">Your Customers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="domain">[('user_id','=',uid)]</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add a contact in your address book.
+              </p><p>
+                Odoo helps you easily track all activities related to
+                a customer: discussions, history of business opportunities,
+                documents, etc.
+              </p>
+            </field>
+        </record>
+
+      <menuitem id="menu_partner_form_custom_agary" parent="base.menu_sales" action="action_partner_customer_form_agary" groups="base.group_sale_salesman"  sequence="14"/>
+    <menuitem id="base.menu_partner_form" parent="base.menu_sales" action="base.action_partner_form" sequence="3"  groups="base.group_sale_manager"  />
+
+    </data>
+</openerp>

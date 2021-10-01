@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+ <menuitem name="PEF"
+            id="menu_pef_app"
+            groups="group_pef_officer,group_pef_manager"
+            sequence="25" web_icon="kin_pef,static/description/icon.png" />
+
+
+   <menuitem id="menu_pef_document" name="PEF Document" parent="menu_pef_app" sequence="1" groups="group_pef_officer,group_pef_manager" />
+   <menuitem id="menu_pef_configuration" name="Master Data" parent="menu_pef_app" sequence="5" groups="group_pef_officer,group_pef_manager" />
+
+
+         <!-- NNPC Receiving Depot -->
+        <record id="view_kin_receiving_depot_pef_form" model="ir.ui.view" >
+            <field name="name" >kin.receiving.depot.pef.form</field>
+            <field name="model">kin.receiving.pef.depot</field>
+            <field name="arch" type="xml" >
+                <form string="Receiving PEF Depot" >
+                    <sheet>
+                        <group col="4">
+                            <field name="name" required="1" />
+                            <field name="address" required="1" />
+                            <field name="country_id" required="1" />
+                            <field name="state_id" required="1" domain="[('country_id','=',country_id)]"  />
+
+                        </group>
+                   <notebook>
+                       <page string="Retail Stations">
+                           <field name="retail_station_ids" readonly="1" />
+                       </page>
+                       <page string="From Depot Bridging Rate" >
+                           <field name="bridging_rate_from_depot_ids" readonly="1" />
+                       </page>
+                       <page string="To Depot Bridging Rate" >
+                           <field name="bridging_rate_to_depot_ids" readonly="1" />
+                       </page>
+                   </notebook>
+                    </sheet>
+                </form>
+            </field>
+         </record>
+
+        <record id="view_kin_receiving_depot_pef_tree" model="ir.ui.view" >
+            <field name="name" >kin.receiving.depot.pef.tree</field>
+            <field name="model">kin.receiving.pef.depot</field>
+            <field name="arch" type="xml" >
+                <tree string="Receiving PEF Depot" >
+                    <field name="name" />
+                    <field name="address" />
+                    <field name="country_id" />
+                    <field name="state_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_kin_receiving_depot_pef_filter" model="ir.ui.view">
+            <field name="name">kin.receiving.depot.pef.select</field>
+            <field name="model">kin.receiving.pef.depot</field>
+            <field name="arch" type="xml">
+                <search string="Receiving Depot PEF Filter">
+                    <field name="name" string="Number"  filter_domain="[('name','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter  string="Retail Station" domain="[]" context="{'group_by':'retail_station_id'}"/>
+                        <filter  string="State" domain="[]" context="{'group_by':'state_id'}"/>
+                        <filter  string="Country" domain="[]" context="{'group_by':'country_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_kin_receiving_depot_pef_form" model="ir.actions.act_window" >
+            <field name="name" >Receiving PEF Depot</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.receiving.pef.depot</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_kin_receiving_depot_pef_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create Receiving Depot
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_kin_receiving_pef_depot" name="Receiving Clearing PEF Depot" parent="menu_pef_configuration" sequence="2" action="action_kin_receiving_depot_pef_form"/>
+
+
+<!-- Retail Stations -->
+         <record id="view_kin_retail_station_pef_form" model="ir.ui.view" >
+            <field name="name" >kin.retail.pef.station.form</field>
+            <field name="model">kin.retail.pef.station</field>
+            <field name="arch" type="xml" >
+                <form string="Retail Station" >
+                    <sheet>
+                        <group col="4">
+                            <field name="name" required="1" />
+                            <field name="address" required="1" />
+                            <field name="country_id" required="1" />
+                            <field name="state_id"  domain="[('country_id','=',country_id)]" required="1" />
+                           <field name="receiving_depot_id"  />
+                            <field name="partner_id" required="1" />
+                            <field name="zone" />
+                            <field name="contribution_rate" />
+                            <field name="nta_rate" />
+                        </group>
+                        <notebook>
+                             <page string="Branch Companies">
+                           <field name="partner_ids" readonly="1" />
+                       </page>
+                            <page string="PEF Registers" >
+                                <field name="pef_register_ids" readonly="1" />
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+         </record>
+
+        <record id="view_kin_retail_station_pef_tree" model="ir.ui.view" >
+            <field name="name" >kin.retail.pef.station.tree</field>
+            <field name="model">kin.retail.pef.station</field>
+            <field name="arch" type="xml" >
+                <tree string="Retail Station" >
+                           <field name="name" />
+                            <field name="address" />
+                            <field name="country_id" />
+                            <field name="state_id" />
+                            <field name="receiving_depot_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_kin_retail_station_pef_filter" model="ir.ui.view">
+            <field name="name">kin.retail.station.pef.select</field>
+            <field name="model">kin.retail.pef.station</field>
+            <field name="arch" type="xml">
+                <search string="Receiving Depot Filter">
+                    <field name="name" string="Name"  filter_domain="[('name','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                       <filter  string="Receiving Depot" domain="[]" context="{'group_by':'receiving_depot_id'}"/>
+                        <filter  string="State" domain="[]" context="{'group_by':'state_id'}"/>
+                        <filter  string="Country" domain="[]" context="{'group_by':'country_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_kin_retail_station_pef_form" model="ir.actions.act_window" >
+            <field name="name" >Retail Station</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.retail.pef.station</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_kin_retail_station_pef_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create Retail Station
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_kin_retail_pef_station" name="Retail Station" parent="menu_pef_configuration" sequence="3" action="action_kin_retail_station_pef_form"/>
+
+
+        <!-- Bridging Rates  -->
+        <record id="view_kin_bridging_rate_tree" model="ir.ui.view" >
+            <field name="name" >kin.bridging.rate.tree</field>
+            <field name="model">kin.bridging.rate</field>
+            <field name="arch" type="xml" >
+                <tree string="Bridging Rate" editable="bottom" >
+                            <field name="from_depot_id" required="1" />
+                            <field name="to_depot_id" required="1" />
+                            <field name="bridging_rate" required="1" />
+                </tree>
+            </field>
+         </record>
+
+
+
+        <record id="view_kin_bridging_rate_filter" model="ir.ui.view">
+            <field name="name">kin.bridging.rate.tree</field>
+            <field name="model">kin.bridging.rate</field>
+            <field name="arch" type="xml">
+                <search string="Bridging Rate Filter">
+                      <field name="from_depot_id" string="From /To Depot"  filter_domain="['|',('from_depot_id','ilike',self),('to_depot_id','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                       <filter  string="From Receiving Depot" domain="[]" context="{'group_by':'from_depot_id'}"/>
+                        <filter  string="To Receiving Depot" domain="[]" context="{'group_by':'to_depot_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_kin_bridging_rate_form" model="ir.actions.act_window" >
+            <field name="name" >Bridging Rate</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.bridging.rate</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="view_kin_bridging_rate_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create Bridging Rate
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_kin_bridging_rate" name="Bridging Rate" parent="menu_pef_configuration" sequence="3" action="action_kin_bridging_rate_form"/>
+
+
+
+        <!-- PEF Register  -->
+        <record id="view_kin_pef_register_form" model="ir.ui.view" >
+            <field name="name" >kin.pef.register.form</field>
+            <field name="model">kin.pef.register</field>
+            <field name="arch" type="xml" >
+                <form string="PEF Register" >
+                     <header>
+                        <button name="action_transit" class="oe_highlight" states="draft" type="object" string="Truck In Transit"  />
+                        <button name="action_cleared" type="object" states="transit" string="Truck Cleared" class="oe_highlight" />
+                        <button name="action_cancel" states="draft,cleared" type="object" string="Cancel" confirm="Are you sure you want to Cancel the document?"/>
+                        <button name="action_draft" states="cancel,transit" type="object" string="Reset to Draft"  />
+                        <field name="state" widget="statusbar"  />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_invoice" groups="account.group_account_user"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                attrs="{'invisible': [('invoice_count', '=', 0)]}" >
+                                <field  name="invoice_count" widget="statinfo" string="Invoice"/>
+                            </button>
+                             <button name="action_view_loading_ticket" groups="account.group_account_user,stock.group_stock_manager"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                attrs="{'invisible': [('lt_count', '=', 0)]}" >
+                                <field  name="lt_count" widget="statinfo" string="Loading Ticket" />
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1" />
+                            </h1>
+                        </div>
+                        <group col="4">
+                            <field name="waybill_no" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="pef_date" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                             <field name="from_depot_id"   attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="to_depot_id"  attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="from_stock_location_id" domain="[('usage','=','internal')]" options="{'no_open':True,'no_create':True}"  attrs="{'readonly': [('state', '!=', 'draft')]}"  />
+                            <field name="retail_station_id" attrs="{'readonly': [('state', '!=', 'draft')]}"  options="{'no_open':True,'no_create':True}"  />
+                            <field name="product_id" attrs="{'readonly': [('state', '!=', 'draft')]}" required="1" />
+                             <field name="product_uom" readonly="1" />
+                            <field name="quantity" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                             <field name="driver_id"   attrs="{'readonly': [('state', '!=', 'draft')]}"  />
+                            <field name="truck_no"   attrs="{'readonly': [('state', '!=', 'draft')]}"  />
+                            <field name="ticket_ref"   attrs="{'readonly': [('state', '!=', 'draft')]}"  />
+                            <field name="other_ref"   attrs="{'readonly': [('state', '!=', 'draft')]}"  />
+                            <field name="loading_ticket_id"   attrs="{'readonly': [('state', '!=', 'draft')]}"  />
+                            <field name="user_id" attrs="{'readonly': [('state', '!=', 'draft')]}"  />
+                            <field name="comment"   attrs="{'readonly': [('state', '!=', 'draft')]}"  />
+
+                        </group>
+                        <notebook>
+                            <page string="Explanation"  >
+                             <group col="4" >
+                                <field name="contribution_rate" />
+                                 <field name="nta_rate" readonly="1" />
+                                 <field name="bridging_rate" readonly="1" />
+                                <field name="claim_rate" readonly="1" />
+                                <field name="claim_total" readonly="1" />
+                                 <field name="contribution_total" readonly="1" />
+                                 <field name="net_claim" readonly="1" />
+                            </group>
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                     <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+         </record>
+
+        <record id="view_kin_pef_register_tree" model="ir.ui.view" >
+            <field name="name" >kin.pef.register.tree</field>
+            <field name="model">kin.pef.register</field>
+            <field name="arch" type="xml" >
+                <tree string="PEF Register" >
+                    <field name="name" />
+                          <field name="waybill_no" />
+                    <field name="pef_date" />
+                            <field name="truck_no" />
+                            <field name="retail_station_id"  />
+                            <field name="product_id" />
+                            <field name="product_uom"  />
+                            <field name="quantity"  />
+                            <field name="from_depot_id"   />
+                            <field name="to_depot_id" />
+                            <field name="net_claim" />
+
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_kin_pef_register_filter" model="ir.ui.view">
+            <field name="name">kin.pef.register.select</field>
+            <field name="model">kin.pef.register</field>
+            <field name="arch" type="xml">
+                <search string="Pef Register Filter">
+                    <field name="name" string="Name/ Waybill/ From /To Depot"  filter_domain="['|','|','|',('name','ilike',self),('waybill_no','ilike',self),('from_depot_id','ilike',self),('to_depot_id','ilike',self)]"/>
+                    <group expand="0" string="Group By">
+                       <filter  string="From Receiving Depot" domain="[]" context="{'group_by':'from_depot_id'}"/>
+                        <filter  string="To Receiving Depot" domain="[]" context="{'group_by':'to_depot_id'}"/>
+                        <filter  string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter  string="Retail Station" domain="[]" context="{'group_by':'retail_station_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_kin_pef_register_form" model="ir.actions.act_window" >
+            <field name="name" >PEF Register</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kin.pef.register</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_kin_pef_register_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create PEF Register
+              </p>
+            </field>
+        </record>
+        <menuitem id="menu_kin_pef_register" name="PEF Register" parent="menu_pef_document" sequence="3" action="action_kin_pef_register_form"/>
+
+<!-- Company -->
+         <record model="ir.ui.view" id="view_company_kin_pef">
+                    <field name="name">res.company.form.kin.pef</field>
+                    <field name="inherit_id" ref="base.view_company_form"/>
+                    <field name="model">res.company</field>
+                    <field name="arch" type="xml">
+                        <notebook position="inside">
+                            <page string="PEF">
+                                <group>
+                                     <field name="partner_pef_id"  />
+                                    <field name="product_id"  />
+                                </group>
+                            </page>
+                        </notebook>
+                    </field>
+                </record>
+
+
+        <!-- Stock Picking -->
+        <record id="view_picking_form_pef_extend" model="ir.ui.view">
+            <field name="name">stock.picking.form.pef.extend</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form" />
+            <field name="arch" type="xml">
+                 <div  name="button_box" position="inside">
+                     <button type="object"  name="btn_view_pef" class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('pef_count', '=', 0)]}" >
+                            <field name="pef_count" widget="statinfo" string="PEF Register"/>
+                    </button>
+                 </div>
+
+            </field>
+        </record>
+
+        <!-- Partner -->
+         <record id="view_res_partner_retail_station_pef_extend" model="ir.ui.view">
+            <field name="name" >res.partner.retail.station.pef.extend</field>
+            <field name="model" >res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                 <field name="function" position="after" >
+                     <field name="retail_station_pef_id" />
+                 </field>
+            </field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+		<record id="group_sale_person_see_your_customer_custom" model="res.groups">
+			<field name="name">Custom Sales Person see your customers</field>
+			<field name="category_id" ref="base.module_category_sales_management"/>
+        	<field name="implied_ids" eval="[(4, ref('base.group_sale_salesman'))]"/>
+		</record>
+
+		<record id="group_sale_manager_see_your_customers_custom" model="res.groups">
+			<field name="name">Custom Sales Manager see your team customers</field>
+			<field name="category_id" ref="base.module_category_sales_management"/>
+        	<field name="implied_ids" eval="[(4, ref('base.group_sale_manager'))]"/>
+		</record>
+
+
+</data>
+</openerp>

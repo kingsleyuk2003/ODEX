@@ -1,0 +1,22 @@
+.display_time.nib {
+    color:rgba(91, 192, 222, 0.80);
+}
+
+.display_time.nib span{
+    width:30%;
+    display:inline-block;
+    text-align:center;
+}
+
+.display_time.nib span:nth-child(1){
+    color:#21b799;
+}
+
+.display_time.nib span:nth-child(2){
+    color:#893b74;
+}
+
+.partner_task_image.nib{
+    height: 20px;
+    float: right;
+}

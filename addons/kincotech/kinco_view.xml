@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    
+
+
+        <record model="ir.ui.menu" id="calendar.mail_menu_calendar">
+		 <field name="groups_id" eval="[(6, 0, [ref('group_show_calendar_app')])]"/>
+        </record>
+
+        <record model="ir.ui.menu" id="mail.mail_channel_menu_root_chat">
+		 <field name="groups_id" eval="[(6, 0, [ref('group_show_discuss_app')])]"/>
+        </record>
+
+        <record model="ir.ui.menu" id="mail.menu_contacts">
+		 <field name="groups_id" eval="[(6, 0, [ref('group_show_contacts_app')])]"/>
+        </record>
+
+        <record model="ir.ui.menu" id="utm.menu_link_tracker_root">
+		 <field name="groups_id" eval="[(6, 0, [ref('group_show_utm_tracker')])]"/>
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record  id="view_general_report_wizard" model="ir.ui.view" >
+                <field name="name">General Report Wizard</field>
+                <field name="model">general.report.wizard</field>
+                <field name="arch" type="xml" >
+                <form string="General Pension Report Wizard" >
+                  <label string="This wizard will help you generate a general Report in .xlsx file" />
+                     <group col="4" colspan="4" >
+                         <field name="start_date" required="1" />
+                         <field name="end_date" required="1" />
+                    </group>
+                    <notebook>
+                        <page string="PFAs" >
+                             <field name="pfa_ids"   />
+                        </page>
+                         <page string="Employees" >
+                             <field name="emp_ids"   />
+                        </page>
+                    </notebook>
+
+                        <footer>
+                            <button default_focus="1" icon="gtk-execute" name="general_excel_report" string="Export as Excel" type="object"  colspan="2" class="oe_highlight" />
+                            or <button special="cancel" class="oe_link"  string="Cancel"  />
+                        </footer>
+                </form>
+             </field>
+        </record>
+
+		<record id="action_general_report_wizard" model="ir.actions.act_window">
+            <field name="name">Generate General Pension Report</field>
+            <field name="res_model">general.report.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_general_report_wizard"/>
+            <field name="context">{}</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="target">new</field>
+        </record>
+
+         <menuitem name="General Pension Excel Report" id="menu_general_report" action="action_general_report_wizard"
+           parent="kin_hr.hr_payroll_kin_report" sequence="21"  icon="STOCK_PRINT" />
+
+
+   </data>
+</openerp>

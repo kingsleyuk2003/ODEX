@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record  id="view_stock_level_wizard" model="ir.ui.view" >
+                <field name="name">Current Stock Level Report</field>
+                <field name="model">stock.level.wizard</field>
+                <field name="arch" type="xml" >
+                <form string="Current Stock Level Wizard" >
+                  <label string="This wizard will help  generate the .xls file for the current stock level" />
+                     <group col="4" colspan="4" >
+                            <field name="stock_location_ids" widget="many2many_tags" domain="[('usage','=','internal')]" />
+
+                    </group>
+                    <notebook colspan="4">
+                        <page string="Product Category">
+                            <group colspan="4" >
+                                <field name="category_ids" nolabel="1"  >
+                                        <field name="name" />
+                                </field>
+                            </group>
+                        </page>
+                    </notebook>
+                        <footer>
+                            <button default_focus="1" icon="gtk-execute" name="stock_excel_report" string="Export as Excel" type="object"  colspan="2" class="oe_highlight" />
+                            or <button special="cancel" class="oe_link"  string="Cancel"  />
+                        </footer>
+                </form>
+             </field>
+        </record>
+
+		<record id="action_stock_level_wizard" model="ir.actions.act_window">
+            <field name="name">Generate Stock Level Report</field>
+            <field name="res_model">stock.level.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_stock_level_wizard"/>
+            <field name="context">{}</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="target">new</field>
+        </record>
+
+
+         <menuitem id="menu_stock_level_excel" name="Current Stock Level Excel Report" parent="stock.menu_warehouse_report" sequence="4" action="action_stock_level_wizard" icon="STOCK_PRINT" />
+   </data>
+</openerp>

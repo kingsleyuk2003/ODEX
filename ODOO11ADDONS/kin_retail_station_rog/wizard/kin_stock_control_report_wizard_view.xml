@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record  id="view_stock_control_report_wizard" model="ir.ui.view" >
+                <field name="name">Day Control Report Wizard</field>
+                <field name="model">kin.stock.control.wizard</field>
+                <field name="arch" type="xml" >
+                <form string="Day Control Report Wizard" >
+                  <label string="This wizard will help you generate a Day Control Report in .xlsx file" />
+                     <group col="4" colspan="4" >
+                         <field name="start_date" />
+                         <field name="end_date" />
+                          <field name="retail_station_ids" widget="many2many_tags"  options="{'no_open':True,'no_create':True}" />
+                    </group>
+                        <footer>
+                            <button default_focus="1" icon="gtk-execute" name="stock_control_excel_report" string="Export as Excel" type="object"  colspan="2" class="oe_highlight" />
+                            or <button special="cancel" class="oe_link"  string="Cancel"  />
+                        </footer>
+                </form>
+             </field>
+        </record>
+
+		<record id="action_stock_control_report_wizard" model="ir.actions.act_window">
+            <field name="name">Generate Day Control Report</field>
+            <field name="res_model">kin.stock.control.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_stock_control_report_wizard"/>
+            <field name="context">{}</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="target">new</field>
+        </record>
+
+
+
+
+   </data>
+</odoo>

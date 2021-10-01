@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_kin_reminder_user,kin.reminder user,model_kin_reminder,group_reminder_user,1,1,1,1
+access_kin_reminder_manager,kin.reminder manager,model_kin_reminder,group_reminder_manager,1,1,1,1

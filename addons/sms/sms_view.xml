@@ -1,0 +1,151 @@
+<openerp>
+    <data>
+
+
+
+        <record  id="view_company_sms_config" model="ir.ui.view" >
+            <field name="name">res.company.sms</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="model">res.company</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            <data>
+                <page name="report" position="after">
+                    <page string="SMS Configuration">
+                         <group  col="1" colspan="4" >
+                             <p>Please Enter the URL Parameters as Name and Value pair. Depending on your SMS Gateway provider, some of the parameters are not compulsory</p>
+
+                            <field name="base_url" />
+                         </group>
+
+                            <group col="4" colspan="4" >
+                                 <field name="username_key" />
+                                 <field name="username_value" />
+                                 <field name="password_key" />
+                                 <field name="password_value" />
+                                 <field name="sender_key" />
+                                 <field name="sender_value" />
+                                <field name="message_key" />
+                                <field name="recipients_key" />
+                            </group>
+                         <group  col="2" colspan="4" >
+                            <field name="other_parameter_ids" >
+                                    <tree editable="bottom" >
+                                        <field name="key" />
+                                        <field name="value" />
+                                    </tree>
+                            </field>
+                        </group>
+                    </page>
+                </page>
+             </data>
+            </field>
+        </record>
+
+
+        <record  id="sms_compose_view_form" model="ir.ui.view" >
+            <field name="name">sms.compose.view.form</field>
+            <field name="model">sms.compose</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Compose SMS">
+                    <header>
+					<button name="submit_sent_btn"  class="oe_highlight"  type="object" string="Send Message" states="draft"   />
+					 <button name="submit_reset_btn"   type="object" string="Reset" states="sent"   />
+                        <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,sent" />
+				</header>
+                    <sheet>
+                        <group  col="2" colspan="4" >
+                            <field name="sender_id" />
+                            <field name="recipients" />
+                            <field name="message" />
+                        </group>
+                        <group col="1" colspan="4" >
+                            <notebook >
+                                <page string="Log History" >
+                                    <field name="sms_log_ids" nolabel="1" />
+                                </page>
+                            </notebook>
+                        </group>
+                     </sheet>
+                </form>
+            </field>
+    </record>
+
+
+        <record id="sms.compose_view_tree" model="ir.ui.view" >
+        <field name="model">sms.compose</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Compose SMS">
+                  <field name="sender_id" />
+                  <field name="recipients" />
+                 <field name="message" />
+
+            </tree>
+        </field>
+    </record>
+
+
+        <record id="sms_compose_action" model="ir.actions.act_window" >
+        <field name="name">Compose SMS</field>
+        <field name="res_model">sms.compose</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="sms_menu"  name="SMS"     />
+    <menuitem id="sms_menu_head" name="SMS" parent="sms_menu" sequence="0"     />
+    <menuitem id="compose_sms_menu"  name="Compose SMS" parent="sms_menu_head" action="sms_compose_action"  />
+
+
+<record id="sms_log" model="ir.ui.view" >
+    <field name="name" >sms.log</field>
+    <field name="model" >sms.log</field>
+    <field name="type">form</field>
+    <field name="arch" type="xml">
+        <form string="SMS Log">
+            <sheet>
+                <group  col="2" colspan="4" >
+                     <field name="date_log" />
+                  <field name="sender_id" />
+                 <field name="recipients" />
+                 <field name="response_text" />
+                <field name="response_status_code" />
+                <field name="response_reason" />
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+
+
+        <record id="sms_log_tree" model="ir.ui.view" >
+        <field name="model">sms.log</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="SMS Log">
+                  <field name="date_log" />
+                  <field name="sender_id" />
+                 <field name="recipients" />
+                 <field name="response_text" />
+                <field name="response_status_code" />
+                <field name="response_reason" />
+            </tree>
+        </field>
+    </record>
+
+<record id="sms_log_action" model="ir.actions.act_window" >
+        <field name="name">SMS Log</field>
+        <field name="res_model">sms.log</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+ <menuitem id="sms_log_menu_menu"  name="SMS Log" parent="sms_menu_head" action="sms_log_action"  />
+
+    </data>
+</openerp>
+
+

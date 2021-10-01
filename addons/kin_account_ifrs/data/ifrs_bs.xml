@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+        <record id="ifrs_bs" model="mis.report" >
+            <field name="name">Balance Sheet</field>
+        </record>
+
+        <record id="ifrs_bs_assets" model="mis.report.kpi" >
+            <field name="sequence" >1</field>
+            <field name="description" >ASSETS</field>
+            <field name="name">assets</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="style_id" ref="mis_report_style_indent_0_bold" />
+            <field name="expression" >AccountingNone</field>
+             <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+       <record id="ifrs_bs_non_current_assets" model="mis.report.kpi" >
+            <field name="sequence" >2</field>
+            <field name="description" >Non-current assets</field>
+            <field name="name">non_current_assets</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="style_id" ref="mis_report_style_indent_1_bold" />
+            <field name="expression" ></field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+
+        <record id="ifrs_bs_property_plant_and_equipment" model="mis.report.kpi" >
+            <field name="sequence" >3</field>
+            <field name="description" >Property, plant and equipment</field>
+            <field name="name">property_plant_and_equipment</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Property, plant and equipment')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+
+        <record id="ifrs_bs_investment_properties" model="mis.report.kpi" >
+            <field name="sequence" >4</field>
+            <field name="description" >Investment properties</field>
+            <field name="name">investment_properties</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Investment properties')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_intangible_assets" model="mis.report.kpi" >
+            <field name="sequence" >5</field>
+            <field name="description" >Intangible assets</field>
+            <field name="name">intangible_assets</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Intangible assets')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_deferred_tax_assets" model="mis.report.kpi" >
+            <field name="sequence" >6</field>
+            <field name="description" >Deferred tax assets</field>
+            <field name="name">deferred_tax_assets</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Deferred tax assets')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_total_non_current_assets" model="mis.report.kpi" >
+            <field name="sequence" >7</field>
+            <field name="description" >Total non-current assets</field>
+            <field name="name">total_non_current_assets</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_1_bold" />
+            <field name="expression" >property_plant_and_equipment + investment_properties + intangible_assets + deferred_tax_assets</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_space_1" model="mis.report.kpi" >
+            <field name="sequence" >8</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_current_assets" model="mis.report.kpi" >
+            <field name="sequence" >9</field>
+            <field name="description" >Current assets</field>
+            <field name="name">current_assets</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="style_id" ref="mis_report_style_indent_1_bold" />
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_inventories" model="mis.report.kpi" >
+            <field name="sequence" >10</field>
+            <field name="description" >Inventories</field>
+            <field name="name">inventories</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Inventories')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_trade_receivables" model="mis.report.kpi" >
+            <field name="sequence" >11</field>
+            <field name="description" >Trade receivables</field>
+            <field name="name">trade_receivables</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Trade receivables')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_other_receivables" model="mis.report.kpi" >
+            <field name="sequence" >12</field>
+            <field name="description" >Other receivables</field>
+            <field name="name">other_receivables</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Other receivables')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_financial_assets_at_fair_value_t" model="mis.report.kpi" >
+            <field name="sequence" >13</field>
+            <field name="description" >Financial assets at fair value through profit or loss</field>
+            <field name="name">financial_assets_at_fair_value_t</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Financial assets at fair value through profit or loss')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_cash_and_cash_equivalents_exclu" model="mis.report.kpi" >
+            <field name="sequence" >14</field>
+            <field name="description" >Cash and cash equivalents (excluding bank overdrafts)</field>
+            <field name="name">cash_and_cash_equivalents_exclu</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Cash and cash equivalents (excluding bank overdrafts)')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_assets_classified_as_held_for_sa" model="mis.report.kpi" >
+            <field name="sequence" >15</field>
+            <field name="description" >Assets classified as held for sale</field>
+            <field name="name">assets_classified_as_held_for_sa</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Assets classified as held for sale')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+
+
+        <record id="ifrs_bs_total_current_assets" model="mis.report.kpi" >
+            <field name="sequence" >16</field>
+            <field name="description" >Total current assets</field>
+            <field name="name">total_current_assets</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_1_bold" />
+            <field name="expression" >inventories + trade_receivables + other_receivables + financial_assets_at_fair_value_t + cash_and_cash_equivalents_exclu + assets_classified_as_held_for_sa</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_space_2" model="mis.report.kpi" >
+            <field name="sequence" >17</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_total_assets" model="mis.report.kpi" >
+            <field name="sequence" >18</field>
+            <field name="description" >Total assets</field>
+            <field name="name">total_assets</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_0_bold" />
+            <field name="expression" >total_non_current_assets + total_current_assets</field>
+                       <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+
+        <record id="ifrs_bs_space_3" model="mis.report.kpi" >
+            <field name="sequence" >19</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_space_4" model="mis.report.kpi" >
+            <field name="sequence" >20</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_liabilities" model="mis.report.kpi" >
+            <field name="sequence" >21</field>
+            <field name="description" >LIABILITIES</field>
+            <field name="name">liabilities</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="style_id" ref="mis_report_style_indent_0_bold" />
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_non_current_liabilities" model="mis.report.kpi" >
+            <field name="sequence" >22</field>
+            <field name="description" >Non-current liabilities</field>
+            <field name="name">non_current_liabilities</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="style_id" ref="mis_report_style_indent_1_bold" />
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+
+        <record id="ifrs_bs_borrowings" model="mis.report.kpi" >
+            <field name="sequence" >23</field>
+            <field name="description" >Borrowings</field>
+            <field name="name">borrowings</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Borrowings')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_deferred_tax_liabilities" model="mis.report.kpi" >
+            <field name="sequence" >24</field>
+            <field name="description" >Deferred tax liabilities</field>
+            <field name="name">deferred_tax_liabilities</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Deferred tax liabilities')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_total_non_current_liabilities" model="mis.report.kpi" >
+            <field name="sequence" >25</field>
+            <field name="description" >Total non-current liabilities</field>
+            <field name="name">total_non_current_liabilities</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_1_bold" />
+            <field name="expression" >borrowings + deferred_tax_liabilities</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_space_5" model="mis.report.kpi" >
+            <field name="sequence" >26</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_current_liabilities" model="mis.report.kpi" >
+            <field name="sequence" >27</field>
+            <field name="description" >Current liabilities</field>
+            <field name="name">current_liabilities</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="style_id" ref="mis_report_style_indent_1_bold" />
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+
+         <record id="ifrs_bs_trade_payables" model="mis.report.kpi" >
+            <field name="sequence" >28</field>
+            <field name="description" >Trade payables</field>
+            <field name="name">trade_payables</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Trade payables')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+         <record id="ifrs_bs_other_payables" model="mis.report.kpi" >
+            <field name="sequence" >29</field>
+            <field name="description" >Other payables</field>
+            <field name="name">other_payables</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Other payables')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+
+         <record id="ifrs_bs_current_tax_liabilities" model="mis.report.kpi" >
+            <field name="sequence" >30</field>
+            <field name="description" >Current tax liabilities</field>
+            <field name="name">current_tax_liabilities</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Current tax liabilities')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+
+        <record id="ifrs_bs_employee_benefit_obligations" model="mis.report.kpi" >
+            <field name="sequence" >31</field>
+            <field name="description" >Employee benefit obligations</field>
+            <field name="name">employee_benefit_obligations</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Employee benefit obligations')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+
+        <record id="ifrs_bs_deferred_revenue" model="mis.report.kpi" >
+            <field name="sequence" >32</field>
+            <field name="description" >Deferred revenue</field>
+            <field name="name">deferred_revenue</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_2" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Deferred revenue')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_total_current_liabilities" model="mis.report.kpi" >
+            <field name="sequence" >33</field>
+            <field name="description" >Total current liabilities</field>
+            <field name="name">total_current_liabilities</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_0_bold" />
+            <field name="expression" >trade_payables + other_payables + current_tax_liabilities + employee_benefit_obligations + deferred_revenue</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_space_6" model="mis.report.kpi" >
+            <field name="sequence" >34</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+
+        <record id="ifrs_bs_total_liabilities" model="mis.report.kpi" >
+            <field name="sequence" >35</field>
+            <field name="description" >Total Liabilities</field>
+            <field name="name">total_liabilities</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_0_bold" />
+            <field name="expression" >total_non_current_liabilities + total_current_liabilities</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_space_7" model="mis.report.kpi" >
+            <field name="sequence" >36</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_net_assets" model="mis.report.kpi" >
+            <field name="sequence" >37</field>
+            <field name="description" >Net assets</field>
+            <field name="name">net_assets</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_0_bold" />
+            <field name="expression" >total_assets +  total_liabilities</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_space_8" model="mis.report.kpi" >
+            <field name="sequence" >38</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+
+        <record id="ifrs_bs_equity" model="mis.report.kpi" >
+            <field name="sequence" >39</field>
+            <field name="description" >EQUITY</field>
+            <field name="name">equity</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="style_id" ref="mis_report_style_indent_0_bold" />
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_share_capital_and_share_premium" model="mis.report.kpi" >
+            <field name="sequence" >40</field>
+            <field name="description" >Share capital and share premium</field>
+            <field name="name">share_capital_and_share_premium</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_1" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Share capital and share premium')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+
+        <record id="ifrs_bs_other_equity" model="mis.report.kpi" >
+            <field name="sequence" >41</field>
+            <field name="description" >Other equity</field>
+            <field name="name">other_equity</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_1" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Other equity')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_other_reserves" model="mis.report.kpi" >
+            <field name="sequence" >42</field>
+            <field name="description" >Other reserves</field>
+            <field name="name">other_reserves</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_1" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Other reserves')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_retained_earnings" model="mis.report.kpi" >
+            <field name="sequence" >43</field>
+            <field name="description" >Retained earnings</field>
+            <field name="name">retained_earnings</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_1" />
+            <field name="expression" >balp[('report_head_id.name', '=', 'Retained earnings')]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_current_period_earnings" model="mis.report.kpi" >
+            <field name="sequence" >44</field>
+            <field name="description" >Current Period Earnings</field>
+            <field name="name">current_period_earnings</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_1" />
+            <field name="expression" >balp[50%,51%,6%,7%,8%]</field>
+            <field name="auto_expand_accounts" eval="1" />
+            <field name="auto_expand_accounts_style_id" ref="mis_report_style_indent_3" />
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_total_equity" model="mis.report.kpi" >
+            <field name="sequence" >45</field>
+            <field name="description" >Total equity</field>
+            <field name="name">total_equity</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_0_bold" />
+            <field name="expression" >share_capital_and_share_premium + other_equity + other_reserves  + retained_earnings + current_period_earnings</field>
+             <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_space_9" model="mis.report.kpi" >
+            <field name="sequence" >46</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_balance" model="mis.report.kpi" >
+            <field name="sequence" >47</field>
+            <field name="description" >Balance</field>
+            <field name="name">balance</field>
+            <field name="type" >num</field>
+            <field name="compare_method" >pct</field>
+            <field name="accumulation_method" >sum</field>
+            <field name="style_id" ref="mis_report_style_indent_0_bold" />
+            <field name="expression" >net_assets + total_equity</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+        <record id="ifrs_bs_space_10" model="mis.report.kpi" >
+            <field name="sequence" >48</field>
+            <field name="description" > </field>
+            <field name="name">_</field>
+            <field name="type" >str</field>
+            <field name="compare_method" >none</field>
+            <field name="accumulation_method" >none</field>
+            <field name="expression" >AccountingNone</field>
+            <field name="report_id" ref="ifrs_bs" />
+        </record>
+
+
+
+
+
+
+
+    </data>
+</openerp>

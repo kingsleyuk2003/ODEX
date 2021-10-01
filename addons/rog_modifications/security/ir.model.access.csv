@@ -1,0 +1,28 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_import_permit user,import.permit user,model_import_permit,group_shipping,1,1,1,1
+access_import_permit user,kin.reminder shipping user,model_kin_reminder,group_shipping,1,1,1,1
+access_vessel_charter_contract user,vessel.charter.contract user,model_vessel_charter_contract,group_shipping,1,1,1,1
+access_sbu,sbu user,model_sbu,base.group_user,1,1,1,1
+access_shared_service_allocation,shared.service.allocation user,model_shared_service_allocation,base.group_user,1,1,1,1
+access_ship_to_ship purchase user,ship.to.ship procurement user,model_ship_to_ship,group_procurement,1,1,1,1
+access_ship_to_ship user,ship.to.ship user,model_ship_to_ship,group_shipping,1,1,1,1
+access_tender_proposal_evaluation_user,tender.proposal.evaluation user,model_tender_proposal_evaluation,base.group_user,1,1,1,1
+access_initial_evaluation_user,initial.evaluation user,model_initial_evaluation,base.group_user,1,1,1,1
+access_final_evaluation_user,final.evaluation user,model_final_evaluation,base.group_user,1,1,1,1
+access_payment_term_user,payment.term user,model_payment_term,base.group_user,1,1,1,1
+access_final_approval_user,final.approval user,model_final_approval,base.group_user,1,1,1,1
+access_final_payment_term_user,final.payment.term user,model_final_payment_term,base.group_user,1,1,1,1
+access_goods_verification_user,goods.verification user,model_goods_verification,base.group_user,1,1,1,1
+access_goods_verification_compare_user,goods.verification.compare user,model_goods_verification_compare,base.group_user,1,1,1,1
+access_supplier_evaluation_user,supplier.evaluation user,model_supplier_evaluation,base.group_user,1,1,1,1
+access_procurement_register_user,procurement.register user,model_procurement_register,base.group_user,1,1,1,1
+access_action_taken_user,action.taken user,model_action_taken,base.group_user,1,1,1,1
+access_form_m_user,form.m user,model_form_m,purchase.group_purchase_user,1,1,1,1
+access_hr_children_rog_user,hr.children.rog user,model_hr_children_rog,base.group_user,1,1,1,1
+access_hr_rog_grade,hr.rog.grade user,model_hr_rog_grade,base.group_user,1,1,1,1
+access_hr_rog_location,hr.rog.location user,model_hr_rog_location,base.group_user,1,1,1,1
+access_hr_rog_band,hr.rog.band user,model_hr_rog_band,base.group_user,1,1,1,1
+access_hr_rog_band,hr.rog.function user,model_hr_rog_function,base.group_user,1,1,1,1
+access_rule_adjustment,rule.adjustment user,model_rule_adjustment,base.group_user,1,1,1,1
+access_stock_reading,stock.reading user,model_stock_reading,base.group_user,1,1,1,1
+access_stock_reading_lines,stock.reading.lines user,model_stock_reading_lines,base.group_user,1,1,1,1

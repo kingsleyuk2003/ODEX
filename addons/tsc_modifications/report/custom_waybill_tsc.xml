@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="report_waybill_tsc_extend" inherit_id="kin_report.report_waybill" >
+
+				 <xpath expr="//p[@name='p_serial']"  position="replace">
+					 <div t-if="has_serial_number"><strong>Serial Number(s):</strong></div>
+					 <t t-foreach="pack_operation.pack_lot_ids" t-as="packlot" >
+							<span t-field="packlot.lot_id" />,
+								<t t-if="not packlot.lot_id">
+									<span t-field="packlot.lot_name"/>,
+								</t>
+					 </t>
+				 </xpath>
+		</template>
+
+	</data>
+</odoo>

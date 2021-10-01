@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
+		<!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
+		<report
+		    id="kin_report.receipt_custom"
+		    model="account.payment.group"
+		    string="Payment Receipt"
+		    report_type="qweb-pdf"
+		    name="aminata_modifications.custom_receipt_aminata"
+		    file="aminata_modifications.custom_receipt_aminata"
+		    attachment_use="False"
+		    		/>
+
+
+<template id="custom_receipt_aminata">
+	    <t t-call="report.html_container">
+	        <t t-foreach="docs" t-as="o">
+	            <t t-call="aminata_modifications.custom_layout_aminata_receipt"  >
+					<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+	                <div class="page" >
+						<style type="text/css">
+							<t t-call="kin_report.style"/>
+						</style>
+						<div t-raw="o.company_id.html_after_header" />
+
+							<div class="row">
+							<div class="col-xs-12" >
+								<table  style="width: 100%;font-size:17px;line-height:2" class="table-bordered-black"  >
+											<thead>
+												<tr>
+													<th colspan="5" >
+														<span t-if="o.state == 'posted'">PAYMENT RECEIPT</span>
+														<span t-if="o.state == 'draft'">DRAFT RECEIPT</span>
+													</th>
+													<th  colspan="1" style="text-align:right" >No: <span t-if="o.state == 'posted'" t-field="o.name" /></th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td colspan="5">
+														<b>Paid by:</b> <span t-field="o.partner_id.name" />
+														<br />
+														<br />
+													</td>
+													<td>
+														<b>Paid to:</b> <span t-field="o.company_id.name" />
+													</td>
+												</tr>
+												<tr>
+													<td colspan="5" ><b>DESCRIPTION</b></td>
+													<td><b>AMOUNT</b></td>
+												</tr>
+												<tr>
+													<td colspan="5">
+														<span t-field="o.narration" />
+														<br />
+														<br />
+													</td>
+													<td><span t-field="o.payments_amount" /></td>
+												</tr>
+												<tr>
+													<td colspan="6"><b>Amount in words:</b><span  t-esc="o.amount_to_text(o.payments_amount, o.currency_id)"/></td>
+												</tr>
+												<tr>
+													<td colspan="1" ><b>Date: </b><span t-field="o.payment_date" /></td>
+													<td colspan="5"  ><span style="float:center" ><b>Received by: </b><span t-field="o.create_uid.name" /></span></td>
+												</tr>
+
+											</tbody>
+										</table>
+							</div>
+							</div>
+								<br/>
+								<br />
+								<p style="font-size:17px;line-height:2" >FOR: <b><span t-field="o.company_id.name" /></b> .................. </p>
+							</div>
+
+
+	            </t>
+	        </t>
+    	</t>
+</template>
+	</data>
+</openerp>
+
+

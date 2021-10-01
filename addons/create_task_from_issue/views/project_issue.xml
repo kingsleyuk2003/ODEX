@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="project_issue_form_view_inherit" model="ir.ui.view">
+            <field name="name">project_issue_inherit</field>
+            <field name="model">project.issue</field>
+            <field name="inherit_id" ref="project_issue.project_issue_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='task_id']" position="attributes">
+                    <attribute name="context">
+                        {'default_project_id':project_id,
+                        'default_issue_ids': [(4, id, False)],
+                        'default_user_id': user_id,
+                        'default_description': description,
+                        'default_name': name,}
+                    </attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+
+        <record id="view_create_po_form" model="ir.ui.view">
+            <field name="name">Create PO</field>
+            <field name="model">create.po.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Create PO">
+                     <p>This wizard allows you to create a Purchase Order / Stock Release based on the Fixing table </p>
+                    <group>
+                        <field name="ago_qty" />
+                        <field name="pms_qty" />
+                    </group>
+                    <footer>
+                        <button name="action_create_po" string="Create PO based on Fixing Table" type="object" class="oe_highlight"/>
+                        or
+                        <button string="No and Close" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_create_po" model="ir.actions.act_window">
+            <field name="name">Create PO based on Fixing Table</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">create.po.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_create_po_form" />
+            <field name="target">new</field>
+            <!--<field name="groups_id" eval="[(4,ref('base.group_sale_salesman'))]"/>-->
+        </record>
+
+
+
+
+
+
+
+    </data>
+</openerp>

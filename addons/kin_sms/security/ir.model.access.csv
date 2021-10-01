@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_kin_sms_user,kin.sms user,model_kin_sms,group_kin_sms,1,1,1,1
+access_kin_sms_log_user,kin.sms.log user,model_kin_sms_log,group_kin_sms,1,1,1,1
+access_kin_sms_params_user,kin.sms.params user,model_kin_sms_params,group_kin_sms,1,1,1,1

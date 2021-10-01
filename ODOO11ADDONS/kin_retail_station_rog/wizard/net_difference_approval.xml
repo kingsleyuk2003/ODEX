@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+        <record id="view_net_difference_approval" model="ir.ui.view">
+            <field name="name">Net Difference Approval</field>
+            <field name="model">net.difference.approval.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Net Difference Confirmation">
+                        <p>There is a Net Difference of <b style="color:red" ><field name="net_difference" readonly="1" class="oe_inline" /></b> in the cash control. </p>
+                    <p>Do you want to go ahead with the approval? You may disapprove for the retail manager to fix the values</p>
+                    <footer>
+                        <button name="action_approve_wizard" string="Yes, go ahead and approve" type="object" />
+                        or
+                        <button string="No, wait. Let me Disapprove this record" special="cancel" class="oe_highlight" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_net_difference_approval" model="ir.actions.act_window">
+            <field name="name">Net Difference Approval</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">net.difference.approval.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_net_difference_approval" />
+            <field name="target">new</field>
+            <!--<field name="groups_id" eval="[(4,ref('base.group_sale_salesman'))]"/>-->
+        </record>
+
+
+
+
+
+    </data>
+</odoo>

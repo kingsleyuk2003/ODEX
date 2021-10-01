@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
+		<!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
+		<report
+		    id="waybill_custom"
+		    model="stock.picking"
+		    string="Waybill/Delivery Note"
+		    report_type="qweb-pdf"
+		    name="kin_report.report_waybill"
+		    file="kin_report.report_waybill"
+		    attachment_use="False"
+		    		/>
+
+<template id="report_waybill">
+	    <t t-call="report.html_container"> 	    	
+	        <t t-foreach="docs" t-as="o">
+	            <t t-call="kin_report.custom_layout"  >
+	                <div class="page" >
+						<style type="text/css">
+							<t t-call="kin_report.style"/>
+						</style>
+						<div t-raw="o.company_id.html_after_header" />
+						<div class="row" >
+							<div class="col-xs-5">
+								<div style="font-weight:bold" >
+									<span t-if="o.picking_type_id.code == 'outgoing'" >FROM:</span>
+									<span t-if="o.picking_type_id.code == 'incoming'" >TO:</span>
+									<span t-if="o.picking_type_id.code == 'internal'" >INTERNAL:</span>
+								</div>
+								<div>
+									<span t-field="o.picking_type_id.warehouse_id.name" />
+								</div>
+								<p />
+								<div>
+								<div t-if="o.company_id.vat" ><span style="font-weight:bold">VAT NO:  </span> <span t-field="o.company_id.vat" /></div>
+								<div t-if="o.company_id.company_registry" ><span style="font-weight:bold">Reg. NO:  </span> <span t-field="o.company_id.company_registry" /></div>
+								</div>
+							</div>
+							<div class="col-xs-7">
+								<div class="row">
+									<div class="col-xs-6 col-xs-offset-6" style="font-weight:bold">
+										<span t-if="o.picking_type_id.code == 'outgoing'" >TO:</span>
+										<span t-if="o.picking_type_id.code == 'incoming'" >FROM:</span>
+										<span t-if="o.picking_type_id.code == 'internal'" >INTERNAL:</span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6 col-xs-offset-6" >
+										<div t-field="o.partner_id" t-field-options='{"widget": "contact", "fields": ["address", "name", "phone", "fax"], "no_marker": true, "phone_icons": true}'/>
+										<p t-if="o.partner_id.vat">VAT: <span t-field="o.partner_id.vat"/></p>
+									</div>
+						    	</div>
+							</div>
+						</div>
+
+
+						<div class="row" >
+							<div class="col-xs-12 text-center" >
+								<h3  t-if="o.state == 'draft'" ><b>DRAFT WAYBILL/DELIVERY NOTE <span t-field="o.name" /></b></h3>
+								<h3 t-if="o.state == 'done'"><b>WAYBILL/DELIVERY NOTE <span t-field="o.name" /></b></h3>
+								<h3 t-if="o.state == 'cancel'"><b>CANCELLED WAYBILL/DELIVERY NOTE <span t-field="o.name" /></b></h3>
+								<h3 t-if="o.state in ('confirmed,partially_available,assigned')"><b>WIP WAYBILL/DELIVERY NOTE <span t-field="o.name" /></b></h3>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 mt16" >
+								<table  style="width: 100%" class="table-bordered-black" cellpadding="3" cellspacing="0" >
+									<thead>
+										<tr>
+											<th><span>Shipment Date:</span></th>
+											<th><span>Scheduled Date:</span></th>
+											<th><span>Your Order Ref.</span></th>
+											<th><span>Sales Person</span></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><span t-field="o.shipment_date" /></td>
+											<td><span t-field="o.min_date" /></td>
+											<td><span t-field="o.shipment_ref" /></td>
+											<td><span t-field="o.salesperson_id.name" /></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12" >
+								<table  style="width: 100%" class="table-bordered-black" cellpadding="3" cellspacing="0" >
+ 										<t t-set="has_serial_number" t-value="o.pack_operation_ids.filtered('pack_lot_ids')" groups="stock.group_production_lot"/>
+										<thead style="display: table-row-group " >
+											<tr>
+												<td width="50%" ><span><b>Description</b></span></td>
+												<td class="text-right" ><span><b>Quantity</b></span></td>
+											</tr>
+										</thead>
+										<tbody>
+
+											<tr  t-foreach="o.pack_operation_ids" t-as="pack_operation" >
+												<td style="padding-left: 2px" >
+													<span t-field="pack_operation.name"/>
+													<t t-if="not pack_operation.product_id and pack_operation.package_id">
+														<span  t-field="pack_operation.package_id"/>
+													</t>
+													<p name="p_serial" >
+														<div t-if="has_serial_number"><strong>Serial Number(s):</strong></div>
+														<t t-foreach="pack_operation.pack_lot_ids" t-as="packlot" >
+															<span t-field="packlot.lot_id" />(<span t-field="packlot.qty"/>),
+															<t t-if="not packlot.lot_id">
+																<span t-field="packlot.lot_name"/>(<span t-field="packlot.qty"/>),
+															</t>
+														</t>
+													</p>
+												</td>
+												<td class="text-right">
+													<span t-field="pack_operation.product_qty"/>
+												 	<t t-if="o.company_id.is_show_uom"><span  t-field="pack_operation.product_uom_id"/></t>
+												</td>
+											</tr>
+										</tbody>
+								</table>
+							</div>
+						</div>
+
+						<br />
+						<br />
+						<div class="col-xs-12" name="div_acknowledge" >
+							<div  class="row" name="div_sign_picking" >
+								<div class="col-xs-6" >
+									<span>Received by ....................................</span>
+								</div>
+								<div class="col-xs-6" >
+									<span>Delivered by ...................................</span>
+								</div>
+							</div>
+						 	<br />
+						 	<div  class="row mt32 mt32" name="div_sign_picking1" >
+								<div class="col-xs-6" >
+									<span>Signature &amp; Date ............................</span>
+								</div>
+								 <div class="col-xs-6" >
+									<span>Signature &amp; Date ............................</span>
+								</div>
+							</div>
+						</div>
+
+	                </div>
+	            </t>
+	        </t>
+    	</t>
+</template>
+	</data>
+</openerp>

@@ -1,0 +1,7 @@
+import payroll_report_wizard
+import mass_email_payslip
+import pfa_report_wizard
+import bank_advice_report_wizard
+import hr_payroll_payslips_by_employees_extend
+import general_pension_report_wizard
+import paye_report_wizard

@@ -1,0 +1,125 @@
+Index: requirements.txt.save
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/requirements.txt.save b/requirements.txt.save
+new file mode 100755
+--- /dev/null	(date 1610564558582)
++++ b/requirements.txt.save	(date 1610564558582)
+@@ -0,0 +1,40 @@
++Babel==1.3
++Jinja2==2.7.3
++Mako==1.0.1
++MarkupSafe==0.23
++#Pillow==2.7.0
++Python-Chart==1.39
++PyYAML==3.11
++Werkzeug==0.9.6
++argparse==1.2.1
++decorator==3.4.0
++docutils==0.12
++feedparser==5.1.3
++gdata==2.0.18
++gevent
++lxml
++
++mock==1.0.1
++ofxparse==0.14
++passlib==1.6.2
++#psutil==2.2.0
++psycogreen==1.0
++#psycopg2==2.5.4
++pyPdf==1.13
++pydot==1.0.2
++pyparsing==2.0.3
++pyserial==2.7
++python-dateutil==2.4.0
++#python-ldap==2.4.19
++python-openid==2.2.5
++pytz==2014.10
++pyusb==1.0.0b2
++qrcode==5.1
++reportlab
++requests==2.6.0
++six==1.9.0
++suds-jurko==0.6
++vatnumber==1.2
++vobject==0.6.6
++wsgiref==0.1.2
++xlwt==0.7.5
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"ProjectRootManager\" version=\"2\" project-jdk-name=\"Python 3.6 (myvenv)  odoo 13\" project-jdk-type=\"Python SDK\" />\n  <component name=\"PythonCompatibilityInspectionAdvertiser\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 17c0ae834cdd7fbe48116bbc2bf94241dbaa9fbc)
++++ b/.idea/misc.xml	(date 1610561063815)
+@@ -1,6 +1,9 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.6 (myvenv)  odoo 13" project-jdk-type="Python SDK" />
++  <component name="ProjectRootManager" version="2" project-jdk-name="Python 2.7" project-jdk-type="Python SDK" />
++  <component name="PyPackaging">
++    <option name="earlyReleasesAsUpgrades" value="true" />
++  </component>
+   <component name="PythonCompatibilityInspectionAdvertiser">
+     <option name="version" value="3" />
+   </component>
+Index: .idea/ODEX.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<module type=\"PYTHON_MODULE\" version=\"4\">\n  <component name=\"NewModuleRootManager\">\n    <content url=\"file://$MODULE_DIR$\">\n      <excludeFolder url=\"file://$MODULE_DIR$/venv\" />\n    </content>\n    <orderEntry type=\"jdk\" jdkName=\"Python 3.6 (myvenv)  odoo 13\" jdkType=\"Python SDK\" />\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\n  </component>\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/ODEX.iml b/.idea/ODEX.iml
+--- a/.idea/ODEX.iml	(revision 17c0ae834cdd7fbe48116bbc2bf94241dbaa9fbc)
++++ b/.idea/ODEX.iml	(date 1610561063235)
+@@ -3,8 +3,9 @@
+   <component name="NewModuleRootManager">
+     <content url="file://$MODULE_DIR$">
+       <excludeFolder url="file://$MODULE_DIR$/venv" />
++      <excludeFolder url="file://$MODULE_DIR$/myvenv" />
+     </content>
+-    <orderEntry type="jdk" jdkName="Python 3.6 (myvenv)  odoo 13" jdkType="Python SDK" />
++    <orderEntry type="jdk" jdkName="Python 2.7" jdkType="Python SDK" />
+     <orderEntry type="sourceFolder" forTests="false" />
+   </component>
+ </module>
+\ No newline at end of file
+diff --git a/venv/lib/python2.7/site-packages/pip/_vendor/html5lib/filters/__init__.py b/venv/lib/python2.7/site-packages/pip/_vendor/html5lib/filters/__init__.py
+deleted file mode 100644
+diff --git a/venv/lib/python2.7/site-packages/pip/_vendor/urllib3/contrib/_securetransport/__init__.py b/venv/lib/python2.7/site-packages/pip/_vendor/urllib3/contrib/_securetransport/__init__.py
+deleted file mode 100644
+diff --git a/venv/lib/python2.7/site-packages/lxml/includes/__init__.py b/venv/lib/python2.7/site-packages/lxml/includes/__init__.py
+deleted file mode 100644
+diff --git a/venv/lib/python2.7/site-packages/gdata/spreadsheets/__init__.py b/venv/lib/python2.7/site-packages/gdata/spreadsheets/__init__.py
+deleted file mode 100644
+diff --git a/venv/lib/python2.7/site-packages/gdata/apps/multidomain/__init__.py b/venv/lib/python2.7/site-packages/gdata/apps/multidomain/__init__.py
+deleted file mode 100644
+diff --git a/venv/lib/python2.7/site-packages/pip/_internal/operations/build/__init__.py b/venv/lib/python2.7/site-packages/pip/_internal/operations/build/__init__.py
+deleted file mode 100644
+diff --git a/venv/lib/python2.7/site-packages/gdata/apps/groups/__init__.py b/venv/lib/python2.7/site-packages/gdata/apps/groups/__init__.py
+deleted file mode 100644
+diff --git a/venv/lib/python2.7/site-packages/mako/ext/__init__.py b/venv/lib/python2.7/site-packages/mako/ext/__init__.py
+deleted file mode 100644
+diff --git a/venv/lib/python2.7/site-packages/openid/extensions/draft/__init__.py b/venv/lib/python2.7/site-packages/openid/extensions/draft/__init__.py
+deleted file mode 100644
+diff --git a/venv/lib/python2.7/site-packages/jinja2/testsuite/res/__init__.py b/venv/lib/python2.7/site-packages/jinja2/testsuite/res/__init__.py
+deleted file mode 100644
+diff --git a/venv/lib/python2.7/site-packages/pip/_internal/operations/__init__.py b/venv/lib/python2.7/site-packages/pip/_internal/operations/__init__.py
+deleted file mode 100644
+diff --git a/venv/lib/python2.7/site-packages/gdata/sites/__init__.py b/venv/lib/python2.7/site-packages/gdata/sites/__init__.py
+deleted file mode 100644
+diff --git a/venv/lib/python2.7/site-packages/pip/_internal/utils/__init__.py b/venv/lib/python2.7/site-packages/pip/_internal/utils/__init__.py
+deleted file mode 100644
+diff --git a/venv/lib/python2.7/site-packages/gdata/apps/organization/__init__.py b/venv/lib/python2.7/site-packages/gdata/apps/organization/__init__.py
+deleted file mode 100644
+diff --git a/venv/lib/python2.7/no-global-site-packages.txt b/venv/lib/python2.7/no-global-site-packages.txt
+deleted file mode 100644
+diff --git a/venv/lib/python2.7/site-packages/pip/_vendor/urllib3/contrib/__init__.py b/venv/lib/python2.7/site-packages/pip/_vendor/urllib3/contrib/__init__.py
+deleted file mode 100644

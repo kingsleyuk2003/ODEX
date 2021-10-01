@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>        
+
+        <record forcecreate="True" id="ir_cron_request_qhsse_meeting" model="ir.cron">
+            <field name="name">Run QHSSE Meeting Reminder</field>
+            <field eval="True" name="active"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field name="model_id" ref="model_qhsse_meeting"/>
+             <field name="state">code</field>
+            <field name="code">model.run_notify_qhsse_meeting()</field>
+        </record>
+
+        <record forcecreate="True" id="ir_cron_request_emergency_drill" model="ir.cron">
+            <field name="name">Run Emergency Drill Reminder</field>
+            <field eval="True" name="active"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field name="model_id" ref="model_emergency_drill"/>
+             <field name="state">code</field>
+            <field name="code">model.run_notify_emergency_drill()</field>
+        </record>
+
+        <record forcecreate="True" id="ir_cron_request_security_meeting" model="ir.cron">
+            <field name="name">Run Security Meeting Reminder</field>
+            <field eval="True" name="active"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field name="model_id" ref="model_security_meeting"/>
+             <field name="state">code</field>
+            <field name="code">model.run_notify_security_meeting()</field>
+        </record>
+
+        <record forcecreate="True" id="ir_cron_inspection_meeting" model="ir.cron">
+            <field name="name">Run Inspection Reminder</field>
+            <field eval="True" name="active"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field name="model_id" ref="model_inspection"/>
+             <field name="state">code</field>
+            <field name="code">model.run_notify_inspection()</field>
+        </record>
+
+         <record forcecreate="True" id="ir_cron_regulatory_document" model="ir.cron">
+            <field name="name">Run Regulatory Document Reminder</field>
+            <field eval="True" name="active"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field name="model_id" ref="model_regulatory_document"/>
+             <field name="state">code</field>
+            <field name="code">model.run_notify_regulatory_document()</field>
+        </record>
+
+          <record forcecreate="True" id="ir_cron_routine_activity" model="ir.cron">
+            <field name="name">Run Routine Activity Reminder</field>
+            <field eval="True" name="active"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field name="model_id" ref="model_routine_activity"/>
+             <field name="state">code</field>
+            <field name="code">model.run_notify_routine_activity()</field>
+        </record>
+
+
+    </data>
+</odoo>

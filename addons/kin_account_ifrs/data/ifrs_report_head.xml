@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1" >
+
+         <record model="account.report.head" id="account_report_head_data_ppe">
+          <field name="name">Property, plant and equipment</field>
+        </record>
+
+         <record model="account.report.head" id="account_report_head_data_ita">
+          <field name="name">Intangible assets</field>
+        </record>
+
+        <record model="account.report.head" id="account_report_head_data_ip">
+          <field name="name">Investment properties</field>
+        </record>
+
+        <record model="account.report.head" id="account_report_head_data_fafv">
+          <field name="name">Financial assets at fair value through profit or loss</field>
+        </record>
+
+        <record model="account.report.head" id="account_report_head_data_dfa">
+          <field name="name">Deferred tax assets</field>
+        </record>
+
+        <record model="account.report.head" id="account_report_head_data_or">
+          <field name="name">Other receivables</field>
+        </record>
+
+        <record model="account.report.head" id="account_report_head_data_tr">
+          <field name="name">Trade receivables</field>
+        </record>
+
+        <record model="account.report.head" id="account_report_head_data_inv">
+          <field name="name">Inventories</field>
+        </record>
+
+        <record model="account.report.head" id="account_report_head_data_cce">
+          <field name="name">Cash and cash equivalents (excluding bank overdrafts)</field>
+        </record>
+
+        <record model="account.report.head" id="account_report_head_data_ach">
+          <field name="name">Assets classified as held for sale</field>
+        </record>
+
+        <record model="account.report.head" id="account_report_head_data_op">
+          <field name="name">Other payables</field>
+        </record>
+
+        <record model="account.report.head" id="account_report_head_data_tp">
+          <field name="name">Trade payables</field>
+        </record>
+
+         <record model="account.report.head" id="account_report_head_data_ebo">
+          <field name="name">Employee benefit obligations</field>
+        </record>
+
+         <record model="account.report.head" id="account_report_head_data_ctl">
+          <field name="name">Current tax liabilities</field>
+        </record>
+
+         <record model="account.report.head" id="account_report_head_data_dfl">
+          <field name="name">Deferred tax liabilities</field>
+        </record>
+
+         <record model="account.report.head" id="account_report_head_data_bor">
+          <field name="name">Borrowings</field>
+        </record>
+
+         <record model="account.report.head" id="account_report_head_data_dr">
+          <field name="name">Deferred revenue</field>
+        </record>
+
+         <record model="account.report.head" id="account_report_head_data_scsp">
+          <field name="name">Share capital and share premium</field>
+        </record>
+
+         <record model="account.report.head" id="account_report_head_data_ors">
+          <field name="name">Other reserves</field>
+        </record>
+
+         <record model="account.report.head" id="account_report_head_data_re">
+          <field name="name">Retained earnings</field>
+        </record>
+
+         <record model="account.report.head" id="account_report_head_data_oe">
+          <field name="name">Other equity</field>
+        </record>
+
+         <record model="account.report.head" id="account_report_head_data_rev">
+          <field name="name">Revenue</field>
+        </record>
+
+         <record model="account.report.head" id="account_report_head_data_oi">
+          <field name="name">Other income</field>
+        </record>
+
+         <record model="account.report.head" id="account_report_head_data_fi">
+          <field name="name">Finance income</field>
+        </record>
+
+        <record model="account.report.head" id="account_report_head_data_rsd">
+          <field name="name">Revaluation Surplus/Deficit</field>
+        </record>
+
+        <record model="account.report.head" id="account_report_head_data_rgl">
+          <field name="name">Remeasurement gain or loss</field>
+        </record>
+
+        <record model="account.report.head" id="account_report_head_data_cfva">
+          <field name="name">Changes in FV of financial assets</field>
+        </record>
+        <record model="account.report.head" id="account_report_head_data_cfvchi">
+          <field name="name">Changes in FV of Cashflow hedging instrument</field>
+        </record>
+        <record model="account.report.head" id="account_report_head_data_cosg">
+          <field name="name">Cost of sales of goods</field>
+        </record>
+        <record model="account.report.head" id="account_report_head_data_dc">
+          <field name="name">Distribution costs</field>
+        </record>
+
+        <record model="account.report.head" id="account_report_head_data_ae">
+          <field name="name">Administrative expenses</field>
+        </record>
+
+        <record model="account.report.head" id="account_report_head_data_fc">
+          <field name="name">Finance costs</field>
+        </record>
+
+        <record model="account.report.head" id="account_report_head_data_ite">
+          <field name="name">Income tax expense</field>
+        </record>
+
+
+
+
+
+
+    </data>
+</openerp>

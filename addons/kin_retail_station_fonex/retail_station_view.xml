@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_product_received_register_other_company_form_fonex" model="ir.ui.view" >
+            <field name="name" >product.received.register.other.company.form.fonex</field>
+            <field name="model">product.received.register</field>
+           <field name="inherit_id" ref="kin_retail_station_general.view_product_received_register_other_company_form" />
+            <field name="arch" type="xml" >
+                <button name="action_confirm" position="attributes" >
+                    <attribute name="groups" >kin_retail_station_fonex.group_show_validate_inventory_button</attribute>
+                    <attribute name="states" >waiting</attribute>
+                </button>
+                <button name="action_confirm" position="before" >
+                    <button name="action_submit" type="object" states="draft,transit" string="Send to Manager"  class="oe_highlight" />
+                </button>
+                 <button name="action_cancel" position="attributes" >
+                         <attribute name="states" >waiting,draft,transit</attribute>
+                 </button>
+            </field>
+        </record>
+
+    </data>
+</openerp>

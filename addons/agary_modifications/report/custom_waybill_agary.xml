@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="report_waybill_agary_extend" inherit_id="kin_report.report_waybill" >
+
+
+            <xpath expr="//p[@name='p_serial']"  position="replace">
+					 <div t-if="has_serial_number"><strong>Batch(es):</strong></div>
+					 <t t-foreach="pack_operation.pack_lot_ids" t-as="packlot" >
+							<span t-field="packlot.lot_id" />,
+								<t t-if="not packlot.lot_id">
+									<span t-field="packlot.lot_name"/>,
+								</t>
+					 </t>
+			</xpath>
+
+			<xpath expr="//div[@name='div_acknowledge']"  position="replace">
+                <p><span t-field="o.note"/></p>
+
+                <p align="center" >We certify that the above goods were supplied in good and accurate condition.</p>
+
+                <div class="row" name="div_acknowledge" >
+							<div class="col-xs-12" >
+								<div class="row">
+                                    <div class="col-xs-6" >
+                                        <div>
+										    Authorised By: .....................................................
+                                        </div>
+                                        <div class="mt8">
+                                            Date: ....................................................................
+                                        </div>
+                                       <div class="mt8">
+                                            Vehicle No: ..........................................................
+                                        </div>
+										<div class="mt8">
+                                            Security Sign: ......................................................
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6" >
+                                        <div class="mt8" >
+										    Driver's Name: ..............................................
+                                        </div>
+                                        <div class="mt8" >
+                                            Driver's Sign: .................................................
+                                        </div>
+										<div class="mt8" >
+                                            Receiver's Sign: ............................................
+                                        </div>
+                                        <div class="mt8" >
+                                            Date: .............................................................
+                                        </div>
+                                    </div>
+
+								</div>
+
+							</div>
+
+						<div class="row" align="center"  >
+							<div class="col-xs-12"  ><br />
+								<p><span><b>TERMS AND CONDITIONS</b></span></p>
+							</div>
+                            <div class="col-xs-12"  >
+                                    <p><b>Kindly verify that the product(s) ,date, quality and quantity are to your satisfaction within 48hours.</b></p>
+                                    <p><b>Please note that goods once supplied shall neither be returned nor exchanged.</b></p>
+                            </div>
+
+						</div>
+                </div>
+            </xpath>
+
+		</template>
+
+	</data>
+</odoo>
