@@ -167,41 +167,43 @@ class Ticket(models.Model):
     def set_hours_elapsed(self):
         today = datetime.today().strftime('%Y-%m-%d %H:%M:%S').day
         open_day = datetime.strptime(self.open_date, '%Y-%m-%d %H:%M:%S').day
-        day_no = today- open_day + 1
+        day_no = today - open_day + 1
         current_hour = today.hour
 
-        if 8 < current_hour < 17:
+        is_sunday = False
+        if today.weekday() == 6 :
+            is_sunday = True
+        if 8 < current_hour < 17 and not is_sunday:
             current_hours_elapsed = current_hour - 8
             #update the elapsed table
             self.update_elapsed_table(day_no, current_hours_elapsed)
 
 
+    def escalate_service_relocation(self):
+        today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+        tickets = self.search(
+            [('open_date', '<', today), ('is_service_relocation', '=', 'yes'), ('state', '!=', 'closed')])
 
+        for ticket in tickets:
+            total_elapsed_hours = ticket.total_elapsed_hours
+            if total_elapsed_hours > 54:
+                # Is the relocation more than 6 days ?
+                ticket.escalate_to_bpsq_cto_md()
+            elif total_elapsed_hours > 36:
+                # Is the relocation more than 4 days ?
+                ticket.escalate_to_bpsq_cto()
+            elif total_elapsed_hours > 27:
+                # Is the relocation more than 3 days ?
+                ticket.escalate_to_regional_manager()
+            elif total_elapsed_hours > 18:
+                # Is the relocation more than 2 days ?
+                ticket.escalate_to_area_manager()
 
     @api.model
     def run_check_service_relocation_escalation_ticket(self):
-        today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
-        tickets = self.search([('open_date', '<', today), ('is_service_relocation', '=', 'yes'), ('state', '!=', 'closed')])
-
-        for ticket in tickets:
-            open_date = ticket.open_date
-            opened_date = datetime.strptime(open_date, '%Y-%m-%d %H:%M:%S')
-            date_diff = datetime.today() - opened_date
-
-            if date_diff.days > 6 :
-                # Is the relocation more than 6 days ?
-                ticket.escalate_to_bpsq_cto_md()
-            elif date_diff.days > 4 :
-                # Is the relocation more than 4 days ?
-                ticket.escalate_to_bpsq_cto()
-            elif date_diff.days > 3 :
-                # Is the relocation more than 3 days ?
-                ticket.escalate_to_regional_manager()
-            elif date_diff.days > 2 :
-                # Is the relocation more than 2 days ?
-                ticket.escalate_to_area_manager()
+        self.set_hours_elapsed()
+        self.escalate_service_relocation()
         return True
-
 
 
     @api.model
