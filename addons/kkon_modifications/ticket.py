@@ -68,6 +68,12 @@ class RSSI(models.Model):
 
     name = fields.Char(string='RSSI')
 
+class ElapsedHours(models.Model):
+    _name = "kkon.elapsed.hour"
+
+    day_no = fields.Integer(string="Day No.")
+    elapsed_hours = fields.Integer(string="Elapsed Hours")
+    ticket_id = fields.Many2one('kin.ticket', '', string='Ticket')
 
 class Ticket(models.Model):
     _inherit = 'kin.ticket'
@@ -141,6 +147,36 @@ class Ticket(models.Model):
         subject, msg = self.get_escalation_msg(esc_type='EXTREMELY OVERDUE ESCALATION', days='6')
         self.send_escalation_msg(partner_ids, subject, msg)
         return
+
+    @api.depends('elapsed_hours')
+    def _compute_total_elapsed_hours(self):
+        total_elapsed_hours = 0
+        for elh in self.elapsed_hours:
+            total_elapsed_hours += elh.elapsed_hours
+        self.total_elapsed_hours = total_elapsed_hours
+
+
+    def update_elapsed_table(self, day_no, elapsed_hours):
+        the_elapsed_rec = self.elapsed_hours.search([('day_no', '=', day_no)])
+        if not the_elapsed_rec :
+            self.elapsed_hours.create({'day_no': day_no, 'elapsed_hours': elapsed_hours})
+        else :
+            the_elapsed_rec.write({'elapsed_hours': elapsed_hours})
+
+
+    def set_hours_elapsed(self):
+        today = datetime.today().strftime('%Y-%m-%d %H:%M:%S').day
+        open_day = datetime.strptime(self.open_date, '%Y-%m-%d %H:%M:%S').day
+        day_no = today- open_day + 1
+        current_hour = today.hour
+
+        if 8 < current_hour < 17:
+            current_hours_elapsed = current_hour - 8
+            #update the elapsed table
+            self.update_elapsed_table(day_no, current_hours_elapsed)
+
+
+
 
     @api.model
     def run_check_service_relocation_escalation_ticket(self):
@@ -1447,6 +1483,8 @@ class Ticket(models.Model):
 
     #Change Request
     is_service_relocation = fields.Selection([('yes', 'Yes'),('no', 'No')], string='Is Service Relocation',  track_visibility='onchange')
+    elapsed_hours = fields.One2many('kkon.elapsed.hour','ticket_id', string='Elapsed Hours')
+    total_elapsed_hours = fields.Integer(compute=_compute_total_elapsed_hours, string="Total Elapsed Hours", store=True)
     area_change_request_id = fields.Many2one('kkon.area', string="Area", track_visibility='onchange')
     updown_grade_type = fields.Selection([('upgrade', 'Upgrade'), ('downgrade', 'Downgrade'),('disconnect', 'Disconnect'),('reconnection', 'Reconnection'),('relocation', 'Relocation'),('voip', 'Voip')], string='Change Request Type')
     product_curr_id = fields.Many2one('product.product',string='Current Package')
