@@ -187,7 +187,7 @@
                      <attribute name="groups" >rog_modifications.group_show_approve_btn_hr_expense</attribute>
                 </button>
                 <button name="action_move_create" position="attributes" >
-                    <attribute name="groups" >rog_modifications.group_show_approve_btn_hr_expense</attribute>
+                    <attribute name="groups" >rog_modifications.group_show_approve_btn_hr_expense</attribute>                  
                 </button>
 
                <field name="tax_ids" position="after">

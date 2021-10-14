@@ -1328,6 +1328,8 @@ class HrExpenseExtend(models.Model):
 
     @api.multi
     def action_move_create(self):
+        if self.payment_mode == 'own_account' :
+            raise UserError('Please wait for the Accountant to Set the Bank  for the Payment')
         ctx = dict(self._context)
         ctx['is_ssd_sbu'] = self.is_ssd_sbu
         ctx['hr_department_id'] = self.hr_department_id

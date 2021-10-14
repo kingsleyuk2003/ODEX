@@ -11,7 +11,7 @@
 		    name="aminata_modifications.report_station_to_station_transfer"
 		    file="aminata_modifications.report_station_to_station_transfer"
 		    attachment_use="False"
-		    		/>
+	/>
 
 
 <template id="report_station_to_station_transfer">
