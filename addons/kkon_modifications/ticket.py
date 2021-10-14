@@ -73,7 +73,7 @@ class ElapsedHours(models.Model):
 
     day_no = fields.Integer(string="Day No.")
     elapsed_hours = fields.Integer(string="Elapsed Hours")
-    ticket_id = fields.Many2one('kin.ticket', '', string='Ticket')
+    ticket_id = fields.Many2one('kin.ticket',  string='Ticket')
 
 class Ticket(models.Model):
     _inherit = 'kin.ticket'
@@ -150,10 +150,11 @@ class Ticket(models.Model):
 
     @api.depends('elapsed_hours')
     def _compute_total_elapsed_hours(self):
-        total_elapsed_hours = 0
-        for elh in self.elapsed_hours:
-            total_elapsed_hours += elh.elapsed_hours
-        self.total_elapsed_hours = total_elapsed_hours
+        for rec in self:
+            total_elapsed_hours = 0
+            for elh in rec.elapsed_hours:
+                total_elapsed_hours += elh.elapsed_hours
+            rec.total_elapsed_hours = total_elapsed_hours
 
 
     def update_elapsed_table(self, day_no, elapsed_hours):
@@ -165,24 +166,32 @@ class Ticket(models.Model):
 
 
     def set_hours_elapsed(self):
-        today = datetime.today().strftime('%Y-%m-%d %H:%M:%S').day
-        open_day = datetime.strptime(self.open_date, '%Y-%m-%d %H:%M:%S').day
-        day_no = today - open_day + 1
-        current_hour = today.hour
+        dtoday = datetime.today()
+        today = dtoday.strftime('%Y-%m-%d %H:%M:%S')
+        tickets = self.search(
+            [('open_date', '<', today),  ('is_service_relocation', '=', 'yes'),
+             ('state', 'not in', ['draft','closed'])])
 
-        is_sunday = False
-        if today.weekday() == 6 :
-            is_sunday = True
-        if 8 < current_hour < 17 and not is_sunday:
-            current_hours_elapsed = current_hour - 8
-            #update the elapsed table
-            self.update_elapsed_table(day_no, current_hours_elapsed)
+        tday = dtoday.day
+        for ticket in tickets:
+            open_day = datetime.strptime(ticket.open_date, '%Y-%m-%d %H:%M:%S').day
+            day_no = tday - open_day + 1
+            current_hour = dtoday.hour
+
+            is_sunday = False
+            if dtoday.weekday() == 6 :
+                is_sunday = True
+            if 8 < current_hour < 17 and not is_sunday:
+                current_hours_elapsed = current_hour - 8
+                #update the elapsed table
+                ticket.update_elapsed_table(day_no, current_hours_elapsed)
 
 
     def escalate_service_relocation(self):
         today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
         tickets = self.search(
-            [('open_date', '<', today), ('is_service_relocation', '=', 'yes'), ('state', '!=', 'closed')])
+            [('open_date', '<', today), ('is_service_relocation', '=', 'yes'),
+             ('state', 'not in', ['draft', 'closed'])])
 
         for ticket in tickets:
             total_elapsed_hours = ticket.total_elapsed_hours
