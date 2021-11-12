@@ -26,4 +26,6 @@ access_kkon_expense_type,kkon.expense.type,model_kkon_expense_type,base.group_us
 access_kkon_expense_type_admin,kkon.expense.type admin,model_kkon_expense_type,base.group_no_one,1,1,1,1
 access_kkon_emp_expense_group,kkon.emp.expense.group,model_emp_expense_group,base.group_user,1,1,1,1
 access_kin_ticket_kkon_complaint_type,kkon.complaint.type user,model_kkon_complaint_type,base.group_user,1,1,1,1
-access_kin_ticket_kkon_elapsed_hour,kkon.elapsed.hour user,model_kkon_elapsed_hour,base.group_user,1,1,1,1
+access_kin_ticket_kkon_elapsed_hour_first,kkon.elapsed.hour.first user,model_kkon_elapsed_hour_first,base.group_user,1,1,1,1
+access_kin_ticket_kkon_elapsed_hour_second,kkon.elapsed.hour.second user,model_kkon_elapsed_hour_second,base.group_user,1,1,1,1
+access_kin_ticket_kkon_elapsed_hour_third,kkon.elapsed.hour.third user,model_kkon_elapsed_hour_third,base.group_user,1,1,1,1

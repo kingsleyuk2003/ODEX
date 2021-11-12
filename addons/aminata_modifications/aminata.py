@@ -608,7 +608,7 @@ class ResPartnerAminata(models.Model):
     is_service_station = fields.Boolean(string='Is Service Station')
     internal_location_id = fields.Many2one('stock.location', string='Internal Location')
     is_service_station_mgr = fields.Boolean(string='Is Service Station Manager')
-    station_mgr_location_id = fields.Many2one('stock.location', string='Station Manager Location')
+    station_mgr_location_id = fields.Many2one('stock.location', string='Retail Station Location')
 
 
 
@@ -619,10 +619,10 @@ class DeliveryRegisterExtend(models.Model):
 
 
 
-
-
 class ProductTemplateAminataExtend(models.Model):
     _inherit = 'product.template'
+
+
     @api.multi
     def write(self,vals):
         allow_group_obj_users = self.env.ref('aminata_modifications.group_price_unit_allow').users
@@ -762,6 +762,7 @@ class AccountInvoice(models.Model):
 
     ref_do = fields.Char(string='Reference. DO #')
     ref_tlo = fields.Char(string='Reference TLO #')
+    note = fields.Char(string='Note')
     delivery_location_id = fields.Many2one('kin.product.location', string='Delivery Location')
     station_sales_id = fields.Many2one('station.sales', string='Station Sales')
     is_station_sales = fields.Boolean(string='Is from Service Station Sales')
@@ -2359,11 +2360,13 @@ class StationSalesRecord(models.Model):
         invoice = self.invoice_ids[0]
         return self.env['report'].get_action(invoice, 'aminata_modifications.report_invoice_aminata')
 
+
     def _get_user_partner(self):
         user = self.env.user
         user_obj = self.env['res.users']
         partner_id = user_obj.browse(user.id).partner_id
         return partner_id and partner_id[0].id
+
 
     def create_station_invoice(self,order):
         inv_obj = self.env['account.invoice']
@@ -2537,10 +2540,46 @@ class StationSalesRecord(models.Model):
         return self.write({'state': 'confirm', 'user_id': self.env.user.id,
                            'user_confirmed_date': datetime.today()})
 
+
+
+    def set_validation_credentials(self):
+        # check if the dipping is negative
+        for line in self.station_sales_line_ids:
+            if line.closing_dip < 0 :
+                raise UserError('Closing Dip cannot be negative')
+            if line.closing_dip < 0 :
+                raise UserError('Qty. Supplied cannot be negative')
+            if line.product_received < 0 :
+                raise UserError('Qty. Supplied cannot be negative')
+            if line.qty < 0 :
+                raise UserError('Qty. Sold cannot be negative')
+            if line.closing_dip == 0 :
+                raise UserError('Closing Dip cannot be zero')
+
+            # check if the opening balance is the same as the closing balance of the previous sales line
+            query = """ SELECT id, closing_dip,validation_date FROM station_sales_lines WHERE station_mgr_location_id = %s and product_id =  %s  and state = 'validate' and validation_date = (SELECT  max(validation_date) from station_sales_lines  WHERE  station_mgr_location_id = %s and product_id =  %s  and state = 'validate') """ % (
+            line.station_mgr_location_id.id, line.product_id.id, line.station_mgr_location_id.id,line.product_id.id,)
+            self.env.cr.execute(query)
+            query_results = self.env.cr.dictfetchall()
+            if query_results and query_results[0].get('closing_dip'):
+                prev_closing_dip = query_results[0].get('closing_dip')
+                prev_id = query_results[0].get('id')
+                # if line.opening_dip != prev_closing_dip:
+                #     raise UserError('Sorry, Opening Dip must be equal to the Previous Closing Dip')
+                line.previous_retail_sale_line_id = prev_id
+
+        #if ok, then set values , else raise error
+        self.user_validate_id = self.env.user
+        self.user_validated_date = datetime.today()
+
+        return
+
     @api.multi
     def action_validate(self):
         if self.state == 'validate':
             raise UserError(_('This record has been previously validated. Please refresh your browser'))
+
+        self.set_validation_credentials()
 
         #create sales order
         order = self.create_station_sales_order()
@@ -2564,7 +2603,9 @@ class StationSalesRecord(models.Model):
         invoice = self.create_station_invoice(order)
         invoice.is_station_sales = True
         invoice.station_sales_id = self.id
+        invoice.note = self.note
         invoice.signal_workflow('invoice_open')
+
 
         #Send email to the debtor
         partn_ids = []
@@ -2695,10 +2736,10 @@ class StationSalesRecord(models.Model):
     amount_total = fields.Monetary(string='Total Amount', store=True, readonly=True, compute='_compute_amount_total', track_visibility='always')
     currency_id = fields.Many2one("res.currency", string="Currency", required=True, default=lambda self: self.env.user.company_id.currency_id, ondelete='restrict')
 
-    station_mgr_location_id = fields.Many2one('stock.location', string='Station Manager Location',compute=_compute_location,store=True)
+    station_mgr_location_id = fields.Many2one('stock.location', string='Retail Station Location',compute=_compute_location,store=True)
     user_id = fields.Many2one('res.users', string='User', default=lambda self: self.env.user.id, ondelete='restrict', readonly=True)
     user_confirmed_date = fields.Datetime('Confirmed Date')
-    user_validate_id = fields.Many2one('res.users', string='User', ondelete='restrict')
+    user_validate_id = fields.Many2one('res.users', string='Validated By', ondelete='restrict')
     user_validated_date = fields.Datetime('Validated Date')
     order_id = fields.Many2one('sale.order',string='Sales Order')
 
@@ -2714,33 +2755,46 @@ class StationSalesRecordLines(models.Model):
                 'line_amount': price
             })
 
-    @api.one #I had to put @api.one to allow the record to be saved
-    @api.depends('product_id')
-    def _compute_sales_price(self):
-        for rec in self:
-            sales_price = rec.product_id.station_sales_price_ids.filtered(lambda line: line.product_id == rec.product_id and line.stock_location_id == rec.station_sale_id.station_mgr_location_id)
-            if sales_price:
-                rec.pump_price = sales_price.mapped('sale_price')[0]
-
-    @api.depends('product_id','product_received','closing_dip')
+    @api.depends('opening_dip','product_received','closing_dip')
     def _compute_values(self):
         for rec in self:
             rec.qty = rec.opening_dip + rec.product_received - rec.closing_dip
+
+
+    @api.onchange('product_id')
+    def on_change_product(self):
+        if self.product_id :
+            sales_price = self.product_id.station_sales_price_ids.filtered(lambda line: line.product_id == self.product_id and line.stock_location_id == self.station_sale_id.station_mgr_location_id)
+            if sales_price:
+                self.pump_price = sales_price.mapped('sale_price')[0]
+
+            # search for all retails sales lines that are done and have validation date for the selected product
+            query = """ SELECT id, closing_dip,validation_date FROM station_sales_lines WHERE station_mgr_location_id = %s and  product_id =  %s  and state = 'validate' and validation_date = (SELECT  max(validation_date) from station_sales_lines  WHERE station_mgr_location_id = %s and product_id =  %s  and state = 'validate') """ % (self.station_mgr_location_id.id, self.product_id.id,self.station_mgr_location_id.id,self.product_id.id,)
+            self.env.cr.execute(query)
+            query_results = self.env.cr.dictfetchall()
+            if query_results and query_results[0].get('closing_dip'):
+                self.opening_dip = query_results[0].get('closing_dip')
+                self.previous_retail_sale_line_id = query_results[0].get('id')
 
 
     station_sale_id = fields.Many2one('station.sales',string='Station Sales')
     partner_id = fields.Many2one('res.partner', related='station_sale_id.partner_id' , string='Station Manager', store=True)
     product_id = fields.Many2one('product.product', string='Product', ondelete='restrict', track_visibility='onchange')
     product_uom = fields.Many2one('product.uom', related='product_id.uom_id', string='Unit of Measure')
-    opening_dip = fields.Float(string='Opening Dip')
-    product_received = fields.Float(string='Product Received')
-    closing_dip = fields.Float(string='Closing Dip')
-    qty = fields.Float(string='Qty.', track_visibility='onchange', compute='_compute_values', store=True)
-    pump_price = fields.Float(string='Pump Price',compute=_compute_sales_price,store=True)
+    opening_dip = fields.Float(string='Opening')
+    product_received = fields.Float(string='Qty. Supplied')
+    closing_dip = fields.Float(string='Dipping')
+    qty = fields.Float(string='Qty. Sold', track_visibility='onchange', compute='_compute_values', store=True)
+    pump_price = fields.Float(string='Pump Price')
     line_amount = fields.Monetary(string='Amount', store=True, readonly=True, compute='_compute_amount', track_visibility='always')
     currency_id = fields.Many2one("res.currency", string="Currency", default=lambda self: self.env.user.company_id.currency_id, related='station_sale_id.currency_id', store=True, ondelete='restrict')
     user_id = fields.Many2one('res.users', string='User', default=lambda self: self.env.user.id, ondelete='restrict', readonly=True)
+    validation_date = fields.Datetime(related='station_sale_id.user_validated_date',string='Validation Date', store=True)
+    validated_by = fields.Many2one('res.users', related='station_sale_id.user_validate_id', string='Validated By')
+    previous_retail_sale_line_id = fields.Many2one('station.sales.lines', string='Previous Sales Line')
     company_id = fields.Many2one('res.company', related='station_sale_id.company_id', string='Company')
+    station_mgr_location_id = fields.Many2one('stock.location',related='station_sale_id.station_mgr_location_id' , string='Retail Station Location', store=True)
+    state = fields.Selection(related='station_sale_id.state',string='State',store=True)
 
 
 class StationSalesPrice(models.Model):

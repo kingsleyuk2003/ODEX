@@ -6,7 +6,7 @@ Aminata Modifications
 =======================================================================================
 """,
     'author': 'Kingsley Okonkwo (kingsley@kinsolve.com)',
-    'depends': ['base','hr_payroll','hr_contract','hr','kin_hr','kin_report','purchase','kin_sales','kin_purchase','kin_delivery','account','kin_account','kin_lifting','kin_retail_station_general','stock','account_voucher_extend'],
+    'depends': ['base','hr_payroll','hr_contract','hr','kin_hr','kin_report','purchase','kin_sales','kin_purchase','kin_delivery','account','kin_account','kin_lifting','kin_retail_station_general','stock','account_voucher_extend','web_readonly_bypass'],
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
@@ -25,6 +25,7 @@ Aminata Modifications
         'report/transfer_aminata.xml',
         'report/custom_invoice.xml',
         'report/custom_payslip.xml',
+        'report/daily_sales_inventory.xml',
     ],
     'installable': True,
     'images': [],

@@ -575,7 +575,9 @@
                         <field name="ref_do" />
                         <field name="ref_tlo" />
                          <field name="delivery_location_id" />
+                          <field name="note" readonly="1" />
                     </field>
+
 
                 </field>
       </record>
@@ -1107,14 +1109,29 @@
                                     <tree editable="bottom"  >
                                         <field name="product_id" required="1" domain="[('white_product','in',['pms','ago','kero'])]" options="{'no_open':True,'no_create':True}"  />
                                         <field name="product_uom" readonly="1" required="1" options="{'no_open':True,'no_create':True}"  />
-                                        <field name="pump_price" required="1"  options="{'no_open':True,'no_create':True}"  />
-                                       <field name="opening_dip" required="1" />
+                                        <field name="pump_price" required="1" readonly="1"  options="{'no_open':True,'no_create':True}"  />
+                                       <field name="opening_dip" required="1" readonly="1"  />
                                         <field name="product_received" required="1" />
-                                        <field name="closing_dip" required="1" />
+                                        <field name="closing_dip" required="1"  />
                                         <field name="qty" required="1" sum="Total" />
                                        <field name="line_amount" />
                                         <field name="currency_id" readonly="1"  />
                                     </tree>
+                                    <form>
+                                        <group>
+
+                                         <field name="product_id" required="1" domain="[('white_product','in',['pms','ago','kero'])]" options="{'no_open':True,'no_create':True}"  />
+                                        <field name="product_uom" readonly="1" required="1" options="{'no_open':True,'no_create':True}"  />
+                                        <field name="pump_price" required="1" readonly="1"  options="{'no_open':True,'no_create':True}"  />
+                                       <field name="opening_dip" required="1" readonly="1"  />
+                                        <field name="product_received" required="1" />
+                                        <field name="closing_dip" required="1"  />
+                                        <field name="qty" required="1" sum="Total" />
+                                       <field name="line_amount" />
+                                        <field name="currency_id" readonly="1"  />
+
+                                        </group>
+                                    </form>
                                 </field>
                                 <group class="oe_subtotal_footer oe_right" colspan="2" >
                                         <field name="amount_total" readonly="1" />
@@ -1180,7 +1197,7 @@
             <field name="res_model">station.sales</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-            <field name="context">{"search_default_gprstation":1}</field>
+            <field name="context">{"search_default_gprstation":1,'readonly_by_pass': True }</field>
             <field name="search_view_id" ref="view_station_sales_aminata_filter"/>
         </record>
 

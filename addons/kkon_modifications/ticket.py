@@ -26,9 +26,16 @@ class UserGroups(models.Model):
     is_maint_default = fields.Boolean(string='Is Maintenance Close Team Default')
     is_csc_kkon_group = fields.Boolean(string='Is CSC KKON Group')
     is_csc_fob_group = fields.Boolean(string='Is CSC FOB Group')
-    is_regional_manager = fields.Boolean(string='Is Regional Manager')
+
     is_bpsq_cto_manager = fields.Boolean(string='Is BPSQ/CTO')
-    is_bpsq_cto_md_manager = fields.Boolean(string='Is BPSQ/CTO/MD')
+    is_bpsq_md_manager = fields.Boolean(string='Is MD/BPSQ')
+    is_regional_manager_hcx = fields.Boolean(string='Is Regional Manager/HCX')
+    is_cto_rm_hcx = fields.Boolean(string='Is CTO/RM/HCX')
+    is_hcx = fields.Boolean(string='Is HCX')
+    is_hcx_team_lead = fields.Boolean(string='Is HCX/Teamlead')
+    is_cx = fields.Boolean(string='Is CX')
+    is_team_lead = fields.Boolean(string='Is Teamlead')
+    is_bpsq_hcx = fields.Boolean(string='Is BPSQ/HCX')
 
 
 class Estate(models.Model):
@@ -68,8 +75,22 @@ class RSSI(models.Model):
 
     name = fields.Char(string='RSSI')
 
-class ElapsedHours(models.Model):
-    _name = "kkon.elapsed.hour"
+class ElapsedHoursFirst(models.Model):
+    _name = "kkon.elapsed.hour.first"
+
+    day_no = fields.Integer(string="Day No.")
+    elapsed_hours = fields.Integer(string="Elapsed Hours")
+    ticket_id = fields.Many2one('kin.ticket',  string='Ticket')
+
+class ElapsedHoursSecond(models.Model):
+    _name = "kkon.elapsed.hour.second"
+
+    day_no = fields.Integer(string="Day No.")
+    elapsed_hours = fields.Integer(string="Elapsed Hours")
+    ticket_id = fields.Many2one('kin.ticket',  string='Ticket')
+
+class ElapsedHoursThird(models.Model):
+    _name = "kkon.elapsed.hour.third"
 
     day_no = fields.Integer(string="Day No.")
     elapsed_hours = fields.Integer(string="Elapsed Hours")
@@ -104,74 +125,180 @@ class Ticket(models.Model):
         return partner_ids
 
 
-    def get_escalation_msg(self, esc_type, days):
+    def get_escalation_msg(self, esc_type, hours):
         open_date_format = datetime.strptime(self.open_date, '%Y-%m-%d %H:%M:%S').strftime('%d-%m-%Y %H:%M:%S')
         subject = 'Service Relocation Ticket Alert (%s) for ticket with ID: %s' % (esc_type, self.ticket_id)
         msg = _(
-            'The is to bring to your attention, that the service relocation ticket (%s) with subject (%s), which was opened on %s, is over %s days. Kindly attend to the Service relocation ticket and ensure it is closed, to avoid further escalation') % (
-                  self.ticket_id, self.name, open_date_format, days)
+            'The is to bring to your attention, that the service relocation ticket (%s) with subject (%s), which was opened on %s, is over %s hours. Kindly attend to the Service relocation ticket and ensure it is closed, to avoid further escalation') % (
+                  self.ticket_id, self.name, open_date_format, hours)
         return subject, msg
 
-    #High escalation after 2 days
-    def escalate_to_area_manager(self):
-        # get the area managers
-        user_type = 'is_area_manager'
-        partner_ids = self.get_escalation_partners(user_type=user_type)
-
-        # create the subject and msg
-        subject, msg = self.get_escalation_msg(esc_type='HIGH ESCALATION', days='2')
-
-        # send escalation msg
+    def escalate(self,user_type,esc_type, hours):
+        partner_ids = self.get_escalation_partners(user_type)
+        subject, msg = self.get_escalation_msg(esc_type, hours)
         self.send_escalation_msg(partner_ids, subject, msg)
 
-    #Due escalation after 3 days
-    def escalate_to_regional_manager(self):
-        user_type = 'is_regional_manager'
-        partner_ids = self.get_escalation_partners(user_type=user_type)
-        subject, msg = self.get_escalation_msg(esc_type='DUE ESCALATION', days='3')
-        self.send_escalation_msg(partner_ids, subject, msg)
-        return
 
-    #Overdue Escalation after 4 days
-    def escalate_to_bpsq_cto(self):
-        user_type = 'is_bpsq_cto_manager'
-        partner_ids = self.get_escalation_partners(user_type=user_type)
-        subject, msg = self.get_escalation_msg(esc_type='OVERDUE ESCALATION', days='4')
-        self.send_escalation_msg(partner_ids, subject, msg)
-        return
 
-    #Extremely Overdue Escalation after 6 days
-    def escalate_to_bpsq_cto_md(self):
-        user_type = 'is_bpsq_cto_md_manager'
-        partner_ids = self.get_escalation_partners(user_type=user_type)
-        subject, msg = self.get_escalation_msg(esc_type='EXTREMELY OVERDUE ESCALATION', days='6')
-        self.send_escalation_msg(partner_ids, subject, msg)
-        return
+    def escalate_first_service_relocation(self):
+        today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+        tickets = self.search(
+            [('open_date', '<', today), ('is_service_relocation', '=', 'yes'),
+             ('state', 'not in', ['draft', 'closed'])])
 
-    @api.depends('elapsed_hours')
-    def _compute_total_elapsed_hours(self):
+        for ticket in tickets:
+            total_elapsed_hours = ticket.total_elapsed_hours_first
+            user_type = ''
+            esc_type = ''
+            hours = 0
+            if total_elapsed_hours > 54:
+                user_type = 'is_bpsq_md_manager'
+                esc_type = 'EXTREMELY OVERDUE ESCALATION'
+                hours = 54
+            elif total_elapsed_hours > 41:
+                user_type = 'is_bpsq_cto_manager'
+                esc_type = 'OVERDUE ESCALATION'
+                hours = 41
+            elif total_elapsed_hours > 27:
+                user_type = 'is_bpsq_cto_manager'
+                esc_type = 'DUE ESCALATION'
+                hours = 27
+            elif total_elapsed_hours > 21:
+                user_type = ' is_cto_rm_hcx'
+                esc_type = 'HIGH ESCALATION'
+                hours = 21
+            elif total_elapsed_hours > 14:
+                user_type = 'is_regional_manager_hcx'
+                esc_type = 'MODERATE ESCALATION'
+                hours = 14
+            elif total_elapsed_hours > 7:
+                user_type = 'is_area_manager'
+                esc_type = 'NORMAL'
+                hours = 7
+
+            if user_type and esc_type and hours :
+                self.escalate(user_type, esc_type, hours)
+
+
+
+    def escalate_second_service_relocation(self):
+        today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+        tickets = self.search(
+            [('done_date', '<', today), ('is_service_relocation', '=', 'yes'),
+             ('state', '=', 'done')])
+
+        for ticket in tickets:
+            total_elapsed_hours = ticket.total_elapsed_hours_second
+            user_type = ''
+            esc_type = ''
+            hours = 0
+            if total_elapsed_hours > 6:
+                user_type = 'is_bpsq_md_manager'
+                esc_type = 'EXTREMELY OVERDUE ESCALATION'
+                hours = 6
+            elif total_elapsed_hours > 4:
+                user_type = ' is_hcx'
+                esc_type = 'DUE ESCALATION'
+                hours = 3
+            elif total_elapsed_hours > 3:
+                user_type = 'is_hcx_team_lead'
+                esc_type = 'HIGH ESCALATION'
+                hours = 2
+            elif total_elapsed_hours > 2:
+                user_type = ' is_hcx'
+                esc_type = 'MODERATE ESCALATION'
+                hours = 1
+            elif total_elapsed_hours > 1:
+                user_type = ' is_hcx'
+                esc_type = 'NORMAL ESCALATION'
+                hours = 1
+
+            if user_type and esc_type and hours:
+                self.escalate(user_type, esc_type, hours)
+
+
+    def escalate_third_service_relocation(self):
+        today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+        tickets = self.search(
+            [('integration_date', '<', today), ('is_service_relocation', '=', 'yes'),
+             ('state', '=', 'done')])
+
+        for ticket in tickets:
+            total_elapsed_hours = ticket.total_elapsed_hours_third
+            user_type = ''
+            esc_type = ''
+            hours = 0
+            if total_elapsed_hours > 12:
+                user_type = ' is_bpsq_hcx'
+                esc_type = 'HIGH ESCALATION'
+                hours = 12
+            elif total_elapsed_hours > 9:
+                user_type = ' is_hcx'
+                esc_type = 'HIGH ESCALATION'
+                hours = 9
+            elif total_elapsed_hours > 6:
+                user_type = 'is_team_lead'
+                esc_type = 'MODERATE ESCALATION'
+                hours = 6
+            elif total_elapsed_hours > 3:
+                user_type = ' is_cx'
+                esc_type = 'NORMAL ESCALATION'
+                hours = 3
+
+            if user_type and esc_type and hours:
+                self.escalate(user_type, esc_type, hours)
+
+    @api.depends('elapsed_hours_first')
+    def _compute_total_elapsed_hours_first(self):
         for rec in self:
             total_elapsed_hours = 0
-            for elh in rec.elapsed_hours:
+            for elh in rec.elapsed_hours_first:
                 total_elapsed_hours += elh.elapsed_hours
-            rec.total_elapsed_hours = total_elapsed_hours
+            rec.total_elapsed_hours_first = total_elapsed_hours
 
 
-    def update_elapsed_table(self, day_no, elapsed_hours):
-        the_elapsed_rec = self.elapsed_hours.search([('day_no', '=', day_no)])
+    @api.depends('elapsed_hours_second')
+    def _compute_total_elapsed_hours_second(self):
+        for rec in self:
+            total_elapsed_hours = 0
+            for elh in rec.elapsed_hours_second:
+                total_elapsed_hours += elh.elapsed_hours
+            rec.total_elapsed_hours_second = total_elapsed_hours
+
+
+    @api.depends('elapsed_hours_third')
+    def _compute_total_elapsed_hours_third(self):
+        for rec in self:
+            total_elapsed_hours = 0
+            for elh in rec.elapsed_hours_third:
+                total_elapsed_hours += elh.elapsed_hours
+            rec.total_elapsed_hours_third = total_elapsed_hours
+
+
+    def update_elapsed_table_first(self, day_no, elapsed_hours):
+        the_elapsed_rec = self.elapsed_hours_first.search([('day_no', '=', day_no),('ticket_id', '=', self.id)])
         if not the_elapsed_rec :
-            self.elapsed_hours.create({'day_no': day_no, 'elapsed_hours': elapsed_hours})
+            self.elapsed_hours_first.create({'day_no': day_no, 'elapsed_hours': elapsed_hours, 'ticket_id': self.id})
         else :
-            the_elapsed_rec.write({'elapsed_hours': elapsed_hours})
+            the_elapsed_rec.write({'elapsed_hours_first': elapsed_hours})
+
+    def update_elapsed_table_second(self, day_no, elapsed_hours):
+        the_elapsed_rec = self.elapsed_hours_first.search([('day_no', '=', day_no),('ticket_id', '=', self.id)])
+        if not the_elapsed_rec :
+            self.elapsed_hours_first.create({'day_no': day_no, 'elapsed_hours': elapsed_hours, 'ticket_id': self.id})
+        else :
+            the_elapsed_rec.write({'elapsed_hours_first': elapsed_hours})
+
+    def update_elapsed_table_third(self, day_no, elapsed_hours):
+        the_elapsed_rec = self.elapsed_hours_first.search([('day_no', '=', day_no),('ticket_id', '=', self.id)])
+        if not the_elapsed_rec :
+            self.elapsed_hours_first.create({'day_no': day_no, 'elapsed_hours': elapsed_hours, 'ticket_id': self.id})
+        else :
+            the_elapsed_rec.write({'elapsed_hours_first': elapsed_hours})
 
 
-    def set_hours_elapsed(self):
+    def set_hours_elapsed(self,tickets,escalation_type):
         dtoday = datetime.today()
-        today = dtoday.strftime('%Y-%m-%d %H:%M:%S')
-        tickets = self.search(
-            [('open_date', '<', today),  ('is_service_relocation', '=', 'yes'),
-             ('state', 'not in', ['draft','closed'])])
-
         tday = dtoday.day
         for ticket in tickets:
             open_day = datetime.strptime(ticket.open_date, '%Y-%m-%d %H:%M:%S').day
@@ -183,35 +310,46 @@ class Ticket(models.Model):
                 is_sunday = True
             if 8 < current_hour < 17 and not is_sunday:
                 current_hours_elapsed = current_hour - 8
-                #update the elapsed table
-                ticket.update_elapsed_table(day_no, current_hours_elapsed)
+
+                if escalation_type == 'first' :
+                    ticket.update_elapsed_table_first(day_no, current_hours_elapsed)
+                elif escalation_type == 'second' :
+                    ticket.update_elapsed_table_second(day_no, current_hours_elapsed)
+                elif escalation_type == 'third' :
+                    ticket.update_elapsed_table_third(day_no, current_hours_elapsed)
 
 
-    def escalate_service_relocation(self):
+    def set_hours_elapsed_first(self):
         today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
         tickets = self.search(
             [('open_date', '<', today), ('is_service_relocation', '=', 'yes'),
              ('state', 'not in', ['draft', 'closed'])])
+        self.set_hours_elapsed(tickets,'first')
 
-        for ticket in tickets:
-            total_elapsed_hours = ticket.total_elapsed_hours
-            if total_elapsed_hours > 54:
-                # Is the relocation more than 6 days ?
-                ticket.escalate_to_bpsq_cto_md()
-            elif total_elapsed_hours > 36:
-                # Is the relocation more than 4 days ?
-                ticket.escalate_to_bpsq_cto()
-            elif total_elapsed_hours > 27:
-                # Is the relocation more than 3 days ?
-                ticket.escalate_to_regional_manager()
-            elif total_elapsed_hours > 18:
-                # Is the relocation more than 2 days ?
-                ticket.escalate_to_area_manager()
+    def set_hours_elapsed_second(self):
+        today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+        tickets = self.search(
+            [('done_date', '<', today), ('is_service_relocation', '=', 'yes'),
+             ('state', 'not in', ['draft', 'closed'])])
+        self.set_hours_elapsed(tickets, 'second')
+
+    def set_hours_elapsed_third(self):
+        today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+        tickets = self.search(
+            [('integration_date', '<', today), ('is_service_relocation', '=', 'yes'),
+             ('state', 'not in', ['draft', 'closed'])])
+        self.set_hours_elapsed(tickets, 'third')
+
+
 
     @api.model
     def run_check_service_relocation_escalation_ticket(self):
-        self.set_hours_elapsed()
-        self.escalate_service_relocation()
+        self.set_hours_elapsed_first()
+        self.escalate_first_service_relocation()
+        self.set_hours_elapsed_second()
+        self.escalate_second_service_relocation()
+        self.set_hours_elapsed_third()
+        self.escalate_third_service_relocation()
         return True
 
 
@@ -339,6 +477,7 @@ class Ticket(models.Model):
         # send email to the Assigned users too
         partn_ids = []
         user_names = ''
+        mail_obj = False
         eng_users = self.user_ticket_group_id.sudo().user_ids
         msg = 'The Ticket (%s) with description (%s), has been Opened by %s' % (
             self.ticket_id, self.name, self.env.user.name)
@@ -367,7 +506,7 @@ class Ticket(models.Model):
                 if user.is_group_email:
                     user_names += user.name + ", "
                     partn_csc_ids.append(user.partner_id.id)
-            if partn_csc_ids :
+            if partn_csc_ids and mail_obj:
                 mail_obj.email_partner_cc = partn_csc_ids
 
 
@@ -1494,8 +1633,12 @@ class Ticket(models.Model):
 
     #Change Request
     is_service_relocation = fields.Selection([('yes', 'Yes'),('no', 'No')], string='Is Service Relocation',  track_visibility='onchange')
-    elapsed_hours = fields.One2many('kkon.elapsed.hour','ticket_id', string='Elapsed Hours')
-    total_elapsed_hours = fields.Integer(compute=_compute_total_elapsed_hours, string="Total Elapsed Hours", store=True)
+    elapsed_hours_first = fields.One2many('kkon.elapsed.hour.first','ticket_id', string='First Escalation Elapsed Hours')
+    elapsed_hours_second = fields.One2many('kkon.elapsed.hour.second', 'ticket_id', string='Second Escalation Elapsed Hours')
+    elapsed_hours_third = fields.One2many('kkon.elapsed.hour.third', 'ticket_id', string='Third Escalation Elapsed Hours')
+    total_elapsed_hours_first = fields.Integer(compute=_compute_total_elapsed_hours_first, string="First Escalation Total Elapsed Hours", store=True)
+    total_elapsed_hours_second = fields.Integer(compute=_compute_total_elapsed_hours_second, string="Second Escalation Total Elapsed Hours", store=True)
+    total_elapsed_hours_third = fields.Integer(compute=_compute_total_elapsed_hours_third, string="Third Escalation Total Elapsed Hours", store=True)
     area_change_request_id = fields.Many2one('kkon.area', string="Area", track_visibility='onchange')
     updown_grade_type = fields.Selection([('upgrade', 'Upgrade'), ('downgrade', 'Downgrade'),('disconnect', 'Disconnect'),('reconnection', 'Reconnection'),('relocation', 'Relocation'),('voip', 'Voip')], string='Change Request Type')
     product_curr_id = fields.Many2one('product.product',string='Current Package')
@@ -1506,6 +1649,8 @@ class Ticket(models.Model):
     address_new = fields.Char(string='New Address')
     address_ip_current = fields.Char(string='Current IP Address')
     adddress_ip_new = fields.Char(string='New IP Address')
+    done_date = fields.Datetime(string='Completed Date')
+    integration_date = fields.Datetime(string='Finalized Date')
 
     last_log_datetime = fields.Datetime(string='Last Logged datetime')
     last_log_user_id = fields.Many2one('res.users',string='Last Logged User')

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
+		<!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
+		<report
+		    id="daily_sales_inventory_aminata"
+		    model="station.sales"
+		    string="Station Daily Sales - Inventory Report"
+		    report_type="qweb-pdf"
+		    name="aminata_modifications.report_daily_sales_inventory_aminata"
+		    file="aminata_modifications.report_daily_sales_inventory_aminata"
+		    attachment_use="False"
+		    		/>
+
+
+<template id="report_daily_sales_inventory_aminata">
+	    <t t-call="report.html_container">
+	        <t t-foreach="docs" t-as="o">
+	            <t t-call="kin_report.custom_layout"  >
+					<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+	                <div class="page" >
+						<style type="text/css">
+							<t t-call="kin_report.style"/>
+						</style>
+						<div t-raw="o.company_id.html_after_header" />
+						<p />
+						<div class="row">
+							<div class="col-xs-12 text-center" >
+								<h3><strong>
+									<p>Station Daily Sales - Inventory Report</p>
+								</strong></h3>
+							</div>
+						</div>
+						<p />
+						<div class="row" >
+							<div class="col-xs-5">
+
+							</div>
+							<div class="col-xs-7">
+								<div class="row">
+									<div class="col-xs-6 col-xs-offset-6" style="font-weight:bold">
+										<span>Station Manager:</span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6 col-xs-offset-6">
+										<div t-field="o.partner_id" t-field-options='{"widget": "contact", "fields": ["address", "name", "phone", "fax"], "no_marker": true, "phone_icons": true}'/>
+										<div t-if="o.partner_id.street" t-field="o.partner_id.street" />
+									</div>
+						    	</div>
+							</div>
+						</div>
+							<p />
+						<div class="row">
+							<div class="col-xs-12 text-center" >
+								<h3><strong>
+									<span t-if="o.state == 'draft'">DRAFT</span>
+									<span t-if="o.state == 'confirm'">CONFIRMED</span>
+									<span t-if="o.state == 'validate'">DONE</span>
+									<span t-if="o.state == 'cancel'">CANCELLED</span>
+									<span t-field="o.name" /></strong></h3>
+							</div>
+						</div>
+						<p />
+
+
+						<table style="width: 100%;" class="table-bordered-black" cellpadding="3" cellspacing="0" >
+									<thead>
+										<tr>
+											<th><span>Station Manager</span></th>
+											<th><span>Retail Station Location</span></th>
+											<th><span>Approved By</span></th>
+											<th><span>Date</span></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><span t-field="o.partner_id" /></td>
+											<td><span t-field="o.station_mgr_location_id" /></td>
+											<td><span t-field="o.user_validate_id" /></td>
+											<td><span  t-field="o.date" /></td>
+										</tr>
+									</tbody>
+						</table>
+						<p />
+						<div class="row mt16">
+							<div class="col-xs-12 text-center" >
+								<span style="font-weight:bold" >....................................Daily Sales and Stock Information ....................................</span>
+							</div>
+						</div>
+						<p />
+						<div class="row mt8">
+							<div class="col-xs-12" >
+								<table  style="width: 100%;" class="table-bordered-black" cellpadding="3" cellspacing="0" >
+										<thead style="display: table-row-group " >
+												<tr>
+													<td><span><b>Product</b></span></td>
+													<td class="text-right" ><span><b>Pump price (<span t-field="o.currency_id.symbol" />)</b></span></td>
+													<td class="text-right" ><span><b>Opening</b></span></td>
+													<td class="text-right" ><span><b>Qty. Supplied</b></span></td>
+													<td class="text-right" ><span><b>Dipping</b></span></td>
+													<td class="text-right" ><span><b>Qty. Sold</b></span></td>
+													<td class="text-right" ><span><b>Amount</b></span></td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr  t-foreach="o.station_sales_line_ids" t-as="line" >
+													<td style="padding-left: 2px" class="text-left" ><span t-field="line.product_id" />	</td>
+													<td class="text-right">
+														<span t-field="line.pump_price"/>
+													</td>
+													<td class="text-right">
+														<span t-field="line.opening_dip"/>
+													</td>
+													<td class="text-right">
+														<span t-field="line.product_received" />
+													</td>
+													<td class="text-right">
+														<span t-field="line.closing_dip" />
+													</td>
+													<td class="text-right">
+														<span t-field="line.qty" />
+													</td>
+													<td class="text-right">
+														<span t-field="line.line_amount" />
+													</td>
+												</tr>
+											</tbody>
+											<tr>
+												<td t-if="not display_discount" colspan="5"  style="border-bottom:solid white;border-left: solid white" />
+												<td ><b>Total <span t-field="o.currency_id.name" /></b></td>
+												<td class="text-right">
+													<span t-esc="'{:,.2f}'.format(o.amount_total)" />
+												</td>
+											</tr>
+								</table>
+							</div>
+						</div>
+						<br />
+						<p>
+							<b>Note:</b><span t-field="o.note"/>
+            			</p>
+						<br />
+						<div class="row mt16" >
+							<div class="col-xs-12" >
+								<div class="row">
+									<div class="col-xs-6" >
+										 <span><b>Retail Manager's Signature:</b> ............................ </span>
+									</div>
+									<div class="col-xs-6" >
+										<span><b>Station Manager's Signature:</b> ............................ </span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+	                </div>
+	            </t>
+	        </t>
+    	</t>
+</template>
+	</data>
+</openerp>
