@@ -1102,9 +1102,10 @@
                             <field name="date" attrs="{'readonly': [('state', '!=', 'draft')]}"  required="1" />
                            <field name="station_mgr_location_id" readonly="1" />
                             <field name="note" required="1"  attrs="{'readonly': [('state', '!=', 'draft')]}" />
+
                         </group>
                         <notebook>
-                            <page string="Station Sales Lines"  >
+                            <page string="PRODUCT SALES"  >
                                 <field name="station_sales_line_ids"  attrs="{'readonly': [('state', '!=', 'draft')]}"  >
                                     <tree editable="bottom"  >
                                         <field name="product_id" required="1" domain="[('white_product','in',['pms','ago','kero'])]" options="{'no_open':True,'no_create':True}"  />
@@ -1115,7 +1116,10 @@
                                         <field name="closing_dip" required="1"  />
                                         <field name="qty" required="1" sum="Total" />
                                        <field name="line_amount" />
-                                        <field name="currency_id" readonly="1"  />
+                                        <field name="coupon_sales_gals" />
+                                        <field name="cash_sales_gals" />
+                                        <field name="total_cash_amt" />
+                                        <field name="currency_id" readonly="1" invisible="1"  />
                                     </tree>
                                     <form>
                                         <group>
@@ -1135,6 +1139,34 @@
                                 </field>
                                 <group class="oe_subtotal_footer oe_right" colspan="2" >
                                         <field name="amount_total" readonly="1" />
+                                </group>
+                            </page>
+                            <page string="PRODUCT RECEIVED">
+                                <field name="station_product_received_line_ids"  attrs="{'readonly': [('state', '!=', 'draft')]}"  >
+                                    <tree editable="bottom"  >
+                                        <field name="product_id" required="1" domain="[('white_product','in',['pms','ago','kero'])]" options="{'no_open':True,'no_create':True}"  />
+                                        <field name="product_uom" readonly="1" required="1" options="{'no_open':True,'no_create':True}"  />
+                                        <field name="do_number" required="1" />
+                                        <field name="qty_received" required="1"  />
+                                    </tree>
+                                    <form>
+                                        <group>
+                                              <field name="product_id" required="1" domain="[('white_product','in',['pms','ago','kero'])]" options="{'no_open':True,'no_create':True}"  />
+                                                <field name="product_uom" readonly="1" required="1" options="{'no_open':True,'no_create':True}"  />
+                                                <field name="do_number" required="1" />
+                                                <field name="qty_received" required="1"  />
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="COUPONS">
+                                <group col="4">
+                                    <group>
+                                        <field name="pms_coupon" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                                        <field name="ago_coupon" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                                        <field name="cash_coupon" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                                    </group>
+
                                 </group>
                             </page>
                             <page string="Other Information">

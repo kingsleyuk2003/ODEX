@@ -2489,28 +2489,19 @@ class StationSalesRecord(models.Model):
                 raise UserError(_('Sorry, Non-Draft record cannot be deleted.'))
         return super(StationSalesRecord, self).unlink()
 
-    @api.model
-    def create(self, vals):
-        vals['name'] = self.env['ir.sequence'].next_by_code('station_sales_code') or 'New'
-        rec = super(StationSalesRecord, self).create(vals)
-        # if rec.partner_id.station_mgr_location_id:
-        #     rec.station_mgr_location_id = rec.partner_id.station_mgr_location_id
-        # else:
-        #     UserError('Please Set a Station Manager Location for the Station Manager in the Customer Database')
-        return rec
+
 
     @api.multi
     def write(self, vals):
-        # partner_id = vals.get('partner_id', False)
-        # station_mgr_location_id = False
-        # if partner_id :
-        #     station_mgr_location_id = self.env['res.partner'].browse(partner_id).station_mgr_location_id
-        # if station_mgr_location_id:
-        #     rec.station_mgr_location_id = station_mgr_location_id
-        # else:
-        #     UserError('Please Set a Station Manager Location for the Station Manager in the Customer Database')
         res = super(StationSalesRecord, self).write(vals)
+        if self.pms_coupon < 0:
+            raise UserError(_('PMS Coupon cannot be negative'))
+        if self.ago_coupon < 0:
+            raise UserError(_('AGO Coupon cannot be negative'))
+        if self.cash_coupon < 0:
+            raise UserError(_('Cash Coupon cannot be negative'))
         return res
+
 
     def send_email(self, grp_name, msg):
         # send email
@@ -2564,8 +2555,8 @@ class StationSalesRecord(models.Model):
             if query_results and query_results[0].get('closing_dip'):
                 prev_closing_dip = query_results[0].get('closing_dip')
                 prev_id = query_results[0].get('id')
-                # if line.opening_dip != prev_closing_dip:
-                #     raise UserError('Sorry, Opening Dip must be equal to the Previous Closing Dip')
+                if line.opening_dip != prev_closing_dip:
+                    raise UserError('Sorry, Opening Dip must be equal to the Previous Closing Dip')
                 line.previous_retail_sale_line_id = prev_id
 
         #if ok, then set values , else raise error
@@ -2742,6 +2733,11 @@ class StationSalesRecord(models.Model):
     user_validate_id = fields.Many2one('res.users', string='Validated By', ondelete='restrict')
     user_validated_date = fields.Datetime('Validated Date')
     order_id = fields.Many2one('sale.order',string='Sales Order')
+    pms_coupon = fields.Float(string='PMS Coupon')
+    ago_coupon = fields.Float(string='AGO Coupon')
+    cash_coupon = fields.Float(string='Cash Coupon')
+    station_product_received_line_ids = fields.One2many('station.product.received.lines', 'station_sale_id', string='Product Received Lines')
+
 
 
 class StationSalesRecordLines(models.Model):
@@ -2755,10 +2751,13 @@ class StationSalesRecordLines(models.Model):
                 'line_amount': price
             })
 
-    @api.depends('opening_dip','product_received','closing_dip')
+    @api.depends('opening_dip','product_received','closing_dip','coupon_sales_gals')
     def _compute_values(self):
         for rec in self:
             rec.qty = rec.opening_dip + rec.product_received - rec.closing_dip
+            rec.cash_sales_gals = rec.qty - rec.coupon_sales_gals
+            rec.total_cash_amt = rec.cash_sales_gals * rec.pump_price
+
 
 
     @api.onchange('product_id')
@@ -2776,17 +2775,52 @@ class StationSalesRecordLines(models.Model):
                 self.opening_dip = query_results[0].get('closing_dip')
                 self.previous_retail_sale_line_id = query_results[0].get('id')
 
+            self._compute_product_received()
+            self._compute_coupon()
+
+    @api.depends('station_sale_id.station_product_received_line_ids.qty_received')
+    def _compute_product_received(self):
+        for line in self:
+            total_qty_received = 0
+            stp_lines = line.station_sale_id.station_product_received_line_ids.filtered(lambda l: l.product_id.id == line.product_id.id)
+            for received_line_id in stp_lines:
+                total_qty_received += received_line_id.qty_received
+            line.product_received = total_qty_received
+
+
+    @api.depends('station_sale_id.pms_coupon','station_sale_id.ago_coupon')
+    def _compute_coupon(self):
+        for line in self:
+            if line.product_id.name == 'AGO' :
+                ago_coupon = line.station_sale_id.ago_coupon
+                ago_line = line.station_sale_id.station_sales_line_ids.filtered(
+                    lambda l: l.product_id.name == 'AGO') and line.station_sale_id.station_sales_line_ids.filtered(
+                    lambda l: l.product_id.name == 'AGO')[0]
+                if ago_line:
+                    ago_line.coupon_sales_gals = ago_coupon
+            if line.product_id.name == 'PMS' :
+                pms_coupon = line.station_sale_id.pms_coupon
+                pms_line = line.station_sale_id.station_sales_line_ids.filtered(
+                    lambda l: l.product_id.name == 'PMS') and line.station_sale_id.station_sales_line_ids.filtered(
+                    lambda l: l.product_id.name == 'PMS')[0]
+                if pms_line:
+                    pms_line.coupon_sales_gals = pms_coupon
+
 
     station_sale_id = fields.Many2one('station.sales',string='Station Sales')
     partner_id = fields.Many2one('res.partner', related='station_sale_id.partner_id' , string='Station Manager', store=True)
     product_id = fields.Many2one('product.product', string='Product', ondelete='restrict', track_visibility='onchange')
     product_uom = fields.Many2one('product.uom', related='product_id.uom_id', string='Unit of Measure')
     opening_dip = fields.Float(string='Opening')
-    product_received = fields.Float(string='Qty. Supplied')
+    product_received = fields.Float(string='Qty. Supplied',compute='_compute_product_received', store=True)
     closing_dip = fields.Float(string='Dipping')
-    qty = fields.Float(string='Qty. Sold', track_visibility='onchange', compute='_compute_values', store=True)
+    qty = fields.Float(string='Product Sales (gals)', track_visibility='onchange', compute='_compute_values', store=True)
     pump_price = fields.Float(string='Pump Price')
-    line_amount = fields.Monetary(string='Amount', store=True, readonly=True, compute='_compute_amount', track_visibility='always')
+    line_amount = fields.Monetary(string='Total Sales Amt.', store=True, readonly=True, compute='_compute_amount', track_visibility='always')
+    coupon_sales_gals = fields.Float(string='Coupon Sales (gals)',compute='_compute_coupon', store=True)
+    cash_sales_gals = fields.Float(string='Gal. Sales in Cash', compute='_compute_values', store=True)
+    total_cash_amt = fields.Monetary(string='Total Cash Amt.' ,compute='_compute_values', store=True)
+
     currency_id = fields.Many2one("res.currency", string="Currency", default=lambda self: self.env.user.company_id.currency_id, related='station_sale_id.currency_id', store=True, ondelete='restrict')
     user_id = fields.Many2one('res.users', string='User', default=lambda self: self.env.user.id, ondelete='restrict', readonly=True)
     validation_date = fields.Datetime(related='station_sale_id.user_validated_date',string='Validation Date', store=True)
@@ -2795,6 +2829,24 @@ class StationSalesRecordLines(models.Model):
     company_id = fields.Many2one('res.company', related='station_sale_id.company_id', string='Company')
     station_mgr_location_id = fields.Many2one('stock.location',related='station_sale_id.station_mgr_location_id' , string='Retail Station Location', store=True)
     state = fields.Selection(related='station_sale_id.state',string='State',store=True)
+
+
+class StationProductReceivedLines(models.Model):
+    _name = 'station.product.received.lines'
+
+    @api.multi
+    def write(self, vals):
+        res = super(StationProductReceivedLines, self).write(vals)
+        if self.qty_received < 0:
+            raise UserError(_('Qty. Received cannot be negative'))
+        return res
+
+
+    station_sale_id = fields.Many2one('station.sales', string='Station Sales')
+    product_id = fields.Many2one('product.product', string='Product', ondelete='restrict', track_visibility='onchange')
+    product_uom = fields.Many2one('product.uom', related='product_id.uom_id', string='Unit of Measure')
+    do_number = fields.Char(string='DO Number(s)')
+    qty_received = fields.Float(string='Qty. Received')
 
 
 class StationSalesPrice(models.Model):

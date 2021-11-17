@@ -28,7 +28,7 @@
 						<div class="row">
 							<div class="col-xs-12 text-center" >
 								<h3><strong>
-									<p>Station Daily Sales - Inventory Report</p>
+									<p>STATION DAILY SALES AND INVENTORY REPORT</p>
 								</strong></h3>
 							</div>
 						</div>
@@ -84,9 +84,11 @@
 									</tbody>
 						</table>
 						<p />
+						<br />
+						<br />
 						<div class="row mt16">
 							<div class="col-xs-12 text-center" >
-								<span style="font-weight:bold" >....................................Daily Sales and Stock Information ....................................</span>
+								<span style="font-weight:bold" >PRODUCT DAILY SALES AND DIPPINGS</span>
 							</div>
 						</div>
 						<p />
@@ -97,11 +99,14 @@
 												<tr>
 													<td><span><b>Product</b></span></td>
 													<td class="text-right" ><span><b>Pump price (<span t-field="o.currency_id.symbol" />)</b></span></td>
-													<td class="text-right" ><span><b>Opening</b></span></td>
-													<td class="text-right" ><span><b>Qty. Supplied</b></span></td>
-													<td class="text-right" ><span><b>Dipping</b></span></td>
-													<td class="text-right" ><span><b>Qty. Sold</b></span></td>
-													<td class="text-right" ><span><b>Amount</b></span></td>
+													<td class="text-right" ><span><b>Opening (gals)</b></span></td>
+													<td class="text-right" ><span><b>Qty. Supplied (gals)</b></span></td>
+													<td class="text-right" ><span><b>Dipping (gals)</b></span></td>
+													<td class="text-right" ><span><b>Product Sales (gals)</b></span></td>
+													<td class="text-right" ><span><b>Total Sales Amt. (<span t-field="o.currency_id.symbol" />)</b></span></td>
+													<td class="text-right" ><span><b>Coupon Sales (gals)</b></span></td>
+													<td class="text-right" ><span><b>Gallons Sales in Cash (gals)</b></span></td>
+													<td class="text-right" ><span><b>Total Cash Amt. (<span t-field="o.currency_id.symbol" />)</b></span></td>
 												</tr>
 											</thead>
 											<tbody>
@@ -125,16 +130,93 @@
 													<td class="text-right">
 														<span t-field="line.line_amount" />
 													</td>
+													<td class="text-right">
+														<span t-field="line.coupon_sales_gals" />
+													</td>
+													<td class="text-right">
+														<span t-field="line.cash_sales_gals" />
+													</td>
+													<td class="text-right">
+														<span t-field="line.total_cash_amt" />
+													</td>
 												</tr>
 											</tbody>
 											<tr>
-												<td t-if="not display_discount" colspan="5"  style="border-bottom:solid white;border-left: solid white" />
+												<td t-if="not display_discount" colspan="8"  style="border-bottom:solid white;border-left: solid white" />
 												<td ><b>Total <span t-field="o.currency_id.name" /></b></td>
 												<td class="text-right">
 													<span t-esc="'{:,.2f}'.format(o.amount_total)" />
 												</td>
 											</tr>
 								</table>
+							</div>
+						</div>
+						<br />
+						<p />
+						<div class="row mt8">
+							<div class="col-xs-7" >
+								<div class="row mt16">
+										<div class="col-xs-12 text-center" >
+											<span style="font-weight:bold" >PRODUCTS RECEIVED</span>
+										</div>
+									</div>
+								<table  style="width: 100%;" class="table-bordered-black" cellpadding="3" cellspacing="0" >
+										<thead style="display: table-row-group " >
+												<tr>
+													<td><span><b>Product</b></span></td>
+													<td class="text-right" ><span><b>DO Number</b></span></td>
+													<td class="text-right" ><span><b>Qty. Received</b></span></td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr  t-foreach="o.station_product_received_line_ids" t-as="line" >
+													<td style="padding-left: 2px" class="text-left" ><span t-field="line.product_id" />	</td>
+													<td class="text-right">
+														<span t-field="line.do_number"/>
+													</td>
+													<td class="text-right">
+														<span t-field="line.qty_received"/>
+													</td>
+												</tr>
+											</tbody>
+								</table>
+								</div>
+							    <div class="col-xs-5" >
+									<div class="row mt16">
+										<div class="col-xs-12 text-center" >
+											<span style="font-weight:bold" >COUPONS</span>
+										</div>
+									</div>
+								<table  style="width: 100%;" class="table-bordered-black" cellpadding="3" cellspacing="0" >
+
+											<tbody>
+												<tr>
+													<td class="text-left">
+														PMS Coupon
+													</td>
+													<td class="text-right">
+														<span t-field="o.pms_coupon"/>
+													</td>
+												</tr>
+												<tr>
+													<td class="text-left">
+														AGO Coupon
+													</td>
+													<td class="text-right">
+														<span t-field="o.ago_coupon"/>
+													</td>
+												</tr>
+												<tr>
+													<td class="text-left">
+														Cash Coupon
+													</td>
+													<td class="text-right">
+														<span t-field="o.cash_coupon"/>
+													</td>
+												</tr>
+											</tbody>
+								</table>
+
 							</div>
 						</div>
 						<br />
@@ -146,7 +228,7 @@
 							<div class="col-xs-12" >
 								<div class="row">
 									<div class="col-xs-6" >
-										 <span><b>Retail Manager's Signature:</b> ............................ </span>
+										 <span><b>Retail Staff Signature:</b> ............................ </span>
 									</div>
 									<div class="col-xs-6" >
 										<span><b>Station Manager's Signature:</b> ............................ </span>
