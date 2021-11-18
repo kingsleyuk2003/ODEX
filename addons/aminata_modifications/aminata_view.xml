@@ -1114,7 +1114,7 @@
                                        <field name="opening_dip" required="1" readonly="1"  />
                                         <field name="product_received" required="1" />
                                         <field name="closing_dip" required="1"  />
-                                        <field name="qty" required="1" sum="Total" />
+                                        <field name="qty" required="1"  />
                                        <field name="line_amount" />
                                         <field name="coupon_sales_gals" />
                                         <field name="cash_sales_gals" />

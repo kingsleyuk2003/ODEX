@@ -2751,14 +2751,15 @@ class StationSalesRecordLines(models.Model):
                 'line_amount': price
             })
 
+
     @api.depends('opening_dip','product_received','closing_dip','coupon_sales_gals')
     def _compute_values(self):
         for rec in self:
             rec.qty = rec.opening_dip + rec.product_received - rec.closing_dip
             rec.cash_sales_gals = rec.qty - rec.coupon_sales_gals
             rec.total_cash_amt = rec.cash_sales_gals * rec.pump_price
-
-
+        self._compute_product_received()
+        self._compute_coupon()
 
     @api.onchange('product_id')
     def on_change_product(self):
@@ -2775,8 +2776,7 @@ class StationSalesRecordLines(models.Model):
                 self.opening_dip = query_results[0].get('closing_dip')
                 self.previous_retail_sale_line_id = query_results[0].get('id')
 
-            self._compute_product_received()
-            self._compute_coupon()
+
 
     @api.depends('station_sale_id.station_product_received_line_ids.qty_received')
     def _compute_product_received(self):
