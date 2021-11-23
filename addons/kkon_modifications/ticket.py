@@ -969,7 +969,7 @@ class Ticket(models.Model):
                 subject='%s' % msg, partner_ids=partn_ids)
 
         self.env.user.notify_info('%s Will Be Notified by Email' % (user_names))
-
+        self.done_date = datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         return super(Ticket,self).btn_ticket_done()
 
     @api.multi
@@ -1478,6 +1478,7 @@ class Ticket(models.Model):
                 _(msg),
                 subject='%s' % msg, partner_ids=partn_ids)
             self.env.user.notify_info('%s Will Be Notified by Email' % (user_names))
+        self.integration_date = datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
     #Integration rejection
     @api.multi
