@@ -82,12 +82,15 @@ class ElapsedHoursFirst(models.Model):
     elapsed_hours = fields.Integer(string="Elapsed Hours")
     ticket_id = fields.Many2one('kin.ticket',  string='Ticket')
 
+
+
 class ElapsedHoursSecond(models.Model):
     _name = "kkon.elapsed.hour.second"
 
     day_no = fields.Integer(string="Day No.")
     elapsed_hours = fields.Integer(string="Elapsed Hours")
     ticket_id = fields.Many2one('kin.ticket',  string='Ticket')
+
 
 class ElapsedHoursThird(models.Model):
     _name = "kkon.elapsed.hour.third"
@@ -125,18 +128,58 @@ class Ticket(models.Model):
         return partner_ids
 
 
-    def get_escalation_msg(self, esc_type, hours):
-        open_date_format = datetime.strptime(self.open_date, '%Y-%m-%d %H:%M:%S').strftime('%d-%m-%Y %H:%M:%S')
-        subject = 'Service Relocation Ticket Alert (%s) for ticket with ID: %s' % (esc_type, self.ticket_id)
-        msg = _(
-            'The is to bring to your attention, that the service relocation ticket (%s) with subject (%s), which was opened on %s, is over %s hours. Kindly attend to the Service relocation ticket and ensure it is closed, to avoid further escalation') % (
-                  self.ticket_id, self.name, open_date_format, hours)
+    def escalate_first(self,user_type,esc_type, hours):
+        subject = False
+        msg = False
+        if self.open_date :
+            user_tz_obj = pytz.timezone(self.env.context.get('tz') or 'Africa/Lagos')
+            localize_tz = pytz.utc.localize
+            open_date_format = localize_tz(datetime.strptime(self.open_date, '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d-%m-%Y %H:%M:%S')
+            subject = 'Service Relocation Ticket Alert (%s) for ticket with ID: %s' % (esc_type, self.ticket_id)
+            msg = _(
+                'The is to bring to your attention, that the service relocation ticket (%s) with subject (%s), which was opened on %s, has not been closed. Kindly attend to the Service relocation ticket and ensure it is closed, to avoid further escalation') % (
+                    self.ticket_id, self.name, open_date_format)
+
+            partner_ids = self.get_escalation_partners(user_type)
+            if subject and msg:
+                self.send_escalation_msg(partner_ids, subject, msg)
         return subject, msg
 
-    def escalate(self,user_type,esc_type, hours):
-        partner_ids = self.get_escalation_partners(user_type)
-        subject, msg = self.get_escalation_msg(esc_type, hours)
-        self.send_escalation_msg(partner_ids, subject, msg)
+    def escalate_second(self, user_type, esc_type, hours):
+        subject = False
+        msg = False
+        if self.done_date:
+            user_tz_obj = pytz.timezone(self.env.context.get('tz') or 'Africa/Lagos')
+            localize_tz = pytz.utc.localize
+            done_date_format = localize_tz(datetime.strptime(self.done_date, '%Y-%m-%d %H:%M:%S')).astimezone(
+                user_tz_obj).strftime('%d-%m-%Y %H:%M:%S')
+            subject = 'Completed Service Relocation Ticket Alert (%s) for ticket with ID: %s' % (esc_type, self.ticket_id)
+            msg = _(
+                'The is to bring to your attention, that the service relocation ticket (%s) with subject (%s), which has been completed on %s, has not been closed. Kindly attend to the Service relocation ticket and ensure it is closed, to avoid further escalation') % (
+                      self.ticket_id, self.name, done_date_format)
+
+            partner_ids = self.get_escalation_partners(user_type)
+            if subject and msg:
+                self.send_escalation_msg(partner_ids, subject, msg)
+        return subject, msg
+
+    def escalate_third(self, user_type, esc_type, hours):
+        subject = False
+        msg = False
+        if self.integration_date:
+            user_tz_obj = pytz.timezone(self.env.context.get('tz') or 'Africa/Lagos')
+            localize_tz = pytz.utc.localize
+            integration_date_format = localize_tz(datetime.strptime(self.integration_date, '%Y-%m-%d %H:%M:%S')).astimezone(
+                user_tz_obj).strftime('%d-%m-%Y %H:%M:%S')
+            subject = 'Finalized Service Relocation Ticket Alert (%s) for ticket with ID: %s' % (esc_type, self.ticket_id)
+            msg = _(
+                'The is to bring to your attention, that the service relocation ticket (%s) with subject (%s), which has been finalized on %s, has not been closed. Kindly attend to the Service relocation ticket and ensure it is closed, to avoid further escalation') % (
+                      self.ticket_id, self.name, integration_date_format)
+
+            partner_ids = self.get_escalation_partners(user_type)
+            if subject and msg:
+                self.send_escalation_msg(partner_ids, subject, msg)
+        return subject, msg
 
 
 
@@ -151,33 +194,33 @@ class Ticket(models.Model):
             user_type = ''
             esc_type = ''
             hours = 0
-            if total_elapsed_hours > 54:
+            if total_elapsed_hours == 54:
                 user_type = 'is_bpsq_md_manager'
                 esc_type = 'EXTREMELY OVERDUE ESCALATION'
                 hours = 54
-            elif total_elapsed_hours > 41:
+            elif total_elapsed_hours == 41:
                 user_type = 'is_bpsq_cto_manager'
                 esc_type = 'OVERDUE ESCALATION'
                 hours = 41
-            elif total_elapsed_hours > 27:
+            elif total_elapsed_hours == 27:
                 user_type = 'is_bpsq_cto_manager'
                 esc_type = 'DUE ESCALATION'
                 hours = 27
-            elif total_elapsed_hours > 21:
-                user_type = ' is_cto_rm_hcx'
+            elif total_elapsed_hours == 21:
+                user_type = 'is_cto_rm_hcx'
                 esc_type = 'HIGH ESCALATION'
                 hours = 21
-            elif total_elapsed_hours > 14:
+            elif total_elapsed_hours == 14:
                 user_type = 'is_regional_manager_hcx'
                 esc_type = 'MODERATE ESCALATION'
                 hours = 14
-            elif total_elapsed_hours > 7:
+            elif total_elapsed_hours == 7:
                 user_type = 'is_area_manager'
                 esc_type = 'NORMAL'
                 hours = 7
 
             if user_type and esc_type and hours :
-                self.escalate(user_type, esc_type, hours)
+                ticket.escalate_first(user_type, esc_type, hours)
 
 
 
@@ -192,29 +235,29 @@ class Ticket(models.Model):
             user_type = ''
             esc_type = ''
             hours = 0
-            if total_elapsed_hours > 6:
+            if total_elapsed_hours == 6:
                 user_type = 'is_bpsq_md_manager'
                 esc_type = 'EXTREMELY OVERDUE ESCALATION'
                 hours = 6
-            elif total_elapsed_hours > 4:
-                user_type = ' is_hcx'
+            elif total_elapsed_hours == 4:
+                user_type = 'is_hcx'
                 esc_type = 'DUE ESCALATION'
-                hours = 3
-            elif total_elapsed_hours > 3:
+                hours = 4
+            elif total_elapsed_hours == 3:
                 user_type = 'is_hcx_team_lead'
                 esc_type = 'HIGH ESCALATION'
-                hours = 2
-            elif total_elapsed_hours > 2:
-                user_type = ' is_hcx'
+                hours = 3
+            elif total_elapsed_hours == 2:
+                user_type = 'is_hcx'
                 esc_type = 'MODERATE ESCALATION'
-                hours = 1
-            elif total_elapsed_hours > 1:
-                user_type = ' is_hcx'
+                hours = 2
+            elif total_elapsed_hours == 1:
+                user_type = 'is_hcx'
                 esc_type = 'NORMAL ESCALATION'
                 hours = 1
 
             if user_type and esc_type and hours:
-                self.escalate(user_type, esc_type, hours)
+                ticket.escalate_second(user_type, esc_type, hours)
 
 
     def escalate_third_service_relocation(self):
@@ -228,25 +271,25 @@ class Ticket(models.Model):
             user_type = ''
             esc_type = ''
             hours = 0
-            if total_elapsed_hours > 12:
-                user_type = ' is_bpsq_hcx'
+            if total_elapsed_hours == 12:
+                user_type = 'is_bpsq_hcx'
                 esc_type = 'HIGH ESCALATION'
                 hours = 12
-            elif total_elapsed_hours > 9:
-                user_type = ' is_hcx'
+            elif total_elapsed_hours == 9:
+                user_type = 'is_hcx'
                 esc_type = 'HIGH ESCALATION'
                 hours = 9
-            elif total_elapsed_hours > 6:
+            elif total_elapsed_hours == 6:
                 user_type = 'is_team_lead'
                 esc_type = 'MODERATE ESCALATION'
                 hours = 6
-            elif total_elapsed_hours > 3:
-                user_type = ' is_cx'
+            elif total_elapsed_hours == 3:
+                user_type = 'is_cx'
                 esc_type = 'NORMAL ESCALATION'
                 hours = 3
 
             if user_type and esc_type and hours:
-                self.escalate(user_type, esc_type, hours)
+                ticket.escalate_third(user_type, esc_type, hours)
 
     @api.depends('elapsed_hours_first')
     def _compute_total_elapsed_hours_first(self):
@@ -280,43 +323,75 @@ class Ticket(models.Model):
         if not the_elapsed_rec :
             self.elapsed_hours_first.create({'day_no': day_no, 'elapsed_hours': elapsed_hours, 'ticket_id': self.id})
         else :
-            the_elapsed_rec.write({'elapsed_hours_first': elapsed_hours})
+            the_elapsed_rec.write({'elapsed_hours': elapsed_hours})
 
     def update_elapsed_table_second(self, day_no, elapsed_hours):
-        the_elapsed_rec = self.elapsed_hours_first.search([('day_no', '=', day_no),('ticket_id', '=', self.id)])
+        the_elapsed_rec = self.elapsed_hours_second.search([('day_no', '=', day_no),('ticket_id', '=', self.id)])
         if not the_elapsed_rec :
-            self.elapsed_hours_first.create({'day_no': day_no, 'elapsed_hours': elapsed_hours, 'ticket_id': self.id})
+            self.elapsed_hours_second.create({'day_no': day_no, 'elapsed_hours': elapsed_hours, 'ticket_id': self.id})
         else :
-            the_elapsed_rec.write({'elapsed_hours_first': elapsed_hours})
+            the_elapsed_rec.write({'elapsed_hours': elapsed_hours})
 
     def update_elapsed_table_third(self, day_no, elapsed_hours):
-        the_elapsed_rec = self.elapsed_hours_first.search([('day_no', '=', day_no),('ticket_id', '=', self.id)])
+        the_elapsed_rec = self.elapsed_hours_third.search([('day_no', '=', day_no),('ticket_id', '=', self.id)])
         if not the_elapsed_rec :
-            self.elapsed_hours_first.create({'day_no': day_no, 'elapsed_hours': elapsed_hours, 'ticket_id': self.id})
+            self.elapsed_hours_third.create({'day_no': day_no, 'elapsed_hours': elapsed_hours, 'ticket_id': self.id})
         else :
-            the_elapsed_rec.write({'elapsed_hours_first': elapsed_hours})
+            the_elapsed_rec.write({'elapsed_hours': elapsed_hours})
 
 
     def set_hours_elapsed(self,tickets,escalation_type):
         dtoday = datetime.today()
         tday = dtoday.day
+        user_tz_obj = pytz.timezone(self.env.context.get('tz') or 'Africa/Lagos')
+        localize_tz = pytz.utc.localize
         for ticket in tickets:
-            open_day = datetime.strptime(ticket.open_date, '%Y-%m-%d %H:%M:%S').day
-            day_no = tday - open_day + 1
-            current_hour = dtoday.hour
+            start_day = False
+            start_hour = False
+            if escalation_type == 'first':
+                start_day = localize_tz(
+                    datetime.strptime(ticket.open_date, '%Y-%m-%d %H:%M:%S')).astimezone(
+                    user_tz_obj).day
+                start_hour = localize_tz(
+                    datetime.strptime(ticket.open_date, '%Y-%m-%d %H:%M:%S')).astimezone(
+                    user_tz_obj).hour
+            elif escalation_type == 'second':
+                start_day = localize_tz(
+                    datetime.strptime(ticket.done_date, '%Y-%m-%d %H:%M:%S')).astimezone(
+                    user_tz_obj).day
+                start_hour = localize_tz(
+                    datetime.strptime(ticket.done_date, '%Y-%m-%d %H:%M:%S')).astimezone(
+                    user_tz_obj).hour
+            elif escalation_type == 'third':
+                start_day = localize_tz(
+                    datetime.strptime(ticket.integration_date, '%Y-%m-%d %H:%M:%S')).astimezone(
+                    user_tz_obj).day
+                start_hour = localize_tz(
+                    datetime.strptime(ticket.integration_date, '%Y-%m-%d %H:%M:%S')).astimezone(
+                    user_tz_obj).hour
+
+            day_no = tday - start_day + 1
+            current_hour = dtoday.hour + 1
 
             is_sunday = False
             if dtoday.weekday() == 6 :
                 is_sunday = True
-            if 8 < current_hour < 17 and not is_sunday:
+            if 8 < current_hour < 18 and not is_sunday:
                 current_hours_elapsed = current_hour - 8
-
+                if day_no == 1:
+                    if start_hour <= 8 :
+                        start_hour = 8
+                    current_hours_elapsed = current_hour - start_hour
                 if escalation_type == 'first' :
                     ticket.update_elapsed_table_first(day_no, current_hours_elapsed)
+                    ticket._compute_total_elapsed_hours_first()
                 elif escalation_type == 'second' :
                     ticket.update_elapsed_table_second(day_no, current_hours_elapsed)
+                    ticket._compute_total_elapsed_hours_second()
                 elif escalation_type == 'third' :
                     ticket.update_elapsed_table_third(day_no, current_hours_elapsed)
+                    ticket._compute_total_elapsed_hours_third()
+
 
 
     def set_hours_elapsed_first(self):
@@ -344,12 +419,18 @@ class Ticket(models.Model):
 
     @api.model
     def run_check_service_relocation_escalation_ticket(self):
-        self.set_hours_elapsed_first()
-        self.escalate_first_service_relocation()
-        self.set_hours_elapsed_second()
-        self.escalate_second_service_relocation()
-        self.set_hours_elapsed_third()
-        self.escalate_third_service_relocation()
+        dtoday = datetime.today()
+        current_hour = dtoday.hour + 1
+        is_sunday = False
+        if dtoday.weekday() == 6:
+            is_sunday = True
+        if 8 < current_hour < 18 and not is_sunday:
+            self.set_hours_elapsed_first()
+            self.escalate_first_service_relocation()
+            self.set_hours_elapsed_second()
+            self.escalate_second_service_relocation()
+            self.set_hours_elapsed_third()
+            self.escalate_third_service_relocation()
         return True
 
 
@@ -1656,6 +1737,24 @@ class Ticket(models.Model):
     last_log_user_id = fields.Many2one('res.users',string='Last Logged User')
     last_log_message = fields.Html(string='Last Log Message')
     is_upcountry = fields.Boolean(string='Up Country Transaction')
+
+    is_area_manager_email_sent  = fields.Boolean(string='Is Area Manager Email Sent')
+    is_regional_manager_hcx_email_sent = fields.Boolean(string='Is Regional Manager/HCX Email Sent')
+    is_cto_rm_hcx_email_sent = fields.Boolean(string='Is CTO/RM/HCX Email Sent')
+    is_bpsq_cto_manager_email_sent = fields.Boolean(string='Is BPSQ/CTO Email Sent')
+    is_bpsq_cto_manager1_email_sent = fields.Boolean(string='Is BPSQ/CTO 1 Email Sent')
+    is_bpsq_md_manager_email_sent = fields.Boolean(string='Is MD/BPSQ Email Sent')
+
+    is_hcx_email_sent = fields.Boolean(string='Is HCX Email Sent')
+    is_hcx1_email_sent = fields.Boolean(string='Is HCX 1 Email Sent')
+    is_hcx_team_lead_email_sent = fields.Boolean(string='Is HCX/Teamlead')
+    is_hcx2_email_sent = fields.Boolean(string='Is HCX 2 Email Sent')
+    is_bpsq_md_manager1_email_sent = fields.Boolean(string='Is MD/BPSQ 1 Email Sent')
+
+    is_cx_email_sent = fields.Boolean(string='Is CX')
+    is_team_lead_email_sent = fields.Boolean(string='Is Teamlead')
+    is_hcx3_email_sent = fields.Boolean(string='Is HCX 3 Email Sent')
+    is_bpsq_hcx_email_sent = fields.Boolean(string='Is BPSQ/HCX')
 
 
 

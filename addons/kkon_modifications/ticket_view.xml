@@ -297,7 +297,27 @@
                         </group>
                           <group class="oe_subtotal_footer oe_right" colspan="2" >
                                        <field name="total_elapsed_hours_third" />
-                                </group>
+                          </group>
+
+<!--                        <group col="4" string="Email tracking">-->
+<!--                            <field name="is_area_manager_email_sent" />-->
+<!--                            <field name="is_regional_manager_hcx_email_sent" />-->
+<!--                            <field name="is_cto_rm_hcx_email_sent" />-->
+<!--                            <field name="is_bpsq_cto_manager_email_sent" />-->
+<!--                            <field name="is_bpsq_cto_manager1_email_sent" />-->
+<!--                            <field name="is_bpsq_md_manager_email_sent" />-->
+<!--                            <field name="is_hcx_email_sent" />-->
+<!--                            <field name="is_hcx1_email_sent" />-->
+<!--                            <field name="is_hcx_team_lead_email_sent" />-->
+<!--                            <field name="is_hcx2_email_sent" />-->
+<!--                            <field name="is_bpsq_md_manager1_email_sent" />-->
+<!--                            <field name="is_cx_email_sent" />-->
+<!--                            <field name="is_team_lead_email_sent" />-->
+<!--                            <field name="is_hcx3_email_sent" />-->
+<!--                            <field name="is_bpsq_hcx_email_sent" />-->
+
+<!--                        </group>-->
+
 
                     </page>
                     <page  string="Site Survey and SRF Form"  attrs="{'invisible': [('category_id', '!=', 2 )]}" >
