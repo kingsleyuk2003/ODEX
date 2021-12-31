@@ -29,7 +29,7 @@ class AccountMoveLineExtend(models.Model):
     def create(self, vals, apply_taxes=False):
         if 'is_from_rpc' in vals:
             #sudo() is not required here
-            move_line = super(AccountMoveLineExtend,self.with_context({'check_move_validity':False})).create(vals)
+            move_line = super(AccountMoveLineExtend,self.sudo().with_context({'check_move_validity':False})).create(vals)
         else:
             move_line = super(AccountMoveLineExtend,self).create(vals)
         return move_line
