@@ -29,3 +29,6 @@ access_kin_ticket_kkon_complaint_type,kkon.complaint.type user,model_kkon_compla
 access_kin_ticket_kkon_elapsed_hour_first,kkon.elapsed.hour.first user,model_kkon_elapsed_hour_first,base.group_user,1,1,1,1
 access_kin_ticket_kkon_elapsed_hour_second,kkon.elapsed.hour.second user,model_kkon_elapsed_hour_second,base.group_user,1,1,1,1
 access_kin_ticket_kkon_elapsed_hour_third,kkon.elapsed.hour.third user,model_kkon_elapsed_hour_third,base.group_user,1,1,1,1
+access_kin_ticket_kkon_elapsed_hour_first_support,kkon.elapsed.hour.first.support user,model_kkon_elapsed_hour_first_support,base.group_user,1,1,1,1
+access_kin_ticket_kkon_elapsed_hour_second_support,kkon.elapsed.hour.second.support user,model_kkon_elapsed_hour_second_support,base.group_user,1,1,1,1
+access_kin_ticket_kkon_elapsed_hour_major_support,kkon.elapsed.hour.major.support user,model_kkon_elapsed_hour_major_support,base.group_user,1,1,1,1

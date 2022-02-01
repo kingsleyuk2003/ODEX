@@ -37,6 +37,15 @@ class UserGroups(models.Model):
     is_team_lead = fields.Boolean(string='Is Teamlead')
     is_bpsq_hcx = fields.Boolean(string='Is BPSQ/HCX')
 
+    is_team_lead_im = fields.Boolean(string='Is Team lead, IM')
+    is_team_lead_im_cm = fields.Boolean(string='Is Team lead, IM/CM')
+    is_hcx_hod = fields.Boolean(string='Is HCX/HOD')
+    is_cto_hod = fields.Boolean(string='Is CTO/HOD')
+    is_bpsq_hcx_cto = fields.Boolean(string='BPSQ/HCX/CTO')
+    is_bpsq_md_cto = fields.Boolean(string='BPSQ/MD/CTO')
+
+
+
 
 class Estate(models.Model):
     _name = "kkon.estate"
@@ -98,6 +107,29 @@ class ElapsedHoursThird(models.Model):
     day_no = fields.Integer(string="Day No.")
     elapsed_hours = fields.Integer(string="Elapsed Hours")
     ticket_id = fields.Many2one('kin.ticket',  string='Ticket')
+
+
+class ElapsedHoursFirstSupport(models.Model):
+    _name = "kkon.elapsed.hour.first.support"
+
+    day_no = fields.Integer(string="Day No.")
+    elapsed_hours = fields.Integer(string="Elapsed Hours")
+    ticket_id = fields.Many2one('kin.ticket',  string='Ticket')
+
+class ElapsedHoursSecondSupport(models.Model):
+    _name = "kkon.elapsed.hour.second.support"
+
+    day_no = fields.Integer(string="Day No.")
+    elapsed_hours = fields.Integer(string="Elapsed Hours")
+    ticket_id = fields.Many2one('kin.ticket',  string='Ticket')
+
+class ElapsedHoursMajorSupport(models.Model):
+    _name = "kkon.elapsed.hour.major.support"
+
+    day_no = fields.Integer(string="Day No.")
+    elapsed_hours = fields.Integer(string="Elapsed Hours")
+    ticket_id = fields.Many2one('kin.ticket',  string='Ticket')
+
 
 class Ticket(models.Model):
     _inherit = 'kin.ticket'
@@ -175,6 +207,60 @@ class Ticket(models.Model):
             msg = _(
                 'The is to bring to your attention, that the service relocation ticket (%s) with subject (%s), which has been finalized on %s, has not been closed. Kindly attend to the Service relocation ticket and ensure it is closed, to avoid further escalation') % (
                       self.ticket_id, self.name, integration_date_format)
+
+            partner_ids = self.get_escalation_partners(user_type)
+            if subject and msg:
+                self.send_escalation_msg(partner_ids, subject, msg)
+        return subject, msg
+
+
+    def escalate_first_support(self,user_type,esc_type, hours):
+        subject = False
+        msg = False
+        if self.open_date :
+            user_tz_obj = pytz.timezone(self.env.context.get('tz') or 'Africa/Lagos')
+            localize_tz = pytz.utc.localize
+            open_date_format = localize_tz(datetime.strptime(self.open_date, '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d-%m-%Y %H:%M:%S')
+            subject = 'Support Ticket Alert (%s) for ticket with ID: %s' % (esc_type, self.ticket_id)
+            msg = _(
+                'The is to bring to your attention, that the support ticket (%s) with subject (%s), which was opened on %s, has not been closed. Kindly attend to the support ticket and ensure it is closed, to avoid further escalation') % (
+                    self.ticket_id, self.name, open_date_format)
+
+            partner_ids = self.get_escalation_partners(user_type)
+            if subject and msg:
+                self.send_escalation_msg(partner_ids, subject, msg)
+        return subject, msg
+
+    def escalate_second_support(self, user_type, esc_type, hours):
+        subject = False
+        msg = False
+        if self.done_date:
+            user_tz_obj = pytz.timezone(self.env.context.get('tz') or 'Africa/Lagos')
+            localize_tz = pytz.utc.localize
+            done_date_format = localize_tz(datetime.strptime(self.done_date, '%Y-%m-%d %H:%M:%S')).astimezone(
+                user_tz_obj).strftime('%d-%m-%Y %H:%M:%S')
+            subject = 'Completed Support Ticket Alert (%s) for ticket with ID: %s' % (esc_type, self.ticket_id)
+            msg = _(
+                'The is to bring to your attention, that the support ticket (%s) with subject (%s), which has been completed on %s, has not been closed. Kindly attend to the support ticket and ensure it is closed, to avoid further escalation') % (
+                      self.ticket_id, self.name, done_date_format)
+
+            partner_ids = self.get_escalation_partners(user_type)
+            if subject and msg:
+                self.send_escalation_msg(partner_ids, subject, msg)
+        return subject, msg
+
+    def escalate_major_support(self, user_type, esc_type, hours):
+        subject = False
+        msg = False
+        if self.open_date:
+            user_tz_obj = pytz.timezone(self.env.context.get('tz') or 'Africa/Lagos')
+            localize_tz = pytz.utc.localize
+            open_date_format = localize_tz(datetime.strptime(self.open_date, '%Y-%m-%d %H:%M:%S')).astimezone(
+                user_tz_obj).strftime('%d-%m-%Y %H:%M:%S')
+            subject = 'Major Incident Support Ticket Alert (%s) for ticket with ID: %s' % (esc_type, self.ticket_id)
+            msg = _(
+                'The is to bring to your attention, that the major incident support ticket (%s) with subject (%s), which was opened on %s, has not been closed. Kindly attend to the support ticket and ensure it is closed, to avoid further escalation') % (
+                      self.ticket_id, self.name, open_date_format)
 
             partner_ids = self.get_escalation_partners(user_type)
             if subject and msg:
@@ -291,6 +377,123 @@ class Ticket(models.Model):
             if user_type and esc_type and hours:
                 ticket.escalate_third(user_type, esc_type, hours)
 
+
+    def escalate_first_support_ticket(self):
+        today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+        tickets = self.search(
+            [('open_date', '<', today), ('category_id', '=', 3),('is_major_support', '=', 'no'),
+             ('state', 'not in', ['draft', 'closed'])])
+
+        for ticket in tickets:
+            total_elapsed_hours = ticket.total_elapsed_hours_first_support
+            user_type = ''
+            esc_type = ''
+            hours = 0
+            if total_elapsed_hours == 54:
+                user_type = 'is_bpsq_md_manager'
+                esc_type = 'EXTREMELY OVERDUE ESCALATION'
+                hours = 54
+            elif total_elapsed_hours == 41:
+                user_type = 'is_bpsq_cto_manager'
+                esc_type = 'OVERDUE ESCALATION'
+                hours = 41
+            elif total_elapsed_hours == 27:
+                user_type = 'is_bpsq_cto_manager'
+                esc_type = 'DUE ESCALATION'
+                hours = 27
+            elif total_elapsed_hours == 21:
+                user_type = 'is_cto_rm_hcx'
+                esc_type = 'HIGH ESCALATION'
+                hours = 21
+            elif total_elapsed_hours == 14:
+                user_type = 'is_regional_manager_hcx'
+                esc_type = 'MODERATE ESCALATION'
+                hours = 14
+            elif total_elapsed_hours == 7:
+                user_type = 'is_area_manager'
+                esc_type = 'NORMAL'
+                hours = 7
+
+            if user_type and esc_type and hours :
+                ticket.escalate_first(user_type, esc_type, hours)
+
+
+
+    def escalate_second_support_ticket(self):
+        today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+        tickets = self.search(
+            [('done_date', '<', today), ('category_id', '=', 3),('is_major_support', '=', 'no'),
+             ('state', '=', 'done')])
+
+        for ticket in tickets:
+            total_elapsed_hours = ticket.total_elapsed_hours_second_support
+            user_type = ''
+            esc_type = ''
+            hours = 0
+            if total_elapsed_hours == 6:
+                user_type = 'is_bpsq_md_manager'
+                esc_type = 'EXTREMELY OVERDUE ESCALATION'
+                hours = 6
+            elif total_elapsed_hours == 4:
+                user_type = 'is_hcx'
+                esc_type = 'DUE ESCALATION'
+                hours = 4
+            elif total_elapsed_hours == 3:
+                user_type = 'is_hcx_team_lead'
+                esc_type = 'HIGH ESCALATION'
+                hours = 3
+            elif total_elapsed_hours == 2:
+                user_type = 'is_hcx'
+                esc_type = 'MODERATE ESCALATION'
+                hours = 2
+            elif total_elapsed_hours == 1:
+                user_type = 'is_hcx'
+                esc_type = 'NORMAL ESCALATION'
+                hours = 1
+
+            if user_type and esc_type and hours:
+                ticket.escalate_second(user_type, esc_type, hours)
+
+    def escalate_major_support_ticket(self):
+        today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+        tickets = self.search(
+            [('open_date', '<', today), ('category_id', '=', 3),('is_major_support', '=', 'yes'),
+             ('state', 'not in', ['draft', 'closed'])])
+
+        for ticket in tickets:
+            total_elapsed_hours = ticket.total_elapsed_hours_major_support
+            user_type = ''
+            esc_type = ''
+            hours = 0
+            if total_elapsed_hours == 54:
+                user_type = 'is_bpsq_md_manager'
+                esc_type = 'EXTREMELY OVERDUE ESCALATION'
+                hours = 54
+            elif total_elapsed_hours == 41:
+                user_type = 'is_bpsq_cto_manager'
+                esc_type = 'OVERDUE ESCALATION'
+                hours = 41
+            elif total_elapsed_hours == 27:
+                user_type = 'is_bpsq_cto_manager'
+                esc_type = 'DUE ESCALATION'
+                hours = 27
+            elif total_elapsed_hours == 21:
+                user_type = 'is_cto_rm_hcx'
+                esc_type = 'HIGH ESCALATION'
+                hours = 21
+            elif total_elapsed_hours == 14:
+                user_type = 'is_regional_manager_hcx'
+                esc_type = 'MODERATE ESCALATION'
+                hours = 14
+            elif total_elapsed_hours == 7:
+                user_type = 'is_area_manager'
+                esc_type = 'NORMAL'
+                hours = 7
+
+            if user_type and esc_type and hours :
+                ticket.escalate_first(user_type, esc_type, hours)
+
+
     @api.depends('elapsed_hours_first')
     def _compute_total_elapsed_hours_first(self):
         for rec in self:
@@ -317,6 +520,31 @@ class Ticket(models.Model):
                 total_elapsed_hours += elh.elapsed_hours
             rec.total_elapsed_hours_third = total_elapsed_hours
 
+    @api.depends('elapsed_hours_first_support')
+    def _compute_total_elapsed_hours_first_support(self):
+        for rec in self:
+            total_elapsed_hours = 0
+            for elh in rec.elapsed_hours_first_support:
+                total_elapsed_hours += elh.elapsed_hours
+            rec.total_elapsed_hours_first_support = total_elapsed_hours
+
+    @api.depends('elapsed_hours_second_support')
+    def _compute_total_elapsed_hours_second_support(self):
+        for rec in self:
+            total_elapsed_hours = 0
+            for elh in rec.elapsed_hours_second_support:
+                total_elapsed_hours += elh.elapsed_hours
+            rec.total_elapsed_hours_second_support = total_elapsed_hours
+
+    @api.depends('elapsed_hours_major_support')
+    def _compute_total_elapsed_hours_major_support(self):
+        for rec in self:
+            total_elapsed_hours = 0
+            for elh in rec.elapsed_hours_major_support:
+                total_elapsed_hours += elh.elapsed_hours
+            rec.total_elapsed_hours_major_support = total_elapsed_hours
+
+
 
     def update_elapsed_table_first(self, day_no, elapsed_hours):
         the_elapsed_rec = self.elapsed_hours_first.search([('day_no', '=', day_no),('ticket_id', '=', self.id)])
@@ -336,6 +564,28 @@ class Ticket(models.Model):
         the_elapsed_rec = self.elapsed_hours_third.search([('day_no', '=', day_no),('ticket_id', '=', self.id)])
         if not the_elapsed_rec :
             self.elapsed_hours_third.create({'day_no': day_no, 'elapsed_hours': elapsed_hours, 'ticket_id': self.id})
+        else :
+            the_elapsed_rec.write({'elapsed_hours': elapsed_hours})
+
+
+    def update_elapsed_table_first_support(self, day_no, elapsed_hours):
+        the_elapsed_rec = self.elapsed_hours_first_support.search([('day_no', '=', day_no),('ticket_id', '=', self.id)])
+        if not the_elapsed_rec :
+            self.elapsed_hours_first_support.create({'day_no': day_no, 'elapsed_hours': elapsed_hours, 'ticket_id': self.id})
+        else :
+            the_elapsed_rec.write({'elapsed_hours': elapsed_hours})
+
+    def update_elapsed_table_second_support(self, day_no, elapsed_hours):
+        the_elapsed_rec = self.elapsed_hours_second_support.search([('day_no', '=', day_no),('ticket_id', '=', self.id)])
+        if not the_elapsed_rec :
+            self.elapsed_hours_second_support.create({'day_no': day_no, 'elapsed_hours': elapsed_hours, 'ticket_id': self.id})
+        else :
+            the_elapsed_rec.write({'elapsed_hours': elapsed_hours})
+
+    def update_elapsed_table_major_support(self, day_no, elapsed_hours):
+        the_elapsed_rec = self.elapsed_hours_major_support.search([('day_no', '=', day_no),('ticket_id', '=', self.id)])
+        if not the_elapsed_rec :
+            self.elapsed_hours_major_support.create({'day_no': day_no, 'elapsed_hours': elapsed_hours, 'ticket_id': self.id})
         else :
             the_elapsed_rec.write({'elapsed_hours': elapsed_hours})
 
@@ -369,6 +619,27 @@ class Ticket(models.Model):
                 start_hour = localize_tz(
                     datetime.strptime(ticket.integration_date, '%Y-%m-%d %H:%M:%S')).astimezone(
                     user_tz_obj).hour
+            elif escalation_type == 'first_support':
+                start_day = localize_tz(
+                    datetime.strptime(ticket.open_date, '%Y-%m-%d %H:%M:%S')).astimezone(
+                    user_tz_obj).day
+                start_hour = localize_tz(
+                    datetime.strptime(ticket.open_date, '%Y-%m-%d %H:%M:%S')).astimezone(
+                    user_tz_obj).hour
+            elif escalation_type == 'second_support':
+                start_day = localize_tz(
+                    datetime.strptime(ticket.done_date, '%Y-%m-%d %H:%M:%S')).astimezone(
+                    user_tz_obj).day
+                start_hour = localize_tz(
+                    datetime.strptime(ticket.done_date, '%Y-%m-%d %H:%M:%S')).astimezone(
+                    user_tz_obj).hour
+            elif escalation_type == 'major_support':
+                start_day = localize_tz(
+                    datetime.strptime(ticket.open_date, '%Y-%m-%d %H:%M:%S')).astimezone(
+                    user_tz_obj).day
+                start_hour = localize_tz(
+                    datetime.strptime(ticket.open_date, '%Y-%m-%d %H:%M:%S')).astimezone(
+                    user_tz_obj).hour
 
             day_no = tday - start_day + 1
             current_hour = dtoday.hour + 1
@@ -391,6 +662,15 @@ class Ticket(models.Model):
                 elif escalation_type == 'third' :
                     ticket.update_elapsed_table_third(day_no, current_hours_elapsed)
                     ticket._compute_total_elapsed_hours_third()
+                elif escalation_type == 'first_support' :
+                    ticket.update_elapsed_table_first_support(day_no, current_hours_elapsed)
+                    ticket._compute_total_elapsed_hours_first_support()
+                elif escalation_type == 'second_support' :
+                    ticket.update_elapsed_table_second_support(day_no, current_hours_elapsed)
+                    ticket._compute_total_elapsed_hours_second_support()
+                elif escalation_type == 'major_support' :
+                    ticket.update_elapsed_table_major_support(day_no, current_hours_elapsed)
+                    ticket._compute_total_elapsed_hours_major_support()
 
 
 
@@ -416,9 +696,30 @@ class Ticket(models.Model):
         self.set_hours_elapsed(tickets, 'third')
 
 
+    def set_hours_elapsed_first_support(self):
+        today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+        tickets = self.search(
+            [('open_date', '<', today), ('category_id', '=', 3),('is_major_support', '=', 'no'),
+             ('state', 'not in', ['draft', 'closed'])])
+        self.set_hours_elapsed(tickets,'first_support')
+
+    def set_hours_elapsed_second_support(self):
+        today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+        tickets = self.search(
+            [('done_date', '<', today), ('category_id', '=', 3),('is_major_support', '=', 'no'),
+             ('state', 'not in', ['draft', 'closed'])])
+        self.set_hours_elapsed(tickets, 'second_support')
+
+    def set_hours_elapsed_major_support(self):
+        today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+        tickets = self.search(
+            [('open_date', '<', today), ('category_id', '=', 3), ('is_major_support', '=', 'yes'),
+             ('state', 'not in', ['draft', 'closed'])])
+        self.set_hours_elapsed(tickets,'major_support')
+
 
     @api.model
-    def run_check_service_relocation_escalation_ticket(self):
+    def run_check_escalation_ticket(self):
         dtoday = datetime.today()
         current_hour = dtoday.hour + 1
         is_sunday = False
@@ -431,6 +732,12 @@ class Ticket(models.Model):
             self.escalate_second_service_relocation()
             self.set_hours_elapsed_third()
             self.escalate_third_service_relocation()
+            self.set_hours_elapsed_first_support()
+            self.escalate_first_support_ticket()
+            self.set_hours_elapsed_second_support()
+            self.escalate_second_support_ticket()
+            self.set_hours_elapsed_major_support()
+            self.escalate_major_support_ticket()
         return True
 
 
@@ -1718,10 +2025,18 @@ class Ticket(models.Model):
     elapsed_hours_first = fields.One2many('kkon.elapsed.hour.first','ticket_id', string='First Escalation Elapsed Hours')
     elapsed_hours_second = fields.One2many('kkon.elapsed.hour.second', 'ticket_id', string='Second Escalation Elapsed Hours')
     elapsed_hours_third = fields.One2many('kkon.elapsed.hour.third', 'ticket_id', string='Third Escalation Elapsed Hours')
+    elapsed_hours_first_support = fields.One2many('kkon.elapsed.hour.first.support', 'ticket_id', string='First Support Escalation Elapsed Hours')
+    elapsed_hours_second_support = fields.One2many('kkon.elapsed.hour.second.support', 'ticket_id', string='Second Support Escalation Elapsed Hours')
+    elapsed_hours_major_support = fields.One2many('kkon.elapsed.hour.second.support', 'ticket_id',    string='Major Support Escalation Elapsed Hours')
     total_elapsed_hours_first = fields.Integer(compute=_compute_total_elapsed_hours_first, string="First Escalation Total Elapsed Hours", store=True)
     total_elapsed_hours_second = fields.Integer(compute=_compute_total_elapsed_hours_second, string="Second Escalation Total Elapsed Hours", store=True)
     total_elapsed_hours_third = fields.Integer(compute=_compute_total_elapsed_hours_third, string="Third Escalation Total Elapsed Hours", store=True)
+    is_major_support = fields.Selection([('yes', 'Yes'), ('no', 'No')], string='Is Major Support Ticket', track_visibility='onchange')
+    total_elapsed_hours_first_support = fields.Integer(compute=_compute_total_elapsed_hours_first_support, string="First Support Escalation Total Elapsed Hours", store=True)
+    total_elapsed_hours_second_support = fields.Integer(compute=_compute_total_elapsed_hours_second_support, string="Second Support Escalation Total Elapsed Hours", store=True)
+    total_elapsed_hours_major_support = fields.Integer(compute=_compute_total_elapsed_hours_major_support,   string="Major Support Escalation Total Elapsed Hours", store=True)
     area_change_request_id = fields.Many2one('kkon.area', string="Area", track_visibility='onchange')
+    area_support_id = fields.Many2one('kkon.area', string="Area", track_visibility='onchange')
     updown_grade_type = fields.Selection([('upgrade', 'Upgrade'), ('downgrade', 'Downgrade'),('disconnect', 'Disconnect'),('reconnection', 'Reconnection'),('relocation', 'Relocation'),('voip', 'Voip')], string='Change Request Type')
     product_curr_id = fields.Many2one('product.product',string='Current Package')
     product_new_id = fields.Many2one('product.product', string='New Package')

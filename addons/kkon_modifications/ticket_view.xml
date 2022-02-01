@@ -235,8 +235,10 @@
                     </page>
 
                     <page  string="Support Form" attrs="{'invisible': [('category_id', '!=', 3 )]}" >
-
                             <group col="4" >
+                                <field name="is_major_support" attrs="{'readonly': [('state', 'in', ('closed'))], 'required': [('category_id', '=', 3 )]}"   />
+                                 <field name="area_support_id"  domain="[('area_manager_id','!=',False)]" options="{'no_open': True, 'no_create': True}" attrs="{'readonly': [('state', 'in', ('closed'))], 'required': [('is_major_support', '=', 'yes' )], 'invisible': [('is_major_support', '=', 'no')]}"   />
+
                                  <field name="call_type_support" attrs="{'readonly': [('state', 'in', ('closed'))], 'required': [('category_id', '=', 3 )]}"   />
                                  <field name="source_support" attrs="{'readonly': [('state', 'in', ('closed'))], 'required': [('category_id', '=', 3 )]}"   />
                                  <field name="complaint_type_support_id" attrs="{'readonly': [('state', 'in', ('closed'))], 'required': [('category_id', '=', 3 )]}"    />
@@ -295,6 +297,34 @@
                                 </tree>
                             </field>
                         </group>
+
+                        <group string="First Support Escalation Elapsed Hours"  col="4" >
+                            <field name="elapsed_hours_first_support" nolabel="1" readonly="1"  >
+                                <tree editable="bottom" >
+                                    <field name="day_no" />
+                                    <field name="elapsed_hours" />
+                                </tree>
+                            </field>
+                        </group>
+
+                        <group string="Second Support Escalation Elapsed Hours"  col="4" >
+                            <field name="elapsed_hours_second_support" nolabel="1" readonly="1"  >
+                                <tree editable="bottom" >
+                                    <field name="day_no" />
+                                    <field name="elapsed_hours" />
+                                </tree>
+                            </field>
+                        </group>
+
+                        <group string="Major Support Escalation Elapsed Hours"  col="4" >
+                            <field name="elapsed_hours_major_support" nolabel="1" readonly="1"  >
+                                <tree editable="bottom" >
+                                    <field name="day_no" />
+                                    <field name="elapsed_hours" />
+                                </tree>
+                            </field>
+                        </group>
+
                           <group class="oe_subtotal_footer oe_right" colspan="2" >
                                        <field name="total_elapsed_hours_third" />
                           </group>
