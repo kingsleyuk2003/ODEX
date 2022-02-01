@@ -389,33 +389,62 @@ class Ticket(models.Model):
             user_type = ''
             esc_type = ''
             hours = 0
-            if total_elapsed_hours == 54:
+            company = self.sudo().ticket_company_id.company_select
+            if total_elapsed_hours == 36:
                 user_type = 'is_bpsq_md_manager'
                 esc_type = 'EXTREMELY OVERDUE ESCALATION'
-                hours = 54
-            elif total_elapsed_hours == 41:
-                user_type = 'is_bpsq_cto_manager'
-                esc_type = 'OVERDUE ESCALATION'
-                hours = 41
+                hours = 36
             elif total_elapsed_hours == 27:
                 user_type = 'is_bpsq_cto_manager'
-                esc_type = 'DUE ESCALATION'
+                esc_type = 'OVERDUE ESCALATION'
                 hours = 27
-            elif total_elapsed_hours == 21:
+            elif total_elapsed_hours == 16:
+                user_type = 'is_bpsq_cto_manager'
+                esc_type = 'DUE ESCALATION'
+                hours = 16
+            elif total_elapsed_hours == 14:
                 user_type = 'is_cto_rm_hcx'
                 esc_type = 'HIGH ESCALATION'
-                hours = 21
-            elif total_elapsed_hours == 14:
+                hours = 14
+            elif total_elapsed_hours == 10:
                 user_type = 'is_regional_manager_hcx'
                 esc_type = 'MODERATE ESCALATION'
-                hours = 14
-            elif total_elapsed_hours == 7:
-                user_type = 'is_area_manager'
-                esc_type = 'NORMAL'
+                hours = 10
+            elif total_elapsed_hours == 7 and company == 'fob':
+                user_type = 'is_cto_hod'
+                esc_type = 'DUE ESCALATION'
                 hours = 7
+            elif total_elapsed_hours == 6 and company == 'fob':
+                user_type = 'is_hcx_hod'
+                esc_type = 'HIGH ESCALATION'
+                hours = 6
+            elif total_elapsed_hours == 4 and company == 'fob':
+                user_type = 'is_team_lead_im_cm'
+                esc_type = 'MODERATE ESCALATION'
+                hours = 4
+            elif total_elapsed_hours == 2 and company == 'fob':
+                user_type = 'is_team_lead_im'
+                esc_type = 'NORMAL ESCALATION'
+                hours = 2
+            elif total_elapsed_hours == 4 and company == 'kkon':
+                user_type = 'is_bpsq_md_manager'
+                esc_type = 'EXTREMELY OVERDUE ESCALATION'
+                hours = 4
+            elif total_elapsed_hours == 3 and company == 'kkon':
+                user_type = 'is_cto_hod'
+                esc_type = 'DUE ESCALATION'
+                hours = 3
+            elif total_elapsed_hours == 2 and company == 'kkon':
+                user_type = 'is_hcx_hod'
+                esc_type = 'HIGH ESCALATION'
+                hours = 2
+            elif total_elapsed_hours == 1 and company == 'kkon':
+                user_type = 'is_team_lead_im'
+                esc_type = 'NORMAL ESCALATION'
+                hours = 1
 
             if user_type and esc_type and hours :
-                ticket.escalate_first(user_type, esc_type, hours)
+                ticket.escalate_first_support(user_type, esc_type, hours)
 
 
 
@@ -430,29 +459,30 @@ class Ticket(models.Model):
             user_type = ''
             esc_type = ''
             hours = 0
-            if total_elapsed_hours == 6:
+            if total_elapsed_hours == 8:
                 user_type = 'is_bpsq_md_manager'
                 esc_type = 'EXTREMELY OVERDUE ESCALATION'
-                hours = 6
-            elif total_elapsed_hours == 4:
+                hours = 8
+            elif total_elapsed_hours == 5:
                 user_type = 'is_hcx'
                 esc_type = 'DUE ESCALATION'
-                hours = 4
-            elif total_elapsed_hours == 3:
+                hours = 5
+            elif total_elapsed_hours == 4:
                 user_type = 'is_hcx_team_lead'
                 esc_type = 'HIGH ESCALATION'
-                hours = 3
+                hours = 4
             elif total_elapsed_hours == 2:
-                user_type = 'is_hcx'
+                user_type = 'is_team_lead_im_cm'
                 esc_type = 'MODERATE ESCALATION'
                 hours = 2
             elif total_elapsed_hours == 1:
-                user_type = 'is_hcx'
+                user_type = 'is_team_lead_im'
                 esc_type = 'NORMAL ESCALATION'
                 hours = 1
 
             if user_type and esc_type and hours:
-                ticket.escalate_second(user_type, esc_type, hours)
+                ticket.escalate_second_support(user_type, esc_type, hours)
+
 
     def escalate_major_support_ticket(self):
         today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
@@ -465,33 +495,33 @@ class Ticket(models.Model):
             user_type = ''
             esc_type = ''
             hours = 0
-            if total_elapsed_hours == 54:
-                user_type = 'is_bpsq_md_manager'
+            if total_elapsed_hours == 16:
+                user_type = 'is_bpsq_md_cto'
                 esc_type = 'EXTREMELY OVERDUE ESCALATION'
-                hours = 54
-            elif total_elapsed_hours == 41:
-                user_type = 'is_bpsq_cto_manager'
+                hours = 16
+            elif total_elapsed_hours == 12:
+                user_type = 'is_bpsq_hcx_cto'
                 esc_type = 'OVERDUE ESCALATION'
-                hours = 41
-            elif total_elapsed_hours == 27:
-                user_type = 'is_bpsq_cto_manager'
+                hours = 12
+            elif total_elapsed_hours == 8:
+                user_type = 'is_bpsq_hcx'
                 esc_type = 'DUE ESCALATION'
-                hours = 27
-            elif total_elapsed_hours == 21:
-                user_type = 'is_cto_rm_hcx'
+                hours = 8
+            elif total_elapsed_hours == 6:
+                user_type = 'is_hcx'
                 esc_type = 'HIGH ESCALATION'
-                hours = 21
-            elif total_elapsed_hours == 14:
-                user_type = 'is_regional_manager_hcx'
+                hours = 6
+            elif total_elapsed_hours == 4:
+                user_type = 'is_team_lead'
                 esc_type = 'MODERATE ESCALATION'
-                hours = 14
-            elif total_elapsed_hours == 7:
-                user_type = 'is_area_manager'
-                esc_type = 'NORMAL'
-                hours = 7
+                hours = 4
+            elif total_elapsed_hours == 2:
+                user_type = 'is_csc_fob_group'
+                esc_type = 'NORMAL ESCALATION'
+                hours = 2
 
             if user_type and esc_type and hours :
-                ticket.escalate_first(user_type, esc_type, hours)
+                ticket.escalate_major_support(user_type, esc_type, hours)
 
 
     @api.depends('elapsed_hours_first')
