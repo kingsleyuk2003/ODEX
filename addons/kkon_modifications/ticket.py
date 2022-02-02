@@ -169,8 +169,8 @@ class Ticket(models.Model):
             open_date_format = localize_tz(datetime.strptime(self.open_date, '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d-%m-%Y %H:%M:%S')
             subject = 'Service Relocation Ticket Alert (%s) for ticket with ID: %s' % (esc_type, self.ticket_id)
             msg = _(
-                'The is to bring to your attention, that the service relocation ticket (%s) with subject (%s), which was opened on %s, has not been closed. Kindly attend to the Service relocation ticket and ensure it is closed, to avoid further escalation') % (
-                    self.ticket_id, self.name, open_date_format)
+                'The is to bring to your attention, that the service relocation ticket (%s) with subject (%s) and level as (%s), which was opened on %s, has not been closed. Kindly attend to the Service relocation ticket and ensure it is closed, to avoid further escalation') % (
+                    self.ticket_id, self.name,esc_type, open_date_format)
 
             partner_ids = self.get_escalation_partners(user_type)
             if subject and msg:
@@ -187,8 +187,8 @@ class Ticket(models.Model):
                 user_tz_obj).strftime('%d-%m-%Y %H:%M:%S')
             subject = 'Completed Service Relocation Ticket Alert (%s) for ticket with ID: %s' % (esc_type, self.ticket_id)
             msg = _(
-                'The is to bring to your attention, that the service relocation ticket (%s) with subject (%s), which has been completed on %s, has not been closed. Kindly attend to the Service relocation ticket and ensure it is closed, to avoid further escalation') % (
-                      self.ticket_id, self.name, done_date_format)
+                'The is to bring to your attention, that the service relocation ticket (%s) with subject (%s) and level as (%s), which has been completed on %s, has not been closed. Kindly attend to the Service relocation ticket and ensure it is closed, to avoid further escalation') % (
+                      self.ticket_id, self.name,esc_type, done_date_format)
 
             partner_ids = self.get_escalation_partners(user_type)
             if subject and msg:
@@ -205,8 +205,8 @@ class Ticket(models.Model):
                 user_tz_obj).strftime('%d-%m-%Y %H:%M:%S')
             subject = 'Finalized Service Relocation Ticket Alert (%s) for ticket with ID: %s' % (esc_type, self.ticket_id)
             msg = _(
-                'The is to bring to your attention, that the service relocation ticket (%s) with subject (%s), which has been finalized on %s, has not been closed. Kindly attend to the Service relocation ticket and ensure it is closed, to avoid further escalation') % (
-                      self.ticket_id, self.name, integration_date_format)
+                'The is to bring to your attention, that the service relocation ticket (%s) with subject (%s) and level as (%s), which has been finalized on %s, has not been closed. Kindly attend to the Service relocation ticket and ensure it is closed, to avoid further escalation') % (
+                      self.ticket_id, self.name,esc_type, integration_date_format)
 
             partner_ids = self.get_escalation_partners(user_type)
             if subject and msg:
@@ -223,8 +223,8 @@ class Ticket(models.Model):
             open_date_format = localize_tz(datetime.strptime(self.open_date, '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d-%m-%Y %H:%M:%S')
             subject = 'Support Ticket Alert (%s) for ticket with ID: %s' % (esc_type, self.ticket_id)
             msg = _(
-                'The is to bring to your attention, that the support ticket (%s) with subject (%s), which was opened on %s, has not been closed. Kindly attend to the support ticket and ensure it is closed, to avoid further escalation') % (
-                    self.ticket_id, self.name, open_date_format)
+                'The is to bring to your attention, that the support ticket (%s) with subject (%s) and level as (%s), which was opened on %s, has not been closed. Kindly attend to the support ticket and ensure it is closed, to avoid further escalation') % (
+                    self.ticket_id, self.name, esc_type, open_date_format)
 
             partner_ids = self.get_escalation_partners(user_type)
             if subject and msg:
@@ -241,8 +241,8 @@ class Ticket(models.Model):
                 user_tz_obj).strftime('%d-%m-%Y %H:%M:%S')
             subject = 'Completed Support Ticket Alert (%s) for ticket with ID: %s' % (esc_type, self.ticket_id)
             msg = _(
-                'The is to bring to your attention, that the support ticket (%s) with subject (%s), which has been completed on %s, has not been closed. Kindly attend to the support ticket and ensure it is closed, to avoid further escalation') % (
-                      self.ticket_id, self.name, done_date_format)
+                'The is to bring to your attention, that the support ticket (%s) with subject (%s) and level as (%s), which has been completed on %s, has not been closed. Kindly attend to the support ticket and ensure it is closed, to avoid further escalation') % (
+                      self.ticket_id, self.name,esc_type, done_date_format)
 
             partner_ids = self.get_escalation_partners(user_type)
             if subject and msg:
@@ -259,8 +259,8 @@ class Ticket(models.Model):
                 user_tz_obj).strftime('%d-%m-%Y %H:%M:%S')
             subject = 'Major Incident Support Ticket Alert (%s) for ticket with ID: %s' % (esc_type, self.ticket_id)
             msg = _(
-                'The is to bring to your attention, that the major incident support ticket (%s) with subject (%s), which was opened on %s, has not been closed. Kindly attend to the support ticket and ensure it is closed, to avoid further escalation') % (
-                      self.ticket_id, self.name, open_date_format)
+                'The is to bring to your attention, that the major incident support ticket (%s) with subject (%s) and level as (%s), which was opened on %s, has not been closed. Kindly attend to the support ticket and ensure it is closed, to avoid further escalation') % (
+                      self.ticket_id, self.name,esc_type, open_date_format)
 
             partner_ids = self.get_escalation_partners(user_type)
             if subject and msg:

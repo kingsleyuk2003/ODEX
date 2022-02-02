@@ -247,6 +247,33 @@
                                   <field name="root_cause" attrs="{'readonly': [('state', 'in', ('integration', 'closed'))]}"   />
                                  <field name="resolution" attrs="{'readonly': [('state', 'in', ('integration', 'closed'))]}"  />
                             </group>
+
+                        <group string="First Support Escalation Elapsed Hours"  col="4" >
+                            <field name="elapsed_hours_first_support" nolabel="1" readonly="1"  >
+                                <tree editable="bottom" >
+                                    <field name="day_no" />
+                                    <field name="elapsed_hours" />
+                                </tree>
+                            </field>
+                        </group>
+
+                        <group string="Second Support Escalation Elapsed Hours"  col="4" >
+                            <field name="elapsed_hours_second_support" nolabel="1" readonly="1"  >
+                                <tree editable="bottom" >
+                                    <field name="day_no" />
+                                    <field name="elapsed_hours" />
+                                </tree>
+                            </field>
+                        </group>
+
+                        <group string="Major Support Escalation Elapsed Hours"  col="4" >
+                            <field name="elapsed_hours_major_support" nolabel="1" readonly="1"  >
+                                <tree editable="bottom" >
+                                    <field name="day_no" />
+                                    <field name="elapsed_hours" />
+                                </tree>
+                            </field>
+                        </group>
                     </page>
                     <page  string="Change Request Form" attrs="{'invisible': [('category_id', '!=', 7 )]}" >
                             <group col="4" >
@@ -298,32 +325,7 @@
                             </field>
                         </group>
 
-                        <group string="First Support Escalation Elapsed Hours"  col="4" >
-                            <field name="elapsed_hours_first_support" nolabel="1" readonly="1"  >
-                                <tree editable="bottom" >
-                                    <field name="day_no" />
-                                    <field name="elapsed_hours" />
-                                </tree>
-                            </field>
-                        </group>
 
-                        <group string="Second Support Escalation Elapsed Hours"  col="4" >
-                            <field name="elapsed_hours_second_support" nolabel="1" readonly="1"  >
-                                <tree editable="bottom" >
-                                    <field name="day_no" />
-                                    <field name="elapsed_hours" />
-                                </tree>
-                            </field>
-                        </group>
-
-                        <group string="Major Support Escalation Elapsed Hours"  col="4" >
-                            <field name="elapsed_hours_major_support" nolabel="1" readonly="1"  >
-                                <tree editable="bottom" >
-                                    <field name="day_no" />
-                                    <field name="elapsed_hours" />
-                                </tree>
-                            </field>
-                        </group>
 
                           <group class="oe_subtotal_footer oe_right" colspan="2" >
                                        <field name="total_elapsed_hours_third" />
