@@ -60,12 +60,12 @@ class EscalationTicketReport(ReportXlsx):
                   total_elapsed_hours_second,
                   total_elapsed_hours_third,                  
                   current_escalation_level_service_relocation,
+                  area_support_id,
+                  area_change_request_id,
                   state
                 FROM
                   kin_ticket
-                WHERE  
-                   (is_service_relocation IS NOT NULL OR 
-                   is_major_support IS NOT NULL) AND                  
+                WHERE                 
                     state != 'cancel' AND                   
                     """ + where_category + """ 
                      """ + where_company + """
@@ -136,8 +136,8 @@ class EscalationTicketReport(ReportXlsx):
         control_report_worksheet.set_column(4, 4, 15)
         control_report_worksheet.set_column(5, 5, 15)
         control_report_worksheet.set_column(6, 6, 15)
-        control_report_worksheet.set_column(7, 7, 15)
 
+        control_report_worksheet.set_column(7, 7, 15)
         control_report_worksheet.set_column(8, 8, 15)
         control_report_worksheet.set_column(9, 9, 20)
         control_report_worksheet.set_column(10, 10, 20)
@@ -146,33 +146,44 @@ class EscalationTicketReport(ReportXlsx):
         control_report_worksheet.set_column(13, 13, 15)
 
         if category_id == 3:
-            control_report_worksheet.write_row(row, col, ('Title','Open DateTime','Client ID', 'Customer','Assigned Group','Completed DateTime', 'Closed DateTime', 'Time Spent', 'Is Major Support Ticket', 'Elapsed Hours (First)',  'Elapsed Hours (Second)', 'Elapsed Hours (Third)' ,'Current Escalation level' , 'Stage'), head_format)
+            control_report_worksheet.write_row(row, col, ('Title','Open DateTime','Client ID', 'Customer','Assigned Group','Completed DateTime', 'Closed DateTime', 'Area', 'Is Major Support Ticket', 'Elapsed Hours (First)',  'Elapsed Hours (Second)', 'Elapsed Hours (Third)' ,'Current Escalation level' , 'Stage'), head_format)
         elif category_id == 7:
-            control_report_worksheet.write_row(row, col, ( 'Title', 'Open DateTime', 'Client ID', 'Customer', 'Assigned Group', 'Completed DateTime', 'Closed DateTime',   'Time Spent', 'Is Service Relocation', 'Elapsed Hours (First)',  'Elapsed Hours (Second)', 'Elapsed Hours (Third)' , 'Current Escalation level', 'Stage'), head_format)
+            control_report_worksheet.write_row(row, col, ( 'Title', 'Open DateTime', 'Client ID', 'Customer', 'Assigned Group', 'Completed DateTime', 'Closed DateTime', 'Area', 'Is Service Relocation', 'Elapsed Hours (First)',  'Elapsed Hours (Second)', 'Elapsed Hours (Third)' , 'Current Escalation level', 'Stage'), head_format)
 
 
         user_ticket_group_obj = self.env['user.ticket.group']
         res_partner_obj = self.env['res.partner']
+        area_obj = self.env['kkon.area']
 
         row += 1
         for list_dict in list_dicts:
-            control_report_worksheet.write(row, 0, list_dict['name'], cell_wrap_format)
-            control_report_worksheet.write(row, 1, localize_tz(datetime.strptime(list_dict['open_date'], '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %I:%M:%S %p') if list_dict['open_date'] else '', cell_wrap_format)
-            control_report_worksheet.write(row, 2, res_partner_obj.sudo().browse(list_dict['partner_id']).ref or '',cell_wrap_format)
-            control_report_worksheet.write(row, 3, res_partner_obj.sudo().browse(list_dict['partner_id']).name or '', cell_wrap_format)
-            control_report_worksheet.write(row, 4, user_ticket_group_obj.sudo().browse(list_dict['user_ticket_group_id']).name or '', cell_wrap_format)
-            control_report_worksheet.write(row, 5, localize_tz(datetime.strptime(list_dict['done_ticket_date'], '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %I:%M:%S %p') if list_dict['done_ticket_date'] else '', cell_wrap_format)
-            control_report_worksheet.write(row, 6, (localize_tz(datetime.strptime(list_dict['closed_date'], '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %H:%%I:%M:%S %p:%S') if list_dict['closed_date'] else ''), cell_wrap_format)
-            control_report_worksheet.write(row, 7, list_dict['time_spent'], cell_wrap_format)
+            if category_id == 3 and list_dict['is_major_support']:
+                control_report_worksheet.write(row, 0, list_dict['name'], cell_wrap_format)
+                control_report_worksheet.write(row, 1, localize_tz( datetime.strptime(list_dict['open_date'], '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %I:%M:%S %p') if list_dict['open_date'] else '', cell_wrap_format)
+                control_report_worksheet.write(row, 2, res_partner_obj.sudo().browse(list_dict['partner_id']).ref or '', cell_wrap_format)
+                control_report_worksheet.write(row, 3, res_partner_obj.sudo().browse(list_dict['partner_id']).name or '', cell_wrap_format)
+                control_report_worksheet.write(row, 4, user_ticket_group_obj.sudo().browse(list_dict['user_ticket_group_id']).name or '', cell_wrap_format)
+                control_report_worksheet.write(row, 5, localize_tz(datetime.strptime(list_dict['done_ticket_date'], '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %I:%M:%S %p') if list_dict['done_ticket_date'] else '', cell_wrap_format)
+                control_report_worksheet.write(row, 6, (localize_tz(datetime.strptime(list_dict['closed_date'], '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %H:%%I:%M:%S %p:%S') if list_dict['closed_date'] else ''), cell_wrap_format)
 
-            if category_id == 3 :
+                control_report_worksheet.write(row, 7, area_obj.sudo().browse(list_dict['area_support_id']).name or '', cell_wrap_format)
                 control_report_worksheet.write(row, 8, list_dict['is_major_support'], cell_wrap_format)
                 control_report_worksheet.write(row, 9, list_dict['total_elapsed_hours_first_support'], cell_wrap_format)
                 control_report_worksheet.write(row, 10, list_dict['total_elapsed_hours_second_support'], cell_wrap_format)
                 control_report_worksheet.write(row, 11, list_dict['total_elapsed_hours_major_support'], cell_wrap_format)
                 control_report_worksheet.write(row, 12, list_dict['current_escalation_level_support'], cell_wrap_format)
                 control_report_worksheet.write(row, 13, list_dict['state'], cell_wrap_format)
-            elif category_id == 7 :
+
+            elif category_id == 7 and list_dict['is_major_support'] == 'yes':
+                control_report_worksheet.write(row, 0, list_dict['name'], cell_wrap_format)
+                control_report_worksheet.write(row, 1, localize_tz(datetime.strptime(list_dict['open_date'], '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %I:%M:%S %p') if list_dict['open_date'] else '', cell_wrap_format)
+                control_report_worksheet.write(row, 2, res_partner_obj.sudo().browse(list_dict['partner_id']).ref or '',cell_wrap_format)
+                control_report_worksheet.write(row, 3,res_partner_obj.sudo().browse(list_dict['partner_id']).name or '',cell_wrap_format)
+                control_report_worksheet.write(row, 4, user_ticket_group_obj.sudo().browse(list_dict['user_ticket_group_id']).name or '', cell_wrap_format)
+                control_report_worksheet.write(row, 5, localize_tz(datetime.strptime(list_dict['done_ticket_date'], '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %I:%M:%S %p') if list_dict['done_ticket_date'] else '',cell_wrap_format)
+                control_report_worksheet.write(row, 6, (localize_tz(datetime.strptime(list_dict['closed_date'], '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %H:%%I:%M:%S %p:%S') if list_dict['closed_date'] else ''), cell_wrap_format)
+
+                control_report_worksheet.write(row, 7, area_obj.sudo().browse(list_dict['area_change_request_id']).name or '', cell_wrap_format)
                 control_report_worksheet.write(row, 8, list_dict['is_service_relocation'], cell_wrap_format)
                 control_report_worksheet.write(row, 9, list_dict['total_elapsed_hours_first'], cell_wrap_format)
                 control_report_worksheet.write(row, 10, list_dict['total_elapsed_hours_second'], cell_wrap_format)

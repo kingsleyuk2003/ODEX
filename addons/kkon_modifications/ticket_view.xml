@@ -755,6 +755,13 @@
                      <field name="is_team_lead" />
                      <field name="is_bpsq_hcx" />
 
+                     <field name="is_team_lead_im" />
+                     <field name="is_team_lead_im_cm" />
+                     <field name="is_hcx_hod" />
+                     <field name="is_cto_hod" />
+                     <field name="is_bpsq_hcx_cto" />
+                     <field name="is_bpsq_md_cto" />
+
                  </field>
 
             </field>
