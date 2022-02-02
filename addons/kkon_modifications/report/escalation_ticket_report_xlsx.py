@@ -178,7 +178,7 @@ class EscalationTicketReport(ReportXlsx):
                 control_report_worksheet.write(row, 14, list_dict['state'], cell_wrap_format)
                 row += 1
 
-            elif category_id == 7 and list_dict['is_major_support'] == 'yes':
+            elif category_id == 7 and list_dict['is_service_relocation'] == 'yes':
                 control_report_worksheet.write(row, 0, list_dict['ticket_id'], cell_wrap_format)
                 control_report_worksheet.write(row, 1, list_dict['name'], cell_wrap_format)
                 control_report_worksheet.write(row, 2, localize_tz(datetime.strptime(list_dict['open_date'], '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %I:%M:%S %p') if list_dict['open_date'] else '', cell_wrap_format)
