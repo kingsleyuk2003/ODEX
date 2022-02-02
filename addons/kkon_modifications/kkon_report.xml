@@ -12,6 +12,17 @@
 		    attachment_use="False"
         />
 
+		<report
+		    id="escalation_ticket_report_kkon"
+            model="kin.ticket"
+		    string="Escalation Ticket Report"
+		    report_type="xlsx"
+		    name="kkon_modifications.escalation_ticket_report"
+			file="kkon_modifications.escalation_ticket_report"
+		    attachment_use="False"
+        />
+
+
 
 
 

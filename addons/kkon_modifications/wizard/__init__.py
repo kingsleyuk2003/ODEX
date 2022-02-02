@@ -8,3 +8,4 @@ import crm_lead_to_opportunity
 import expense_disapprove
 import ticket_report_wizard
 import create_payment_entry
+import escalation_ticket_report_wizard

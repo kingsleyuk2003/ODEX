@@ -20,6 +20,7 @@ KKON Modifications
         'wizard/survey_ticket.xml',
         'wizard/expense_disapprove.xml',
         'wizard/ticket_report_wizard_view.xml',
+        'wizard/escalation_ticket_report_wizard_view.xml',
         'wizard/create_payment_entry.xml',
         'report/custom_report_layouts.xml',
         'report/custom_invoice.xml',

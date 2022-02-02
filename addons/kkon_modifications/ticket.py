@@ -175,6 +175,7 @@ class Ticket(models.Model):
             partner_ids = self.get_escalation_partners(user_type)
             if subject and msg:
                 self.send_escalation_msg(partner_ids, subject, msg)
+            self.current_escalation_level_service_relocation = esc_type
         return subject, msg
 
     def escalate_second(self, user_type, esc_type, hours):
@@ -193,6 +194,7 @@ class Ticket(models.Model):
             partner_ids = self.get_escalation_partners(user_type)
             if subject and msg:
                 self.send_escalation_msg(partner_ids, subject, msg)
+            self.current_escalation_level_service_relocation = esc_type
         return subject, msg
 
     def escalate_third(self, user_type, esc_type, hours):
@@ -211,6 +213,7 @@ class Ticket(models.Model):
             partner_ids = self.get_escalation_partners(user_type)
             if subject and msg:
                 self.send_escalation_msg(partner_ids, subject, msg)
+            self.current_escalation_level_service_relocation = esc_type
         return subject, msg
 
 
@@ -229,6 +232,7 @@ class Ticket(models.Model):
             partner_ids = self.get_escalation_partners(user_type)
             if subject and msg:
                 self.send_escalation_msg(partner_ids, subject, msg)
+            self.current_escalation_level_support = esc_type
         return subject, msg
 
     def escalate_second_support(self, user_type, esc_type, hours):
@@ -247,6 +251,7 @@ class Ticket(models.Model):
             partner_ids = self.get_escalation_partners(user_type)
             if subject and msg:
                 self.send_escalation_msg(partner_ids, subject, msg)
+            self.current_escalation_level_support = esc_type
         return subject, msg
 
     def escalate_major_support(self, user_type, esc_type, hours):
@@ -265,6 +270,7 @@ class Ticket(models.Model):
             partner_ids = self.get_escalation_partners(user_type)
             if subject and msg:
                 self.send_escalation_msg(partner_ids, subject, msg)
+            self.current_escalation_level_support = esc_type
         return subject, msg
 
 
@@ -2065,6 +2071,8 @@ class Ticket(models.Model):
     total_elapsed_hours_first_support = fields.Integer(compute=_compute_total_elapsed_hours_first_support, string="First Support Escalation Total Elapsed Hours", store=True)
     total_elapsed_hours_second_support = fields.Integer(compute=_compute_total_elapsed_hours_second_support, string="Second Support Escalation Total Elapsed Hours", store=True)
     total_elapsed_hours_major_support = fields.Integer(compute=_compute_total_elapsed_hours_major_support,   string="Major Support Escalation Total Elapsed Hours", store=True)
+    current_escalation_level_support = fields.Char(string='Current Escalation Level Support')
+    current_escalation_level_service_relocation = fields.Char(string='Current Escalation Level Service Relocation')
     area_change_request_id = fields.Many2one('kkon.area', string="Area", track_visibility='onchange')
     area_support_id = fields.Many2one('kkon.area', string="Area", track_visibility='onchange')
     updown_grade_type = fields.Selection([('upgrade', 'Upgrade'), ('downgrade', 'Downgrade'),('disconnect', 'Disconnect'),('reconnection', 'Reconnection'),('relocation', 'Relocation'),('voip', 'Voip')], string='Change Request Type')
