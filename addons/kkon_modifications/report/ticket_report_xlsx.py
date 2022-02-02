@@ -46,6 +46,7 @@ class TicketReport(ReportXlsx):
         sql_statement = """
 
         ( SELECT
+                  ticket_id,
                   assigned_date,
                   kin_ticket.name as name,
                   U1.id as user_name_id,
@@ -93,6 +94,7 @@ class TicketReport(ReportXlsx):
 
                 (               
                 SELECT
+                 ticket_id,
                   assigned_date,
                   kin_ticket.name as name,
                   U1.id as user_name_id,
@@ -194,32 +196,32 @@ class TicketReport(ReportXlsx):
 
         col = 0
         row = 2
-        control_report_worksheet.set_column(0, 0, 15)
-        control_report_worksheet.set_column(1, 1, 30)
-        control_report_worksheet.set_column(2, 2, 15)
+        control_report_worksheet.set_column(0, 0, 10)
+        control_report_worksheet.set_column(1, 1, 15)
+        control_report_worksheet.set_column(2, 2, 30)
         control_report_worksheet.set_column(3, 3, 15)
         control_report_worksheet.set_column(4, 4, 15)
         control_report_worksheet.set_column(5, 5, 15)
         control_report_worksheet.set_column(6, 6, 15)
         control_report_worksheet.set_column(7, 7, 15)
         control_report_worksheet.set_column(8, 8, 15)
-        control_report_worksheet.set_column(9, 9, 10)
-        control_report_worksheet.set_column(10, 10, 30)
-        control_report_worksheet.set_column(11, 11, 15)
-
+        control_report_worksheet.set_column(9, 9, 15)
+        control_report_worksheet.set_column(10, 10, 10)
+        control_report_worksheet.set_column(11, 11, 30)
         control_report_worksheet.set_column(12, 12, 15)
+
         control_report_worksheet.set_column(13, 13, 15)
         control_report_worksheet.set_column(14, 14, 15)
         control_report_worksheet.set_column(15, 15, 15)
         control_report_worksheet.set_column(16, 16, 15)
-
         control_report_worksheet.set_column(17, 17, 15)
+
         control_report_worksheet.set_column(18, 18, 15)
         control_report_worksheet.set_column(19, 19, 15)
         control_report_worksheet.set_column(20, 20, 15)
         control_report_worksheet.set_column(21, 21, 15)
-
         control_report_worksheet.set_column(22, 22, 15)
+
         control_report_worksheet.set_column(23, 23, 15)
         control_report_worksheet.set_column(24, 24, 15)
         control_report_worksheet.set_column(25, 25, 15)
@@ -227,13 +229,14 @@ class TicketReport(ReportXlsx):
         control_report_worksheet.set_column(27, 27, 15)
         control_report_worksheet.set_column(28, 28, 15)
         control_report_worksheet.set_column(29, 29, 15)
-        control_report_worksheet.set_column(30, 30, 30)
+        control_report_worksheet.set_column(30, 30, 15)
+        control_report_worksheet.set_column(31, 31, 30)
 
-        control_report_worksheet.set_column(31, 31, 15)
         control_report_worksheet.set_column(32, 32, 15)
-        control_report_worksheet.set_column(33, 33, 30)
+        control_report_worksheet.set_column(33, 33, 15)
+        control_report_worksheet.set_column(34, 34, 30)
 
-        control_report_worksheet.write_row(row, col, (
+        control_report_worksheet.write_row(row, col, ('Ticket ID',
         'Assigned Date and Time', 'Title', 'Ticket Opener', 'Assigned User', 'User Ticket Group',
         'Opened Date and Time', 'Done Date and Time', 'Closed Date and Time', 'Time Spent', 'Stage', 'Incident Details',
         'Package', 'Customer', 'Client ID', 'Address', 'Phone', 'Mobile' ,'Email', 'Non Customer Name', 'Non-Customer Client ID',
@@ -251,44 +254,45 @@ class TicketReport(ReportXlsx):
         row += 1
         first_row = row
         for list_dict in list_dicts:
-            control_report_worksheet.write(row, 0, localize_tz(datetime.strptime(list_dict['assigned_date'], '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %I:%M:%S %p') if list_dict['assigned_date'] else '', cell_wrap_format)
-            control_report_worksheet.write(row, 1, list_dict['name'], cell_wrap_format)
-            control_report_worksheet.write(row, 2, res_user_obj.browse(list_dict['user_name_id']).name, cell_wrap_format)
-            control_report_worksheet.write(row, 3, res_user_obj.browse(list_dict['assigned_user_name_id']).name or '',cell_wrap_format)
-            control_report_worksheet.write(row, 4, user_ticket_group_obj.sudo().browse(list_dict['user_ticket_group_id']).name or '', cell_wrap_format)
-            control_report_worksheet.write(row, 5, localize_tz(datetime.strptime(list_dict['open_date'], '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %I:%M:%S %p') if list_dict['open_date'] else '', cell_wrap_format)
-            control_report_worksheet.write(row, 6, localize_tz(datetime.strptime(list_dict['done_ticket_date'],'%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %I:%M:%S %p') if list_dict['done_ticket_date'] else '', cell_wrap_format)
-            control_report_worksheet.write(row, 7, (localize_tz(datetime.strptime(list_dict['closed_date'], '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %H:%%I:%M:%S %p:%S') if list_dict['closed_date'] else ''), cell_wrap_format)
-            control_report_worksheet.write(row, 8, list_dict['time_spent'], cell_wrap_format)
-            control_report_worksheet.write(row, 9, list_dict['state'], cell_wrap_format)
-            control_report_worksheet.write(row, 10, list_dict['description'], cell_wrap_format)
-            control_report_worksheet.write(row, 11, res_partner_obj.sudo().browse(list_dict['partner_id']).product_id.name or '', cell_wrap_format)
+            control_report_worksheet.write(row, 0, list_dict['ticket_id'], cell_wrap_format)
+            control_report_worksheet.write(row, 1, localize_tz(datetime.strptime(list_dict['assigned_date'], '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %I:%M:%S %p') if list_dict['assigned_date'] else '', cell_wrap_format)
+            control_report_worksheet.write(row, 2, list_dict['name'], cell_wrap_format)
+            control_report_worksheet.write(row, 3, res_user_obj.browse(list_dict['user_name_id']).name, cell_wrap_format)
+            control_report_worksheet.write(row, 4, res_user_obj.browse(list_dict['assigned_user_name_id']).name or '',cell_wrap_format)
+            control_report_worksheet.write(row, 5, user_ticket_group_obj.sudo().browse(list_dict['user_ticket_group_id']).name or '', cell_wrap_format)
+            control_report_worksheet.write(row, 6, localize_tz(datetime.strptime(list_dict['open_date'], '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %I:%M:%S %p') if list_dict['open_date'] else '', cell_wrap_format)
+            control_report_worksheet.write(row, 7, localize_tz(datetime.strptime(list_dict['done_ticket_date'],'%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %I:%M:%S %p') if list_dict['done_ticket_date'] else '', cell_wrap_format)
+            control_report_worksheet.write(row, 8, (localize_tz(datetime.strptime(list_dict['closed_date'], '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %H:%%I:%M:%S %p:%S') if list_dict['closed_date'] else ''), cell_wrap_format)
+            control_report_worksheet.write(row, 9, list_dict['time_spent'], cell_wrap_format)
+            control_report_worksheet.write(row, 10, list_dict['state'], cell_wrap_format)
+            control_report_worksheet.write(row, 11, list_dict['description'], cell_wrap_format)
+            control_report_worksheet.write(row, 12, res_partner_obj.sudo().browse(list_dict['partner_id']).product_id.name or '', cell_wrap_format)
 
-            control_report_worksheet.write(row, 12, res_partner_obj.sudo().browse(list_dict['partner_id']).name or '',cell_wrap_format)
-            control_report_worksheet.write(row, 13, res_partner_obj.sudo().browse(list_dict['partner_id']).ref or '',cell_wrap_format)
-            control_report_worksheet.write(row, 14, res_partner_obj.sudo().browse(list_dict['partner_id']).street or '',cell_wrap_format)
-            control_report_worksheet.write(row, 15, res_partner_obj.sudo().browse(list_dict['partner_id']).phone or '',cell_wrap_format)
-            control_report_worksheet.write(row, 16, res_partner_obj.sudo().browse(list_dict['partner_id']).mobile or '', cell_wrap_format)
-            control_report_worksheet.write(row, 17, res_partner_obj.sudo().browse(list_dict['partner_id']).email or '',cell_wrap_format)
+            control_report_worksheet.write(row, 13, res_partner_obj.sudo().browse(list_dict['partner_id']).name or '',cell_wrap_format)
+            control_report_worksheet.write(row, 14, res_partner_obj.sudo().browse(list_dict['partner_id']).ref or '',cell_wrap_format)
+            control_report_worksheet.write(row, 15, res_partner_obj.sudo().browse(list_dict['partner_id']).street or '',cell_wrap_format)
+            control_report_worksheet.write(row, 16, res_partner_obj.sudo().browse(list_dict['partner_id']).phone or '',cell_wrap_format)
+            control_report_worksheet.write(row, 17, res_partner_obj.sudo().browse(list_dict['partner_id']).mobile or '', cell_wrap_format)
+            control_report_worksheet.write(row, 18, res_partner_obj.sudo().browse(list_dict['partner_id']).email or '',cell_wrap_format)
 
-            control_report_worksheet.write(row, 18, list_dict['non_cust_name'], cell_wrap_format)
-            control_report_worksheet.write(row, 19, list_dict['non_cust_client_id'], cell_wrap_format)
-            control_report_worksheet.write(row, 20, list_dict['non_cust_address'], cell_wrap_format)
-            control_report_worksheet.write(row, 21, list_dict['non_cust_phone'], cell_wrap_format)
-            control_report_worksheet.write(row, 22, list_dict['non_cust_email'], cell_wrap_format)
+            control_report_worksheet.write(row, 19, list_dict['non_cust_name'], cell_wrap_format)
+            control_report_worksheet.write(row, 20, list_dict['non_cust_client_id'], cell_wrap_format)
+            control_report_worksheet.write(row, 21, list_dict['non_cust_address'], cell_wrap_format)
+            control_report_worksheet.write(row, 22, list_dict['non_cust_phone'], cell_wrap_format)
+            control_report_worksheet.write(row, 23, list_dict['non_cust_email'], cell_wrap_format)
 
-            control_report_worksheet.write(row, 23, list_dict['root_cause'], cell_wrap_format)
-            control_report_worksheet.write(row, 24, region_obj.sudo().browse(list_dict['region_call_id']).name or '',cell_wrap_format)
-            control_report_worksheet.write(row, 25, area_obj.sudo().browse(list_dict['area_customer_id']).name or '',cell_wrap_format)
-            control_report_worksheet.write(row, 26,complaint_type_obj.sudo().browse(list_dict['complaint_type_id']).name or '', cell_wrap_format)
-            control_report_worksheet.write(row, 27, complaint_type_obj.sudo().browse(list_dict['complaint_type_support_id']).name or '', cell_wrap_format)
-            control_report_worksheet.write(row, 28, list_dict['source_support'], cell_wrap_format)
-            control_report_worksheet.write(row, 29, list_dict['source_call'], cell_wrap_format)
-            control_report_worksheet.write(row, 30, list_dict['comment_call_log'], cell_wrap_format)
+            control_report_worksheet.write(row, 24, list_dict['root_cause'], cell_wrap_format)
+            control_report_worksheet.write(row, 25, region_obj.sudo().browse(list_dict['region_call_id']).name or '',cell_wrap_format)
+            control_report_worksheet.write(row, 26, area_obj.sudo().browse(list_dict['area_customer_id']).name or '',cell_wrap_format)
+            control_report_worksheet.write(row, 27,complaint_type_obj.sudo().browse(list_dict['complaint_type_id']).name or '', cell_wrap_format)
+            control_report_worksheet.write(row, 28, complaint_type_obj.sudo().browse(list_dict['complaint_type_support_id']).name or '', cell_wrap_format)
+            control_report_worksheet.write(row, 29, list_dict['source_support'], cell_wrap_format)
+            control_report_worksheet.write(row, 30, list_dict['source_call'], cell_wrap_format)
+            control_report_worksheet.write(row, 31, list_dict['comment_call_log'], cell_wrap_format)
 
-            control_report_worksheet.write(row, 31, localize_tz(datetime.strptime(list_dict['last_log_datetime'], '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %I:%M:%S %p') if list_dict['last_log_datetime'] else '', cell_wrap_format)
-            control_report_worksheet.write(row, 32, res_user_obj.browse(list_dict['last_log_user_id']).name or '',cell_wrap_format)
-            control_report_worksheet.write(row, 33, list_dict['last_log_message'], cell_wrap_format)
+            control_report_worksheet.write(row, 32, localize_tz(datetime.strptime(list_dict['last_log_datetime'], '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %I:%M:%S %p') if list_dict['last_log_datetime'] else '', cell_wrap_format)
+            control_report_worksheet.write(row, 33, res_user_obj.browse(list_dict['last_log_user_id']).name or '',cell_wrap_format)
+            control_report_worksheet.write(row, 34, list_dict['last_log_message'], cell_wrap_format)
             row += 1
 
 
