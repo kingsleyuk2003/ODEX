@@ -173,6 +173,7 @@ class EscalationTicketReport(ReportXlsx):
                 control_report_worksheet.write(row, 11, list_dict['total_elapsed_hours_major_support'], cell_wrap_format)
                 control_report_worksheet.write(row, 12, list_dict['current_escalation_level_support'], cell_wrap_format)
                 control_report_worksheet.write(row, 13, list_dict['state'], cell_wrap_format)
+                row += 1
 
             elif category_id == 7 and list_dict['is_major_support'] == 'yes':
                 control_report_worksheet.write(row, 0, list_dict['name'], cell_wrap_format)
@@ -190,9 +191,7 @@ class EscalationTicketReport(ReportXlsx):
                 control_report_worksheet.write(row, 11, list_dict['total_elapsed_hours_third'], cell_wrap_format)
                 control_report_worksheet.write(row, 12, list_dict['current_escalation_level_service_relocation'], cell_wrap_format)
                 control_report_worksheet.write(row, 13, list_dict['state'], cell_wrap_format)
-
-            row += 1
-
+                row += 1
 
 # The purchase.report.wizard in the PurchaseReportWriter function call, represents the "objects" parameter in the generate_xlsx_report function
 EscalationTicketReport('report.kkon_modifications.escalation_ticket_report', 'escalation.ticket.wizard', parser=report_sxw.rml_parse)
