@@ -978,7 +978,7 @@ class Ticket(models.Model):
             assigned_date = localize_tz(
                 datetime.strptime(self.assigned_date, DEFAULT_SERVER_DATETIME_FORMAT)).astimezone(user_tz_obj).strftime(
                 '%d-%m-%Y')
-            msg = 'Dear %s, <p>Thank you for reaching out to us. We acknowledge the receipt of your complaint/enquiry dated - %s with ticket ID - %s .</p> <p> Please note that your satisfaction is very important to us and as such you can be assured of our prompt response at all times.</p> <p> If you require further assistance, please do not hesitate to contact us. </> <p>Regards,</p>' % (
+            msg = 'Dear %s, <p>Thank you for reaching out to us. We acknowledge the receipt of your request/enquiry dated - %s with ticket ID - %s .</p> <p> Please note that your satisfaction is very important to us and as such you can be assured of our prompt response at all times.</p> <p> If you require further assistance, please do not hesitate to contact us. </> <p>Regards,</p>' % (
             partner_id.name, assigned_date, self.ticket_id)
             mail_obj = self.message_post(
                 _(msg),
@@ -993,7 +993,7 @@ class Ticket(models.Model):
                 mail_obj.reply_to = 'servicemanagement@kkontech.com'
 
         elif partner_id and  self.category_id in [self.env.ref('kkon_modifications.kkon_support'),self.env.ref('kkon_modifications.kkon_updown_grade')]:
-            msg = 'Dear %s (%s), <p>We acknowledge the receipt of your complaints dated - %s with ticket ID - %s </p><p>Thank you for bringing this issue to our attention and we sincerely apologize for any inconvenience this may have caused you.</p><p>Please be assured that your complaint is being taken seriously and as such, you will be contacted shortly on necessary action for resolution.</p><p>Thank you for your patience.</p><p> Regards,</p>Customer Service Center</p>' % \
+            msg = 'Dear %s (%s), <p>We acknowledge the receipt of your request dated - %s with ticket ID - %s </p><p>Thank you for bringing this issue to our attention and we sincerely apologize for any inconvenience this may have caused you.</p><p>Please be assured that your complaint is being taken seriously and as such, you will be contacted shortly on necessary action for resolution.</p><p>Thank you for your patience.</p><p> Regards,</p>Customer Service Center</p>' % \
                   (
                 partner_id.name,partner_id.ref, datetime.strptime(self.open_date, '%Y-%m-%d %H:%M:%S').strftime('%d-%m-%Y'), self.ticket_id)
             mail_obj = self.message_post(
@@ -1455,7 +1455,7 @@ class Ticket(models.Model):
                 user_tz_obj = pytz.timezone(self.env.context.get('tz') or 'utc')
                 localize_tz = pytz.utc.localize
                 assigned_date = localize_tz(datetime.strptime(self.assigned_date, DEFAULT_SERVER_DATETIME_FORMAT)).astimezone(user_tz_obj).strftime('%d-%m-%Y')
-                msg = 'Dear %s, <p>In response to your internet complaint received on - %s with ticket ID - %s. Our support representative reported that your network issue has been resolved. You a valued customer and your satisfaction is our top priority at every point of interaction, we would like to hear from you if this issue was resolved to your satisfaction. <p><p>Please do not hesitate to contact us if you require further assistance.</p><p>Regards,</p><p>Customer Service Center</p>' % (self.partner_id.name, assigned_date, self.ticket_id)
+                msg = 'Dear %s, <p>In response to your internet request received on - %s with ticket ID - %s. Our support representative reported that your network issue has been resolved. You a valued customer and your satisfaction is our top priority at every point of interaction, we would like to hear from you if this issue was resolved to your satisfaction. <p><p>Please do not hesitate to contact us if you require further assistance.</p><p>Regards,</p><p>Customer Service Center</p>' % (self.partner_id.name, assigned_date, self.ticket_id)
                 mail_obj = self.message_post(
                     _(msg),
                     subject='Closed call log Ticket Notification for %s' % (
