@@ -119,14 +119,9 @@ class EscalationTicketReport(ReportXlsx):
         if start_date and end_date:
             start_date_format = localize_tz(datetime.strptime(start_date, DEFAULT_SERVER_DATETIME_FORMAT)).astimezone(user_tz_obj).strftime('%d/%m/%Y %I:%M:%S %p')
             end_date_format = localize_tz(datetime.strptime(end_date, DEFAULT_SERVER_DATETIME_FORMAT)).astimezone(user_tz_obj).strftime('%d/%m/%Y %I:%M:%S %p')
-            control_report_worksheet.merge_range(0, 0, 0, 10,
-                                                 '%s %s ESCALATION TICKET REPORT FROM %s to %s' % (
-                                                 user_company.name, cat_name, start_date_format, end_date_format),
-                                                 title_format)
+            control_report_worksheet.merge_range(0, 0, 0, 10, '%s %s ESCALATION TICKET REPORT FROM %s to %s' % (user_company.name, cat_name, start_date_format, end_date_format), title_format)
         else:
-            control_report_worksheet.merge_range(0, 0, 0, 10,
-                                                 '%s %s ESCALATION TICKET REPORT FOR ALL PERIOD' % (user_company.name, cat_name),
-                                                 title_format)
+            control_report_worksheet.merge_range(0, 0, 0, 10,'%s %s ESCALATION TICKET REPORT FOR ALL PERIOD' % (user_company.name, cat_name), title_format)
 
         col = 0
         row = 2
