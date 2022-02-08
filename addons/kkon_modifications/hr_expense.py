@@ -128,7 +128,7 @@ class HRExpense(models.Model):
 
     @api.multi
     def reset_expenses(self):
-        self.write({'refused_by':False,'refused_date':False,'refused_msg':False,'audited_by':False,'audited_date':False,'posted_by':False,'posted_date':False,'paid_by':False,'paid_date':False})
+        self.write({'refused_by':False,'refused_date':False,'refused_msg':False,'approved_by':False,'approved_date':False,'audited_by':False,'audited_date':False,'posted_by':False,'posted_date':False,'paid_by':False,'paid_date':False})
         res = super(HRExpense,self).reset_expenses()
         return res
 
@@ -228,7 +228,8 @@ class HRExpense(models.Model):
             journal_id = self.sudo().env['account.journal'].search([('type', '=', 'purchase'),('company_id', '=', company.id)], limit=1)
             self.write({'state': 'audit_approve','emp_expense_group_aud_id':company.auditor_group_id.id,'emp_expense_group_acc_id':company.accountant_group_id.id,'company_id':company.id,'journal_id':journal_id.id})
 
-
+        self.approved_by = self.env.user
+        self.approved_date = datetime.today()
 
         if any(expense.state not in ('draft','submit') for expense in self.expense_group_id.expense_line_ids):
             self.expense_group_id.state = 'done'
@@ -517,6 +518,8 @@ class HRExpense(models.Model):
     refused_msg = fields.Text(string='Refused Reason')
     refused_by = fields.Many2one('res.users', string='Refused By')
     refused_date = fields.Datetime(string='Refused DateTime')
+    approved_by = fields.Many2one('res.users', string='Approved By')
+    approved_date = fields.Datetime(string='Approved DateTime')
     audited_by = fields.Many2one('res.users', string='Audited By')
     audited_date = fields.Datetime(string='Audited DateTime')
     posted_by = fields.Many2one('res.users', string='Posted By')
