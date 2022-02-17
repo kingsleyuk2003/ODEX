@@ -171,8 +171,8 @@ class SaleOrderExtend(models.Model):
             'AUTHORIZATION': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpZCI6ImVycCIsImVudHJ5Ijoid2Vic2VydmljZSEyMyJ9.bcQ8DXROZY-G1lVgEaU1hpz4WQxaZaOffJZEglJnCf8vCgxWAE7GSiBh_9BhHmcMW3h3hgw9DrQzV5h17DwUfw'}
         payload = {
                     'erpid' : sale_order.partner_id.id,
-                    'firstname' : '',
-                    'lastname' : sale_order.partner_id.name or '',
+                    'firstname' : sale_order.partner_id.first_name or sale_order.partner_id.name or '',
+                    'lastname' :  sale_order.partner_id.last_name or '',
                     'username' : sale_order.partner_id.ref or '',
                     'company' : sale_order.partner_id.name,
                     'orderno' : sale_order.name or '',
@@ -785,7 +785,7 @@ class ResPartnerExtend(models.Model):
                            'pck': res.product_id and res.product_id.name or '',
                            'company_id' : res.company_id.id,
                            'title' : res.title and res.title.name or '',
-                           'first_name' : res.first_name or '',
+                           'first_name' : res.first_name or res.name or '',
                            'last_name' : res.last_name or '',
                            'gender' : res.gender or '',
                            'estate' : res.estate_id and res.estate_id.name or '',
@@ -851,7 +851,7 @@ class ResPartnerExtend(models.Model):
                                'pck': self.product_id and self.product_id.name or '',
                                'company_id': self.company_id.id,
                             'title' : self.title and self.title.name or '',
-                           'first_name' : self.first_name or '',
+                           'first_name' : self.first_name or self.name or '',
                            'last_name' : self.last_name or '',
                            'gender' : self.gender or '',
                            'estate' : self.estate_id and self.estate_id.name or '',
@@ -904,7 +904,7 @@ class ResPartnerExtend(models.Model):
                            'company_id': self.company_id.id,
                            
                            'title' : self.title and self.title.name or '',
-                           'first_name' : self.first_name or '',
+                           'first_name' : self.first_name or self.name or '',
                            'last_name' : self.last_name or '',
                            'gender' : self.gender or '',
                            'estate' : self.estate_id and self.estate_id.name or '',
