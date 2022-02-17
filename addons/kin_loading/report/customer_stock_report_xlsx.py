@@ -121,40 +121,39 @@ import openerp.addons.decimal_precision as dp
 
 class CustomerStocKReportWriter(ReportXlsx):
 
-    def _get_data(self,form):
-        partner_id = form['partner_id']
-        product_ids = form['product_ids']
+    def _get_data(self, product_id, partner_id, type):
 
-        where_partner = ''
-        if partner_id :
-            where_partner = "sol.order_partner_id = '%s' AND" % (partner_id[0])
+        where_partner = "sol.order_partner_id = '%s' AND" % (partner_id)
+        where_prod = "sol.product_id = '%s' AND" % (product_id)
 
-
-        where_prod = ''
-        if product_ids:
-            where_prod = "sol.product_id in (%s) AND" % ','.join(str(pr_id) for pr_id in product_ids)
+        where_type = ''
+        if type == 'is_throughput':
+            where_type = "sol.is_throughput_order = True AND"
+        elif type == 'is_internal_use':
+            where_type = "sol.is_internal_use_order = True AND"
+        elif type == 'is_indepot':
+            where_type = "sol.is_throughput_order = False AND sol.is_internal_use_order = False AND"
+        elif type == 'all':
+            where_type = ""
 
         # LEFT JOIN works similar to INNER JOIN but with the extra advantage of showing empty join parameter fields (uncompulsory join fields). It is good for join fields that don't have value. It will still show the records. Unlike INNER JOIN (for compulsory join fields) which will omit those records
         sql_statement = """
-            SELECT
-               sum(sol.qty_to_invoice) as qty_to_invoice, sum(sol.price_unit) as price_unit, sum(sol.product_uom_qty) as product_uom_qty,
-               sum(sol.qty_invoiced) as qty_invoiced,
-               sum(sol.price_subtotal) as price_subtotal, sum(sol.discount) as discount, sum(sol.price_reduce) as price_reduce,
-               sum(sol.qty_delivered) as qty_delivered, sum(sol.price_total) as price_total,
-               sum(sol.purchase_price) as purchase_price, sum(sol.margin) as margin, sum(sol.discount_amt) as discount_amt,
-               sum(sol.qty_available) as qty_available, sum(sol.product_ticket_qty) as product_ticket_qty,
-               sum(sol.ticket_remaining_qty) as ticket_remaining_qty, sum(sol.ticket_created_qty) as ticket_created_qty,
-               sum(sol.transfer_created_qty) as transfer_created_qty, sum(sol.cancelled_remaining_qty) as cancelled_remaining_qty,
-               sum(sol.unloaded_balance_qty) as unloaded_balance_qty, sum(sol.balance_qty) as balance_qty,
-               sol.name as prod_name,sol.product_id, customer.name as customer_name , customer.ref as customer_ref
-            FROM sale_order_line as sol
-            LEFT JOIN res_partner as customer ON sol.order_partner_id = customer.id
-            WHERE
-             """ + where_partner +"""
-             """ + where_prod + """
-             sol.state IN ('sale','done')
-            GROUP BY customer_name , customer_ref, product_id, prod_name
-            """
+                    SELECT
+                        sale_order.date_order , qty_to_invoice, product_uom_qty,
+                        qty_invoiced, price_subtotal, price_reduce, qty_delivered, price_total, product_ticket_qty,
+                       ticket_remaining_qty,  ticket_created_qty, transfer_created_qty, cancelled_remaining_qty, 
+                       unloaded_balance_qty,  balance_qty,
+                       sol.name as prod_name,sol.product_id, customer.name as customer_name , customer.ref as customer_ref
+                    FROM sale_order_line as sol
+                    LEFT JOIN sale_order ON sol.order_id = sale_order.id
+                    LEFT JOIN res_partner as customer ON sol.order_partner_id = customer.id
+                    WHERE
+                     """ + where_type + """
+                     """ + where_partner + """
+                     """ + where_prod + """
+                     customer.customer = True AND
+                     sol.state NOT IN ('draft','cancel')
+                    """
         self.env.cr.execute(sql_statement)
         dictAll = self.env.cr.dictfetchall()
 
@@ -163,7 +162,6 @@ class CustomerStocKReportWriter(ReportXlsx):
 
     def generate_xlsx_report(self, workbook, data, objects):
         user_company = self.env.user.company_id
-        list_dicts = self._get_data(data['form'])
 
         product_ids = data['form']['product_ids']
         if not product_ids :
@@ -171,8 +169,14 @@ class CustomerStocKReportWriter(ReportXlsx):
             for pr_id in pro_ids:
                 product_ids.append(pr_id.id)
 
+        partner_ids = data['form']['partner_ids']
+        if not partner_ids:
+            part_ids = self.env['res.partner'].search([('customer', '=', True)])
+            for part_id in part_ids:
+                partner_ids.append(part_id.id)
 
-        report_worksheet = workbook.add_worksheet('Customer Stock Summary Report')
+
+        report_worksheet = workbook.add_worksheet('Customer Stock Report')
         header_format = workbook.add_format({'bold': True, 'align': 'center', 'valign': 'vcenter', 'font_size': 24})
         title_format = workbook.add_format({'bold': True, 'align': 'center', 'valign': 'vcenter', 'font_size': 14})
         head_format = workbook.add_format({'bold': True, 'border': 1, 'font_size': 10,'bg_color':'blue','color':'white'})
@@ -204,50 +208,62 @@ class CustomerStocKReportWriter(ReportXlsx):
         row = 5
         report_worksheet.set_column(0, 0, 5)
         report_worksheet.set_column(1, 1, 10)
-        report_worksheet.set_column(2, 2, 25)
-        report_worksheet.set_column(3, 17, 10)
+        report_worksheet.set_column(2, 2, 15)
+        report_worksheet.set_column(3, 12, 10)
 
-        product_obj =  self.env['product.product']
-        for product_id in product_ids :
+        partner_obj = self.env['res.partner']
+        product_obj = self.env['product.product']
+        type = data['form']['type']
+        for product_id in product_ids:
             report_worksheet.set_row(row, 20)
             row += 2
             product_name = product_obj.browse(product_id).name
-            report_worksheet.merge_range(row, col, row, 9, product_name, title_format)
-            row += 2
-
-            report_worksheet.write_row(row, col, ('S/N', 'Customer ID' , 'Customer', 'Product.', 'Ordered Qty.', 'Transferred Qty.', 'Cancelled Qty.', 'Un-Ticketed Qty.' , 'Ticketed Qty.', 'Loaded Qty.', 'Un-loaded Qty.', 'Balance Qty.', 'Invoiced', 'Un-Invoiced' ,'Unit Price' ,'Disc(%)', 'Disc. Amt.','Sub-total' ) , head_format)
+            report_worksheet.merge_range(row, col, row, 9, 'PRODUCT: ' + product_name, title_format)
             row += 1
-            total_qty = 0
-            first_row = row
-            a1_notation_total_qty_start = xl_rowcol_to_cell(row, 1)
-            sn = 0
-            for list_dict in list_dicts:
-                if list_dict['product_id'] == product_id :
+
+            for part_id in partner_ids:
+                list_dicts = self._get_data(product_id, part_id, type)
+                row += 2
+                partner_name = partner_obj.browse(part_id).name
+                report_worksheet.merge_range(row, col, row, 9, partner_name, title_format)
+                row += 2
+
+                report_worksheet.write_row(row, col, (
+                    'S/N', 'Order Date', 'Ordered Qty.', 'Transferred Qty.', 'Cancelled Qty.',
+                    'Un-Ticketed Qty.', 'Ticketed Qty.', 'Loaded Qty.', 'Un-loaded Qty.', 'Balance Qty.', 'Invoiced',
+                    'Un-Invoiced', 'Sub-total'), head_format)
+                row += 1
+                total_qty = 0
+                balance_qty = 0
+                first_row = row
+                sn = 0
+
+                for list_dict in list_dicts:
                     sn += 1
-                    report_worksheet.write(row, 0, sn,cell_wrap_format)
-                    report_worksheet.write(row, 1, list_dict['customer_ref'], cell_wrap_format)
-                    report_worksheet.write(row, 2, list_dict['customer_name'], cell_wrap_format)
-                    report_worksheet.write(row, 3, list_dict['prod_name'], cell_wrap_format)
-                    report_worksheet.write(row, 4, list_dict['product_uom_qty'], cell_number)
-                    report_worksheet.write(row, 5, list_dict['transfer_created_qty'], cell_number)
-                    report_worksheet.write(row, 6, list_dict['cancelled_remaining_qty'], cell_number)
-                    report_worksheet.write(row, 7, list_dict['ticket_remaining_qty'], cell_number)
-                    report_worksheet.write(row, 8, list_dict['ticket_created_qty'], cell_number)
-                    report_worksheet.write(row, 9, list_dict['qty_delivered'], cell_number)
-                    report_worksheet.write(row, 10, list_dict['unloaded_balance_qty'], cell_number)
-                    report_worksheet.write(row, 11, list_dict['balance_qty'], cell_number)
-                    report_worksheet.write(row, 12, list_dict['qty_invoiced'], cell_amount)
-                    report_worksheet.write(row, 13, list_dict['qty_to_invoice'], cell_amount)
-                    report_worksheet.write(row, 14, list_dict['price_unit'], cell_amount)
-                    report_worksheet.write(row, 15, list_dict['discount'], cell_amount)
-                    report_worksheet.write(row, 16, list_dict['discount_amt'], cell_amount)
-                    report_worksheet.write(row, 17, list_dict['price_subtotal'], cell_amount)
+                    report_worksheet.write(row, 0, sn, cell_wrap_format)
+                    # report_worksheet.write(row, 1, list_dict['customer_ref'], cell_wrap_format)
+                    # report_worksheet.write(row, 2, list_dict['customer_name'], cell_wrap_format)
+                    report_worksheet.write(row, 1,list_dict['date_order'] and datetime.strptime(list_dict['date_order'], '%Y-%m-%d %H:%M:%S').strftime('%d-%m-%Y'), cell_wrap_format) or False
+                    report_worksheet.write(row, 2, list_dict['product_uom_qty'], cell_number)
+                    report_worksheet.write(row, 3, list_dict['transfer_created_qty'], cell_number)
+                    report_worksheet.write(row, 4, list_dict['cancelled_remaining_qty'], cell_number)
+                    report_worksheet.write(row, 5, list_dict['ticket_remaining_qty'], cell_number)
+                    report_worksheet.write(row, 6, list_dict['ticket_created_qty'], cell_number)
+                    report_worksheet.write(row, 7, list_dict['qty_delivered'], cell_number)
+                    report_worksheet.write(row, 8, list_dict['unloaded_balance_qty'], cell_number)
+                    report_worksheet.write(row, 9, list_dict['balance_qty'], cell_number)
+                    report_worksheet.write(row, 10, list_dict['qty_invoiced'], cell_amount)
+                    report_worksheet.write(row, 11, list_dict['qty_to_invoice'], cell_amount)
+                    report_worksheet.write(row, 12, list_dict['price_subtotal'], cell_amount)
                     row += 1
                     total_qty += list_dict['product_uom_qty']
-                last_row  = row
-                a1_notation_ref = xl_range(first_row, 4, last_row, 4)
-                report_worksheet.write(row, 4, '=SUM(' + a1_notation_ref + ')', cell_total_currency, total_qty)
-            row += 1
+                    balance_qty += list_dict['balance_qty']
+                last_row = row
+                a1_notation_ref = xl_range(first_row, 2, last_row, 2)
+                report_worksheet.write(row, 2, '=SUM(' + a1_notation_ref + ')', cell_total_currency, total_qty)
+                bal_notation_ref = xl_range(first_row, 9, last_row, 9)
+                report_worksheet.write(row, 9, '=SUM(' + bal_notation_ref + ')', cell_total_currency, balance_qty)
+                row += 1
         return
 
 # The sales.report.wizard in the SalesReportWriter function call, represents the "objects" parameter in the generate_xlsx_report function

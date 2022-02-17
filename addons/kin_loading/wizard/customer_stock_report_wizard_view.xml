@@ -12,7 +12,7 @@
                          <!--<field name="end_date" />-->
                     <!--</group>-->
                     <group col="4" colspan="4" >
-                         <field name="partner_id" options="{'no_open':True,'no_create':True}"  />
+                         <field name="partner_ids" widget="many2many_tags" options="{'no_open':True,'no_create':True}"  />
                         <field name="type" required="1" />
                         <field name="product_ids"  widget="many2many_tags" domain="[('type','=','product')]" options="{'no_open':True,'no_create':True}" />
                     </group>
