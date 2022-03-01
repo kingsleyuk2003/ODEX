@@ -205,7 +205,7 @@ class SaleOrderExtend(models.Model):
                     _('Sorry, There is an issue sending the sales order information to the EBILLING application'))
             else:
                 self.env.cr.execute(
-                    "update sale_order set ebilling_order_push = True, ebilling_order_response = '%s' where id = %s" % (
+                    "update sale_order set ebilling_manager_order_push = True, ebilling_manager_order_response = '%s' where id = %s" % (
                     response.text, self.id))
 
         except Exception, e:
@@ -719,11 +719,13 @@ class SaleOrderExtend(models.Model):
     show_alert_box_kkon = fields.Boolean(string="Show Alert Box")
     alert_msg = fields.Char(string='Alert Message')
     payment_group_count = fields.Integer(compute="_compute_payment_group_count", string='# of Payment Groups', copy=False, default=0)
-    ebilling_order_push = fields.Boolean(string='Ebilling Order Pushed')
-    ebilling_order_response = fields.Char(string='Ebilling Order Response')
+    ebilling_manager_order_push = fields.Boolean(string='Ebilling Sales Manager Order Pushed')
+    ebilling_manager_order_response = fields.Char(string='Ebilling Sales Manager Order Response')
+    ebilling_order_push = fields.Boolean(string='Ebilling Account Approved Order Pushed')
+    ebilling_order_response = fields.Char(string='Ebilling Account Approved Order Response')
     is_successful_ebilling_payment_receipt = fields.Boolean(string='Ebilling Payment Receipt Successful')
     ebilling_payment_receipt_error_msg = fields.Char(string='Ebilling Payment Receipt Error Message')
-    ebilling_order_manually_approved_pushed = fields.Boolean(string='Ebilling Order Manually Approved Pushed')
+    ebilling_order_manually_approved_pushed = fields.Boolean(string='Ebilling Manual Account Payment Posted')
     is_upcountry = fields.Boolean(string='Up Country Transaction')
 
 class ResPartnerExtend(models.Model):

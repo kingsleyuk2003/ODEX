@@ -452,11 +452,14 @@
                 <field name="company_id" position="after"  >
                     <field name="payment_group_id"  readonly="1" />
                     <field name="is_free_installation" readonly="1" />
+                      <field name="ebilling_manager_order_push" readonly="1"  />
+                    <field name="ebilling_manager_order_response" readonly="1" />
                      <field name="ebilling_order_push" readonly="1"  />
                     <field name="ebilling_order_response" readonly="1" />
+                    <field name="ebilling_order_manually_approved_pushed" readonly="1" />
                      <field name="is_successful_ebilling_payment_receipt" readonly="1" />
                     <field name="ebilling_payment_receipt_error_msg" readonly="1" />
-                    <field name="ebilling_order_manually_approved_pushed" readonly="1" />
+
                 </field>
 
                  <field name="amount_total" position="after"  >
