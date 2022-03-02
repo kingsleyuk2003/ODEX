@@ -70,18 +70,6 @@ class FixingTable(models.Model):
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    @api.multi
-    def write(self, vals):
-        res = super(SaleOrder, self).write(vals)
-        for rec in self:
-            # This is causing some issue, for some invoices when merging invoices in aminata
-            # if rec.partner_id.customer and  rec.partner_id.active == False :
-            #     raise UserError(_('%s is not approved and active' % (rec.partner_id.name)))
-            if len(rec.order_line) == 0:
-                raise UserError(_('At Least an Order Line is Required'))
-        return res
-
-
     @api.onchange('partner_id')
     def _onchange_partner(self):
         for rec in self:
