@@ -218,7 +218,7 @@ class SaleOrderExtend(models.Model):
 
     @api.multi
     def write(self, vals):
-        res = super(SaleOrder, self).write(vals)
+        res = super(SaleOrderExtend, self).write(vals)
         for rec in self:
             # This is causing some issue, for some invoices when merging invoices in aminata
             # if rec.partner_id.customer and  rec.partner_id.active == False :
