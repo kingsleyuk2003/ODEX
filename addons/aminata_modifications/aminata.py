@@ -2791,18 +2791,16 @@ class StationSalesRecordLines(models.Model):
     @api.depends('station_sale_id.pms_coupon','station_sale_id.ago_coupon')
     def _compute_coupon(self):
         for line in self:
-            if line.product_id.name == 'AGO' :
+            if line.product_id.white_product == 'ago' :
                 ago_coupon = line.station_sale_id.ago_coupon
-                ago_line = line.station_sale_id.station_sales_line_ids.filtered(
-                    lambda l: l.product_id.name == 'AGO') and line.station_sale_id.station_sales_line_ids.filtered(
-                    lambda l: l.product_id.name == 'AGO')[0]
+                ago_line = line.station_sale_id.station_sales_line_ids.filtered(lambda l: l.product_id.id == line.product_id.id) and line.station_sale_id.station_sales_line_ids.filtered(lambda l: l.product_id.id == line.product_id.id)[0]
                 if ago_line:
                     ago_line.coupon_sales_gals = ago_coupon
-            if line.product_id.name == 'PMS' :
+            if line.product_id.white_product == 'pms' :
                 pms_coupon = line.station_sale_id.pms_coupon
                 pms_line = line.station_sale_id.station_sales_line_ids.filtered(
-                    lambda l: l.product_id.name == 'PMS') and line.station_sale_id.station_sales_line_ids.filtered(
-                    lambda l: l.product_id.name == 'PMS')[0]
+                    lambda l: l.product_id.id == line.product_id.id) and line.station_sale_id.station_sales_line_ids.filtered(
+                    lambda l: l.product_id.id == line.product_id.id)[0]
                 if pms_line:
                     pms_line.coupon_sales_gals = pms_coupon
 
