@@ -2488,7 +2488,11 @@ class StationSalesRecord(models.Model):
                 raise UserError(_('Sorry, Non-Draft record cannot be deleted.'))
         return super(StationSalesRecord, self).unlink()
 
-
+    @api.model
+    def create(self, vals):
+        vals['name'] = self.env['ir.sequence'].next_by_code('station_sales_code') or 'New'
+        rec = super(StationSalesRecord, self).create(vals)
+        return rec
 
     @api.multi
     def write(self, vals):
@@ -2692,7 +2696,7 @@ class StationSalesRecord(models.Model):
             rec.stock_pick_count = len(rec.stock_pick_ids)
 
 
-    @api.depends('station_sales_line_ids.line_amount')
+    @api.depends('station_sales_line_ids')
     def _compute_amount_total(self):
         for order in self:
             amount_total = 0
@@ -2777,6 +2781,7 @@ class StationSalesRecordLines(models.Model):
 
 
 
+
     @api.depends('station_sale_id.station_product_received_line_ids.qty_received')
     def _compute_product_received(self):
         for line in self:
@@ -2787,7 +2792,7 @@ class StationSalesRecordLines(models.Model):
             line.product_received = total_qty_received
 
 
-    @api.depends('station_sale_id.pms_coupon','station_sale_id.ago_coupon')
+    @api.depends('station_sale_id','station_sale_id.pms_coupon','station_sale_id.ago_coupon')
     def _compute_coupon(self):
         for line in self:
             if line.product_id.white_product == 'ago' :
