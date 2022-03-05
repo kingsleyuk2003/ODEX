@@ -26,7 +26,7 @@ class CreatePaymentEntry(models.TransientModel):
             if sale_order.amount_total == sale_order.total_amount_paid:
                 sale_order.create_ticket_with_email()
                 # notify ebilling that this order has been approved
-                if sale_order.ebilling_order_push and not sale_order.ebilling_order_manually_approved_pushed:
+                if sale_order.ebilling_manager_order_push and not sale_order.ebilling_order_manually_approved_pushed:
                     sale_order.ebilling_push_sale_order_approved()
                     sale_order.ebilling_order_manually_approved_pushed = True
 
