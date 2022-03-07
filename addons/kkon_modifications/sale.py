@@ -144,7 +144,7 @@ class SaleOrderExtend(models.Model):
                                      headers=headers)
             if response.status_code != requests.codes.ok:
                 raise UserError(
-                    _('Sorry, There is an issue sending the sales order information to the EBILLING application'))
+                    _('Sorry, There is an issue sending the sales order information to the EBILLING application with error message for Accountant approved payment endpoint maninvpay : %s' % (response.text)))
             else:
                 self.env.cr.execute(
                     "update sale_order set ebilling_order_push = True, ebilling_order_response = '%s' where id = %s" % (
@@ -156,7 +156,7 @@ class SaleOrderExtend(models.Model):
             _logger.exception(e)
             raise UserError(
                 _(
-                    'Sorry, ODEX ERP cannot connect with EBILLING service for the Sales Order Processing. Please contact your IT Administrator'))
+                    'Sorry, ODEX ERP cannot connect with EBILLING service for the Sales Order Processing. Please contact your IT Administrator, Accountant approved payment endpoint: maninvpay. ebilling message: %s' % (e)))
 
         return
 
@@ -202,7 +202,7 @@ class SaleOrderExtend(models.Model):
                                      headers=headers)
             if response.status_code != requests.codes.ok:
                 raise UserError(
-                    _('Sorry, There is an issue sending the sales order information to the EBILLING application'))
+                    _('Sorry, There is an issue sending the sales order information to the EBILLING application with error message for the Sales manager approve Endpoint accinit:' % (response.text)))
             else:
                 self.env.cr.execute(
                     "update sale_order set ebilling_manager_order_push = True, ebilling_manager_order_response = '%s' where id = %s" % (
@@ -213,7 +213,7 @@ class SaleOrderExtend(models.Model):
             _logger = logging.getLogger(__name__)
             _logger.exception(e)
             raise UserError(
-                _('Sorry, ODEX ERP cannot connect with EBILLING service for the Sales Order Processing. Please contact your IT Administrator'))
+                _('Sorry, ODEX ERP cannot connect with EBILLING service for the Sales Order Processing. Please contact your IT Administrator. Sales manager approve Endpoint: accinit.  ebilling message:' % (e)))
 
         return
 
