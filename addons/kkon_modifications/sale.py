@@ -73,7 +73,8 @@ class SaleOrderExtend(models.Model):
             if not company_id:
                 raise UserError('Company ID is required')
 
-            if amount != order.amount_total :
+            amount = float('{:.2f}'.format(float(amount)))
+            if amount != float('{:.2f}'.format(order.amount_total)):
                 res = 'Sorry, the Total Amount (%s) from Ebilling must equal the Amount (%s) for the sales order on the erp' % (amount,order.amount_total)
                 order.ebilling_payment_receipt_error_msg = res
                 return res
