@@ -74,7 +74,10 @@ class TicketReport(ReportXlsx):
                   comment_call_log ,
                   last_log_datetime,
                   last_log_user_id,
-                  last_log_message            
+                  last_log_message,
+                  idu_serial_no,
+                  cpe,
+                  wireless_technology
                 FROM
                   kin_ticket
                   left JOIN res_users as U1 ON user_id = U1.id 
@@ -122,7 +125,10 @@ class TicketReport(ReportXlsx):
                   comment_call_log ,    
                   last_log_datetime,
                   last_log_user_id,
-                  last_log_message         
+                  last_log_message,
+                  idu_serial_no,
+                  cpe,
+                  wireless_technology  
                 FROM
                   kin_ticket
                   left JOIN res_users as U1 ON user_id = U1.id 
@@ -235,6 +241,9 @@ class TicketReport(ReportXlsx):
         control_report_worksheet.set_column(32, 32, 15)
         control_report_worksheet.set_column(33, 33, 15)
         control_report_worksheet.set_column(34, 34, 30)
+        control_report_worksheet.set_column(35, 35, 15)
+        control_report_worksheet.set_column(36, 36, 15)
+        control_report_worksheet.set_column(37, 37, 15)
 
         control_report_worksheet.write_row(row, col, ('Ticket ID',
         'Assigned Date and Time', 'Title', 'Ticket Opener', 'Assigned User', 'User Ticket Group',
@@ -242,7 +251,7 @@ class TicketReport(ReportXlsx):
         'Package', 'Customer', 'Client ID', 'Address', 'Phone', 'Mobile' ,'Email', 'Non Customer Name', 'Non-Customer Client ID',
         ' Non-Customer Address', 'Non-Customer Phone', 'Non-Customer Email', 'Root Cause', 'Region', 'Area',
         'Call log Complaint Type', 'Support Complaint Type', 'Source Support', 'Source Call Log', 'Call Log Comment/Feedback',
-        'Last Logged Datetime', 'Last Logged User', 'Last Log Message'), head_format)
+        'Last Logged Datetime', 'Last Logged User', 'Last Log Message','IDU SerialNumber','CPE Model','Wireless Technology'), head_format)
 
         res_user_obj = self.env['res.users']
         user_ticket_group_obj = self.env['user.ticket.group']
@@ -293,6 +302,11 @@ class TicketReport(ReportXlsx):
             control_report_worksheet.write(row, 32, localize_tz(datetime.strptime(list_dict['last_log_datetime'], '%Y-%m-%d %H:%M:%S')).astimezone(user_tz_obj).strftime('%d/%m/%Y %I:%M:%S %p') if list_dict['last_log_datetime'] else '', cell_wrap_format)
             control_report_worksheet.write(row, 33, res_user_obj.browse(list_dict['last_log_user_id']).name or '',cell_wrap_format)
             control_report_worksheet.write(row, 34, list_dict['last_log_message'], cell_wrap_format)
+
+
+            control_report_worksheet.write(row, 35, list_dict['idu_serial_no'], cell_wrap_format)
+            control_report_worksheet.write(row, 36, list_dict['cpe'], cell_wrap_format)
+            control_report_worksheet.write(row, 37, list_dict['wireless_technology'], cell_wrap_format)
             row += 1
 
 
