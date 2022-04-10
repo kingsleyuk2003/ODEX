@@ -303,7 +303,7 @@ class TicketReport(ReportXlsx):
 
 
             control_report_worksheet.write(row, 35, list_dict['idu_serial_no'], cell_wrap_format)
-            control_report_worksheet.write(row, 36, res_partner_obj.sudo().browse(list_dict['cpe']).ref or '', cell_wrap_format)
+            control_report_worksheet.write(row, 36, res_partner_obj.sudo().browse(list_dict['partner_id']).cpe or '', cell_wrap_format)
             control_report_worksheet.write(row, 37, list_dict['wireless_technology'], cell_wrap_format)
             row += 1
 
