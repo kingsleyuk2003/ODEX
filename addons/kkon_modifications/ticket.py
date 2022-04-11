@@ -279,7 +279,7 @@ class Ticket(models.Model):
         today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
         tickets = self.search(
             [('open_date', '<', today), ('is_service_relocation', '=', 'yes'),
-             ('state', 'not in', ['draft', 'closed'])])
+             ('state', 'not in', ['draft', 'closed','cancel'])])
 
         for ticket in tickets:
             total_elapsed_hours = ticket.total_elapsed_hours_first
@@ -388,7 +388,7 @@ class Ticket(models.Model):
         today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
         tickets = self.search(
             [('open_date', '<', today), ('category_id', '=', 3),('is_major_support', '=', 'no'),
-             ('state', 'not in', ['draft', 'closed'])])
+             ('state', 'not in', ['draft', 'closed','cancel'])])
 
         for ticket in tickets:
             total_elapsed_hours = ticket.total_elapsed_hours_first_support
@@ -494,7 +494,7 @@ class Ticket(models.Model):
         today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
         tickets = self.search(
             [('open_date', '<', today), ('category_id', '=', 3),('is_major_support', '=', 'yes'),
-             ('state', 'not in', ['draft', 'closed'])])
+             ('state', 'not in', ['draft', 'closed','cancel'])])
 
         for ticket in tickets:
             total_elapsed_hours = ticket.total_elapsed_hours_major_support
@@ -714,21 +714,21 @@ class Ticket(models.Model):
         today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
         tickets = self.search(
             [('open_date', '<', today), ('is_service_relocation', '=', 'yes'),
-             ('state', 'not in', ['draft', 'closed'])])
+             ('state', 'not in', ['draft', 'closed','cancel'])])
         self.set_hours_elapsed(tickets,'first')
 
     def set_hours_elapsed_second(self):
         today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
         tickets = self.search(
             [('done_date', '<', today), ('is_service_relocation', '=', 'yes'),
-             ('state', 'not in', ['draft', 'closed'])])
+             ('state', 'not in', ['draft', 'closed','cancel'])])
         self.set_hours_elapsed(tickets, 'second')
 
     def set_hours_elapsed_third(self):
         today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
         tickets = self.search(
             [('integration_date', '<', today), ('is_service_relocation', '=', 'yes'),
-             ('state', 'not in', ['draft', 'closed'])])
+             ('state', 'not in', ['draft', 'closed','cancel'])])
         self.set_hours_elapsed(tickets, 'third')
 
 
@@ -736,21 +736,21 @@ class Ticket(models.Model):
         today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
         tickets = self.search(
             [('open_date', '<', today), ('category_id', '=', 3),('is_major_support', '=', 'no'),
-             ('state', 'not in', ['draft', 'closed'])])
+             ('state', 'not in', ['draft', 'closed','cancel'])])
         self.set_hours_elapsed(tickets,'first_support')
 
     def set_hours_elapsed_second_support(self):
         today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
         tickets = self.search(
             [('done_date', '<', today), ('category_id', '=', 3),('is_major_support', '=', 'no'),
-             ('state', 'not in', ['draft', 'closed'])])
+             ('state', 'not in', ['draft', 'closed','cancel'])])
         self.set_hours_elapsed(tickets, 'second_support')
 
     def set_hours_elapsed_major_support(self):
         today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
         tickets = self.search(
             [('open_date', '<', today), ('category_id', '=', 3), ('is_major_support', '=', 'yes'),
-             ('state', 'not in', ['draft', 'closed'])])
+             ('state', 'not in', ['draft', 'closed','cancel'])])
         self.set_hours_elapsed(tickets,'major_support')
 
 
