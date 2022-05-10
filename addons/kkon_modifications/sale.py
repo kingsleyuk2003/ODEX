@@ -742,8 +742,32 @@ class ResPartnerExtend(models.Model):
             client_id = partner_id.ref
             if partner_id and partner_id.email:
 
-                msg = '<p>Dear %s, (ID %s) </p> <p>Thank you for choosing FiberOne Broadband, as your preferred broadband service provider. </p> <p> Your account has been activated and we are confident that you will be very satisfied with our services. Find below details of your service portal login from which you can manage your account.</p> <p><b> Service Code</b> <br/> Service ID: %s <br/> Service Plan: %s </p> <p> <b> You can manage your service via the platforms below.</b> <ul> <li> MyFOB Self-service Portal - For instant and automatic payment renewal. Please visit <a href=https://eservice.fob.ng/ >https://eservice.fob.ng/</a>   </li> <li> My FOB App - For convenient payment automatic service activation, live chat and messaging with our customer service presentative, please download the app on Google play store or App store. </li><li>Quickteller - For instant payment and activations, please visit    <a href=https://www.quickteller.com/fob >https://www.quickteller.com/fob</a>  </li> </ul></p> <p> <b>VOIP Service (Toll Free Line)</b></p><p> FiberOne Broadband makes home and business On-Net call remarkably simple and easy to use with unlimited call capacity to your friends and family within FiberOne network, free of charge.  <a href=https://eservice.fob.ng/ >https://www.fob.ng/fob-voice/</a>    </p> <p><b>For enquiries and support </b> </p> <p>You can contact our customer service center via the following platforms. <ul> <li>Phone: +2349087981900, +2349087981919 </li> <li> WhatsApp: 09083136396 </li><li> Email: csc@fob.ng</li><li> MyFOB App: Live chat and messaging. </li><li> Toll Free On- net Line: Dial 200 to contact our customer service center without mobile airtime. </li></ul> </p> <p> Kindly visit our website, <a href=https://www.fob.ng/ >https://www.fob.ng/</a>   for our terms and conditions.</p> <p> Once again, we thank you for your business.</p> <p> Sincerely, </p> <p><b> Customer Service Center </b> </p>' % (
-                partner_id.name,client_id,client_id,partner_id.product_id.name)
+                msg = '<p>Dear %s, (ID %s) </p> <p>Thank you for choosing FiberOne Broadband, as your preferred broadband service provider. </p> ' \
+                      '<p>We are delighted to inform you that your account has been activated and we are confident that you will be very satisfied with our services. In view of this, we would love to hear from you on your service performance while the ticket will be closed within 48hours if we do not hear from you. Please find below details of your service portal login credentials from which you can manage your account.</p> ' \
+                      '<p><b> Service Code</b> <br/> Service ID: %s <br/> Service Plan: %s </p> ' \
+                      '<p>Service Renewal:</p><p>You can manage your service via the platforms below.</p><p>MyFOB Self-service Portal - For instant and automatic payment renewal. Please visit <a href=https://eservice.fob.ng/ >https://eservice.fob.ng/</a></p> ' \
+                      '<p>MyFOB App - For convenient payment automatic service activation, live chat and messaging with our customer service representative, please download the app on Google play store or App store. </p>' \
+                      '<p>The MyFOB App has everything you need to know about FiberOne Broadband, all in one place. There, you would be able to find your account details and see other features on service request and support. Once you are set up, the App will be your go-to place for all things. </p>' \
+                      '<p><b>Download now:</b> <a href=https://play.google.com/store/apps/details?id=ng.fob.mobile&hl=en&gl=US  ><img src="https://i.ibb.co/rMphkX5/myfob.png" alt="myfob" width="25"  border="0"></a>  </p> ' \
+                      '<p>(The app allows you to receive an instant response to your complaints and account reconnection).</p>' \
+                      '<ul> <li>Username: %s </li><li> Password: %s  (you are advised to use lower case letters or change the password upon the first login).</li></ul><p>VOIP Service (Toll Free Line) - FiberOne Broadband makes home and business On-Net call remarkably simple and easy to use with unlimited call capacity to your friends and family within FiberOne network, free of charge.  <a href=https://eservice.fob.ng/ >https://www.fob.ng/fob-voice/</a>    ' \
+                      '<p>Contact Us</p>'\
+                      '<p>For inquiries and support - You can contact our customer service center via the following platforms. ' \
+                      '<ul> <li>Phone: +2349087981900 </li> ' \
+                      '<li> WhatsApp: 09083136396 </li><li> Email: csc@fob.ng</li>' \
+                      '<p>Social Media</p>' \
+                      '<p>You can connect with us on the following Social media Platforms </p>' \
+                      '<li>Facebook   <a href=https://facebook.com/fobng >https://facebook.com/fobng</a> </li>' \
+                      '<li>Twitter <a href=https://twitter.com/fobroadband >https://twitter.com/fobroadband</a>  </li>' \
+                      '<li>Instagram <a href=https://instagram.com/fobng >https://instagram.com/fobng</a>  </li>' \
+                      '<li>Linkedin <a href=https://linkedin.com/company/fiberone >https://linkedin.com/company/fiberone</a>  </li>' \
+                       '</ul> ' \
+                      '</p> ' \
+                      '<p> Kindly visit our website, <a href=https://www.fob.ng/ >https://www.fob.ng/</a>   for our terms and conditions.</p> ' \
+                      '<p>Once again, we thank you for trusting us with your business.</p> ' \
+                      '<p> Sincerely, </p> ' \
+                      '<p><b>Customer Sales Support Center</b> </p>' % (
+                partner_id.name,client_id,client_id,partner_id.product_id.name,client_id,client_id)
                  #mail_obj = self.message_post(_(msg),subject='%s Welcome to Fiberone Broadboad' % (  partner_id.name), partner_ids=[partner_id.id])
                 user_names += partner_id.name + ", "
 

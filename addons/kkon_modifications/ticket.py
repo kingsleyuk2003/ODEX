@@ -288,27 +288,27 @@ class Ticket(models.Model):
             hours = 0
             if total_elapsed_hours == 54:
                 user_type = 'is_bpsq_md_manager'
-                esc_type = 'EXTREMELY OVERDUE ESCALATION'
+                esc_type = 'EXTREMELY OVERDUE ESCALATION - FIRST ESCALATION LEVEL - SERVICE RELOCATION'
                 hours = 54
             elif total_elapsed_hours == 41:
                 user_type = 'is_bpsq_cto_manager'
-                esc_type = 'OVERDUE ESCALATION'
+                esc_type = 'OVERDUE ESCALATION - FIRST ESCALATION LEVEL - SERVICE RELOCATION'
                 hours = 41
             elif total_elapsed_hours == 27:
                 user_type = 'is_bpsq_cto_manager'
-                esc_type = 'DUE ESCALATION'
+                esc_type = 'DUE ESCALATION - FIRST ESCALATION LEVEL - SERVICE RELOCATION'
                 hours = 27
             elif total_elapsed_hours == 21:
                 user_type = 'is_cto_rm_hcx'
-                esc_type = 'HIGH ESCALATION'
+                esc_type = 'HIGH ESCALATION - FIRST ESCALATION LEVEL - SERVICE RELOCATION'
                 hours = 21
             elif total_elapsed_hours == 14:
                 user_type = 'is_regional_manager_hcx'
-                esc_type = 'MODERATE ESCALATION'
+                esc_type = 'MODERATE ESCALATION - FIRST ESCALATION LEVEL - SERVICE RELOCATION'
                 hours = 14
             elif total_elapsed_hours == 7:
                 user_type = 'is_area_manager'
-                esc_type = 'NORMAL'
+                esc_type = 'NORMAL - FIRST ESCALATION LEVEL - SERVICE RELOCATION'
                 hours = 7
 
             if user_type and esc_type and hours :
@@ -329,23 +329,23 @@ class Ticket(models.Model):
             hours = 0
             if total_elapsed_hours == 6:
                 user_type = 'is_bpsq_md_manager'
-                esc_type = 'EXTREMELY OVERDUE ESCALATION'
+                esc_type = 'EXTREMELY OVERDUE ESCALATION - SECOND ESCALATION LEVEL - SERVICE RELOCATION'
                 hours = 6
             elif total_elapsed_hours == 4:
                 user_type = 'is_hcx'
-                esc_type = 'DUE ESCALATION'
+                esc_type = 'DUE ESCALATION - SECOND ESCALATION LEVEL - SERVICE RELOCATION'
                 hours = 4
             elif total_elapsed_hours == 3:
                 user_type = 'is_hcx_team_lead'
-                esc_type = 'HIGH ESCALATION'
+                esc_type = 'HIGH ESCALATION - SECOND ESCALATION LEVEL - SERVICE RELOCATION'
                 hours = 3
             elif total_elapsed_hours == 2:
                 user_type = 'is_hcx'
-                esc_type = 'MODERATE ESCALATION'
+                esc_type = 'MODERATE ESCALATION - SECOND ESCALATION LEVEL - SERVICE RELOCATION'
                 hours = 2
             elif total_elapsed_hours == 1:
                 user_type = 'is_hcx'
-                esc_type = 'NORMAL ESCALATION'
+                esc_type = 'NORMAL ESCALATION - SECOND ESCALATION LEVEL - SERVICE RELOCATION'
                 hours = 1
 
             if user_type and esc_type and hours:
@@ -365,19 +365,19 @@ class Ticket(models.Model):
             hours = 0
             if total_elapsed_hours == 12:
                 user_type = 'is_bpsq_hcx'
-                esc_type = 'HIGH ESCALATION'
+                esc_type = 'HIGH ESCALATION - THIRD ESCALATION LEVEL - SERVICE RELOCATION'
                 hours = 12
             elif total_elapsed_hours == 9:
                 user_type = 'is_hcx'
-                esc_type = 'HIGH ESCALATION'
+                esc_type = 'HIGH ESCALATION - THIRD ESCALATION LEVEL - SERVICE RELOCATION'
                 hours = 9
             elif total_elapsed_hours == 6:
                 user_type = 'is_team_lead'
-                esc_type = 'MODERATE ESCALATION'
+                esc_type = 'MODERATE ESCALATION - THIRD ESCALATION LEVEL - SERVICE RELOCATION'
                 hours = 6
             elif total_elapsed_hours == 3:
                 user_type = 'is_cx'
-                esc_type = 'NORMAL ESCALATION'
+                esc_type = 'NORMAL ESCALATION - THIRD ESCALATION LEVEL - SERVICE RELOCATION'
                 hours = 3
 
             if user_type and esc_type and hours:
@@ -398,55 +398,55 @@ class Ticket(models.Model):
             company = self.sudo().ticket_company_id.company_select
             if total_elapsed_hours == 36:
                 user_type = 'is_bpsq_md_manager'
-                esc_type = 'EXTREMELY OVERDUE ESCALATION'
+                esc_type = 'EXTREMELY OVERDUE ESCALATION - FIRST ESCALATION LEVEL - SUPPORT'
                 hours = 36
             elif total_elapsed_hours == 27:
                 user_type = 'is_bpsq_cto_manager'
-                esc_type = 'OVERDUE ESCALATION'
+                esc_type = 'OVERDUE ESCALATION - FIRST ESCALATION LEVEL - SUPPORT'
                 hours = 27
             elif total_elapsed_hours == 16:
                 user_type = 'is_bpsq_cto_manager'
-                esc_type = 'DUE ESCALATION'
+                esc_type = 'DUE ESCALATION - FIRST ESCALATION LEVEL - SUPPORT'
                 hours = 16
             elif total_elapsed_hours == 14:
                 user_type = 'is_cto_rm_hcx'
-                esc_type = 'HIGH ESCALATION'
+                esc_type = 'HIGH ESCALATION - FIRST ESCALATION LEVEL - SUPPORT'
                 hours = 14
             elif total_elapsed_hours == 10:
                 user_type = 'is_regional_manager_hcx'
-                esc_type = 'MODERATE ESCALATION'
+                esc_type = 'MODERATE ESCALATION - FIRST ESCALATION LEVEL - SUPPORT'
                 hours = 10
             elif total_elapsed_hours == 7 and company == 'fob':
                 user_type = 'is_cto_hod'
-                esc_type = 'DUE ESCALATION'
+                esc_type = 'DUE ESCALATION - FIRST ESCALATION LEVEL - SUPPORT'
                 hours = 7
             elif total_elapsed_hours == 6 and company == 'fob':
                 user_type = 'is_hcx_hod'
-                esc_type = 'HIGH ESCALATION'
+                esc_type = 'HIGH ESCALATION - FIRST ESCALATION LEVEL - SUPPORT'
                 hours = 6
             elif total_elapsed_hours == 4 and company == 'fob':
                 user_type = 'is_team_lead_im_cm'
-                esc_type = 'MODERATE ESCALATION'
+                esc_type = 'MODERATE ESCALATION - FIRST ESCALATION LEVEL - SUPPORT'
                 hours = 4
             elif total_elapsed_hours == 2 and company == 'fob':
                 user_type = 'is_team_lead_im'
-                esc_type = 'NORMAL ESCALATION'
+                esc_type = 'NORMAL ESCALATION - FIRST ESCALATION LEVEL - SUPPORT'
                 hours = 2
             elif total_elapsed_hours == 4 and company == 'kkon':
                 user_type = 'is_bpsq_md_manager'
-                esc_type = 'EXTREMELY OVERDUE ESCALATION'
+                esc_type = 'EXTREMELY OVERDUE ESCALATION - FIRST ESCALATION LEVEL - SUPPORT'
                 hours = 4
             elif total_elapsed_hours == 3 and company == 'kkon':
                 user_type = 'is_cto_hod'
-                esc_type = 'DUE ESCALATION'
+                esc_type = 'DUE ESCALATION - FIRST ESCALATION LEVEL - SUPPORT'
                 hours = 3
             elif total_elapsed_hours == 2 and company == 'kkon':
                 user_type = 'is_hcx_hod'
-                esc_type = 'HIGH ESCALATION'
+                esc_type = 'HIGH ESCALATION - FIRST ESCALATION LEVEL - SUPPORT'
                 hours = 2
             elif total_elapsed_hours == 1 and company == 'kkon':
                 user_type = 'is_team_lead_im'
-                esc_type = 'NORMAL ESCALATION'
+                esc_type = 'NORMAL ESCALATION - FIRST ESCALATION LEVEL - SUPPORT'
                 hours = 1
 
             if user_type and esc_type and hours :
@@ -467,23 +467,23 @@ class Ticket(models.Model):
             hours = 0
             if total_elapsed_hours == 8:
                 user_type = 'is_bpsq_md_manager'
-                esc_type = 'EXTREMELY OVERDUE ESCALATION'
+                esc_type = 'EXTREMELY OVERDUE ESCALATION - SECOND ESCALATION LEVEL - SUPPORT'
                 hours = 8
             elif total_elapsed_hours == 5:
                 user_type = 'is_hcx'
-                esc_type = 'DUE ESCALATION'
+                esc_type = 'DUE ESCALATION - SECOND ESCALATION LEVEL - SUPPORT'
                 hours = 5
             elif total_elapsed_hours == 4:
                 user_type = 'is_hcx_team_lead'
-                esc_type = 'HIGH ESCALATION'
+                esc_type = 'HIGH ESCALATION - SECOND ESCALATION LEVEL - SUPPORT'
                 hours = 4
             elif total_elapsed_hours == 2:
                 user_type = 'is_team_lead_im_cm'
-                esc_type = 'MODERATE ESCALATION'
+                esc_type = 'MODERATE ESCALATION - SECOND ESCALATION LEVEL - SUPPORT'
                 hours = 2
             elif total_elapsed_hours == 1:
                 user_type = 'is_team_lead_im'
-                esc_type = 'NORMAL ESCALATION'
+                esc_type = 'NORMAL ESCALATION - SECOND ESCALATION LEVEL - SUPPORT'
                 hours = 1
 
             if user_type and esc_type and hours:
@@ -503,27 +503,27 @@ class Ticket(models.Model):
             hours = 0
             if total_elapsed_hours == 16:
                 user_type = 'is_bpsq_md_cto'
-                esc_type = 'EXTREMELY OVERDUE ESCALATION'
+                esc_type = 'EXTREMELY OVERDUE ESCALATION - MAJOR ESCALATION LEVEL - SUPPORT'
                 hours = 16
             elif total_elapsed_hours == 12:
                 user_type = 'is_bpsq_hcx_cto'
-                esc_type = 'OVERDUE ESCALATION'
+                esc_type = 'OVERDUE ESCALATION - MAJOR ESCALATION LEVEL - SUPPORT'
                 hours = 12
             elif total_elapsed_hours == 8:
                 user_type = 'is_bpsq_hcx'
-                esc_type = 'DUE ESCALATION'
+                esc_type = 'DUE ESCALATION - MAJOR ESCALATION LEVEL - SUPPORT'
                 hours = 8
             elif total_elapsed_hours == 6:
                 user_type = 'is_hcx'
-                esc_type = 'HIGH ESCALATION'
+                esc_type = 'HIGH ESCALATION - MAJOR ESCALATION LEVEL - SUPPORT'
                 hours = 6
             elif total_elapsed_hours == 4:
                 user_type = 'is_team_lead'
-                esc_type = 'MODERATE ESCALATION'
+                esc_type = 'MODERATE ESCALATION - MAJOR ESCALATION LEVEL - SUPPORT'
                 hours = 4
             elif total_elapsed_hours == 2:
                 user_type = 'is_csc_fob_group'
-                esc_type = 'NORMAL ESCALATION'
+                esc_type = 'NORMAL ESCALATION - MAJOR ESCALATION LEVEL - SUPPORT'
                 hours = 2
 
             if user_type and esc_type and hours :
@@ -950,7 +950,32 @@ class Ticket(models.Model):
         partner_id = self.partner_id
         if partner_id and self.category_id == self.env.ref('kkon_modifications.kkon_installation'):
             if self.sudo().ticket_company_id.company_select == 'fob':
-                msg = 'Dear %s, <p>This is to acknowledge the receipt of your payment for (Package-%s) Broadband service. </p> An installation ticket with the ID: %s has been opened for your installation. <p> Your Service ID : %s (this will be required for future communication).</p> <p> For further enquiries and assistance, please feel free to contact us through any of the following channels:</p><p><ul class=o_timeline_tracking_value_list><li>Calls: +2349087981900,+2349087981919</li><li>WhatsApp: 08094162890</li><li>Email: salessupport@fob.ng</li><li>MyFOB app,: Download app and click on support.</li></ul></p><p>Please visit our website <a href=https://www.fob.ng/ >https://www.fob.ng</a> for other terms and conditions.</p><p>We appreciate your interest in FiberOne Broadband and we hope you will enjoy our partnership as we provide you a reliable and steady internet connectivity.</p><p> Regards,</p>Customer Service Center</p>' % \
+                msg = 'Dear %s, <p>This is to acknowledge the receipt of your payment for (Package-%s) Broadband service. </p> ' \
+                      'An installation ticket with the ID: %s has been opened for your installation. ' \
+                      '<p> Your Service ID : %s (this will be required for future communication).</p> ' \
+                      '<p>Furthermore, please be informed that the installation is done within 5 – 7 working days. However, these would be carried out in three (3) stages on different days as shown below;</p>' \
+                      '<p>' \
+                      '<ol class=o_timeline_tracking_value_list>' \
+                      '<li>Laying of the fiber cable in your premises (Physical Visitation)</li>' \
+                      '<li>Deployment of Modem (Physical Visitation)</li>' \
+                      '<li>Activation of modem (Back-end Procedures)</li>' \
+                      '</ol>' \
+                      '</p>' \
+                      '<p> For further enquiries and assistance, please feel free to contact us through any of the following channels:</p>' \
+                      '<p><ul class=o_timeline_tracking_value_list>' \
+                      '<li>Calls: +2349087981900</li>' \
+                      '<li>WhatsApp: 08094162890</li>' \
+                      '<li>Email: salessupport@fob.ng</li>' \
+                      '</ul></p>' \
+                      '<p>Social Media</p>' \
+                      '<p>You can connect with us on the following social media Platforms</p>' \
+                       '<p><ul class=o_timeline_tracking_value_list>' \
+                      '<li>Twitter <a href=https://twitter.com/fobroadband >https://twitter.com/fobroadband</a></li>' \
+                      '<li>Instagram <a href=https://instagram.com/fobng >https://instagram.com/fobng</a> </li>' \
+                      '</ul></p>' \
+                      '<p>Please visit our website <a href=https://www.fob.ng/ >https://www.fob.ng</a> for other terms and conditions.</p>' \
+                      '<p>We appreciate your interest in FiberOne Broadband and we hope you will enjoy our partnership as we provide you a reliable and steady internet connectivity.</p>' \
+                      '<p> Regards,</p>Customer Sales Support Center</p>' % \
                       (
                           partner_id.name, self.sudo().product_id.name, self.ticket_id, partner_id.ref)
                 mail_obj = self.message_post(
