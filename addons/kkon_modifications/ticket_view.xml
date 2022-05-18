@@ -290,7 +290,9 @@
                                  <field name="area_change_request_id"  domain="[('area_manager_id','!=',False)]" options="{'no_open': True, 'no_create': True}" attrs="{'readonly': [('state', 'in', ('closed'))], 'required': [('is_service_relocation', '=', 'yes' )], 'invisible': [('is_service_relocation', '=', 'no')]}"   />
 
                                 <field name="updown_grade_type" attrs="{'readonly': [('state', 'in', ('closed'))], 'required': [('category_id', '=', 7 )]}"   />
-                                 <field name="product_curr_id" domain="[('is_mrc','=',True)]" attrs="{'readonly': [('state', 'in', ('closed'))],'required': [('category_id', '=', 7 )]}"    options="{'no_open': True, 'no_create': True}"  />
+                                 <field name="old_technology" attrs="{'invisible': [('updown_grade_type', '!=', 'conversion')], 'required': [('updown_grade_type', '=', 'conversion')]}"   />
+                                <field name="new_technology" attrs="{'invisible': [('updown_grade_type', '!=', 'conversion')], 'required': [('updown_grade_type', '=', 'conversion')]}"   />
+                                <field name="product_curr_id" domain="[('is_mrc','=',True)]" attrs="{'readonly': [('state', 'in', ('closed'))],'required': [('category_id', '=', 7 )]}"    options="{'no_open': True, 'no_create': True}"  />
                                  <field name="product_new_id" domain="[('is_mrc','=',True)]" attrs="{'readonly': [('state', 'in', ('closed'))], 'required': [('category_id', '=', 7 )]}"   options="{'no_open': True, 'no_create': True}"   />
                                 <field name="bandwidth_current" attrs="{'readonly': [('state', 'in', ('closed'))], 'required': [('category_id', '=', 7 ),('state', '=', 'integration' )]}"    />
                                  <field name="bandwidth_new" attrs="{'readonly': [('state', 'in', ('closed'))], 'required': [('category_id', '=', 7 )]}"    />

@@ -950,34 +950,26 @@ class Ticket(models.Model):
         partner_id = self.partner_id
         if partner_id and self.category_id == self.env.ref('kkon_modifications.kkon_installation'):
             if self.sudo().ticket_company_id.company_select == 'fob':
-                msg = 'Dear %s, <p>This is to acknowledge the receipt of your payment for (Package-%s) Broadband service. </p> ' \
-                      'An installation ticket with the ID: %s has been opened for your installation. ' \
-                      '<p> Your Service ID : %s (this will be required for future communication).</p> ' \
-                      '<p>Furthermore, please be informed that the installation is done within 5 – 7 working days. However, these would be carried out in three (3) stages on different days as shown below;</p>' \
-                      '<p>' \
-                      '<ol class=o_timeline_tracking_value_list>' \
-                      '<li>Laying of the fiber cable in your premises (Physical Visitation)</li>' \
-                      '<li>Deployment of Modem (Physical Visitation)</li>' \
-                      '<li>Activation of modem (Back-end Procedures)</li>' \
-                      '</ol>' \
-                      '</p>' \
-                      '<p> For further enquiries and assistance, please feel free to contact us through any of the following channels:</p>' \
-                      '<p><ul class=o_timeline_tracking_value_list>' \
-                      '<li>Calls: +2349087981900</li>' \
-                      '<li>WhatsApp: 08094162890</li>' \
-                      '<li>Email: salessupport@fob.ng</li>' \
-                      '</ul></p>' \
-                      '<p>Social Media</p>' \
-                      '<p>You can connect with us on the following social media Platforms</p>' \
-                       '<p><ul class=o_timeline_tracking_value_list>' \
-                      '<li>Twitter <a href=https://twitter.com/fobroadband >https://twitter.com/fobroadband</a></li>' \
-                      '<li>Instagram <a href=https://instagram.com/fobng >https://instagram.com/fobng</a> </li>' \
-                      '</ul></p>' \
-                      '<p>Please visit our website <a href=https://www.fob.ng/ >https://www.fob.ng</a> for other terms and conditions.</p>' \
-                      '<p>We appreciate your interest in FiberOne Broadband and we hope you will enjoy our partnership as we provide you a reliable and steady internet connectivity.</p>' \
-                      '<p> Regards,</p>Customer Sales Support Center</p>' % \
-                      (
-                          partner_id.name, self.sudo().product_id.name, self.ticket_id, partner_id.ref)
+                msg = 'Dear %s,<p>This is to acknowledge the receipt of your payment for (Package-%s) Broadband ' \
+                      'service.</p>An installation ticket with the ID: %s has been opened for your ' \
+                      'installation.<p>Your Service ID : %s (this will be required for future ' \
+                      'communication).</p><p>Furthermore, please be informed that the installation is done within 5 - ' \
+                      '7 working days. However, these would be carried out in three (3) stages on different days as ' \
+                      'shown below;</p><p><ol class=o_timeline_tracking_value_list><li>Laying of the fiber cable in ' \
+                      'your premises (Physical Visitation)</li><li>Deployment of Modem (Physical ' \
+                      'Visitation)</li><li>Activation of modem (Back-end Procedures)</li></ol></p><p>For further ' \
+                      'enquiries and assistance, please feel free to contact us through any of the following ' \
+                      'channels:</p><p><ul class=o_timeline_tracking_value_list><li>Calls: ' \
+                      '+2349087981900</li><li>WhatsApp: 08094162890</li><li>Email: ' \
+                      'salessupport@fob.ng</li></ul></p><p>Social Media</p><p>You can connect with us on the ' \
+                      'following social media Platforms</p><p><ul class=o_timeline_tracking_value_list><li>Twitter <a ' \
+                      'href=https://twitter.com/fobroadband >https://twitter.com/fobroadband</a></li><li>Instagram <a ' \
+                      'href=https://instagram.com/fobng >https://instagram.com/fobng</a></li></ul></p><p>Please visit ' \
+                      'our website <a href=https://www.fob.ng/ >https://www.fob.ng</a> for other terms and ' \
+                      'conditions.</p><p>We appreciate your interest in FiberOne Broadband and we hope you will enjoy ' \
+                      'our partnership as we provide you a reliable and steady internet connectivity.</p><p>Regards,' \
+                      '</p>Customer Sales Support Center</p>' % (partner_id.name,self.sudo().product_id.name,
+                                                                 self.ticket_id,partner_id.ref)
                 mail_obj = self.message_post(
                     _(msg),
                     subject='%s Opened Installation Ticket Notification for %s' % (
@@ -2100,7 +2092,9 @@ class Ticket(models.Model):
     current_escalation_level_service_relocation = fields.Char(string='Current Escalation Level Service Relocation')
     area_change_request_id = fields.Many2one('kkon.area', string="Area", track_visibility='onchange')
     area_support_id = fields.Many2one('kkon.area', string="Area", track_visibility='onchange')
-    updown_grade_type = fields.Selection([('upgrade', 'Upgrade'), ('downgrade', 'Downgrade'),('disconnect', 'Disconnect'),('reconnection', 'Reconnection'),('relocation', 'Relocation'),('voip', 'Voip')], string='Change Request Type')
+    updown_grade_type = fields.Selection([('upgrade', 'Upgrade'), ('downgrade', 'Downgrade'),('disconnect', 'Disconnect'),('reconnection', 'Reconnection'),('relocation', 'Relocation'),('voip', 'Voip'),('conversion','Conversion')], string='Change Request Type')
+    old_technology = fields.Selection([('radio', 'Radio'),('apn', 'APN'),('fiber', 'Fiber')], string='Old Technology')
+    new_technology = fields.Selection([('radio', 'Radio'),('apn', 'APN'),('fiber', 'Fiber')], string='New Technology')
     product_curr_id = fields.Many2one('product.product',string='Current Package')
     product_new_id = fields.Many2one('product.product', string='New Package')
     bandwidth_current = fields.Char(string='Current Bandwidth')
