@@ -316,11 +316,13 @@ class Ticket(models.Model):
         self.send_email(group_name, msg)
 
 
-    @api.multi
-    def read(self, fields=None, load='_classic_read'):
-        res =  super(Ticket, self).read(fields=fields, load=load)
-        self._compute_time_elapsed()
-        return res
+    # @api.multi
+    # def read(self, fields=None, load='_classic_read'):
+    #     res =  super(Ticket, self).read(fields=fields, load=load)
+    #     self._compute_time_elapsed()
+    #     return res
+
+
 
 
     @api.multi
