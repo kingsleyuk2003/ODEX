@@ -395,10 +395,10 @@ class PurchaseOrderExtend(models.Model):
         lines = []
 
         if not float_is_zero(1, precision_digits=precision):
-            account = self.product_id.property_account_income_id or self.product_id.categ_id.property_account_income_categ_id
+            account = self.product_id.categ_id.property_stock_account_input_categ_id
             if not account:
                 raise UserError(
-                    _('Please define income account for this product: "%s" (id:%d) - or for its category: "%s".') % (
+                    _('Please define stock input  account for this product: "%s" (id:%d) - or for its category: "%s".') % (
                         self.product_id.name, self.product_id.id,
                         self.product_id.categ_id.name))
 
