@@ -216,7 +216,10 @@ class PurchaseOrderExtend(models.Model):
     def button_create_lc_bc_bill(self):
         if self.lc_bc_invoice :
             raise UserError(_('Sorry, LC / BC Bill has been created already'))
-        if not self.final_invoice_value :
+
+        if self.purchase_type == 'local_purchase' :
+            raise UserError(_('Sorry, you cannot create LC or BC Bill for Local Purchase'))
+        elif not self.final_invoice_value :
             raise UserError(_('Please set the Final Invoice Value'))
         elif self.final_invoice_value  < 0 :
             raise UserError(_('Final Invoice Value is negative'))
@@ -228,7 +231,10 @@ class PurchaseOrderExtend(models.Model):
 
     @api.multi
     def button_create_pef_bill(self):
-        if self.pef_invoice :
+
+        if self.purchase_type == 'local_purchase' :
+            raise UserError(_('Sorry, you cannot create PEF Bill for Local Purchase'))
+        elif self.pef_invoice :
             raise UserError(_('Sorry, PEF Bill has been created already'))
         if not self.pef_payment :
             raise UserError(_('Please contact the shipping department to set their Shore Receipt (Ltrs)'))
@@ -244,7 +250,10 @@ class PurchaseOrderExtend(models.Model):
 
     @api.multi
     def button_create_pppra_bill(self):
-        if self.pppra_invoice :
+
+        if self.purchase_type == 'local_purchase' :
+            raise UserError(_('Sorry, you cannot create PPPRA Bill for Local Purchase'))
+        elif self.pppra_invoice :
             raise UserError(_('Sorry, PPPRA Bill has been created already'))
         if not self.admin_charge :
             raise UserError(_('Please contact the shipping department to set their Shore Receipt (Ltrs)'))
