@@ -285,7 +285,7 @@ class StockPicking(models.Model):
                     return res
 
                 purchase_order = self.purchase_id
-                if picking_type_code == "incoming" and purchase_order:  # Create a Vendor Bill
+                if picking_type_code == "incoming" and purchase_order and purchase_order.purchase_type != 'foreign_purchase' :  # Create a Vendor Bill
                     self.transfer_create_bill()
 
 

@@ -137,9 +137,9 @@
                     <button name="button_confirm" type="object" states="local_purchase,letter_of_credit_established" string="Confirm Order" id="draft_confirm" class="oe_highlight" groups="rog_modifications.group_show_confirm_order_btn"  />
                     <!--<button name="button_confirm" type="object" states="sent" string="Confirm Order" class="oe_highlight" id="bid_confirm"/>-->
                     <button name="button_approve_order" type="object" states='to approve' string="Approve Order" class="oe_highlight" groups="rog_modifications.group_show_approve_order_btn" />
-                    <button name="button_create_lc_bc_bill" type="object" string="Create LC/BC Bill"  states="purchase" groups="rog_modifications.group_show_create_lc_bc_bill" class="oe_highlight" confirm="Please ensure the Final Invoice Value has been filled, and you are ready to create a bill" />
-                    <button name="button_create_pef_bill" type="object" string="Create PEF Bill" states="purchase" groups="rog_modifications.group_show_create_pef_bill" class="oe_highlight" confirm="Please ensure the PEF Payment Value has been populated, and you are ready to create a bill"  />
-                    <button name="button_create_pppra_bill" type="object" string="Create PPPRA Bill" states="purchase" groups="rog_modifications.group_show_create_pppra_bill" class="oe_highlight" confirm="Please ensure the PPPRA Payment Value has been populated, and you are ready to create a bill" />
+                    <button name="button_create_lc_bc_bill" type="object" string="Create LC/BC Bill"  states="purchase" groups="rog_modifications.group_show_create_lc_bc_bill" attrs="{'invisible': [('purchase_type', '!=', 'foreign_purchase')]}" class="oe_highlight" confirm="Please ensure the Final Invoice Value has been filled, and you are ready to create a bill" />
+                    <button name="button_create_pef_bill" type="object" string="Create PEF Bill" states="purchase" groups="rog_modifications.group_show_create_pef_bill" class="oe_highlight" attrs="{'invisible': [('purchase_type', '!=', 'foreign_purchase')]}" confirm="Please ensure the PEF Payment Value has been populated, and you are ready to create a bill"  />
+                    <button name="button_create_pppra_bill" type="object" string="Create PPPRA Bill" states="purchase" groups="rog_modifications.group_show_create_pppra_bill" class="oe_highlight" attrs="{'invisible': [('purchase_type', '!=', 'foreign_purchase')]}" confirm="Please ensure the PPPRA Payment Value has been populated, and you are ready to create a bill" />
                     <!--<button name="action_rfq_send" states="purchase" string="Send PO by Email" type="object" context="{'send_rfq':False}"/>-->
                     <!--<button name="action_view_picking" string="Receive Products" class="oe_highlight" type="object" attrs="{'invisible': ['|', '|' , ('is_shipped', '=', True), ('state','not in', ('purchase','done')), ('picking_count', '=', 0)]}"/>-->
 
@@ -284,7 +284,7 @@
 <!--                            </group>-->
 <!--                        </page>-->
 
-                    <page string="Form M Details" >
+                    <page string="Form M Details" attrs="{'invisible': [('purchase_type', '!=', 'foreign_purchase')]}" >
                         <group col="4">
                             <field name="dpr_import_licence_ref_no" />
                             <field name="soncap_ref_no" />
@@ -305,7 +305,7 @@
                             <field name="form_m_expiry" />
                         </group>
                     </page>
-                    <page string="LC and BC Details">
+                    <page string="LC and BC Details" attrs="{'invisible': [('purchase_type', '!=', 'foreign_purchase')]}" >
                         <group col="4">
                             <field name="in_house_no" />
                             <field name="dpr_import_ref_no" readonly="1" />
@@ -345,7 +345,7 @@
                             <field name="is_shipping_documents" />
                         </group>
                     </page>
-                    <page string="PEF and PPPRA Details" >
+                    <page string="PEF and PPPRA Details"  attrs="{'invisible': [('purchase_type', '!=', 'foreign_purchase')]}" >
                         <group col="4">
                             <field name="lc_bc_pfi"  />
                             <field name="in_house_no_pef_pppra" readonly="1" />
@@ -361,8 +361,8 @@
                             <field name="status_payment_pppra" />
 
                         </group>
-                    </page>
-                           <page string="Process Stages">
+                    </page >
+                           <page string="Process Stages" attrs="{'invisible': [('purchase_type', '!=', 'foreign_purchase')]}" >
                         <separator string="Foreign Purchase" />
                         <p>1.) Form M Forwarded to Scanning Agent</p>
                         <p>2.) Form M Forwarded to CBN by Bank</p>
@@ -371,7 +371,7 @@
                         <p>1.) Bank Inspection on Discharged Product</p>
                         <p>2.) Bank Monitoring of Stock</p>
                     </page>
-                    <page  string="Reminders" >
+                    <page  string="Reminders" attrs="{'invisible': [('purchase_type', '!=', 'foreign_purchase')]}" >
                         <group>
                             <field name="reminder_ids" nolabel="1"  >
                                 <tree  editable="bottom"  decoration-success="days_remaining &gt;= expiry_day_interval"    decoration-danger="days_remaining &lt; expiry_day_interval and days_remaining &gt;= 0" >
