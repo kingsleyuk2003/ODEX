@@ -1169,6 +1169,12 @@ class AccountPaymentGroupExtend(models.Model):
                         'Payment Voucher No. %s Already used' % (payment_voucher_no))
 
 
+    @api.multi
+    def post(self):
+        if self.env.user == self.create_uid:
+            raise UserError('Sorry, you can not post a payment created by you')
+        return super(AccountPaymentGroupExtend,self).post()
+
 class AccountVoucher(models.Model):
     _inherit = 'account.voucher'
 
