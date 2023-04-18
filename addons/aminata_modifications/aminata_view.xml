@@ -273,6 +273,13 @@
                  <field name="street" position="attributes" >
                      <attribute name="attrs" >{'required': 1}</attribute>
                  </field>
+                <field name="website" position="before" >
+                     <field name="customer_category_id"  options="{'no_open':True,'no_create':True}"  attrs="{'required':[('customer','=',True)],'invisible':[('customer','=',False)]}"  />
+                 </field>
+
+                <field name="ref" position="attributes" >
+                    <attribute name="attrs" >{'readonly': 1}</attribute>
+                </field>
                  <field name="phone" position="attributes" >
                      <attribute name="attrs" >{'required': 1}</attribute>
                  </field>
@@ -285,7 +292,6 @@
                     <field  name="internal_location_id" attrs="{'required':[('is_service_station','=',True)],'invisible':[('is_service_station','=',False)]}" />
                     <field name="is_service_station_mgr" />
                     <field name="station_mgr_location_id"  attrs="{'required':[('is_service_station_mgr','=',True)],'invisible':[('is_service_station_mgr','=',False)]}"  />
-
                 </field>
 
             </field>
@@ -1327,6 +1333,50 @@
         <menuitem id="menu_station_sales_price_form" name="Station Sales Price" parent="menu_aminata_retail_operation" sequence="11" action="action_station_sales_price_form" groups="aminata_modifications.group_station_sales_price_aminata" />
 
 
+
+
+
+<!-- Customer category -->
+        <record id="customer_category_form" model="ir.ui.view">
+            <field name="name">customer.category.form</field>
+            <field name="model">customer.category</field>
+            <field name="arch" type="xml">
+                <form string="Customer Category">
+                    <sheet>
+                        <group col="4">
+                              <field name="name" required="True" />
+                            <field name="prefix" required="True"  />
+                            <field name="account_id" required="True" options="{'no_open': True, 'no_create': True}" />
+                             <field name="company_id" required="True" options="{'no_open': True, 'no_create': True}" />
+                            <field name="sequence_id" readonly="1" />
+                        </group>
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="customer_category_tree_view">
+            <field name="name">Customer Category Tree</field>
+            <field name="model">customer.category</field>
+              <field name="arch" type="xml">
+                  <tree string="Customer Category Tree" >
+                      <field name="name" />
+                      <field name="prefix"  />
+                      <field name="account_id"  />
+                      <field name="company_id" />
+                      <field name="sequence_id" readonly="1" />
+                  </tree>
+              </field>
+        </record>
+
+         <record id="action_customer_category" model="ir.actions.act_window">
+             <field name="res_model">customer.category</field>
+             <field name="name">Customer Category</field>
+              <field name="view_type">form</field>
+              <field name="view_mode">tree,form</field>
+         </record>
+         <menuitem id="customer_category_area" name="Customer Category" parent="account.menu_finance_configuration" action="action_customer_category" sequence="100" groups="aminata_modifications.group_show_customer_category_menu" />
 
 
     </data>

@@ -600,6 +600,20 @@ class PurchaseOrderExtend(models.Model):
 class ResPartnerAminata(models.Model):
     _inherit = "res.partner"
 
+    @api.model
+    def create(self, vals):
+        customer_category = self.env['customer.category']
+        cc_id = vals.get('customer_category_id', False)
+        if cc_id :
+            cc = customer_category.browse(cc_id)
+            sequence_id = cc.sequence_id
+            vals['ref'] = sequence_id.next_by_id()
+            vals['property_account_receivable_id'] = cc.account_id
+        rec = super(ResPartnerAminata, self).create(vals)
+        return rec
+
+
+
     is_enforce_credit_limit_so = fields.Boolean(string='Activate Credit Limit',default=True)
     warehouse_id = fields.Many2one('stock.warehouse',string='Warehouse')
     is_aminata_retail_reserve = fields.Boolean(string='Is Aminata Retail Reserve')
@@ -608,7 +622,7 @@ class ResPartnerAminata(models.Model):
     internal_location_id = fields.Many2one('stock.location', string='Internal Location')
     is_service_station_mgr = fields.Boolean(string='Is Service Station Manager')
     station_mgr_location_id = fields.Many2one('stock.location', string='Retail Station Location')
-
+    customer_category_id = fields.Many2one('customer.category', string='Customer Category')
 
 
 class DeliveryRegisterExtend(models.Model):
@@ -1027,6 +1041,8 @@ class ResCompanyAminata(models.Model):
     restrict_days = fields.Integer(string='Restrict Transaction Day',default=1)
     overage_stock_location_id = fields.Many2one('stock.location',string='Overage Stock Location')
 
+   # comment this line below before uploading on Aminata server. it is not necessary, but required by localhost
+    #accountant_group_id = fields.Many2one('emp.expense.group', string='Accountant Group')
 
 class HRExtend(models.Model):
     _inherit = 'hr.employee'
@@ -1187,7 +1203,6 @@ class AccountVoucher(models.Model):
                 if len(is_present) > 1:
                     raise ValidationError(
                         'Cash/Bank Payment Ref. %s Already used' % (name))
-
 
 
 class StationLiftingOrder(models.Model):
@@ -2866,3 +2881,32 @@ class StationSalesPrice(models.Model):
     sale_price = fields.Monetary(string='Sales Price')
     currency_id = fields.Many2one("res.currency", string="Currency",default=lambda self: self.env.user.company_id.currency_id, ondelete='restrict')
     company_id = fields.Many2one('res.company', default=lambda self: self.env['res.company']._company_default_get('station.sales.price'))
+
+
+class CustomerCategory(models.Model):
+    _name = "customer.category"
+    _description = 'Customer Category'
+
+    @api.model
+    def create(self, vals):
+        prefix = vals.get('prefix',False)
+        if prefix :
+            IrSequence = self.env['ir.sequence'].sudo()
+            val = {
+                'name': _('%s Sequence' % vals['name']),
+                'padding': 4,
+                'number_next': 1,
+                'number_increment': 1,
+                'prefix': "%s" % vals['prefix'],
+                'code': '%s-code' % (vals['prefix']),
+                'company_id': vals['company_id'],
+            }
+            vals['sequence_id'] = IrSequence.create(val).id
+        return super(CustomerCategory, self).create(vals)
+
+
+    name = fields.Char(string='Category')
+    prefix = fields.Char(string='Prefix')
+    account_id = fields.Many2one('account.account',domain="[('internal_type', '=', 'receivable')]" ,string='Account')
+    sequence_id = fields.Many2one('ir.sequence', string="Sequence",ondelete="restrict")
+    company_id = fields.Many2one('res.company', string='Company')

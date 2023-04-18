@@ -193,6 +193,11 @@
 			<field name="category_id" ref="module_category_aminata_rights"/>
 	</record>
 
+	<record id="group_show_customer_category_menu" model="res.groups">
+			<field name="name">Show "Customer Category" Menu in Configuration</field>
+			<field name="category_id" ref="module_category_aminata_rights"/>
+	</record>
+
 <!-- Rules -->
 	<record model="ir.rule" id="purchase_contract_comp_rule">
         <field name="name">Purchase Contract multi-company</field>
