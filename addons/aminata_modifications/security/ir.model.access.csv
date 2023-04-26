@@ -10,3 +10,5 @@ access_station_sales_user,station.sales user,aminata_modifications.model_station
 access_station_sales_lines_user,station.sales.lines user,model_station_sales_lines,aminata_modifications.group_station_sales_aminata,1,1,1,1
 access_station_product_received_lines_user,station.product.received.lines user,model_station_product_received_lines,aminata_modifications.group_station_sales_aminata,1,1,1,1
 access_station_sales_price_user,station.sales.price user,model_station_sales_price,aminata_modifications.group_station_sales_aminata,1,1,1,1
+access_purchase_report_sales_salesman,purchase.purchase.report salesman,purchase.model_purchase_report,base.group_sale_salesman,1,1,1,1
+access_customer_category_user,customer.category user,model_customer_category,base.group_user,1,0,0,0
