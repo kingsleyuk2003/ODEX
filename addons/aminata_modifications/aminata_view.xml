@@ -274,7 +274,7 @@
                      <attribute name="attrs" >{'required': 1}</attribute>
                  </field>
                 <field name="website" position="before" >
-                     <field name="customer_category_id"  options="{'no_open':True,'no_create':True}"  attrs="{'required':[('customer','=',True)],'invisible':[('customer','=',False)]}"  />
+                     <field name="customer_category_id"  options="{'no_open':True,'no_create':True}"  attrs="{'required':[('customer','=',True)],'invisible':[('customer','=',False)]}"  domain="[('company_id','=',company_id)]" />
                  </field>
 
                 <field name="ref" position="attributes" >
