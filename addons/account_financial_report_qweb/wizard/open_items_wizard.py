@@ -25,7 +25,7 @@ class OpenItemsReportWizard(models.TransientModel):
                                     ('all', 'All Entries')],
                                    string='Target Moves',
                                    required=True,
-                                   default='posted')
+                                   default='all')
     account_ids = fields.Many2many(
         comodel_name='account.account',
         string='Filter accounts',

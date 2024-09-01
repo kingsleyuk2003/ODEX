@@ -98,19 +98,19 @@
                 <!--## partner-->
                 <div class="act_as_cell" style="width: 370px;">Partner</div>
                 <!--## amount_residual-->
-                <div class="act_as_cell" style="width: 110px;">Balance</div>
+                <div class="act_as_cell" style="width: 110px;">Residual</div>
                 <!--## current-->
-                <div class="act_as_cell" style="width: 110px;">0 - 30 days</div>
+                <div class="act_as_cell" style="width: 110px;">Not due</div>
                 <!--## age_30_days-->
-                <div class="act_as_cell" style="width: 110px;">30 - 60 days</div>
+                <div class="act_as_cell" style="width: 110px;">1 - 30 d.</div>
                 <!--## age_60_days-->
-                <div class="act_as_cell" style="width: 110px;">60 - 90 days</div>
+                <div class="act_as_cell" style="width: 110px;">31 - 60 d.</div>
                 <!--## age_90_days-->
-                <div class="act_as_cell" style="width: 110px;">90 - 120 days</div>
+                <div class="act_as_cell" style="width: 110px;">61 - 90 d.</div>
                 <!--## age_120_days-->
-                <div class="act_as_cell" style="width: 110px;">120 -150 days</div>
+                <div class="act_as_cell" style="width: 110px;">91 - 120 d.</div>
                 <!--## older-->
-                <div class="act_as_cell" style="width: 110px;">Older</div>
+                <div class="act_as_cell" style="width: 110px;"> > 120 d.</div>
             </div>
         </div>
     </template>
@@ -160,17 +160,17 @@
                     <!--## date_due-->
                     <div class="act_as_cell" style="width: 60px;">Due date</div>
                     <!--## amount_residual-->
-                    <div class="act_as_cell" style="width: 70px;">Balance</div>
+                    <div class="act_as_cell" style="width: 70px;">Residual</div>
                     <!--## current-->
-                    <div class="act_as_cell" style="width: 70px;">0 - 30 days</div>
+                    <div class="act_as_cell" style="width: 70px;">Current</div>
                     <!--## age_30_days-->
-                    <div class="act_as_cell" style="width: 70px;">30 - 60 days</div>
+                    <div class="act_as_cell" style="width: 70px;">Age ≤ 30 d.</div>
                     <!--## age_60_days-->
-                    <div class="act_as_cell" style="width: 70px;">60 - 90 days</div>
+                    <div class="act_as_cell" style="width: 70px;">Age ≤ 60 d.</div>
                     <!--## age_90_days-->
-                    <div class="act_as_cell" style="width: 70px;">90 - 120 days</div>
+                    <div class="act_as_cell" style="width: 70px;">Age ≤ 90 d.</div>
                     <!--## age_120_days-->
-                    <div class="act_as_cell" style="width: 70px;">120 - 150 days</div>
+                    <div class="act_as_cell" style="width: 70px;">Age ≤ 120 d.</div>
                     <!--## older-->
                     <div class="act_as_cell" style="width: 70px;">Older</div>
                 </div>

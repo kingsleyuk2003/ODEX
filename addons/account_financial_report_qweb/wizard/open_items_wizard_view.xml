@@ -19,7 +19,7 @@
                         <field name="hide_account_balance_at_0"/>
                     </group>
                 </group>
-                <notebook>
+               <notebook>
                     <page string="Accounts" >
                         <group col="4">
                             <field name="receivable_accounts_only"/>
@@ -32,9 +32,9 @@
                     </page>
                 </notebook>
                 <footer>
-                    <!--<button name="button_export_pdf" string="Export PDF" type="object" default_focus="1" class="oe_highlight"/>-->
-                    <!--or-->
-                    <button name="button_export_xlsx" string="Generate Report" type="object" class="oe_highlight" />
+<!--                    <button name="button_export_pdf" string="Export PDF" type="object" default_focus="1" class="oe_highlight"/>-->
+<!--                    or-->
+                    <button name="button_export_xlsx" string="Export XLSX" type="object"/>
                     or
                     <button string="Cancel" class="oe_link" special="cancel" />
                 </footer>
