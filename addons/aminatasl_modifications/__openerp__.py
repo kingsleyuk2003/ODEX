@@ -5,21 +5,17 @@
 # License: see https://www.gnu.org/licenses/lgpl-3.0.en.html
 
 {
-    'name': 'Oil Lifting',
+    'name': 'Aminata SL Modifications',
+    'version': '0.1',
     'description': """
-Lifting for Oil and Gas
+Aminata SL Modifications.
 =======================================================================================
 """,
     'author': 'Kingsley Okonkwo (kingsley@kinsolve.com, +2348030412562)',
     'website': 'http://kinsolve.com',
-    'depends': ['base','kin_stock','kin_sales_double_validation','kin_delivery','kin_report','kin_account'],
+    'depends': ['base','sale','kin_sales','kin_sales_double_validation','stock'],
     'data': [
-        'security/security.xml',
-        'report/custom_report_layouts.xml',
-        'report/custom_instant_delivery_order.xml',
-        'security/ir.model.access.csv',
-        'sequence.xml',
-         'lifting_view.xml',
+         'stock_view.xml',
     ],
     'test':[],
     'installable': True,

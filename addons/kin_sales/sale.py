@@ -264,12 +264,12 @@ class SaleOrderExtend(models.Model):
             self.warehouse_id = self.env['stock.warehouse'].search([('company_id', '=', company)], limit=1)
 
 
-    @api.multi
-    def action_view_delivery(self):
-        res = super(SaleOrderExtend,self).action_view_delivery()
-        res['target'] = 'new'
-        res['nodestroy'] = True
-        return  res
+    # @api.multi
+    # def action_view_delivery(self):
+    #     res = super(SaleOrderExtend,self).action_view_delivery()
+    #     res['target'] = 'new'
+    #     res['nodestroy'] = True
+    #     return  res
 
 
     def _get_invoice_url(self, module_name,menu_id,action_id, context=None):
@@ -765,11 +765,11 @@ class SaleOrderExtend(models.Model):
         ('cancel', 'Cancelled'),
     ], string='Status', readonly=True, copy=False, index=True, track_visibility='onchange', default='draft')
 
-    @api.multi
-    def action_view_invoice(self):
-        res = super(SaleOrderExtend,self).action_view_invoice()
-        res['target'] = 'new'
-        return  res
+    # @api.multi
+    # def action_view_invoice(self):
+    #     res = super(SaleOrderExtend,self).action_view_invoice()
+    #     res['target'] = 'new'
+    #     return  res
 
     @api.multi
     def _prepare_invoice(self):
@@ -882,11 +882,11 @@ class SaleOrderLine(models.Model):
         product_id = vals.get('product_id', False)
         if product_id:
             product_obj = self.env['product.product'].browse(product_id)
-            description_sale = product_obj.description_sale
-            if description_sale and len(description_sale) > 0:
-                vals['name'] = description_sale
-            else:
-                vals['name'] = product_obj.name
+            # description_sale = product_obj.description_sale
+            # if description_sale and len(description_sale) > 0:
+            #     vals['name'] = description_sale
+            # else:
+            #     vals['name'] = product_obj.name
             vals['product_uom'] = product_obj.uom_id.id
         res = super(SaleOrderLine, self).create(vals)
         if res.order_id.state in ('sale','cancel','done'):
@@ -985,10 +985,6 @@ class SaleOrderLine(models.Model):
             pricelist=self.order_id.pricelist_id.id,
             uom=self.product_uom.id
         )
-        if product.description_sale:
-            name = product.description_sale
-            vals['name'] = name
-            self.update(vals)
 
         if self.product_id.type == 'product':
             ctx = {}

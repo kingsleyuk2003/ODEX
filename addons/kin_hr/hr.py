@@ -9,10 +9,6 @@ from openerp import api, fields, models, _
 from openerp.exceptions import UserError
 from openerp.tools import float_compare, float_is_zero
 from datetime import datetime, timedelta
-class ResUser(models.Model):
-    _inherit = 'res.users'
-
-    emp_expense_group_ids = fields.Many2many('emp.expense.group', 'emp_expense_group_rel', 'user_id','emp_expense_group_id', string='Employee Expense Groups', ondelete='restrict')
 
 
 class HRBank(models.Model):

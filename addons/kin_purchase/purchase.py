@@ -168,17 +168,17 @@ class PurchaseOrderExtend(models.Model):
         self.show_alert_box = False
         return
 
-    @api.multi
-    def action_view_invoice(self):
-        res = super(PurchaseOrderExtend,self).action_view_invoice()
-        res['target'] = 'new'
-        return  res
-
-    @api.multi
-    def action_view_picking(self):
-        res = super(PurchaseOrderExtend,self).action_view_picking()
-        res['target'] = 'new'
-        return  res
+    # @api.multi
+    # def action_view_invoice(self):
+    #     res = super(PurchaseOrderExtend,self).action_view_invoice()
+    #     res['target'] = 'new'
+    #     return  res
+    #
+    # @api.multi
+    # def action_view_picking(self):
+    #     res = super(PurchaseOrderExtend,self).action_view_picking()
+    #     res['target'] = 'new'
+    #     return  res
 
     @api.multi
     def _create_picking(self):
@@ -429,17 +429,17 @@ class PurchaseShippingTerms(models.Model):
 class PurchaseOrderLine(models.Model):
     _inherit = 'purchase.order.line'
 
-    @api.model
-    def create(self, vals):
-        product_id = vals.get('product_id',False)
-        if product_id :
-            product_obj = self.env['product.product'].browse(product_id)
-            description_purchase = product_obj.description_purchase
-            if  description_purchase and len(description_purchase.strip()) > 0:
-                vals['name'] = description_purchase
-            else :
-                vals['name'] = product_obj.name
-        return super(PurchaseOrderLine, self).create(vals)
+    # @api.model
+    # def create(self, vals):
+    #     product_id = vals.get('product_id',False)
+    #     if product_id :
+    #         product_obj = self.env['product.product'].browse(product_id)
+    #         description_purchase = product_obj.description_purchase
+    #         if  description_purchase and len(description_purchase.strip()) > 0:
+    #             vals['name'] = description_purchase
+    #         else :
+    #             vals['name'] = product_obj.name
+    #     return super(PurchaseOrderLine, self).create(vals)
 
 
     @api.onchange('discount_amt')

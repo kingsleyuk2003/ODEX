@@ -1,7 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_station_product_allocation_stock_user,station.product.allocation stock user,model_station_product_allocation,stock.group_stock_user,1,1,1,1
-access_station_product_allocation_stock_manager,station.product.allocation stock manager,model_station_product_allocation,stock.group_stock_manager,1,1,1,1
-access_station_product_allocation_see_own_leads,station.product.allocation see own leads,model_station_product_allocation,base.group_sale_salesman,1,1,1,1
-access_product_lifting_stock_user,product.lifting stock user,model_product_lifting,stock.group_stock_user,1,1,1,1
-access_station_product_allocation_stock_manager,product.lifting stock manager,model_product_lifting,stock.group_stock_manager,1,1,1,1
-access_station_product_lifting_see_own_leads,product.lifting see own leads,model_product_lifting,base.group_sale_salesman,1,1,1,1
