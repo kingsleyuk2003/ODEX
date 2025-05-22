@@ -49,11 +49,12 @@
         .table-bordered-black > tbody > tr > td,
         .table-bordered-black > tfoot > tr > td {
           border: 0.5px solid #000000;
+          background-color: blue;
 
         }
         .table-bordered-black > thead > tr > th,
         .table-bordered-black > thead > tr > td {
-          border-bottom-width: 0px;
+          border-bottom-width: 1px;
         }
 
         .table-bordered-black span {
@@ -135,8 +136,8 @@
 <!-- The header class specifies it in the  Layout header -->
 	<div class="header" >
         <div class="row"  >
-            <div class="col-xs-1" style = "margin-top:5px" >
-                <!--<img t-if="company.header_logo" t-att-src="'data:image/png;base64,%s' % company.header_logo" style="max-height: 100px;"/>-->
+             <div class="col-xs-1" style = "margin-top:5px" >
+                <img t-if="company.header_logo" t-att-src="'data:image/png;base64,%s' % company.header_logo" style="max-height: 150px;"/>
             </div>
             <div class="col-xs-11 text-center" style = "margin-top:5px"   >
 				<span t-field="company.header_data" />

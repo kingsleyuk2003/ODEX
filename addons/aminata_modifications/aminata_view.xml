@@ -583,8 +583,17 @@
                          <field name="delivery_location_id" />
                           <field name="note" readonly="1" />
                     </field>
+                </field>
+      </record>
 
-
+         <record id="invoice_tree_aminata" model="ir.ui.view">
+                <field name="name">account.invoice.tree.aminata</field>
+                <field name="model">account.invoice</field>
+                <field name="inherit_id" ref="account.invoice_tree" />
+                <field name="arch" type="xml">
+                     <field name="number"  position="after" >
+                        <field name="name" />
+                    </field>
                 </field>
       </record>
 
@@ -706,7 +715,7 @@
             <field name="model">station.lifting.order</field>
             <field name="arch" type="xml">
                 <search string="Station Lifting Order Filter">
-                    <field name="name" string="ID"  filter_domain="[('station_lifting_order_id','ilike',self)]"/>
+                    <field name="name" string="ID"  filter_domain="[('name','ilike',self)]"/>
                     <group expand="0" string="Group By">
                         <filter string="Product" domain="[]" context="{'group_by':'product_id'}"/>
                         <filter name="grpstatus" string="Status" domain="[]" context="{'group_by':'state'}"/>
@@ -774,9 +783,9 @@
                             <field name="station_product_dist_ids"    >
                                 <tree editable="bottom"   >
                                     <field name="name" readonly="1" string="ID" />
-                                    <field name="partner_id" required="1" domain="[('id','in',parent.lifting_order_partner_ids and parent.lifting_order_partner_ids[0][2] or [])]"  attrs="{'readonly': [('state', '=', 'validate')]}" options="{'no_open':True,'no_create':True}" />
-                                     <field name="qty" required="1"  attrs="{'readonly': [('state', '=', 'validate')]}"  sum="Total" />
-                                    <field name="to_product_location_id"  required="1"  attrs="{'readonly': [('state', '=', 'validate')]}"   options="{'no_open':True,'no_create':True}" />
+                                    <field name="partner_id" required="1"  domain="[('id','in',parent.lifting_order_partner_ids and parent.lifting_order_partner_ids[0][2] or [])]"  attrs="{'readonly': [('state', 'in', ('transit','validate'))]}" options="{'no_open':True,'no_create':True}" />
+                                     <field name="qty" required="1"  attrs="{'readonly': [('state', 'in', ('transit','validate'))]}" sum="Total" />
+                                    <field name="to_product_location_id"  required="1"  attrs="{'readonly': [('state', 'in', ('transit','validate'))]}"   options="{'no_open':True,'no_create':True}" />
                                     <field name="delivery_rate" />
                                      <field name="delivered_qty"  attrs="{'readonly': [('state', '=', 'validate')]}" sum="Total" />
                                     <field name="from_product_location_id" invisible="1" />
