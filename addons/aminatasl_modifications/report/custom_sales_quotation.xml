@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
+		<!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
+		<report
+		    id="sale.report_sale_order"
+		    model="sale.order"
+		    string="Quotations"
+		    report_type="qweb-pdf"
+		    name="kin_report.report_sale_quotation"
+		    file="kin_report.report_sale_quotation"
+		    attachment_use="False"
+		    		/>
+
+
+<template id="report_sale_quotation">
+	    <t t-call="report.html_container"> 	    	
+	        <t t-foreach="docs" t-as="o">
+	            <t t-call="kin_report.custom_layout"  >
+	                <div class="page" >
+						<style type="text/css">
+							<t t-call="kin_report.style"/>
+						</style>
+						<div t-raw="o.company_id.html_after_header" />
+						<div class="row" >
+							<div class="col-xs-5">
+								<div><span style="font-weight:bold">Date:  </span> <span t-field="o.date_quote" /></div>
+								<div><span style="font-weight:bold">Expiration Date:  </span> <span t-field="o.validity_date" /></div>
+								<div t-if="o.company_id.vat" ><span style="font-weight:bold">VAT NO:  </span> <span t-field="o.company_id.vat" /></div>
+								<div t-if="o.company_id.company_registry" ><span style="font-weight:bold">Reg. NO:  </span> <span t-field="o.company_id.company_registry" /></div>
+							</div>
+							<div class="col-xs-7">
+								<div class="row">
+									<div class="col-xs-6 col-xs-offset-6" style="font-weight:bold">
+										<span>TO:</span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6 col-xs-offset-6">
+										<div t-field="o.partner_id" t-field-options='{"widget": "contact", "fields": ["address", "name", "phone", "fax"], "no_marker": true, "phone_icons": true}'/>
+										<p t-if="o.partner_id.vat">VAT: <span t-field="o.partner_id.vat"/></p>
+									</div>
+						    	</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 text-center" >
+								<h3><b>SALES QUOTATlllION <span t-field="o.quote_name" /></b></h3>
+							</div>
+						</div>
+						<table  style="width: 100%" class="table-bordered-black"  >
+									<thead>
+										<tr>
+											<th><span>Sales Contact</span></th>
+											<th><span>Phone</span></th>
+											<th><span>Job Role</span></th>
+											<th><span>Email</span></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><span t-field="o.user_id.name" />
+											</td><td><span t-field="o.user_id.phone" /></td>
+											<td><span t-field="o.user_id.function" /></td>
+											<td><span t-field="o.user_id.email" /></td>
+										</tr>
+									</tbody>
+						</table>
+						<p />
+						<table  style="width: 100%" class="table-bordered-black mt8"  >
+									<thead>
+										<tr>
+											<th><span>Payment Terms</span></th>
+											<th><span>Shipping Terms</span></th>
+											<th><span>Your Ref.</span></th>
+											<th><span>Delivery/Due Date</span></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><span t-field="o.payment_term_id.name" />
+											</td><td><span t-field="o.sale_shipping_term_id.name" /></td>
+											<td><span t-field="o.client_order_ref" /></td>
+											<td><span></span></td>
+										</tr>
+									</tbody>
+						</table>
+						<p />
+						<div class="row mt16">
+							<div class="col-xs-12 text-center" >
+								<span style="font-weight:bold" >.................................... Product / Services Information ....................................</span>
+							</div>
+						</div>
+						<p />
+						<div class="row mt8">
+							<div class="col-xs-12" >
+								<!-- Is there a tax on at least one line? -->
+            					<t t-set="display_tax" t-value="any([l.tax_id for l in o.order_line])"/>
+								<!-- Is there a discount on at least one line? -->
+								<t t-set="display_discount" t-value="any([l.discount for l in o.order_line])"/>
+								<table  style="width: 100%" class="table-bordered-black" cellpadding="3" cellspacing="0" >
+
+										<thead style="display: table-row-group" >
+												<tr>
+													<td width="60%" ><span><b>Description</b></span></td>
+													<td class="text-right" ><span><b>Quantity</b></span></td>
+													<td class="text-right" ><span><b>Unit Price(<span t-field="o.currency_id.symbol" />)</b></span></td>
+													<td  t-if="display_discount"  class="text-right" ><span><b>Discount Amt.(<span t-field="o.currency_id.symbol" />)</b></span></td>
+													<!--<td t-if="display_tax" ><span><b>Taxes</b></span></td>-->
+													<td class="text-right" ><span><b>Price(<span t-field="o.currency_id.symbol" />)</b></span></td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr  t-foreach="o.order_line" t-as="line" >
+													<td  style="padding-left: 2px" ><span t-field="line.name"/></td>
+													<td class="text-right">
+														<span t-field="line.product_uom_qty"/>
+													  <t t-if="o.company_id.is_show_uom" ><span t-field="line.product_uom.name" groups="product.group_uom"/></t>
+													</td>
+													<td class="text-right">
+														<!-- See: https://pyformat.info/ -->
+														<!--<span  t-esc="'{:,.2f}'.format(line.price_unit)" />  Two decimal places-->
+														<span  t-esc="'{:,.2f}'.format(line.price_unit)" />
+													</td>
+													<td  t-if="display_discount"  class="text-right">
+														<span t-esc="'{:,.2f}'.format(line.discount_amt)" />
+													</td>
+													<!--<td t-if="display_tax" ><span t-esc="', '.join(map(lambda x: x.name, line.tax_id))"/></td>-->
+													<td class="text-right">
+														<span  t-esc="'{:,.2f}'.format(line.price_subtotal)" />
+													</td>
+												</tr>
+											</tbody>
+
+											<tr t-if="display_tax" >
+												<td t-if="display_discount"  colspan="3"  style="border-bottom:solid white;border-left: solid white" />
+												<td  t-if="not display_discount"  colspan="2"  style="border-bottom:solid white;border-left: solid white" />
+												<td   style="font-weight:bold;"  >Total <span t-field="o.currency_id.name" /> Excl. VAT</td>
+												 <td style="font-weight:bold;"  class="text-right">
+													<span  t-esc="'{:,.2f}'.format(o.amount_untaxed)" />
+												</td>
+											</tr>
+											<tr t-if="display_tax" >
+												<td t-if="display_discount" colspan="3"  style="border-bottom:solid white;border-left: solid white" />
+												<td t-if="not display_discount" colspan="2"  style="border-bottom:solid white;border-left: solid white" />
+												<td><span>VAT</span></td>
+												<td class="text-right">
+													<span t-esc="'{:,.2f}'.format(o.amount_tax)"	 />
+												</td>
+											</tr>
+											<tr>
+												<td t-if="display_discount" colspan="3"  style="border-bottom:solid white;border-left: solid white" />
+												<td t-if="not display_discount" colspan="2"  style="border-bottom:solid white;border-left: solid white" />
+												<td ><b>Total <span t-field="o.currency_id.name" /> <span t-if="display_tax" >Incl. VAT</span> </b></td>
+												<td style="font-weight:bold;"  class="text-right">
+													<span t-esc="'{:,.2f}'.format(o.amount_total)"	/>
+												</td>
+											</tr>
+
+								</table>
+							</div>
+						</div>
+						<p />
+						<div class="row">
+							<div class="col-xs-12" >
+								<span t-field="o.note" />
+							</div>
+						</div>
+						<!--<p t-if="o.payment_term_id"  >-->
+							<!--<span t-field="o.payment_term_id.note"/>-->
+            			<!--</p>-->
+						<br /><br />
+						<div class="row" >
+							<div class="col-xs-12" >
+								<p><span style="font-weight:bold" >Prepared By: </span><span t-field="o.user_id.name" /></p>
+								<p><span  style="font-weight:bold" t-field="o.company_id.name" /><span style="font-weight:bold"  >    Signature</span> : ........................................................................</p>
+								<p><span style="font-weight:bold" >Customer's Signature &amp; Acceptance of Quote: </span>   ................................................................</p>
+								<br />
+								<!--<div class="row text-center">
+									<span style="font-weight:bold" class="text-center"  ><h3>Thanks for the business!</h3></span>
+								</div>-->
+							</div>
+						</div>
+
+	                </div>
+	            </t>
+	        </t>
+    	</t>
+</template>
+	</data>
+</openerp>

@@ -58,21 +58,19 @@ class PayrollReportWriter(ReportXlsx):
 
         col = 0
         row = 2
-        payslip_worksheet.set_column(1, 1, 5, cell_wrap_format)  # set column width with wrap format.
-        payslip_worksheet.set_column(2, 2, 25, cell_wrap_format)
-        payslip_worksheet.set_column(3, 3, 15, cell_wrap_format)
-        payslip_worksheet.set_column(4, 4, 10, cell_wrap_format)
-        payslip_worksheet.set_column(5, 100, 10)
+        payslip_worksheet.set_column(1,1, 25,cell_wrap_format)  # set column width with wrap format.
+        payslip_worksheet.set_column(2, 2, 20, cell_wrap_format)
+        payslip_worksheet.set_column(3, 4, 18, cell_wrap_format)
+        payslip_worksheet.set_row(row, 20)
         row += 2
 
         dict_srule = {}
-        cc = 5
+        cc = 4
 
         payslip_worksheet.write(row, 0, 'S/N', head_format)
-        payslip_worksheet.write(row, 1, 'ID', head_format)
-        payslip_worksheet.write(row, 2, 'Employee', head_format)
-        payslip_worksheet.write(row, 3, 'Department', head_format)
-        payslip_worksheet.write(row, 4, 'Bank Account No.', head_format)
+        payslip_worksheet.write(row, 1, 'Employee', head_format)
+        payslip_worksheet.write(row, 2, 'Department', head_format)
+        payslip_worksheet.write(row, 3, 'Bank Account No.', head_format)
 
         #this order = 'sequence asc'still works fine
         #salary_rules = self.env['hr.salary.rule'].search([('appears_on_payslip', '=', True)],order = 'sequence asc')
@@ -90,17 +88,11 @@ class PayrollReportWriter(ReportXlsx):
         total_net = 0
 
         for dept_id in dept_ids:
-            # employee_ids  = dept_id.member_ids #this does not considered achived employees, so we cant use it for previous report
+            employee_ids  = dept_id.member_ids
             total_dept_net = 0
             row += 1
             payslip_worksheet.write(row, 2, dept_id.name.upper(), cell_department_format)
             row += 1
-            start_date_emp = datetime.strptime(data['form']['start_date'], '%Y-%m-%d').strftime('%Y-%m-%d')
-            end_date_emp = datetime.strptime(data['form']['end_date'], '%Y-%m-%d').strftime('%Y-%m-%d')
-
-            employee_ids = self.env['hr.payslip.line'].search(
-                [('date_from', '>=', start_date_emp), ('date_to', '<=', end_date_emp),
-                 ('department_id', '=', dept_id.id)]).mapped('employee_id')
 
             for employee in employee_ids:
                 start_date = datetime.strptime(data['form']['start_date'], '%Y-%m-%d').strftime('%Y-%m-%d')
@@ -108,10 +100,9 @@ class PayrollReportWriter(ReportXlsx):
                 payslip_lines = self.env['hr.payslip.line'].search([('date_from', '>=', start_date), ('date_to', '<=', end_date),('employee_id','=',employee.id)])
 
                 payslip_worksheet.write(row, col, sn, cell_wrap_format)
-                payslip_worksheet.write(row, 1, employee.identification_id, cell_wrap_format)
-                payslip_worksheet.write(row, 2, employee.name, cell_wrap_format)
-                payslip_worksheet.write(row, 3, dept_id.name, cell_wrap_format)
-                payslip_worksheet.write(row, 4, employee.bank_account_id, cell_wrap_format)
+                payslip_worksheet.write(row, 1, employee.name, cell_wrap_format)
+                payslip_worksheet.write(row, 2, dept_id.name, cell_wrap_format)
+                payslip_worksheet.write(row, 3, employee.bank_account_id, cell_wrap_format)
 
                 for line in payslip_lines:
                     if line.salary_rule_id.appears_on_payslip:
@@ -133,6 +124,6 @@ class PayrollReportWriter(ReportXlsx):
         return
 
 # The payslip.report.parser in the PayslipReportWriter function call, represents the "objects" parameter in the generate_xlsx_report function
-PayrollReportWriter('report.kin_hr.report_payroll_report', 'payroll.report.parser',parser=report_sxw.rml_parse)
+PayrollReportWriter('report.aminatasl_modifications.report_payroll_report', 'payroll.report.parser',parser=report_sxw.rml_parse)
 
 
