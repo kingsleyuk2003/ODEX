@@ -64,3 +64,29 @@ class HRExtend(models.Model):
 
     bank_account_number_lrd = fields.Char(string='Bank Account Number (SLE)')
     bank_account_number_usd = fields.Char(string='Bank Account Number (USD)')
+
+
+class StockPickingAminata(models.Model):
+    _inherit = "stock.picking"
+
+
+
+    compartment_numbers = fields.Text(string='Compartment Numbers')
+    compartment_capacity = fields.Text(string='Compartment Capacity')
+    quantity_shipped = fields.Text(string='Quantity Being Shipped')
+    inst_dip_reading = fields.Text(string='Installation Dip reading')
+    seal_no = fields.Text(string='Seal Number')
+    discharge_seal_no = fields.Text(string='Discharge Seal Number')
+    sample_seal = fields.Char(string='Sample Seal')
+    narration = fields.Text(string="Narration")
+
+
+
+class ProductLifting(models.Model):
+
+        _inherit = 'product.lifting'
+
+        @api.multi
+        def action_print_ido(self):
+            return self.env['report'].get_action(self, 'aminatasl_modifications.report_instant_delivery_order_lifting')
+

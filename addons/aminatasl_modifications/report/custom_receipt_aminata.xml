@@ -3,6 +3,108 @@
 	<data>
 
 
+		<report
+		    id="kin_report.receipt_custom"
+		    model="account.payment.group"
+		    string="Payment Receipt"
+		    report_type="qweb-pdf"
+		    name="aminatasl_modifications.custom_receipt_aminata"
+		    file="aminatasl_modifications.custom_receipt_aminata"
+		    attachment_use="False"
+		/>
+
+
+
+<template id="custom_receipt_aminata">
+	    <t t-call="report.html_container" >
+	        <t t-foreach="docs" t-as="o"   >
+	             <t t-call="aminatasl_modifications.custom_layout_invoice"  >
+					<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+	                <div class="page" >
+						<style type="text/css">
+							<t t-call="kin_report.style"/>
+						</style>
+						<div t-raw="o.company_id.html_after_header" />
+						<br/> <br/>
+						<div class="row" >
+							<div class="col-xs-5"  >
+								<span><b>PAID BY <br/>
+								</b></span><div  style="font-size:16px;" t-field="o.partner_id" />
+								<div  style="font-size:16px;" t-field="o.partner_id.street" />
+							</div>
+							<div class="col-xs-5 col-xs-offset-2"  >
+								<div  style="font-size:18px;background-color:#0e909a;color:white;margin-bottom:8px;padding:4px" >
+								<b>
+									<span t-if="o.state == 'posted'">OFFICIAL SALES RECEIPT</span>
+									<span t-if="o.state == 'draft'">DRAFT SALES RECEIPT</span>
+									<span t-if="o.state == 'posted'" t-field="o.name" /></b>
+								 </div>
+
+								<div style="font-size:18px;background-color:#0e909a;color:white;margin-bottom:8px;padding:4px" >
+									<b>DATE   </b><span t-field="o.payment_date" />
+								</div>
+
+							</div>
+						</div>
+
+						<div class="row" >
+							<div class="col-xs-12"  ><div style="border:3px solid #0e909a"  /></div>
+						</div>
+
+						<br /><br/><br/>
+
+
+						<div class="row mt8">
+							<div class="col-xs-12" >
+
+
+								<table  style="width: 100%;font-size:16px;border-bottom 2px solid #737b79"  cellpadding="3" cellspacing="3" >
+
+										<thead style="display: table-row-group;;background-color:#0e909a;color:white;line-height:2" >
+												<tr >
+													<td width="50%" style="padding-left:4px" ><span><b>DESCRIPTION</b></span></td>
+
+													<td class="text-right" style="padding-right:4px" ><span><b>AMOUNT (<span t-field="o.currency_id.symbol" />)</b></span></td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr style="border-bottom 2px solid #000" >
+													<td style="padding-left: 2px" ><span t-field="o.narration" /></td>
+													<td class="text-right">
+														<span t-field="o.currency_id.symbol" /> <span t-esc="'{:,.2f}'.format(o.payments_amount)" />
+													</td>
+												</tr>
+											</tbody>
+
+								</table>
+								<div class="row" >
+									<div class="col-xs-12"  ><div style="border-top:1px solid #afabab"  /></div>
+								</div>
+							</div>
+						</div>
+
+						<br />
+						<div  class="row">
+							<div class="col-xs-12" >
+								<div   style="font-size:18px;background-color:#0e909a;color:white;margin-bottom:8px;padding:4px" >
+									<b>AMOUNT IN WORDS:</b><span  t-esc="o.amount_to_text_usd(o.payments_amount, o.currency_id)"/>
+								</div>
+							</div>
+						</div>
+
+
+	                </div>
+	            </t>
+	        </t>
+    	</t>
+</template>
+
+
+
+
+
+
+
 		<!--   USD PAYMENT RECEIPT -->
 		<report
 		    id="kin_report.receipt_custom_usd"
@@ -16,74 +118,88 @@
 
 
 <template id="custom_receipt_aminata_usd">
-	    <t t-call="report.html_container">
-	        <t t-foreach="docs" t-as="o">
-	            <t t-call="aminata_modifications.custom_layout_aminata_receipt"  >
+	    <t t-call="report.html_container" >
+	        <t t-foreach="docs" t-as="o"   >
+	             <t t-call="aminatasl_modifications.custom_layout_invoice"  >
 					<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
 	                <div class="page" >
 						<style type="text/css">
 							<t t-call="kin_report.style"/>
 						</style>
 						<div t-raw="o.company_id.html_after_header" />
+						<br/> <br/>
+						<div class="row" >
+							<div class="col-xs-5"  >
+								<span><b>PAID BY <br/>
+								</b></span><div  style="font-size:16px;" t-field="o.partner_id" />
+								<div  style="font-size:16px;" t-field="o.partner_id.street" />
+							</div>
+							<div class="col-xs-5 col-xs-offset-2"  >
+								<div  style="font-size:18px;background-color:#0e909a;color:white;margin-bottom:8px;padding:4px" >
+								<b>
+									<span t-if="o.state == 'posted'">OFFICIAL SALES RECEIPT</span>
+									<span t-if="o.state == 'draft'">DRAFT SALES RECEIPT</span>
+									<span t-if="o.state == 'posted'" t-field="o.name" /></b>
+								 </div>
 
-							<div class="row">
+								<div style="font-size:18px;background-color:#0e909a;color:white;margin-bottom:8px;padding:4px" >
+									<b>DATE   </b><span t-field="o.payment_date" />
+								</div>
+
+							</div>
+						</div>
+
+						<div class="row" >
+							<div class="col-xs-12"  ><div style="border:3px solid #0e909a"  /></div>
+						</div>
+
+						<br /><br/><br/>
+
+
+						<div class="row mt8">
 							<div class="col-xs-12" >
-								<table  style="width: 100%;font-size:17px;line-height:2" class="table-bordered-black"  >
-											<thead>
-												<tr>
-													<th colspan="5" >
-														<span t-if="o.state == 'posted'">PAYMENT RECEIPT</span>
-														<span t-if="o.state == 'draft'">DRAFT RECEIPT</span>
-													</th>
-													<th  colspan="1" style="text-align:right" >No: <span t-if="o.state == 'posted'" t-field="o.name" /></th>
+
+
+								<table  style="width: 100%;font-size:16px;border-bottom 2px solid #737b79"  cellpadding="3" cellspacing="3" >
+
+										<thead style="display: table-row-group;;background-color:#0e909a;color:white;line-height:2" >
+												<tr >
+													<td width="50%" style="padding-left:4px" ><span><b>DESCRIPTION</b></span></td>
+
+													<td class="text-right" style="padding-right:4px" ><span><b>AMOUNT ($)</b></span></td>
 												</tr>
 											</thead>
 											<tbody>
-												<tr>
-													<td colspan="5">
-														<b>Paid by:</b> <span t-field="o.partner_id.name" />
-														<br />
-														<br />
-													</td>
-													<td>
-														<b>Paid to:</b> <span t-field="o.company_id.name" />
+												<tr style="border-bottom 2px solid #000;line-height:2" >
+													<td style="padding-left: 2px" ><span t-field="o.narration" /></td>
+													<td class="text-right">
+														$ <span t-esc="'{:,.2f}'.format(o.payments_amount_currency)" />
 													</td>
 												</tr>
-												<tr>
-													<td colspan="5" ><b>DESCRIPTION</b></td>
-													<td><b>AMOUNT</b></td>
-												</tr>
-												<tr>
-													<td colspan="5">
-														<span t-field="o.narration" />
-														<br />
-														<br />
-													</td>
-													<td>$ <span t-field="o.payments_amount_currency" /></td>
-												</tr>
-												<tr>
-													<td colspan="6"><b>Amount in words:</b><span  t-esc="o.amount_to_text_usd(o.payments_amount_currency, o.currency_id)"/></td>
-												</tr>
-												<tr>
-													<td colspan="1" ><b>Date: </b><span t-field="o.payment_date" /></td>
-													<td colspan="5"  ><span style="float:center" ><b>Received by: </b><span t-field="o.create_uid.name" /></span></td>
-												</tr>
-
 											</tbody>
-										</table>
+
+								</table>
+								<div class="row" >
+									<div class="col-xs-12"  ><div style="border-top:1px solid #afabab"  /></div>
+								</div>
 							</div>
+						</div>
+
+						<br />
+						<div  class="row">
+							<div class="col-xs-12" >
+								<div   style="font-size:18px;background-color:#0e909a;color:white;margin-bottom:8px;padding:4px" >
+									<b>AMOUNT IN WORDS:</b><span  t-esc="o.amount_to_text_usd(o.payments_amount_currency, o.currency_id)"/>
+								</div>
 							</div>
-								<br/>
-								<br />
-								<p style="font-size:17px;line-height:2" >FOR: <b><span t-field="o.company_id.name" /></b> .................. </p>
-							</div>
+						</div>
 
 
+	                </div>
 	            </t>
 	        </t>
     	</t>
 </template>
-
 
 
 	</data>

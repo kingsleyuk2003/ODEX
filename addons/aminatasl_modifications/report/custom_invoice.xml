@@ -4,16 +4,17 @@
 		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
 		<!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
 		<report
-		    id="sale.report_sale_order"
-		    model="sale.order"
-		    string="Quotations"
+		    id="aminata_modifications.invoice_custom_aminata"
+		    model="account.invoice"
+		    string="Invoices"
 		    report_type="qweb-pdf"
-		    name="aminatasl_modifications.report_sale_quotation"
-		    file="aminatasl_modifications.report_sale_quotation"
+		    name="aminatasl_modifications.report_invoice_aminata"
+		    file="aminatasl_modifications.report_invoice_aminata"
 		    attachment_use="False"
-		 />
+		    		/>
 
-<template id="report_sale_quotation">
+
+<template id="report_invoice_aminata">
 	    <t t-call="report.html_container" >
 	        <t t-foreach="docs" t-as="o"   >
 	             <t t-call="aminatasl_modifications.custom_layout_invoice"  >
@@ -23,26 +24,32 @@
 							<t t-call="kin_report.style"/>
 						</style>
 						<div t-raw="o.company_id.html_after_header" />
-						<br/>
+						 <br/>
                          <br/>
 						<div class="row" >
 							<div class="col-xs-5"  >
-								<span><b>TO <br/>
-								</b></span><div  style="font-size:16px;" t-field="o.partner_id" />
-                                <div  style="font-size:16px;" t-field="o.partner_id.street" />
+								<span><b>BILL TO <br/></b></span>
+								<div  style="font-size:16px;" t-field="o.partner_id" />
+								<div  style="font-size:16px;" t-field="o.partner_id.street" />
 							</div>
-							<div class="col-xs-5 col-xs-offset-2"  >
+							<div class="col-xs-6 col-xs-offset-1"  >
 								<div  style="font-size:18px;background-color:#0e909a;color:white;margin-bottom:8px;padding:4px" >
 								<b>
-									SALES QUOTATION <span t-field="o.quote_name" />
-								</b>
+									<span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">OFFICIAL INVOICE</span>
+									<span t-if="o.type == 'out_invoice' and o.state == 'proforma2'">PRO-FORMA</span>
+									<span t-if="o.type == 'out_invoice' and o.state == 'draft'">DRAFT INVOICE</span>
+									<span t-if="o.type == 'out_invoice' and o.state == 'cancel'">CANCELLED INVOICE</span>
+									<span t-if="o.type == 'out_refund'">SALES REFUND</span>
+									<span t-if="o.type == 'in_refund'">VENDOR REFUND</span>
+									<span t-if="o.type == 'in_invoice'">VENDOR BILL</span>
+									<span t-field="o.number" /></b>
 								 </div>
 
 								<div style="font-size:18px;background-color:#0e909a;color:white;margin-bottom:8px;padding:4px" >
-									<b>DATE  </b><span t-field="o.date_quote" /> <b>  TERMS</b> <span t-field="o.payment_term_id" />
+									<b>DATE   </b><span t-field="o.date_invoice" /> <b>  TERMS</b> <span t-field="o.payment_term_id" />
 								</div>
 								<div style="font-size:18px;background-color:#0e909a;color:white;margin-bottom:2px;padding:4px" >
-								<b>EXPIRATION DATE </b> <span  t-field="o.validity_date" />
+								<b>DUE DATE</b> <span  t-field="o.date_due" t-if="o.date_due and o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')" />
 								</div>
 
 							</div>
@@ -58,33 +65,35 @@
 						<div class="row mt8">
 							<div class="col-xs-12" >
 							<!-- Is there a discount on at least one line? -->
-								<t t-set="display_discount" t-value="any([l.discount for l in o.order_line])"/>
+								<t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
+								<!-- Is there a tax on at least one line? -->
+            					<t t-set="display_tax" t-value="any([l.invoice_line_tax_ids for l in o.invoice_line_ids])"/>
+
 								<table  style="width: 100%;font-size:16px;border-bottom 2px solid #737b79"  cellpadding="3" cellspacing="3" >
 
 										<thead style="display: table-row-group;;background-color:#0e909a;color:white;line-height:2" >
 												<tr >
-													<td  style="padding-left:4px" ><span><b>PRODUCT</b></span></td>
-													<td style="padding-left:4px;width:50%"><span><b>DESCRIPTION</b></span></td>
-													<td class="text-left"  ><span><b>QTY</b></span></td>
-													<td class="text-left" ><span><b>RATE</b></span></td>
+													<td width="50%" style="padding-left:4px" ><span><b>DESCRIPTION</b></span></td>
+													<td class="text-left" ><span><b>QTY</b></span></td>
+													<td class="text-left" ><span><b>RATE (<span t-field="o.currency_id.symbol" />)</b></span></td>
 													<td t-if="display_discount"  class="text-right"  ><span><b>Disc.(%)</b></span></td>
 													<!--<td><span><b>Taxes</b></span></td>-->
-													<td class="text-right" style="padding-right:4px" ><span><b>AMOUNT</b></span></td>
+													<td class="text-right" style="padding-right:4px" ><span><b>AMOUNT (<span t-field="o.currency_id.symbol" />)</b></span></td>
 												</tr>
 											</thead>
 											<tbody>
-												<tr  t-foreach="o.order_line" t-as="line"  style="line-height:2" >
-													<td style="padding-left: 2px" ><span t-field="line.product_id"/></td>
-													<td  ><span t-field="line.name"/></td>
+												<tr  t-foreach="o.invoice_line_ids" t-as="line"  style="line-height:2" >
+													<td style="padding-left: 2px" ><span t-field="line.name"/></td>
 													<td class="text-left">
-														<span  t-esc="'{:,.0f}'.format(line.product_uom_qty)" />
-														<t t-if="o.company_id.is_show_uom" ><span  t-field="line.product_uom.name" groups="product.group_uom"/></t>
+														<span  t-esc="'{:,.2f}'.format(line.quantity)" />
+														<t t-if="o.company_id.is_show_uom" ><span  t-field="line.uom_id" groups="product.group_uom"/></t>
+
 													</td>
 													<td class="text-left">
-														<span t-esc="'{:,.2f}'.format(line.price_unit)" />
+														<span   t-esc="'{:,.2f}'.format(line.price_unit)" />
 													</td>
 													<td t-if="display_discount"  class="text-right" >
-														<span t-field="line.discount_amt"  />
+														<span t-field="line.discount" />
 													</td>
 													<!--<td><span t-esc="', '.join(map(lambda x: (x.description or x.name), line.invoice_line_tax_ids))"/></td>-->
 													<td class="text-right">
@@ -101,9 +110,9 @@
 							</div>
 						</div>
 						<br />
-						<div t-if="o.note" class="row">
+						<div t-if="o.comment" class="row">
 							<div class="col-xs-12" >
-								<span t-field="o.note" />
+								<span t-field="o.comment" />
 							</div>
 						</div>
 						<br />
@@ -112,9 +121,9 @@
             			</p>
 						<br />
 						<div  class="row">
-							<div class="col-xs-4 col-xs-offset-8" >
+							<div class="col-xs-5 col-xs-offset-7" >
 								<div   style="font-size:18px;background-color:#0e909a;color:white;margin-bottom:8px;padding:4px" >
-									<b>TOTAL:  <span t-field="o.currency_id.symbol" /> <span t-esc="'{:,.2f}'.format(o.amount_total)" /></b>
+									<b>TOTAL DUE:  <span t-field="o.currency_id.symbol" /> <span t-esc="'{:,.2f}'.format(o.residual)" /></b>
 								</div>
 							</div>
 						</div>
@@ -125,8 +134,5 @@
 	        </t>
     	</t>
 </template>
-
-
-
 	</data>
 </openerp>

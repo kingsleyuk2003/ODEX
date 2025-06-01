@@ -13,7 +13,7 @@ Aminata SL Modifications.
 """,
     'author': 'Kingsley Okonkwo (kingsley@kinsolve.com, +2348030412562)',
     'website': 'http://kinsolve.com',
-    'depends': ['base','sale','kin_sales','kin_sales_double_validation','stock','kin_account_payment_group','aminata_modifications','kin_report',],
+    'depends': ['base','sale','kin_sales','kin_sales_double_validation','stock','kin_account_payment_group','aminata_modifications','kin_report','kin_lifting',],
     'data': [
          'stock_view.xml',
         'aminata_view.xml',
@@ -21,6 +21,9 @@ Aminata SL Modifications.
         'report/custom_receipt_aminata.xml',
         'report/custom_sales_quotation.xml',
         'report/custom_delivery_note_aminata.xml',
+        'report/custom_instant_delivery_order.xml',
+        'report/custom_invoice.xml',
+        'report/proforma_invoice.xml',
     ],
     'test':[],
     'installable': True,

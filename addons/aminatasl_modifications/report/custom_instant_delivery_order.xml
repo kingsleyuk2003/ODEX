@@ -3,33 +3,30 @@
 	<data>
 		<!-- Note that you can simply replace the old report menu by using thesame "string" name as the old report-->
 		<!-- e.g. if the old menu has the name string="Purchase Order", then new menu can still maintain thesame string name-->
-	<!-- Overridding kin_report.waybill_custom -->
-		<report
-		    id="kin_report.waybill_custom"
-		    model="stock.picking"
-		    string="Delivery Order Aminata SL"
+	<report
+		    id="kin_lifting.instant_delivery_order_lifting"
+		    model="product.lifting"
+		    string="Instant Delivery Order"
 		    report_type="qweb-pdf"
-		    name="aminatasl_modifications.report_delivery_note_aminata"
-		    file="aminatasl_modifications.report_delivery_note_aminata"
+		    name="aminatasl_modifications.report_instant_delivery_order_lifting"
+		    file="aminatasl_modifications.report_instant_delivery_order_lifting"
 		    attachment_use="False"
 		    		/>
 
-<!--<delete model="ir.actions.report.xml" id="kin_report.waybill_custom" />-->
 
-<template id="report_delivery_note_aminata">
+
+<template id="report_instant_delivery_order_lifting">
 	    <t t-call="report.html_container">
 	        <t t-foreach="docs" t-as="o">
-	            <t t-call="aminatasl_modifications.custom_layout_inventory_station"  >
+	            <t t-call="aminatasl_modifications.custom_layout_inventory_station_ido"  >
 	                <div class="page" >
 						<style type="text/css">
 							<t t-call="kin_report.style"/>
 						</style>
-						<!--<div t-raw="o.company_id.html_after_header" />-->
 						<br /><br />
 						<div class="row" >
 							<div class="col-xs-5"  >
-							<!--	<span><b>Customer's Name: </b></span><span t-field="o.partner_id" /><br/>-->
-								<span><b>Destination <br/> </b></span><div  style="padding-left: 12px;border: 1px solid black;font-size:14px;line-height:2;" t-field="o.partner_id.street" />
+								<span><b>Destination <br/> </b></span><div  style="padding-left: 12px;border: 1px solid black;font-size:14px;line-height:2;" t-field="o.to_product_location_id" />
 							</div>
 
 						</div>
@@ -49,11 +46,11 @@
 
 									<td>
 										<b>Tanker Reg. No.</b><br/>
-										<span t-field="o.trucker_id" />
+										<span t-field="o.truck_id" />
 									</td>
 									<td>
 										<b>Order Date</b><br/>
-										<span t-field="o.min_date" />
+										<span t-field="o.picking_id.min_date" />
 									</td>
 								</tr>
 							</table>
@@ -66,14 +63,15 @@
 								<tr>
 									<td style="width: 20%">
 										<b>Customer PO</b> <br/>
-										<span t-field="o.shipment_ref" />
+										<span t-field="o.origin" />
 									</td>
 									<td style="width: 30%">
 										<b>Shipment No</b><br/>
-										<span t-field="o.origin" />
+										<span t-field="o.do_number" />
 									</td>
 									<td  style="width: 50%" >
-
+										<b t-if="o.narration" >Narration</b><br/>
+										<span t-field="o.narration" />
 									</td>
 								</tr>
 							</table>
@@ -100,18 +98,18 @@
 								</tr>
 
 								<tbody>
-											<tr  t-foreach="o.pack_operation_ids" t-as="pack_operation" >
-												<td>
+											<tr>
+												<td  t-foreach="o.picking_id.pack_operation_ids" t-as="pack_operation" >
 													<span  t-esc="'{:,.0f}'.format(pack_operation.product_qty)" />
 												</td>
 												<td>
-													<span  t-esc="'{:,.0f}'.format(pack_operation.product_qty)" />
+													<span  t-esc="'{:,.0f}'.format(o.ordered_qty)" />
 												</td>
 												<td>
-													<span  t-field="pack_operation.product_uom_id"/>
+													<span  t-field="o.product_uom"/>
 												</td>
 												<td>
-													<span t-field="pack_operation.name"/>
+													<span t-field="o.product_id"/>
 												</td>
 											</tr>
 								</tbody>
@@ -122,7 +120,7 @@
 
 						<div class="row" >
 							<div class="col-xs-12 mt16" >
-							<table style="width: 100%;font-size:14px" class="table-bordered-black  text-center" cellpadding="10" cellspacing="0" >
+							<table style="width: 100%;font-size:14px;line-height:2" class="table-bordered-black  text-center" cellpadding="10" cellspacing="0" >
 								<tr>
 									<td>
 										<b>Compart. No.</b>
@@ -151,31 +149,31 @@
 								</tr>
 
 								<tbody>
-											<tr  t-foreach="o.pack_operation_ids" t-as="pack_operation" >
+											<tr>
 												<td>
-													<span t-field="o.compartment_numbers"/>
+													<span t-field="o.picking_id.compartment_numbers"/>
 												</td>
 												<td>
-													<span t-field="o.compartment_capacity"/>
+													<span t-field="o.picking_id.compartment_capacity"/>
 
 												</td>
 												<td>
-													<span t-field="pack_operation.name"/>
+													<span t-field="o.product_id"/>
 												</td>
 												<td>
-													<span t-field="o.quantity_shipped"/>
+													<span t-field="o.ordered_qty"/>
 												</td>
 												<td>
-													<span t-field="o.inst_dip_reading"/>
+													<span t-field="o.picking_id.inst_dip_reading"/>
 												</td>
 												<td>
 													<br/>
 												</td>
 												<td>
-													<span t-field="o.seal_no"/>
+													<span t-field="o.picking_id.seal_no"/>
 												</td>
 												<td>
-													<span t-field="o.discharge_seal_no"/>
+													<span t-field="o.picking_id.discharge_seal_no"/>
 												</td>
 											</tr>
 								</tbody>
@@ -191,7 +189,7 @@
 							<table style="width: 70%;font-size:14px;line-height:2" class="table-bordered-black text-center" cellpadding="10" cellspacing="0" >
 								<tr>
 									<td>
-										<span t-field="o.trucker_id.tanker_capacity" />
+										<span t-field="o.truck_id.tanker_capacity" />
 									</td>
 								</tr>
 								<tr>
@@ -223,7 +221,7 @@
 									<span><b>Contractors Name:</b></span>
 								</div>
 								<div class="col-xs-12" >
-									<span> <b>Driver'Name:</b><span t-field="o.driver_name" /> </span>
+									<span> <b>Driver'Name:</b><span t-field="o.picking_id.driver_name" /> </span>
 								</div>
 						</div>
 
@@ -283,7 +281,7 @@
 												<b>Sample Seal</b>
 											</td>
 											<td>
-											<span t-field="o.sample_seal" />
+											<span t-field="o.picking_id.sample_seal" />
 											</td>
 										</tr>
 									</table>
@@ -319,5 +317,6 @@
 	        </t>
     	</t>
 </template>
+
 	</data>
 </openerp>

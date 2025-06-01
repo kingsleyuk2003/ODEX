@@ -79,6 +79,7 @@
     </t>
 <!-- The header class specifies it in the  Layout header -->
 	<div class="header" >
+
         <div class="row"  >
             <div class="col-xs-1" style = "margin-top:5px" >
                 <img t-if="company.header_logo" t-att-src="'data:image/png;base64,%s' % company.header_logo" style="max-height: 100px;"/>
@@ -172,6 +173,7 @@
     </t>
 <!-- The header class specifies it in the  Layout header -->
 	<div class="header" >
+
         <div class="row"  >
             <div class="col-xs-1" style = "margin-top:5px" >
 <!--                <img t-if="company.header_logo" t-att-src="'data:image/png;base64,%s' % company.header_logo" style="max-height: 100px;"/>-->
@@ -193,8 +195,9 @@
 
 
 
+<!-- DELIVERY ORDER -->
+<template id="custom_header_station_do">
 
-<template id="custom_header_station">
      <!-- Multicompany -->
 	 <t t-if="o and 'operating_unit_id' in o">
         <t t-set="company" t-value="o.operating_unit_id"></t>
@@ -205,15 +208,45 @@
     <t t-if="not o or not 'company_id' in o">
         <t t-set="company" t-value="res_company"></t>
     </t>
+
+
 <!-- The header class specifies it in theLayout header -->
 	<div class="header" >
+         <style type="text/css">
+             <t t-call="aminatasl_modifications.style"/>
+         </style>
+
+        <div class="row" >
+            <div class="col-xs-12  text-center" >
+               <div  class="col-xs-6 col-xs-offset-3"  style="border: 1px solid black" >
+                   <h3 t-if="o.state == 'done'"><b>DELIVERY ORDER</b></h3>
+                   <h3 t-if="o.state != 'done'"><b>DRAFT DELIVERY ORDER</b></h3>
+               </div>
+            </div>
+        </div>
+
+
+
         <div class="row"  >
-            <div class="col-xs-1" style = "margin-top:5px" >
-                <img t-if="company.header_logo" t-att-src="'data:image/png;base64,%s' % company.header_logo" style="max-height: 100px;"/>
+            <div class="col-xs-9"  >
+                <div style="display: grid;" ><img t-if="company.header_logo" t-att-src="'data:image/png;base64,%s' % company.header_logo" style="max-height:60px "/>
+                     <span style="font-size:24px; color:blue; text-align:left ;font-weight:bold" >AMINATA &amp; SONS (SL) LTD</span>
+                    </div>
+
+               <span style="font-size:16px" t-field="company.header_data_inventory"  /><br />
+
+
             </div>
-            <div class="col-xs-11 text-center" style = "margin-top:5px"   >
-				<span t-field="company.header_data_inventory" />
+
+            <div>
+                <br />
+                <table class="withboarder col-xs-3 text-center"  style="font-size:16px"  >
+                    <thead> <tr  ><td><b>Date</b> <br/> <span t-field="o.min_date" /></td><td><b>Page</b> <br />   <span class="page"/></td></tr></thead>
+                    <tr  ><td colspan="2" ><b>Document Number</b><br/> <span t-field="o.name" /></td> </tr>
+              <!--      <tr  ><td  colspan="2"><b>Time</b><br/> _ </td></tr>-->
+                </table>
             </div>
+
 
         </div>
     </div>
@@ -222,10 +255,119 @@
 
 
 <template id="custom_layout_inventory_station">
-    <t t-call="aminatasl_modifications.custom_header_station" />
+    <t t-call="aminatasl_modifications.custom_header_station_do" />
     <t t-raw="0" />
     <!--<t t-if="" t-call="aminatasl_modifications.custom_footer" />-->
 </template>
+
+
+
+<!-- Instant Delivery Order -->
+
+<template id="custom_header_station_ido">
+
+     <!-- Multicompany -->
+	 <t t-if="o and 'operating_unit_id' in o">
+        <t t-set="company" t-value="o.operating_unit_id"></t>
+    </t>
+     <t t-if="o and 'company_id' in o">
+        <t t-set="company" t-value="o.company_id"></t>
+    </t>
+    <t t-if="not o or not 'company_id' in o">
+        <t t-set="company" t-value="res_company"></t>
+    </t>
+
+
+<!-- The header class specifies it in theLayout header -->
+	<div class="header" >
+         <style type="text/css">
+             <t t-call="aminatasl_modifications.style"/>
+         </style>
+
+        <div class="row" >
+            <div class="col-xs-12 text-center" >
+               <div class="col-xs-6 col-xs-offset-3" style="border: 1px solid black" >
+                   <h3 t-if="o.state == 'done'"><b>DELIVERY ORDER</b></h3>
+                   <h3 t-if="o.state != 'done'"><b>DELIVERY ORDER IN-TRANSIT</b></h3>
+               </div>
+            </div>
+        </div>
+        <div class="row"  >
+            <div class="col-xs-9" style = "margin:0;padding:0" >
+               <img t-if="company.header_logo" t-att-src="'data:image/png;base64,%s' % company.header_logo" style="max-height:60px; "/>
+               <span style="font-size:24px; color:blue; text-align:left ;font-weight:bold" >AMINATA &amp; SONS (SL) LTD</span>
+               <span style="font-size:16px,margin-left:40px" t-field="company.header_data_inventory"  />
+            </div>
+
+            <div>
+                <br />
+                <table class="withboarder col-xs-3 text-center"  style="font-size:16px"  >
+                    <thead> <tr  ><td><b>Date</b> <br/> <span t-field="o.picking_id.min_date" /></td><td><b>Page</b> <br />   <span class="page"/></td></tr></thead>
+                    <tr  ><td colspan="2" ><b>Document Number</b><br/> <span t-field="o.name" /></td> </tr>
+              <!--      <tr  ><td  colspan="2"><b>Time</b><br/> _ </td></tr>-->
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+</template>
+
+
+<template id="custom_layout_inventory_station_ido">
+    <t t-call="aminatasl_modifications.custom_header_station_ido" />
+    <t t-raw="0" />
+    <!--<t t-if="" t-call="aminatasl_modifications.custom_footer" />-->
+</template>
+
+
+
+
+ <!-- Custom AminataSL Invoice -->
+<template id="custom_header_invoice">
+
+     <!-- Multicompany -->
+	 <t t-if="o and 'operating_unit_id' in o">
+        <t t-set="company" t-value="o.operating_unit_id"></t>
+    </t>
+     <t t-if="o and 'company_id' in o">
+        <t t-set="company" t-value="o.company_id"></t>
+    </t>
+    <t t-if="not o or not 'company_id' in o">
+        <t t-set="company" t-value="res_company"></t>
+    </t>
+
+
+<!-- The header class specifies it in theLayout header -->
+	<div class="header" >
+         <style type="text/css">
+             <t t-call="aminatasl_modifications.style"/>
+         </style>
+
+
+        <div class="row"  >
+            <div class="col-xs-9" style = "margin:0;padding:0" >
+               <span style="font-size:24px;  text-align:left ;font-weight:bold" >AMINATA AND SONS (SL) LTD</span>
+               <span style="font-size:16px,margin-left:40px" t-field="company.header_data"  />
+
+            </div>
+
+            <div class="col-xs-3">
+                 <img t-if="company.header_logo" t-att-src="'data:image/png;base64,%s' % company.header_logo" style="max-height:100px; "/>
+            </div>
+
+
+        </div>
+    </div>
+</template>
+
+
+<template id="custom_layout_invoice">
+    <t t-call="aminatasl_modifications.custom_header_invoice" />
+    <t t-raw="0" />
+    <!--<t t-if="" t-call="aminatasl_modifications.custom_footer" />-->
+</template>
+
 
 
 
