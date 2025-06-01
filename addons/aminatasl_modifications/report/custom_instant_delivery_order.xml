@@ -70,8 +70,8 @@
 										<span t-field="o.do_number" />
 									</td>
 									<td  style="width: 50%" >
-										<b t-if="o.narration" >Narration</b><br/>
-										<span t-field="o.narration" />
+										<b t-if="o.picking_id.narration" >Narration</b><br/>
+										<span t-field="o.picking_id.narration" />
 									</td>
 								</tr>
 							</table>

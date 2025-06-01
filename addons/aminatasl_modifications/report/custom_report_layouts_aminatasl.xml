@@ -22,7 +22,7 @@
 
 
         table.withboarder, table.withboarder tr td{
-            border: 1px solid #B6B6B4;
+            border: 1px solid #000;
             border-collapse: collapse;
         }
 

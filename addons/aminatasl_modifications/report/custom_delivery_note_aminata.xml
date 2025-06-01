@@ -73,7 +73,8 @@
 										<span t-field="o.origin" />
 									</td>
 									<td  style="width: 50%" >
-
+										<b t-if="o.narration" >Narration</b><br/>
+										<span t-field="o.narration" />
 									</td>
 								</tr>
 							</table>
