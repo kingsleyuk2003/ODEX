@@ -57,8 +57,9 @@
                             <field name="inst_dip_reading" />
                             <field name="seal_no" />
                             <field name="discharge_seal_no" />
-                            <field name="sample_seal" />
                             <field name="narration" />
+                            <field name="sample_seal" />
+                            <field name="other_customer_id" options="{'no_open':True,'no_create':True}"  />
                         </group>
                     </page>
                 </notebook>

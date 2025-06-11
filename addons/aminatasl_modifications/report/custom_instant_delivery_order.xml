@@ -37,11 +37,13 @@
 								<tr>
 									<td>
 										<b>Customer No</b> <br/>
-										<span t-field="o.partner_id.ref" />
+										<t t-if="o.picking_id.other_customer_id" ><span t-field="o.picking_id.other_customer_id.ref" /></t>
+										<t t-if="not o.picking_id.other_customer_id" ><span t-field="o.partner_id.ref" /></t>
 									</td>
 									<td>
 										<b>Customer Name</b> <br/>
-										<span t-field="o.partner_id.name" />
+										<t t-if="o.picking_id.other_customer_id" ><span t-field="o.picking_id.other_customer_id.name" /></t>
+										<t t-if="not o.picking_id.other_customer_id" ><span t-field="o.partner_id.name" /></t>
 									</td>
 
 									<td>

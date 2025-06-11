@@ -79,6 +79,7 @@ class StockPickingAminata(models.Model):
     discharge_seal_no = fields.Text(string='Discharge Seal Number')
     sample_seal = fields.Char(string='Sample Seal')
     narration = fields.Text(string="Narration")
+    other_customer_id = fields.Many2one('res.partner',string='Other Customer')
 
 
 
