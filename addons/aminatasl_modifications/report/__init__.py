@@ -1,3 +1,0 @@
-import custom_receipt
-import payslip_report_xlsx
-import payslip_report_xlsx_parser
